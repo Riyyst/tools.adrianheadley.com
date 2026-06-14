@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Tools | Image Colour Picker</title>
+<meta content="Upload an image or pick any colour on your screen, then copy the HEX or RGB value." name="description"/>
+<meta content="#f5f5f7" name="theme-color"/>
+
+<style>
+    :root{
+      --bg:#f5f5f7;
+      --bg-alt:#ffffff;
+      --text:#111827;
+      --text-soft:#4b5563;
+      --accent:#2563eb;
+      --accent-hover:#1d4ed8;
+      --accent-soft:rgba(37,99,235,.08);
+      --border-subtle:#e5e7eb;
+      --border-strong:#d1d5db;
+      --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+      --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+      --radius:20px;
+      --radius-pill:999px;
+      --max-w:980px;
+      --gap:14px;
+      --stack-gap:14px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%}
+    body{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      background:var(--bg);
+      color:var(--text);
+      font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    main{flex:1}
+    .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+    .skip-link{
+      position:absolute;
+      left:-999px;
+      top:.5rem;
+      padding:.45rem .75rem;
+      background:#111827;
+      color:#f9fafb;
+      z-index:100;
+      border-radius:var(--radius-pill);
+      font-size:.85rem;
+    }
+    .skip-link:focus{left:.5rem}
+
+    header.site-header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      border-bottom:1px solid rgba(148,163,184,.28);
+      backdrop-filter:blur(16px);
+      background:rgba(248,250,252,.95);
+    }
+    .mast{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:58px;
+      padding:.55rem 0;
+    }
+    .nav__list{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.55rem;
+      list-style:none;
+      margin:0;
+      padding:0;
+      flex-wrap:wrap;
+      font-size:.86rem;
+    }
+    .nav__link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:.3rem .8rem;
+      border-radius:var(--radius-pill);
+      color:var(--text-soft);
+      border:1px solid transparent;
+      transition:background .16s,color .16s,transform .12s,border-color .16s;
+    }
+    .nav__link:hover,.nav__link:focus-visible{
+      background:rgba(148,163,184,.18);
+      color:var(--text);
+      transform:translateY(-1px);
+      text-decoration:none;
+      border-color:rgba(148,163,184,.26);
+    }
+    .nav__link--highlight{background:var(--accent-soft);color:var(--accent);border-color:rgba(37,99,235,.18)}
+
+    .intro{
+      text-align:center;
+      padding:2.6rem 0 2.4rem;
+    }
+    .intro__title{
+      font-size:clamp(2.1rem,3vw,2.6rem);
+      line-height:1.15;
+      margin:0 0 .8rem;
+      font-weight:750;
+      letter-spacing:-.03em;
+    }
+    .intro__subtitle{
+      max-width:620px;
+      margin:0 auto;
+      color:var(--text-soft);
+      font-size:.96rem;
+      font-weight:500;
+    }
+
+    .tool{padding:2.4rem 0 4rem}
+    .tool-card{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--border-subtle);
+      border-radius:24px;
+      box-shadow:var(--shadow-soft);
+      padding:clamp(1.2rem,3vw,1.7rem);
+      max-width:980px;
+      margin:0 auto;
+      transition:box-shadow .16s,transform .16s,border-color .16s;
+    }
+    .tool-card:hover{box-shadow:var(--shadow-lift);border-color:rgba(37,99,235,.18)}
+
+    label{
+      display:block;
+      margin-bottom:.35rem;
+      color:var(--text-soft);
+      font-size:.85rem;
+      font-weight:600;
+      text-align:center;
+    }
+
+    .seg{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.65rem;
+      margin:.1rem auto 1.3rem;
+      padding:.35rem;
+      border:1px solid var(--border-subtle);
+      border-radius:var(--radius-pill);
+      background:#f8fafc;
+      width:max-content;
+      max-width:100%;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+      flex-wrap:wrap;
+    }
+    .seg input{
+      position:absolute;
+      opacity:0;
+      pointer-events:none;
+    }
+    .seg label{
+      margin:0;
+      min-width:130px;
+      padding:.45rem 1rem;
+      border-radius:var(--radius-pill);
+      border:1px solid rgba(148,163,184,.8);
+      color:var(--text);
+      background:transparent;
+      cursor:pointer;
+      transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+      font-size:.84rem;
+    }
+    .seg label:hover{
+      background:rgba(148,163,184,.15);
+      transform:translateY(-1px);
+    }
+    .seg input:checked + label{
+      background:var(--accent);
+      color:#f9fafb;
+      border-color:var(--accent);
+      box-shadow:0 10px 25px rgba(37,99,235,.18);
+    }
+
+    .hidden{display:none!important}
+
+    .upload-box{
+      position:relative;
+      display:grid;
+      place-items:center;
+      min-height:150px;
+      padding:1.4rem;
+      border:2px dashed var(--border-strong);
+      border-radius:20px;
+      background:#f8fafc;
+      color:var(--text-soft);
+      text-align:center;
+      cursor:pointer;
+      transition:border-color .16s,background .16s,box-shadow .16s,transform .14s;
+    }
+    .upload-box:hover,.upload-box:focus-within{
+      border-color:var(--accent);
+      background:#f4f8ff;
+      box-shadow:0 0 0 4px rgba(37,99,235,.08);
+      transform:translateY(-1px);
+    }
+    .upload-box input[type="file"]{
+      position:absolute;
+      inset:0;
+      opacity:0;
+      cursor:pointer;
+    }
+    .upload-box small{
+      font-size:.9rem;
+      color:var(--text-soft);
+      font-weight:500;
+    }
+
+    .center-actions{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.7rem;
+      flex-wrap:wrap;
+      margin-top:var(--stack-gap);
+    }
+    .btn-copy{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.55rem;
+      padding:.65rem 1.3rem;
+      border-radius:var(--radius-pill);
+      border:1px solid transparent;
+      background:var(--accent);
+      color:#f9fafb;
+      font-size:.86rem;
+      font-weight:600;
+      cursor:pointer;
+      text-decoration:none;
+      box-shadow:none;
+      transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+    }
+    .btn-copy:hover:not([disabled]){
+      transform:translateY(-1px);
+      background:var(--accent-hover);
+      text-decoration:none;
+      box-shadow:0 10px 25px rgba(37,99,235,.18);
+    }
+    .btn-copy:active:not([disabled]){transform:translateY(0)}
+    .btn-copy[disabled]{
+      opacity:.45;
+      cursor:not-allowed;
+      filter:saturate(.3);
+    }
+
+    .hint{
+      margin:.65rem auto 0;
+      color:var(--text-soft);
+      font-size:.88rem;
+      text-align:center;
+      max-width:560px;
+    }
+
+    .stage{
+      display:none;
+      margin:1.2rem auto 0;
+      padding:.75rem;
+      border-radius:18px;
+      border:1px solid var(--border-subtle);
+      background:#f8fafc;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
+      width:100%;
+      max-width:100%;
+      overflow:auto;
+      text-align:center;
+    }
+    .stage.show{
+      display:block;
+    }
+    #canvas{
+      display:block;
+      max-width:100%;
+      height:auto;
+      margin:0 auto;
+      border-radius:12px;
+      cursor:crosshair;
+    }
+
+    .magnifier{
+      position:absolute;
+      display:none;
+      z-index:80;
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      overflow:hidden;
+      border:3px solid #ffffff;
+      box-shadow:0 18px 36px rgba(15,23,42,.22);
+      pointer-events:none;
+      background:#ffffff;
+    }
+    #magCanvas{
+      display:block;
+      width:180px;
+      height:180px;
+    }
+
+    .readout{
+      display:none;
+      margin:1.2rem auto 0;
+      max-width:560px;
+    }
+    .readout.show{
+      display:block;
+    }
+    .readout-inner{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:1rem;
+      flex-wrap:wrap;
+      padding:1rem;
+      border-radius:18px;
+      border:1px solid var(--border-subtle);
+      background:#f8fafc;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
+    }
+    .chip{
+      width:54px;
+      height:54px;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,.45);
+      background:#ffffff;
+      box-shadow:0 8px 18px rgba(15,23,42,.08);
+    }
+    .mono{
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+      color:var(--text);
+      font-size:.9rem;
+      font-weight:650;
+    }
+
+    #copyBtns{
+      display:none;
+    }
+    #copyBtns.show{
+      display:flex;
+    }
+
+    footer.site-footer{
+      margin-top:auto;
+      padding:1.6rem 1.5rem 1.8rem;
+      font-size:.85rem;
+      color:var(--text-soft);
+      border-top:1px solid rgba(148,163,184,.3);
+      background:rgba(248,250,252,.72);
+    }
+    .fine{font-size:.95rem;color:var(--text-soft)}
+    .footer-legal{
+      margin-top:.45rem;
+      display:flex;
+      justify-content:center;
+      gap:.45rem;
+      font-size:.82rem;
+      flex-wrap:wrap;
+    }
+    .footer-legal a{
+      color:var(--text-soft);
+      padding:.25rem .55rem;
+      border-radius:var(--radius-pill);
+      transition:background .16s,color .16s,transform .12s;
+    }
+    .footer-legal a:hover{
+      color:var(--accent);
+      background:rgba(148,163,184,.16);
+      text-decoration:none;
+      transform:translateY(-1px);
+    }
+
+    @media (max-width:760px){
+      .container{width:min(100% - 2rem,var(--max-w))}
+      .nav__list{gap:.25rem}
+      .nav__link{padding:.28rem .65rem}
+      .intro{padding:2rem 0 2.1rem}
+      .tool{padding:1.6rem 0 3rem}
+      .seg{width:100%;border-radius:18px}
+      .seg label{flex:1 1 140px}
+      .btn-copy{width:100%;max-width:320px}
+      .readout-inner{align-items:stretch;flex-direction:column}
+      .chip{margin:0 auto}
+    }
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Image Colour Picker</h1>
+      <p class="intro__subtitle">Toggle between uploading an image or picking any colour on your screen.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="tool-card">
+        <label>Mode</label>
+
+        <div aria-label="Mode" class="seg" role="radiogroup">
+          <input checked id="m-upload" name="mode" type="radio" value="upload"/>
+          <label for="m-upload">Upload image</label>
+          <input id="m-screen" name="mode" type="radio" value="screen"/>
+          <label for="m-screen">Pick from screen</label>
+        </div>
+
+        <div id="section-upload" style="margin:14px 0 0 0">
+          <label>Upload image</label>
+          <div class="upload-box">
+            <input accept="image/*" id="file" type="file"/>
+            <small>Choose file or drag and drop an image here</small>
+          </div>
+        </div>
+
+        <div class="hidden" id="section-screen" style="margin:14px 0 0 0">
+          <label>Pick from screen</label>
+          <div class="center-actions" style="margin:0">
+            <button class="btn-copy" id="btnEyedrop" type="button">Pick colour</button>
+          </div>
+          <p class="hint" id="edHint">Use your browser's eyedropper to pick any on-screen colour.</p>
+        </div>
+
+        <div aria-live="polite" class="stage" id="stage">
+          <canvas height="1" id="canvas" width="1"></canvas>
+          <div class="magnifier" id="magnifier"><canvas id="magCanvas"></canvas></div>
+        </div>
+
+        <div class="readout" id="readout">
+          <div class="readout-inner">
+            <div class="chip" id="chip"></div>
+            <div class="mono" id="hexLine">HEX: <span id="hex"></span></div>
+            <div class="mono" id="rgbLine">RGB: <span id="rgb"></span></div>
+          </div>
+        </div>
+
+        <div class="center-actions" id="copyBtns">
+          <button class="btn-copy" data-copy="#hex" id="copyHex" type="button">Copy HEX</button>
+          <button class="btn-copy" data-copy="#rgb" id="copyRgb" type="button">Copy RGB</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- RIYST_INLINE_SCRIPT_START -->
+<script>
+const canvas=document.getElementById("canvas"), ctx=canvas.getContext("2d",{willReadFrequently:true});
+    const chip=document.getElementById("chip"), hexEl=document.getElementById("hex"), rgbEl=document.getElementById("rgb"), stage=document.getElementById("stage");
+    const readout=document.getElementById("readout"), copyBtns=document.getElementById("copyBtns");
+    const fileInput=document.getElementById("file"), btnEyedrop=document.getElementById("btnEyedrop"), edHint=document.getElementById("edHint");
+    const magnifier=document.getElementById("magnifier"), magCanvas=document.getElementById("magCanvas"), magCtx=magCanvas.getContext("2d",{willReadFrequently:true});
+    magCanvas.width=180; magCanvas.height=180;
+    let img=new Image(); img.crossOrigin="anonymous"; let hasImage=false;
+
+    function resetOutputs(){ readout.classList.remove("show"); copyBtns.classList.remove("show"); hexEl.textContent=""; rgbEl.textContent=""; }
+    resetOutputs();
+
+    
+    document.querySelectorAll('input[name="mode"]').forEach(r=>r.addEventListener("change",e=>{
+      const isUpload = e.target.value === "upload";
+      document.getElementById("section-upload").classList.toggle("hidden", !isUpload);
+      document.getElementById("section-screen").classList.toggle("hidden", isUpload);
+
+      if (!isUpload) {
+        // Switching to screen picker: wipe uploaded image and reset UI
+        hasImage = false;
+        if (fileInput) fileInput.value = "";
+        stage.classList.remove("show");
+        magnifier.style.display = "none";
+        // Clear canvas to 1x1 transparent pixel so it doesn't capture clicks
+        canvas.width = 1; canvas.height = 1;
+        const c2 = canvas.getContext("2d", { willReadFrequently: true });
+        c2.clearRect(0,0,1,1);
+        resetOutputs();
+      }
+    }));
+    
+
+    if(!("EyeDropper" in window)){ btnEyedrop.disabled=true; if(edHint) edHint.textContent="Your browser does not support on-screen colour picking."; }
+
+    fileInput.addEventListener("change",async e=>{ const f=e.target.files[0]; if(!f)return; const url=URL.createObjectURL(f); await loadImage(url); URL.revokeObjectURL(url); resetOutputs(); });
+
+    btnEyedrop?.addEventListener("click",async()=>{ if(!("EyeDropper" in window))return; try{ const ed=new EyeDropper(); const res=await ed.open(); const {r,g,b}=hexToRgb(res.sRGBHex); setCurrent(r,g,b);}catch{} });
+
+    canvas.addEventListener("mouseenter",()=>{ if(hasImage) magnifier.style.display="block"; });
+    canvas.addEventListener("mouseleave",()=>{ magnifier.style.display="none"; });
+
+    canvas.addEventListener("mousemove",e=>{
+      if(!hasImage)return;
+      const rect=canvas.getBoundingClientRect();
+      const cx=Math.floor(e.clientX-rect.left);
+      const cy=Math.floor(e.clientY-rect.top);
+      if(cx<0||cy<0||cx>=canvas.width||cy>=canvas.height){ magnifier.style.display="none"; return; }
+
+      // Zoomed crop around the cursor from the canvas
+      const srcSize=21; // odd so we have a center pixel
+      const half=(srcSize-1)/2;
+      magCtx.imageSmoothingEnabled=false;
+      magCtx.clearRect(0,0,magCanvas.width,magCanvas.height);
+      magCtx.drawImage(canvas, cx-half, cy-half, srcSize, srcSize, 0, 0, magCanvas.width, magCanvas.height);
+
+      // Draw grid to mimic system loupe
+      const step = magCanvas.width / srcSize;
+      magCtx.beginPath();
+      for(let i=0;i<=srcSize;i++){
+        const pos=Math.round(i*step)+0.5;
+        magCtx.moveTo(pos,0); magCtx.lineTo(pos,magCanvas.height);
+        magCtx.moveTo(0,pos); magCtx.lineTo(magCanvas.width,pos);
+      }
+      magCtx.strokeStyle="rgba(255,255,255,.6)";
+      magCtx.lineWidth=1;
+      magCtx.stroke();
+
+      // Highlight center pixel
+      const c0 = Math.floor(half)*step;
+      magCtx.strokeStyle="#000";
+      magCtx.lineWidth=2;
+      magCtx.strokeRect(c0, c0, step, step);
+      magCtx.strokeStyle="#fff";
+      magCtx.lineWidth=1;
+      magCtx.strokeRect(c0, c0, step, step);
+
+      // Position magnifier around cursor
+      const mSize=magCanvas.width;
+      magnifier.style.left=(e.clientX - mSize/2) + "px";
+      magnifier.style.top=(e.clientY - mSize/2 + window.scrollY) + "px";
+      magnifier.style.display="block";
+    });
+
+    canvas.addEventListener("click",e=>{
+      if(!hasImage)return;
+      const rect=canvas.getBoundingClientRect();
+      const cx=Math.floor(e.clientX-rect.left);
+      const cy=Math.floor(e.clientY-rect.top);
+      const d=ctx.getImageData(cx,cy,1,1).data;
+      setCurrent(d[0],d[1],d[2]);
+    });
+
+    async function loadImage(src){
+      return new Promise((res,rej)=>{
+        img=new Image(); img.crossOrigin="anonymous";
+        img.onload=()=>{hasImage=true;draw();res();};
+        img.onerror=rej; img.src=src;
+      });
+    }
+    function draw(){
+      stage.classList.add("show");
+      const maxW=stage.clientWidth-16, maxH=Math.min(580, window.innerHeight*0.7);
+      const w=img.width, h=img.height;
+      const s=Math.min(maxW/w, maxH/h, 1);
+      const dw=Math.floor(w*s), dh=Math.floor(h*s);
+      canvas.width=dw; canvas.height=dh;
+      const dx=0, dy=0;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(img, dx, dy, dw, dh);
+    }
+
+    function setCurrent(r,g,b){
+      const hex=rgbToHex(r,g,b);
+      chip.style.background=hex;
+      hexEl.textContent=hex;
+      rgbEl.textContent=`(${r}, ${g}, ${b})`;
+      readout.classList.add("show");
+      copyBtns.classList.add("show");
+    }
+    document.querySelectorAll("[data-copy]").forEach(b=>b.addEventListener("click",async()=>{
+      const sel=b.getAttribute("data-copy"); const el=document.querySelector(sel);
+      try{ await navigator.clipboard.writeText(el.textContent.trim()); const orig=b.textContent; b.textContent="Copied!"; setTimeout(()=>b.textContent=orig,900);}catch{}
+    }));
+
+    function rgbToHex(r,g,b){return"#"+[r,g,b].map(x=>x.toString(16).padStart(2,"0")).join("").toUpperCase();}
+    function hexToRgb(h){h=h.replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");return{r:parseInt(h.substr(0,2),16),g:parseInt(h.substr(2,2),16),b:parseInt(h.substr(4,2),16)};}
+</script>
+<!-- RIYST_INLINE_SCRIPT_END -->
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tools | Metadata Remover &amp; Editor</title>
+<meta name="description" content="Remove or edit image metadata locally in your browser. Add GPS, device details, dates or a hidden message."/>
+<meta name="theme-color" content="#f5f5f7"/>
+
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --bg-alt:#ffffff;
+    --text:#111827;
+    --text-soft:#4b5563;
+    --accent:#2563eb;
+    --accent-hover:#1d4ed8;
+    --accent-soft:rgba(37,99,235,.08);
+    --border-subtle:#e5e7eb;
+    --border-strong:#d1d5db;
+    --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+    --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+    --radius:20px;
+    --radius-pill:999px;
+    --max-w:980px;
+    --gap:14px;
+    --stack-gap:14px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%;overflow-x:hidden}
+  body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background:var(--bg);
+    color:var(--text);
+    font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  main{flex:1}
+  .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+  .skip-link{
+    position:absolute;
+    left:-999px;
+    top:.5rem;
+    padding:.45rem .75rem;
+    background:#111827;
+    color:#f9fafb;
+    z-index:100;
+    border-radius:var(--radius-pill);
+    font-size:.85rem;
+  }
+  .skip-link:focus{left:.5rem}
+
+  header.site-header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    border-bottom:1px solid rgba(148,163,184,.28);
+    backdrop-filter:blur(16px);
+    background:rgba(248,250,252,.95);
+  }
+  .mast{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:58px;
+    padding:.55rem 0;
+  }
+  .nav__list{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    list-style:none;
+    margin:0;
+    padding:0;
+    flex-wrap:wrap;
+    font-size:.86rem;
+  }
+  .nav__link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:.3rem .8rem;
+    border-radius:var(--radius-pill);
+    color:var(--text-soft);
+    border:1px solid transparent;
+    transition:background .16s,color .16s,transform .12s,border-color .16s;
+  }
+  .nav__link:hover,.nav__link:focus-visible{
+    background:rgba(148,163,184,.18);
+    color:var(--text);
+    transform:translateY(-1px);
+    text-decoration:none;
+    border-color:rgba(148,163,184,.26);
+  }
+  .nav__link--highlight{background:var(--accent-soft);color:var(--accent);border-color:rgba(37,99,235,.18)}
+
+  .intro{
+    text-align:center;
+    padding:2.6rem 0 2.4rem;
+  }
+  .intro__title{
+    font-size:clamp(2.1rem,3vw,2.6rem);
+    line-height:1.15;
+    margin:0 0 .8rem;
+    font-weight:750;
+    letter-spacing:-.03em;
+  }
+  .intro__subtitle{
+    max-width:680px;
+    margin:0 auto;
+    color:var(--text-soft);
+    font-size:.96rem;
+    font-weight:500;
+  }
+
+  .tool{padding:2.4rem 0 4rem}
+  .card{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--border-subtle);
+    border-radius:24px;
+    box-shadow:var(--shadow-soft);
+    padding:clamp(1.2rem,3vw,1.7rem);
+    max-width:980px;
+    margin:0 auto;
+    transition:box-shadow .16s,transform .16s,border-color .16s;
+  }
+  .card:hover{box-shadow:var(--shadow-lift);border-color:rgba(37,99,235,.18)}
+
+  .drop-merge{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:.5rem;
+    width:100%;
+    min-height:158px;
+    padding:1.35rem;
+    border:2px dashed var(--border-strong);
+    border-radius:20px;
+    background:#f8fafc;
+    color:var(--text);
+    text-align:center;
+    cursor:pointer;
+    transition:border-color .16s,background .16s,box-shadow .16s,transform .14s;
+    font-size:1rem;
+    font-weight:750;
+  }
+  .drop-merge:hover,.drop-merge.dragover,.drop-merge:focus-within{
+    border-color:var(--accent);
+    background:#f4f8ff;
+    box-shadow:0 0 0 4px rgba(37,99,235,.08);
+    transform:translateY(-1px);
+  }
+  .drop-merge input[type="file"]{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    cursor:pointer;
+  }
+
+  .filename{
+    margin-top:.65rem;
+    text-align:center;
+    color:var(--text-soft);
+    font-size:.88rem;
+    font-weight:650;
+    overflow-wrap:anywhere;
+  }
+  .filename.error{
+    color:#b91c1c;
+    min-height:1.4rem;
+  }
+
+  .mode-card,.editor-card,.result-card{
+    margin-top:1rem;
+    border:1px solid var(--border-subtle);
+    border-radius:20px;
+    background:#f8fafc;
+    padding:1rem;
+  }
+  .mode-title{
+    margin:0 0 .7rem;
+    font-size:.95rem;
+    font-weight:800;
+    color:var(--text);
+    text-align:center;
+  }
+
+  .seg{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:.45rem;
+    border-radius:18px;
+    border:1px solid var(--border-subtle);
+    background:#fff;
+    padding:.45rem;
+  }
+  .seg input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+  }
+  .seg label{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:40px;
+    margin:0;
+    padding:.45rem .8rem;
+    border-radius:var(--radius-pill);
+    color:var(--text-soft);
+    background:transparent;
+    cursor:pointer;
+    font-size:.86rem;
+    font-weight:750;
+    transition:background .16s,color .16s,transform .12s;
+  }
+  .seg input:checked + label{
+    background:var(--accent);
+    color:#fff;
+  }
+  .seg label:hover{
+    transform:translateY(-1px);
+    background:rgba(148,163,184,.15);
+  }
+  .seg input:checked + label:hover{
+    background:var(--accent-hover);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:.8rem;
+  }
+  .field{display:flex;flex-direction:column;gap:.35rem}
+  .field.full{grid-column:1 / -1}
+
+  label,.label{
+    display:block;
+    color:var(--text-soft);
+    font-size:.85rem;
+    font-weight:700;
+  }
+  input,select,textarea{
+    width:100%;
+    border-radius:14px;
+    border:1px solid var(--border-strong);
+    background:#ffffff;
+    color:var(--text);
+    outline:none;
+    transition:border-color .16s,box-shadow .16s,background .16s;
+    font:inherit;
+  }
+  input,select{padding:.78rem 1rem}
+  textarea{
+    min-height:96px;
+    resize:vertical;
+    padding:.85rem 1rem;
+  }
+  input:focus,select:focus,textarea:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+  }
+  .hint{
+    margin:.35rem 0 0;
+    color:var(--text-soft);
+    font-size:.8rem;
+    font-weight:600;
+  }
+
+  .check-row{
+    display:flex;
+    align-items:flex-start;
+    gap:.55rem;
+    color:var(--text);
+    font-size:.88rem;
+    font-weight:650;
+    margin-top:.7rem;
+  }
+  .check-row input{
+    width:17px;
+    height:17px;
+    min-width:17px;
+    margin-top:.22rem;
+    padding:0;
+    accent-color:var(--accent);
+    box-shadow:none;
+  }
+
+  .actions{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.7rem;
+    flex-wrap:wrap;
+    margin-top:var(--stack-gap);
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    padding:.65rem 1.3rem;
+    border-radius:var(--radius-pill);
+    border:1px solid transparent;
+    background:var(--accent);
+    color:#f9fafb;
+    font-size:.86rem;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+    box-shadow:none;
+    transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+    font-family:inherit;
+    min-height:44px;
+  }
+  .btn:hover:not([disabled]){
+    transform:translateY(-1px);
+    background:var(--accent-hover);
+    text-decoration:none;
+    box-shadow:0 10px 25px rgba(37,99,235,.18);
+  }
+  .btn.secondary{
+    background:transparent;
+    color:var(--text);
+    border-color:rgba(148,163,184,.8);
+    box-shadow:none;
+  }
+  .btn.secondary:hover:not([disabled]){
+    background:rgba(148,163,184,.15);
+    box-shadow:none;
+  }
+  .btn[disabled],.btn[aria-disabled="true"]{
+    opacity:.45;
+    cursor:not-allowed;
+    pointer-events:none;
+  }
+
+  .preview-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:.8rem;
+    margin-top:.8rem;
+  }
+  .preview-box{
+    border:1px solid var(--border-subtle);
+    border-radius:18px;
+    background:#fff;
+    padding:.9rem;
+    min-width:0;
+  }
+  .preview-box h4{
+    margin:0 0 .6rem;
+    font-size:.92rem;
+    color:var(--text);
+  }
+  .imgwrap{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:220px;
+    border-radius:16px;
+    border:1px solid var(--border-subtle);
+    background:
+      linear-gradient(45deg, #eef2f7 25%, transparent 25%),
+      linear-gradient(-45deg, #eef2f7 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #eef2f7 75%),
+      linear-gradient(-45deg, transparent 75%, #eef2f7 75%);
+    background-size:22px 22px;
+    background-position:0 0,0 11px,11px -11px,-11px 0;
+    overflow:hidden;
+    padding:.75rem;
+  }
+  .imgwrap img{
+    display:block;
+    max-width:100%;
+    max-height:320px;
+    object-fit:contain;
+    border-radius:12px;
+    box-shadow:0 10px 24px rgba(15,23,42,.12);
+  }
+  pre.json{
+    margin:0;
+    max-height:320px;
+    overflow:auto;
+    border:1px solid var(--border-subtle);
+    border-radius:14px;
+    background:#111827;
+    color:#e5e7eb;
+    padding:.9rem;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    font-size:.82rem;
+    line-height:1.55;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+  }
+  .status{
+    margin-top:.8rem;
+    text-align:center;
+    color:var(--text-soft);
+    font-size:.9rem;
+    font-weight:650;
+    min-height:1.4rem;
+  }
+  .status.ok{color:#047857}
+  .status.err{color:#b91c1c}
+  .hidden{display:none!important}
+
+  footer.site-footer{
+    margin-top:auto;
+    padding:1.6rem 1.5rem 1.8rem;
+    font-size:.85rem;
+    color:var(--text-soft);
+    border-top:1px solid rgba(148,163,184,.3);
+    background:rgba(248,250,252,.72);
+  }
+  .fine{font-size:.95rem;color:var(--text-soft)}
+  .footer-legal{
+    margin-top:.45rem;
+    display:flex;
+    justify-content:center;
+    gap:.45rem;
+    font-size:.82rem;
+    flex-wrap:wrap;
+  }
+  .footer-legal a{
+    color:var(--text-soft);
+    padding:.25rem .55rem;
+    border-radius:var(--radius-pill);
+    transition:background .16s,color .16s,transform .12s;
+  }
+  .footer-legal a:hover{
+    color:var(--accent);
+    background:rgba(148,163,184,.16);
+    text-decoration:none;
+    transform:translateY(-1px);
+  }
+
+  @media (max-width:860px){
+    .grid,.preview-grid{grid-template-columns:1fr}
+  }
+  @media (max-width:760px){
+    .container{width:min(100% - 2rem,var(--max-w))}
+    .nav__list{gap:.25rem}
+    .nav__link{padding:.28rem .65rem}
+    .intro{padding:2rem 0 2.1rem}
+    .tool{padding:1.6rem 0 3rem}
+    .actions .btn{width:100%;max-width:320px}
+    .seg{grid-template-columns:1fr}
+  }
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Metadata Remover & Editor</h1>
+      <p class="intro__subtitle">Remove metadata, replace details, add GPS, set device information or add a hidden message locally in your browser.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div aria-label="Image metadata remover and editor" class="card" role="region">
+        <label aria-label="File chooser" class="drop-merge" id="dropMerge">
+          <span>Click to choose an image or drop here</span>
+          <input accept="image/png,image/jpeg,image/webp,.jpg,.jpeg,.png,.webp" id="file" type="file"/>
+        </label>
+        <div class="filename" id="filename">No file selected</div>
+        <div aria-live="polite" class="filename error" id="error"></div>
+
+        <div class="mode-card">
+          <p class="mode-title">What would you like to do?</p>
+          <div class="seg" role="radiogroup" aria-label="Processing mode">
+            <input checked id="modeRemove" name="mode" type="radio" value="remove"/>
+            <label for="modeRemove">Remove metadata</label>
+            <input id="modeEdit" name="mode" type="radio" value="edit"/>
+            <label for="modeEdit">Change / add metadata</label>
+          </div>
+        </div>
+
+        <div class="editor-card hidden" id="editorCard">
+          <p class="mode-title">Metadata to add or replace</p>
+          <div class="grid">
+            <div class="field">
+              <label for="deviceMake">Device make</label>
+              <input id="deviceMake" placeholder="e.g. Apple, Canon, Samsung" type="text"/>
+            </div>
+            <div class="field">
+              <label for="deviceModel">Device model</label>
+              <input id="deviceModel" placeholder="e.g. iPhone 15 Pro" type="text"/>
+            </div>
+            <div class="field">
+              <label for="dateTaken">Date taken</label>
+              <input id="dateTaken" type="datetime-local"/>
+            </div>
+            <div class="field">
+              <label for="software">Software</label>
+              <input id="software" placeholder="Riyst Metadata Editor" type="text"/>
+            </div>
+            <div class="field">
+              <label for="gpsLat">GPS latitude</label>
+              <input id="gpsLat" placeholder="e.g. 52.45436" step="any" type="number"/>
+            </div>
+            <div class="field">
+              <label for="gpsLon">GPS longitude</label>
+              <input id="gpsLon" placeholder="e.g. 1.43818" step="any" type="number"/>
+            </div>
+            <div class="field full">
+              <label for="hiddenMessage">Hidden message</label>
+              <textarea id="hiddenMessage" placeholder="Optional hidden message to embed in the image metadata..."></textarea>
+              <p class="hint">For JPEG this is embedded as metadata/comment data. For PNG this is embedded as text metadata.</p>
+            </div>
+            <div class="field">
+              <label for="outputFormat">Output format</label>
+              <select id="outputFormat">
+                <option value="jpeg" selected>JPG with editable EXIF</option>
+                <option value="png">PNG with text metadata</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="quality">JPG quality</label>
+              <input id="quality" min="50" max="100" value="92" type="number"/>
+            </div>
+          </div>
+          <label class="check-row">
+            <input id="keepVisibleClean" type="checkbox" checked/>
+            <span>Start from a clean copy first, then add only the metadata above.</span>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button class="btn" disabled id="processBtn" type="button">Process image</button>
+          <a class="btn secondary" download href="#" id="downloadBtn" aria-disabled="true">Download</a>
+          <button class="btn secondary" id="clearBtn" type="button">Clear</button>
+        </div>
+
+        <div class="status" id="status" aria-live="polite"></div>
+
+        <div class="result-card hidden" id="resultCard">
+          <p class="mode-title">Processed file</p>
+          <div class="preview-grid">
+            <div class="preview-box">
+              <h4>Preview</h4>
+              <div class="imgwrap"><img id="preview" alt="Processed image preview"/></div>
+            </div>
+            <div class="preview-box">
+              <h4>New metadata summary</h4>
+              <pre class="json" id="summaryJson"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  const $ = sel => document.querySelector(sel);
+
+  const drop = $('#dropMerge');
+  const fileInput = $('#file');
+  const filename = $('#filename');
+  const error = $('#error');
+  const modeRemove = $('#modeRemove');
+  const modeEdit = $('#modeEdit');
+  const editorCard = $('#editorCard');
+  const processBtn = $('#processBtn');
+  const downloadBtn = $('#downloadBtn');
+  const clearBtn = $('#clearBtn');
+  const status = $('#status');
+  const resultCard = $('#resultCard');
+  const preview = $('#preview');
+  const summaryJson = $('#summaryJson');
+
+  const fields = {
+    make: $('#deviceMake'),
+    model: $('#deviceModel'),
+    date: $('#dateTaken'),
+    software: $('#software'),
+    lat: $('#gpsLat'),
+    lon: $('#gpsLon'),
+    hidden: $('#hiddenMessage'),
+    format: $('#outputFormat'),
+    quality: $('#quality'),
+    cleanFirst: $('#keepVisibleClean')
+  };
+
+  let currentFile = null;
+  let currentUrl = null;
+  let outputBlob = null;
+
+  const encoder = new TextEncoder();
+
+  function setStatus(message, type){
+    status.textContent = message || '';
+    status.className = 'status' + (type ? ' ' + type : '');
+  }
+
+  function setError(message){
+    error.textContent = message || '';
+  }
+
+  function showEditor(){
+    editorCard.classList.toggle('hidden', !modeEdit.checked);
+  }
+
+  function baseName(name){
+    return String(name || 'image').replace(/\.[^.]+$/, '') || 'image';
+  }
+
+  function extensionForMime(mime){
+    if(mime === 'image/jpeg') return 'jpg';
+    if(mime === 'image/png') return 'png';
+    if(mime === 'image/webp') return 'webp';
+    return 'png';
+  }
+
+  function setDownload(blob, name){
+    if(currentUrl) URL.revokeObjectURL(currentUrl);
+    currentUrl = URL.createObjectURL(blob);
+    downloadBtn.href = currentUrl;
+    downloadBtn.download = name;
+    downloadBtn.removeAttribute('aria-disabled');
+    preview.src = currentUrl;
+    outputBlob = blob;
+  }
+
+  function resetOutput(){
+    if(currentUrl) URL.revokeObjectURL(currentUrl);
+    currentUrl = null;
+    outputBlob = null;
+    downloadBtn.href = '#';
+    downloadBtn.setAttribute('aria-disabled', 'true');
+    preview.removeAttribute('src');
+    summaryJson.textContent = '';
+    resultCard.classList.add('hidden');
+  }
+
+  function resetAll(){
+    currentFile = null;
+    fileInput.value = '';
+    filename.textContent = 'No file selected';
+    processBtn.disabled = true;
+    setError('');
+    setStatus('');
+    resetOutput();
+  }
+
+  function setFile(file){
+    currentFile = file;
+    filename.textContent = file ? file.name : 'No file selected';
+    processBtn.disabled = !file;
+    resetOutput();
+  }
+
+  function formatExifDate(localValue){
+    if(!localValue) return '';
+    const d = new Date(localValue);
+    if(Number.isNaN(d.getTime())) return '';
+    const pad = n => String(n).padStart(2, '0');
+    return d.getFullYear() + ':' + pad(d.getMonth() + 1) + ':' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+  }
+
+  function metadataValues(){
+    const latRaw = fields.lat.value.trim();
+    const lonRaw = fields.lon.value.trim();
+    const lat = latRaw === '' ? null : Number(latRaw);
+    const lon = lonRaw === '' ? null : Number(lonRaw);
+
+    return {
+      make: fields.make.value.trim(),
+      model: fields.model.value.trim(),
+      date: formatExifDate(fields.date.value),
+      software: fields.software.value.trim() || 'Riyst Metadata Editor',
+      lat: Number.isFinite(lat) ? lat : null,
+      lon: Number.isFinite(lon) ? lon : null,
+      hiddenMessage: fields.hidden.value.trim(),
+      outputFormat: fields.format.value,
+      quality: Math.max(0.5, Math.min(1, (Number(fields.quality.value) || 92) / 100)),
+      cleanFirst: fields.cleanFirst.checked
+    };
+  }
+
+  function bytes(str){
+    return Array.from(encoder.encode(str));
+  }
+
+  function blobToArrayBuffer(blob){
+    return blob.arrayBuffer();
+  }
+
+  function uint8FromDataUrl(dataUrl){
+    const base64 = dataUrl.split(',')[1] || '';
+    const bin = atob(base64);
+    const out = new Uint8Array(bin.length);
+    for(let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+
+  function concatBytes(parts){
+    let total = 0;
+    parts.forEach(p => total += p.length);
+    const out = new Uint8Array(total);
+    let off = 0;
+    parts.forEach(p => {
+      out.set(p, off);
+      off += p.length;
+    });
+    return out;
+  }
+
+  function writeU16LE(arr, n){ arr.push(n & 255, (n >>> 8) & 255); }
+  function writeU32LE(arr, n){ arr.push(n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255); }
+  function writeU16BE(arr, n){ arr.push((n >>> 8) & 255, n & 255); }
+
+  function asciiValue(value){
+    return bytes(String(value || '') + '\0');
+  }
+
+  function padEven(arr){
+    if(arr.length % 2) arr.push(0);
+    return arr;
+  }
+
+  function rationalBytes(num, den){
+    const arr = [];
+    writeU32LE(arr, Math.max(0, Math.round(num)));
+    writeU32LE(arr, Math.max(1, Math.round(den)));
+    return arr;
+  }
+
+  function dmsRationalTriplet(dec){
+    const abs = Math.abs(Number(dec) || 0);
+    const d = Math.floor(abs);
+    const minFloat = (abs - d) * 60;
+    const m = Math.floor(minFloat);
+    const sec = (minFloat - m) * 60;
+    return [
+      ...rationalBytes(d, 1),
+      ...rationalBytes(m, 1),
+      ...rationalBytes(Math.round(sec * 10000), 10000)
+    ];
+  }
+
+  function addIfdEntry(arr, tag, type, count, inlineOrOffset){
+    writeU16LE(arr, tag);
+    writeU16LE(arr, type);
+    writeU32LE(arr, count);
+
+    if(typeof inlineOrOffset === 'number'){
+      writeU32LE(arr, inlineOrOffset);
+    }else{
+      const v = Array.from(inlineOrOffset || []);
+      for(let i = 0; i < 4; i++) arr.push(v[i] || 0);
+    }
+  }
+
+  function buildExifPayload(meta){
+    const textEntries = [];
+
+    if(meta.hiddenMessage) textEntries.push({tag:0x010E, type:2, bytes:asciiValue(meta.hiddenMessage)});
+    if(meta.make) textEntries.push({tag:0x010F, type:2, bytes:asciiValue(meta.make)});
+    if(meta.model) textEntries.push({tag:0x0110, type:2, bytes:asciiValue(meta.model)});
+    if(meta.software) textEntries.push({tag:0x0131, type:2, bytes:asciiValue(meta.software)});
+    if(meta.date) textEntries.push({tag:0x0132, type:2, bytes:asciiValue(meta.date)});
+
+    const hasGps = meta.lat !== null && meta.lon !== null;
+    const ifd0Count = textEntries.length + (hasGps ? 1 : 0);
+
+    const tiffHeader = [];
+    tiffHeader.push(0x49, 0x49);
+    writeU16LE(tiffHeader, 42);
+    writeU32LE(tiffHeader, 8);
+
+    let dataOffset = 8 + 2 + ifd0Count * 12 + 4;
+    const valueData = [];
+    const entries = [];
+
+    textEntries.forEach(item => {
+      const b = padEven(Array.from(item.bytes));
+      if(b.length <= 4){
+        entries.push({tag:item.tag, type:item.type, count:item.bytes.length, value:b});
+      }else{
+        entries.push({tag:item.tag, type:item.type, count:item.bytes.length, offset:dataOffset});
+        valueData.push(...b);
+        dataOffset += b.length;
+      }
+    });
+
+    let gpsIfdOffset = 0;
+    let gpsBlock = [];
+
+    if(hasGps){
+      gpsIfdOffset = dataOffset;
+      entries.push({tag:0x8825, type:4, count:1, offset:gpsIfdOffset});
+
+      const latRef = meta.lat < 0 ? 'S' : 'N';
+      const lonRef = meta.lon < 0 ? 'W' : 'E';
+      const gpsCount = 4;
+      const gpsDataStart = gpsIfdOffset + 2 + gpsCount * 12 + 4;
+      const latOffset = gpsDataStart;
+      const lonOffset = gpsDataStart + 24;
+
+      gpsBlock = [];
+      writeU16LE(gpsBlock, gpsCount);
+      addIfdEntry(gpsBlock, 0x0001, 2, 2, asciiValue(latRef));
+      addIfdEntry(gpsBlock, 0x0002, 5, 3, latOffset);
+      addIfdEntry(gpsBlock, 0x0003, 2, 2, asciiValue(lonRef));
+      addIfdEntry(gpsBlock, 0x0004, 5, 3, lonOffset);
+      writeU32LE(gpsBlock, 0);
+      gpsBlock.push(...dmsRationalTriplet(meta.lat));
+      gpsBlock.push(...dmsRationalTriplet(meta.lon));
+    }
+
+    entries.sort((a, b) => a.tag - b.tag);
+
+    const ifd0 = [];
+    writeU16LE(ifd0, entries.length);
+    entries.forEach(item => {
+      addIfdEntry(ifd0, item.tag, item.type, item.count, item.value || item.offset);
+    });
+    writeU32LE(ifd0, 0);
+
+    return new Uint8Array([
+      ...bytes('Exif'),
+      0, 0,
+      ...tiffHeader,
+      ...ifd0,
+      ...valueData,
+      ...gpsBlock
+    ]);
+  }
+
+  function insertExifIntoJpeg(jpegBytes, meta){
+    if(jpegBytes[0] !== 0xFF || jpegBytes[1] !== 0xD8) throw new Error('JPEG output failed.');
+
+    const payload = buildExifPayload(meta);
+    if(payload.length + 2 > 65535) throw new Error('Metadata is too large for a JPEG EXIF block.');
+
+    const app1 = [];
+    app1.push(0xFF, 0xE1);
+    writeU16BE(app1, payload.length + 2);
+    app1.push(...payload);
+
+    const parts = [
+      jpegBytes.slice(0, 2),
+      new Uint8Array(app1)
+    ];
+
+    if(meta.hiddenMessage){
+      const commentText = bytes(meta.hiddenMessage);
+      const max = Math.min(commentText.length, 65000);
+      const comment = [];
+      comment.push(0xFF, 0xFE);
+      writeU16BE(comment, max + 2);
+      comment.push(...commentText.slice(0, max));
+      parts.push(new Uint8Array(comment));
+    }
+
+    parts.push(jpegBytes.slice(2));
+    return concatBytes(parts);
+  }
+
+  const crcTable = (() => {
+    const table = new Uint32Array(256);
+    for(let n = 0; n < 256; n++){
+      let c = n;
+      for(let k = 0; k < 8; k++){
+        c = ((c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
+      }
+      table[n] = c >>> 0;
+    }
+    return table;
+  })();
+
+  function crc32(bytesArr){
+    let c = 0xFFFFFFFF;
+    for(let i = 0; i < bytesArr.length; i++){
+      c = crcTable[(c ^ bytesArr[i]) & 0xFF] ^ (c >>> 8);
+    }
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  function makePngChunk(type, data){
+    const typeBytes = bytes(type);
+    const dataBytes = Array.from(data || []);
+    const chunk = [];
+    const len = dataBytes.length;
+    chunk.push((len >>> 24) & 255, (len >>> 16) & 255, (len >>> 8) & 255, len & 255);
+    chunk.push(...typeBytes);
+    chunk.push(...dataBytes);
+    const crc = crc32([...typeBytes, ...dataBytes]);
+    chunk.push((crc >>> 24) & 255, (crc >>> 16) & 255, (crc >>> 8) & 255, crc & 255);
+    return new Uint8Array(chunk);
+  }
+
+  function textChunk(keyword, text){
+    return makePngChunk('tEXt', bytes(keyword + '\0' + text));
+  }
+
+  function insertTextIntoPng(pngBytes, meta){
+    const chunks = [];
+
+    if(meta.make) chunks.push(textChunk('Make', meta.make));
+    if(meta.model) chunks.push(textChunk('Model', meta.model));
+    if(meta.software) chunks.push(textChunk('Software', meta.software));
+    if(meta.date) chunks.push(textChunk('DateTime', meta.date));
+    if(meta.lat !== null && meta.lon !== null){
+      chunks.push(textChunk('GPSLatitude', String(meta.lat)));
+      chunks.push(textChunk('GPSLongitude', String(meta.lon)));
+    }
+    if(meta.hiddenMessage) chunks.push(textChunk('HiddenMessage', meta.hiddenMessage));
+
+    if(!chunks.length) return pngBytes;
+
+    let iend = -1;
+    for(let i = 8; i + 8 < pngBytes.length; ){
+      const len = (pngBytes[i] << 24) | (pngBytes[i + 1] << 16) | (pngBytes[i + 2] << 8) | pngBytes[i + 3];
+      const type = String.fromCharCode(pngBytes[i + 4], pngBytes[i + 5], pngBytes[i + 6], pngBytes[i + 7]);
+      if(type === 'IEND'){
+        iend = i;
+        break;
+      }
+      i += 12 + len;
+    }
+
+    if(iend < 0) return pngBytes;
+
+    return concatBytes([
+      pngBytes.slice(0, iend),
+      ...chunks,
+      pngBytes.slice(iend)
+    ]);
+  }
+
+  function isJPEG(u8){ return u8 && u8.length > 2 && u8[0] === 0xFF && u8[1] === 0xD8; }
+  function isPNG(u8){ return u8 && u8.length > 4 && u8[0] === 0x89 && u8[1] === 0x50 && u8[2] === 0x4E && u8[3] === 0x47; }
+  function isWEBP(u8){ return u8 && u8.length > 12 && u8[0] === 0x52 && u8[1] === 0x49 && u8[2] === 0x46 && u8[3] === 0x46 && u8[8] === 0x57 && u8[9] === 0x45 && u8[10] === 0x42 && u8[11] === 0x50; }
+
+  function stripJPEG(u8){
+    const out = [];
+    function write(arr){ for(let i = 0; i < arr.length; i++) out.push(arr[i]); }
+    if(!isJPEG(u8)) throw new Error('Not a JPEG');
+
+    write([0xFF, 0xD8]);
+    let off = 2;
+
+    while(off + 1 < u8.length){
+      if(u8[off] !== 0xFF){
+        while(off < u8.length && u8[off] !== 0xFF) off++;
+        if(off + 1 >= u8.length) break;
+      }
+
+      while(off + 1 < u8.length && u8[off] === 0xFF && u8[off + 1] === 0xFF) off++;
+      if(off + 1 >= u8.length) break;
+
+      const marker = u8[off + 1];
+
+      if(marker === 0xDA){
+        write(u8.slice(off));
+        break;
+      }
+
+      if(marker === 0xD9){
+        write([0xFF, 0xD9]);
+        break;
+      }
+
+      if((marker >= 0xD0 && marker <= 0xD7) || marker === 0x01){
+        write([0xFF, marker]);
+        off += 2;
+        continue;
+      }
+
+      if(off + 4 > u8.length){
+        write(u8.slice(off));
+        break;
+      }
+
+      const len = (u8[off + 2] << 8) | u8[off + 3];
+      const end = off + 2 + len;
+
+      if(end > u8.length){
+        write(u8.slice(off));
+        break;
+      }
+
+      const skip = marker === 0xE1 || marker === 0xED || marker === 0xFE;
+      if(!skip) write(u8.slice(off, end));
+      off = end;
+    }
+
+    return new Uint8Array(out);
+  }
+
+  function stripPNG(u8){
+    const sig = [0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A];
+    for(let i = 0; i < 8; i++) if(u8[i] !== sig[i]) throw new Error('Not a PNG');
+
+    const out = [];
+    function push(arr){ for(let i = 0; i < arr.length; i++) out.push(arr[i]); }
+
+    push(u8.slice(0, 8));
+    let off = 8;
+
+    while(off + 8 <= u8.length){
+      const len = (u8[off] << 24) | (u8[off + 1] << 16) | (u8[off + 2] << 8) | u8[off + 3];
+      const type = String.fromCharCode(u8[off + 4], u8[off + 5], u8[off + 6], u8[off + 7]);
+      const dataEnd = off + 8 + len;
+      const crcEnd = dataEnd + 4;
+      const drop = type === 'eXIf' || type === 'iTXt' || type === 'tEXt' || type === 'zTXt';
+
+      if(!drop) push(u8.slice(off, crcEnd));
+      off = crcEnd;
+
+      if(type === 'IEND') break;
+    }
+
+    return new Uint8Array(out);
+  }
+
+  function stripWEBP(u8){
+    function read32le(p){ return u8[p] | (u8[p + 1] << 8) | (u8[p + 2] << 16) | (u8[p + 3] << 24); }
+    function write32le(n){ return [n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255]; }
+
+    const riff = String.fromCharCode(u8[0],u8[1],u8[2],u8[3]);
+    const webp = String.fromCharCode(u8[8],u8[9],u8[10],u8[11]);
+    if(riff !== 'RIFF' || webp !== 'WEBP') throw new Error('Not a WEBP');
+
+    const out = [];
+    function push(arr){ for(let i = 0; i < arr.length; i++) out.push(arr[i]); }
+
+    push([0x52,0x49,0x46,0x46, 0,0,0,0, 0x57,0x45,0x42,0x50]);
+
+    let off = 12;
+    let dataBytes = 4;
+
+    while(off + 8 <= u8.length){
+      const id = String.fromCharCode(u8[off],u8[off+1],u8[off+2],u8[off+3]);
+      const size = read32le(off + 4);
+      const dataStart = off + 8;
+      const dataEnd = dataStart + size;
+      const pad = size % 2;
+      const drop = id === 'EXIF' || id === 'XMP ';
+
+      if(!drop){
+        push([u8[off],u8[off+1],u8[off+2],u8[off+3]]);
+        push(write32le(size));
+        push(u8.slice(dataStart, dataEnd));
+        if(pad) push([0]);
+        dataBytes += 8 + size + pad;
+      }
+
+      off = dataEnd + pad;
+    }
+
+    const sizeBytes = write32le(dataBytes);
+    out[4] = sizeBytes[0];
+    out[5] = sizeBytes[1];
+    out[6] = sizeBytes[2];
+    out[7] = sizeBytes[3];
+
+    return new Uint8Array(out);
+  }
+
+  async function losslessStrip(file){
+    const buf = await file.arrayBuffer();
+    const u8 = new Uint8Array(buf);
+
+    if(isJPEG(u8)) return new Blob([stripJPEG(u8)], {type:'image/jpeg'});
+    if(isPNG(u8)) return new Blob([stripPNG(u8)], {type:'image/png'});
+    if(isWEBP(u8)) return new Blob([stripWEBP(u8)], {type:'image/webp'});
+
+    return reencode(file, 'image/png', 1);
+  }
+
+  async function fileToBitmap(file){
+    try{
+      return await createImageBitmap(file, {imageOrientation:'from-image'});
+    }catch(_){
+      return await new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          resolve(img);
+        };
+        img.onerror = err => {
+          URL.revokeObjectURL(url);
+          reject(err);
+        };
+        img.src = url;
+      });
+    }
+  }
+
+  async function reencode(file, mime, quality){
+    const bitmap = await fileToBitmap(file);
+    const width = bitmap.width || bitmap.naturalWidth;
+    const height = bitmap.height || bitmap.naturalHeight;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext('2d', {alpha:true});
+
+    if(mime === 'image/jpeg'){
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, width, height);
+    }else{
+      ctx.clearRect(0, 0, width, height);
+    }
+
+    ctx.drawImage(bitmap, 0, 0, width, height);
+
+    return await new Promise((resolve, reject) => {
+      canvas.toBlob(blob => {
+        if(blob) resolve(blob);
+        else reject(new Error('Could not export this image.'));
+      }, mime, quality);
+    });
+  }
+
+  async function createEditedImage(file, meta){
+    const mime = meta.outputFormat === 'png' ? 'image/png' : 'image/jpeg';
+    const encoded = await reencode(file, mime, meta.outputFormat === 'png' ? 1 : meta.quality);
+    const bytesOut = new Uint8Array(await encoded.arrayBuffer());
+
+    if(meta.outputFormat === 'png'){
+      const pngWithText = insertTextIntoPng(bytesOut, meta);
+      return new Blob([pngWithText], {type:'image/png'});
+    }
+
+    const jpegWithExif = insertExifIntoJpeg(bytesOut, meta);
+    return new Blob([jpegWithExif], {type:'image/jpeg'});
+  }
+
+  function summaryFor(blob, mode, meta){
+    const summary = {
+      mode: mode === 'edit' ? 'Changed / added metadata' : 'Removed metadata',
+      outputType: blob.type || 'unknown',
+      size: blob.size,
+      metadataAdded: false
+    };
+
+    if(mode === 'edit'){
+      summary.metadataAdded = true;
+      if(meta.make) summary.deviceMake = meta.make;
+      if(meta.model) summary.deviceModel = meta.model;
+      if(meta.date) summary.dateTaken = meta.date;
+      if(meta.software) summary.software = meta.software;
+      if(meta.lat !== null && meta.lon !== null) summary.gps = { latitude: meta.lat, longitude: meta.lon };
+      if(meta.hiddenMessage) summary.hiddenMessage = meta.hiddenMessage;
+    }else{
+      summary.removed = ['EXIF', 'XMP', 'IPTC/comments where supported'];
+    }
+
+    return summary;
+  }
+
+  async function processImage(){
+    if(!currentFile){
+      setError('Please choose an image first.');
+      return;
+    }
+
+    setError('');
+    setStatus('Processing...', '');
+    processBtn.disabled = true;
+
+    try{
+      const mode = modeEdit.checked ? 'edit' : 'remove';
+      let blob;
+      let downloadName;
+
+      if(mode === 'edit'){
+        const meta = metadataValues();
+
+        if((meta.lat === null) !== (meta.lon === null)){
+          throw new Error('Enter both GPS latitude and longitude, or leave both blank.');
+        }
+
+        if(meta.lat !== null && (meta.lat < -90 || meta.lat > 90)){
+          throw new Error('GPS latitude must be between -90 and 90.');
+        }
+
+        if(meta.lon !== null && (meta.lon < -180 || meta.lon > 180)){
+          throw new Error('GPS longitude must be between -180 and 180.');
+        }
+
+        blob = await createEditedImage(currentFile, meta);
+        downloadName = baseName(currentFile.name) + ' - metadata-edited.' + extensionForMime(blob.type);
+        summaryJson.textContent = JSON.stringify(summaryFor(blob, mode, meta), null, 2);
+      }else{
+        blob = await losslessStrip(currentFile);
+        downloadName = baseName(currentFile.name) + ' - metadata-removed.' + extensionForMime(blob.type);
+        summaryJson.textContent = JSON.stringify(summaryFor(blob, mode, {}), null, 2);
+      }
+
+      setDownload(blob, downloadName);
+      resultCard.classList.remove('hidden');
+      setStatus('Done - ready to download.', 'ok');
+    }catch(err){
+      console.error(err);
+      setStatus('', '');
+      setError(err && err.message ? err.message : 'Could not process that image.');
+    }finally{
+      processBtn.disabled = !currentFile;
+    }
+  }
+
+  ['dragenter','dragover'].forEach(evt => {
+    drop.addEventListener(evt, e => {
+      e.preventDefault();
+      drop.classList.add('dragover');
+    });
+  });
+
+  ['dragleave','drop'].forEach(evt => {
+    drop.addEventListener(evt, e => {
+      e.preventDefault();
+      drop.classList.remove('dragover');
+    });
+  });
+
+  drop.addEventListener('drop', e => {
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    if(file){
+      setError('');
+      setFile(file);
+    }
+  });
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files && fileInput.files[0];
+    if(file){
+      setError('');
+      setFile(file);
+      fileInput.value = '';
+    }
+  });
+
+  modeRemove.addEventListener('change', showEditor);
+  modeEdit.addEventListener('change', showEditor);
+  processBtn.addEventListener('click', processImage);
+  clearBtn.addEventListener('click', resetAll);
+
+  const y = document.getElementById('year');
+  if(y) y.textContent = new Date().getFullYear();
+
+  showEditor();
+})();
+</script>
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

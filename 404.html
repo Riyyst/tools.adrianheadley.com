@@ -14,10 +14,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>404 – Page not found | Adrian Headley</title>
+<title>Page Not Found | Tools</title>
 <meta name="robots" content="noindex,nofollow" />
 
-<link rel="icon" href="Assets/ah-icon.png" type="image/png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -55,6 +54,9 @@ html, body { background:#fff !important; }
 }
 
 </style>
+
+<link rel="icon" href="Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="Assets/site-shell.css">
 </head>
 
 <body data-in-pages="false">
@@ -62,73 +64,30 @@ html, body { background:#fff !important; }
 
 <div class="page-wrapper">
 
-<header class="site-header" id="top">
-            
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-L9N158WSSG"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-L9N158WSSG');
-</script>
-
-<div class="inner-header">
-                <a href="index.html" class="brand">
-                    <span class="brand-mark brand-mark-image">
-                        <img src="Assets/ah-icon.png" alt="Tools logo" />
-                    </span>
-                    <div class="brand-text">
-                        <span class="brand-name">Tools</span>
-</div>
-                </a>
-
-                <nav class="nav" aria-label="Main navigation">
-
-                    <a href="index.html" class="nav-link">Home</a>
-                    <a href="#" class="nav-link">Tools</a>
-                    <a href="#" class="nav-link">Powerful Websites</a>
-                    <a href="#" class="nav-link">About</a>
-                </nav>
-
-                <div class="header-actions">
-                    <button class="a11y-button" id="a11y-button" aria-expanded="false" aria-controls="a11y-panel">
-                        Accessibility
-                    </button>
-                    <div class="a11y-panel" id="a11y-panel" aria-label="Accessibility options">
-                        <div class="a11y-group a11y-group-text">
-                            <span class="a11y-label">Text size</span>
-                            <button type="button" class="a11y-chip" data-text-size="normal">A</button>
-                            <button type="button" class="a11y-chip" data-text-size="large">A+</button>
-                            <button type="button" class="a11y-chip" data-text-size="xlarge">A++</button>
-                        </div>
-                        <div class="a11y-group a11y-group-color">
-                            <span class="a11y-label">Colour</span>
-                            <button type="button" class="a11y-chip" data-color-mode="normal">Default</button>
-                            <button type="button" class="a11y-chip" data-color-mode="cb">Colourblind friendly</button>
-                        </div>
-                        <div class="a11y-group">
-                            <label class="a11y-toggle">
-                                <input type="checkbox" id="underline-toggle" />
-                                <span>Underline links</span>
-                            </label>
-                        </div>
-                        <div class="a11y-group">
-                            <label class="a11y-toggle">
-                                <input type="checkbox" id="motion-toggle" />
-                                <span>Reduce motion</span>
-                            </label>
-                        </div>
-                        <div class="a11y-group">
-                            <label class="a11y-toggle">
-                                <input type="checkbox" id="focus-toggle" />
-                                <span>Stronger focus outlines</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="index.html" class="tools-global-nav-link">Home</a>
+      <a href="pages/tools.html" class="tools-global-nav-link">Tools</a>
+      <a href="pages/toolpages/powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="pages/about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
 
 <main id="main-404" class="error-wrap">
   <div class="error-inner">
@@ -145,20 +104,20 @@ html, body { background:#fff !important; }
   </div>
 </main>
 
-<footer class="site-footer">
-  <div class="footer-inner">
-    <p class="footer-main">© 2025 Adrian Headley</p>
-    <div class="footer-social" aria-label="Social links">
-      <a href="index.html" class="footer-social-link" aria-label="Contact form"><span>✉</span></a>
-      <a href="https://uk.linkedin.com/in/adrianheadley?trk=people-guest_people_search-card" class="footer-social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><span>in</span></a>
-      <a href="https://www.facebook.com/AdrianHeadley04/" class="footer-social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><span>f</span></a>
-      <a href="https://x.com/adrianheadleyhq" class="footer-social-link" aria-label="X (Twitter)" target="_blank" rel="noopener noreferrer"><span>X</span></a>
-    </div>
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="pages/privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="pages/terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
   </div>
 </footer>
 
 </div>
 
 <script src="Assets/script.js"></script>
+<script src="Assets/site-shell.js"></script>
 </body>
 </html>

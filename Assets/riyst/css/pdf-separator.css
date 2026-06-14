@@ -1,0 +1,89 @@
+*{box-sizing:border-box}
+    
+    
+    a{color:inherit;text-decoration:none} a:hover{text-decoration:underline}
+    .container{width:min(var(--max-w),100% - 2rem);margin-inline:auto}
+
+    header.site-header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(18,18,25,.92),rgba(18,18,25,.6) 60%,transparent);backdrop-filter:saturate(120%) blur(8px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .mast{display:flex;justify-content:center;align-items:center;padding:1rem 0;min-height:56px}
+    .nav__list{display:flex;align-items:center;justify-content:center;gap:.25rem;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+    .nav__link{display:inline-block;padding:.5rem .9rem;border-radius:999px;border:1px solid transparent}
+    .nav__link:hover{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.6);text-decoration:none}
+
+    .intro{position:relative;text-align:center;padding:clamp(2rem,6vw,4rem) 0 1.5rem;background:linear-gradient(180deg, rgba(139,92,246,.08), transparent 30%)}
+    .intro__title{margin:.2rem auto .4rem auto;line-height:1.02;font-size:clamp(1.8rem,4vw,2.4rem);font-weight:1000;letter-spacing:.4px}
+    .intro__subtitle{margin:0 auto;color:var(--muted);font-weight:800}
+
+    .tool{padding:2.2rem 0 4rem}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+          border:1px solid rgba(255,255,255,.12);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.45);
+          padding:1.6rem;max-width:980px;margin:0 auto}
+    .row{display:flex;justify-content:center;gap:var(--gap);flex-wrap:wrap;margin-top:var(--gap)}
+    .full{min-width:260px;max-width:100%;flex:1 1 720px}
+
+    label{font-size:.85rem;color:var(--muted);display:block;margin-bottom:.35rem}
+
+    .drop{display:flex;justify-content:center;align-items:center;gap:.6rem;flex-wrap:wrap;
+      border:1px dashed rgba(255,255,255,.22);background:rgba(255,255,255,.05);padding:10px 12px;border-radius:12px;
+      color:#e7e6ff;font-weight:800;cursor:pointer;text-align:center;min-height:var(--ctl-h); position:relative}
+    .drop input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer}
+    .drop.dragover{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.55)}
+
+    .filename{color:var(--muted);font-size:.9rem;text-align:center;margin-top:.5rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .details{color:#cbd5e1;font-size:.95rem;margin-top:.6rem;text-align:left;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:.6rem .75rem;background:rgba(255,255,255,.03)}
+    .error{color:#ffb4b4}
+    .progress{margin-top:10px;text-align:center;color:#cbd5e1;font-size:.95rem}
+
+    .controls{display:grid;grid-template-columns:1fr;gap:10px;margin-top:1rem}
+    @media(min-width:640px){ .controls{grid-template-columns:1.2fr .8fr} }
+    .input{display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:.5rem .75rem}
+    .input input{flex:1 1 auto;background:transparent;border:0;outline:0;color:#e7e6ff;font-weight:700}
+    .hint{font-size:.85rem;color:var(--muted);margin:.15rem 0 0}
+
+    .actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:1rem}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;padding:.6rem 1rem;border-radius:999px;border:1px solid rgba(255,255,255,.18);
+         background:rgba(255,255,255,.07);color:#e7e6ff;font-weight:900;box-shadow:none;
+         transition:transform .12s ease, opacity .2s ease, filter .2s ease}
+    .btn:not([disabled]):hover{animation:pressPulse 1.2s ease-in-out infinite;text-decoration:none}
+    .btn[disabled]{opacity:.45;cursor:not-allowed;filter:grayscale(.45) brightness(.9)}
+    .btn-primary{background:linear-gradient(135deg,#7aa2ff,#b18bff);color:#0e061d;border-color:transparent}
+
+    .dl-list{margin-top:1rem;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:.75rem;background:rgba(255,255,255,.03);max-height:260px;overflow:auto}
+    .dl-list a{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.4rem .55rem;border-radius:10px;border:1px solid rgba(255,255,255,.08);margin:.25rem 0}
+    .dl-list a:hover{background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.55);text-decoration:none}
+
+    .hidden{display:none !important}
+    @keyframes pressPulse{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+    footer.site-footer{padding:1.5rem 0;border-top:1px solid rgba(255,255,255,.06)}
+  
+/* --- Minimal overlay styles (do not break original JS) --- */
+/* Hide the filename-format UI completely */
+label[for="naming"],
+#naming,
+label[for="naming"] + .input + .hint { display: none !important; }
+/* Also hide the container that holds them (set via JS as a fallback) */
+.hide-naming-container { display: none !important; }
+
+/* Show pages block only after file selection (default hidden) */
+#pagesBlock{ display:none; }
+@media(min-width:640px){
+  #pagesBlock{ grid-column:1 / -1; }
+}
+#pagesBlock .input{ min-height: var(--ctl-h); width:100%; }
+
+/* Keep only one visible action for the user */
+#run, #runAll, #downloadAll { display:none !important; }
+
+  
+/* Keep filename & details hidden until a file is loaded */
+#fileName, #pdfInfo { display: none; }
+
+  
+/* Pages input: full width and same height vibe as others */
+#pagesBlock { display:none; grid-column: 1 / -1; }
+#pagesBlock .input { min-height: var(--ctl-h); width: 100%; }
+
+  
+/* Style tweak for downloads list: right-aligned "Download" label */
+.dl-list a .right { opacity:.9; font-weight:800; color:#e7e6ff }

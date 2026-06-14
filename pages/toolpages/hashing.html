@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tools | Hashing Tool</title>
+<meta name="description" content="Hash text, files, multiple files, and compare file or folder hashes directly in your browser."/>
+<meta name="theme-color" content="#f5f5f7"/>
+
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --bg-alt:#ffffff;
+    --text:#111827;
+    --text-soft:#4b5563;
+    --accent:#2563eb;
+    --accent-hover:#1d4ed8;
+    --accent-soft:rgba(37,99,235,.08);
+    --border-subtle:#e5e7eb;
+    --border-strong:#d1d5db;
+    --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+    --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+    --radius:20px;
+    --radius-pill:999px;
+    --max-w:980px;
+    --gap:14px;
+    --stack-gap:14px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%}
+  body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background:var(--bg);
+    color:var(--text);
+    font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  main{flex:1}
+  .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+  .skip-link{
+    position:absolute;
+    left:-999px;
+    top:.5rem;
+    padding:.45rem .75rem;
+    background:#111827;
+    color:#f9fafb;
+    z-index:100;
+    border-radius:var(--radius-pill);
+    font-size:.85rem;
+  }
+  .skip-link:focus{left:.5rem}
+
+  header.site-header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    border-bottom:1px solid rgba(148,163,184,.28);
+    backdrop-filter:blur(16px);
+    background:rgba(248,250,252,.95);
+  }
+  .mast{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:58px;
+    padding:.55rem 0;
+  }
+  .nav__list{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    list-style:none;
+    margin:0;
+    padding:0;
+    flex-wrap:wrap;
+    font-size:.86rem;
+  }
+  .nav__link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:.3rem .8rem;
+    border-radius:var(--radius-pill);
+    color:var(--text-soft);
+    border:1px solid transparent;
+    transition:background .16s,color .16s,transform .12s,border-color .16s;
+  }
+  .nav__link:hover,.nav__link:focus-visible{
+    background:rgba(148,163,184,.18);
+    color:var(--text);
+    transform:translateY(-1px);
+    text-decoration:none;
+    border-color:rgba(148,163,184,.26);
+  }
+  .nav__link--highlight{background:var(--accent-soft);color:var(--accent);border-color:rgba(37,99,235,.18)}
+
+  .intro{
+    text-align:center;
+    padding:2.6rem 0 2.4rem;
+  }
+  .intro__title{
+    font-size:clamp(2.1rem,3vw,2.6rem);
+    line-height:1.15;
+    margin:0 0 .8rem;
+    font-weight:750;
+    letter-spacing:-.03em;
+  }
+  .intro__subtitle{
+    max-width:650px;
+    margin:0 auto;
+    color:var(--text-soft);
+    font-size:.96rem;
+    font-weight:500;
+  }
+
+  .tool{padding:2.4rem 0 4rem}
+  .grid{
+    display:grid;
+    grid-template-columns:minmax(220px,280px) minmax(0,1fr);
+    gap:var(--gap);
+    align-items:start;
+    max-width:980px;
+    margin:0 auto;
+  }
+  .card{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--border-subtle);
+    border-radius:24px;
+    box-shadow:var(--shadow-soft);
+    padding:clamp(1.2rem,3vw,1.7rem);
+    transition:box-shadow .16s,transform .16s,border-color .16s;
+  }
+  .card:hover{box-shadow:var(--shadow-lift);border-color:rgba(37,99,235,.18)}
+  .hd h2{
+    margin:0 0 .85rem;
+    font-size:1.05rem;
+    line-height:1.25;
+    font-weight:760;
+    letter-spacing:-.01em;
+    text-align:center;
+  }
+  .bd{display:flex;flex-direction:column;gap:.85rem}
+
+  label{
+    display:block;
+    margin:0 0 .35rem;
+    color:var(--text-soft);
+    font-size:.85rem;
+    font-weight:700;
+  }
+  textarea,select,input{
+    width:100%;
+    border-radius:14px;
+    border:1px solid var(--border-strong);
+    background:#ffffff;
+    color:var(--text);
+    outline:none;
+    transition:border-color .16s,box-shadow .16s,background .16s;
+    font:inherit;
+  }
+  textarea{
+    min-height:230px;
+    resize:vertical;
+    padding:.9rem 1rem;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    font-size:.92rem;
+    line-height:1.5;
+  }
+  select,input{
+    padding:.78rem 1rem;
+  }
+  textarea:focus,select:focus,input:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+  }
+
+  .tabs{
+    display:flex;
+    flex-direction:column;
+    gap:.45rem;
+  }
+  .tabbtn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    padding:.62rem .9rem;
+    border-radius:var(--radius-pill);
+    border:1px solid rgba(148,163,184,.72);
+    background:#fff;
+    color:var(--text);
+    cursor:pointer;
+    font:inherit;
+    font-size:.86rem;
+    font-weight:700;
+    transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+  }
+  .tabbtn:hover{
+    transform:translateY(-1px);
+    background:rgba(148,163,184,.15);
+  }
+  .tabbtn[aria-selected="true"]{
+    background:var(--accent);
+    color:#fff;
+    border-color:var(--accent);
+  }
+  .hr{display:none}
+
+  .panel[hidden]{display:none!important}
+  .panel{display:flex;flex-direction:column;gap:var(--stack-gap)}
+  .row{
+    display:flex;
+    gap:var(--gap);
+    flex-wrap:wrap;
+  }
+  .row.two>div{flex:1 1 250px;min-width:230px}
+
+  .drop{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:.65rem;
+    min-height:142px;
+    padding:1.3rem;
+    border:2px dashed var(--border-strong);
+    border-radius:20px;
+    background:#f8fafc;
+    color:var(--text-soft);
+    text-align:center;
+    transition:border-color .16s,background .16s,box-shadow .16s,transform .14s;
+    font-weight:650;
+  }
+  .drop:hover,.drop:focus-within{
+    border-color:var(--accent);
+    background:#f4f8ff;
+    box-shadow:0 0 0 4px rgba(37,99,235,.08);
+    transform:translateY(-1px);
+  }
+  .native-file{
+    position:absolute;
+    width:1px;
+    height:1px;
+    opacity:0;
+    pointer-events:none;
+  }
+  .file-ui{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:.55rem;
+    width:100%;
+  }
+  .file-choose{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:40px;
+    padding:.55rem 1.05rem;
+    margin:0;
+    border-radius:var(--radius-pill);
+    border:1px solid transparent;
+    background:var(--accent);
+    color:#fff;
+    cursor:pointer;
+    font-size:.86rem;
+    font-weight:700;
+    transition:background .16s,transform .14s,box-shadow .16s;
+  }
+  .file-choose:hover{
+    background:var(--accent-hover);
+    transform:translateY(-1px);
+    box-shadow:0 10px 25px rgba(37,99,235,.18);
+  }
+  .file-name{
+    color:var(--text);
+    font-size:.86rem;
+    font-weight:650;
+    overflow-wrap:anywhere;
+  }
+  .drop-text{
+    color:var(--text-soft);
+    font-size:.84rem;
+  }
+
+  .btnrow{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.7rem;
+    flex-wrap:wrap;
+  }
+  button.primary,.btnrow button,#filesTable button,#diffTable button{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    min-height:42px;
+    padding:.62rem 1.2rem;
+    border-radius:var(--radius-pill);
+    border:1px solid transparent;
+    background:var(--accent);
+    color:#f9fafb;
+    font-size:.86rem;
+    font-weight:700;
+    cursor:pointer;
+    text-decoration:none;
+    box-shadow:none;
+    transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+    font-family:inherit;
+  }
+  button.primary:hover:not([disabled]),.btnrow button:hover:not([disabled]),#filesTable button:hover:not([disabled]),#diffTable button:hover:not([disabled]){
+    transform:translateY(-1px);
+    background:var(--accent-hover);
+    box-shadow:0 10px 25px rgba(37,99,235,.18);
+  }
+
+  .out{
+    width:100%;
+    min-height:74px;
+    border-radius:18px;
+    border:1px solid var(--border-subtle);
+    background:#f8fafc;
+    color:var(--text);
+    padding:1rem;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    font-size:.9rem;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
+  }
+  .kv{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.45rem;
+    flex-wrap:wrap;
+    color:var(--text-soft);
+  }
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:.24rem .6rem;
+    border-radius:var(--radius-pill);
+    border:1px solid var(--border-subtle);
+    background:#fff;
+    color:var(--text-soft);
+    font-size:.78rem;
+    font-weight:750;
+  }
+  .badge.ok{
+    color:#047857;
+    border-color:rgba(4,120,87,.18);
+    background:rgba(4,120,87,.08);
+  }
+  .badge.bad{
+    color:#b91c1c;
+    border-color:rgba(185,28,28,.18);
+    background:rgba(185,28,28,.08);
+  }
+  .badge.warn{
+    color:#92400e;
+    border-color:rgba(146,64,14,.18);
+    background:rgba(146,64,14,.08);
+  }
+
+  .hidden-until{display:none!important}
+
+  .tablewrap{
+    overflow:auto;
+    border:1px solid var(--border-subtle);
+    border-radius:18px;
+    background:#fff;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.85rem;
+  }
+  th,td{
+    padding:.7rem .75rem;
+    border-bottom:1px solid var(--border-subtle);
+    text-align:left;
+    vertical-align:top;
+  }
+  th{
+    background:#f8fafc;
+    color:var(--text);
+    font-weight:760;
+  }
+  td{
+    color:var(--text-soft);
+  }
+  .hashcell{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    color:var(--text);
+    overflow-wrap:anywhere;
+  }
+  .right{text-align:right}
+
+  footer.site-footer{
+    margin-top:auto;
+    padding:1.6rem 1.5rem 1.8rem;
+    font-size:.85rem;
+    color:var(--text-soft);
+    border-top:1px solid rgba(148,163,184,.3);
+    background:rgba(248,250,252,.72);
+  }
+  .fine{font-size:.95rem;color:var(--text-soft)}
+  .footer-legal{
+    margin-top:.45rem;
+    display:flex;
+    justify-content:center;
+    gap:.45rem;
+    font-size:.82rem;
+    flex-wrap:wrap;
+  }
+  .footer-legal a{
+    color:var(--text-soft);
+    padding:.25rem .55rem;
+    border-radius:var(--radius-pill);
+    transition:background .16s,color .16s,transform .12s;
+  }
+  .footer-legal a:hover{
+    color:var(--accent);
+    background:rgba(148,163,184,.16);
+    text-decoration:none;
+    transform:translateY(-1px);
+  }
+
+  @media (max-width:840px){
+    .grid{grid-template-columns:1fr}
+    .tabs{flex-direction:row;flex-wrap:wrap;justify-content:center}
+    .tabbtn{width:auto;min-width:120px}
+  }
+  @media (max-width:760px){
+    .container{width:min(100% - 2rem,var(--max-w))}
+    .nav__list{gap:.25rem}
+    .nav__link{padding:.28rem .65rem}
+    .intro{padding:2rem 0 2.1rem}
+    .tool{padding:1.6rem 0 3rem}
+    .btnrow button,button.primary{width:100%;max-width:320px}
+  }
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Hashing Tool</h1>
+      <p class="intro__subtitle">Hash text, files, multiple files, and compare files or folders directly in your browser.</p>
+    </div>
+  </section>
+
+  <section class="tool" id="hashing-tool">
+    <div class="container">
+      <div class="grid">
+        <section class="card">
+          <div class="hd"><h2>Mode</h2></div>
+          <div class="bd">
+            <div class="tabs" role="tablist" aria-label="Modes">
+              <button class="tabbtn" role="tab" data-tab="text" aria-selected="true" type="button">Text</button>
+              <button class="tabbtn" role="tab" data-tab="file" aria-selected="false" type="button">File</button>
+              <button class="tabbtn" role="tab" data-tab="files" aria-selected="false" type="button">Files</button>
+              <button class="tabbtn" role="tab" data-tab="compare" aria-selected="false" type="button">Compare</button>
+            </div>
+
+            <div class="hr"></div>
+
+            <label for="algo">Hash algorithm</label>
+            <select id="algo">
+              <option value="SHA-1" selected>SHA-1</option>
+              <option value="SHA-256">SHA-256</option>
+              <option value="SHA-512">SHA-512</option>
+              <option value="SHA3-256">SHA3-256</option>
+              <option value="SHA3-512">SHA3-512</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="hd"><h2 id="panelTitle">Text hashing</h2></div>
+          <div class="bd">
+
+            <div class="panel" data-panel="text">
+              <label for="textInput">Input text</label>
+              <textarea id="textInput" placeholder="Type or paste text here..."></textarea>
+              <div class="btnrow" id="textBtnRow">
+                <button id="hashText" class="primary" type="button">Hash text</button>
+                <button id="copyTextIn" class="primary" type="button" style="display:none;">Copy input</button>
+              </div>
+
+              <label id="textResultLabel" class="hidden-until">Result</label>
+              <div id="textOut" class="out hidden-until"></div>
+              <div class="kv hidden-until" id="textMeta"></div>
+            </div>
+
+            <div class="panel" data-panel="file" hidden>
+              <label>File</label>
+              <div class="drop" id="dropOne">
+                <input id="oneFile" type="file" class="native-file"/>
+                <div class="file-ui">
+                  <label class="file-choose" for="oneFile">Choose file</label>
+                  <div class="file-name" id="oneFileName">No file chosen</div>
+                </div>
+                <div class="drop-text">Drop a file here</div>
+              </div>
+
+              <div class="btnrow">
+                <button id="hashFile" class="primary" type="button">Hash file</button>
+                <button id="copyFileHash" class="primary" type="button" style="display:none;">Copy hash</button>
+              </div>
+
+              <label id="fileResultLabel" class="hidden-until">Result</label>
+              <div id="fileOut" class="out hidden-until"></div>
+              <div class="kv hidden-until" id="fileMeta"></div>
+            </div>
+
+            <div class="panel" data-panel="files" hidden>
+              <label>Files</label>
+              <div class="drop" id="dropMany">
+                <input id="manyFiles" type="file" multiple class="native-file"/>
+                <div class="file-ui">
+                  <label class="file-choose" for="manyFiles">Choose files</label>
+                  <div class="file-name" id="manyFilesName">No files chosen</div>
+                </div>
+                <div class="drop-text">Drop files here</div>
+              </div>
+
+              <div class="btnrow">
+                <button id="hashFiles" class="primary" type="button">Hash selected files</button>
+                <button id="copyTable" class="primary" type="button" style="display:none;">Copy table (TSV)</button>
+                <button id="exportManifest" class="primary" type="button" style="display:none;">Export manifest</button>
+              </div>
+
+              <div class="tablewrap" style="margin-top:10px;">
+                <table id="filesTable" class="hidden-until">
+                  <thead>
+                    <tr>
+                      <th style="min-width:220px;">Name</th>
+                      <th style="min-width:120px;">Size</th>
+                      <th style="min-width:240px;">Hash</th>
+                      <th style="min-width:120px;">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="kv hidden-until" id="filesMeta"></div>
+            </div>
+
+            <div class="panel" data-panel="compare" hidden>
+              <label for="cmpType">Compare type</label>
+              <select id="cmpType">
+                <option value="files" selected>Files</option>
+                <option value="folders">Folders</option>
+              </select>
+
+              <div id="cmpFilesBox">
+                <div class="row two">
+                  <div>
+                    <label for="cmpA">Item A</label>
+                    <div class="drop" id="dropCmpA">
+                      <input id="cmpA" type="file" class="native-file"/>
+                      <div class="file-ui">
+                        <label class="file-choose" for="cmpA">Choose file</label>
+                        <div class="file-name" id="cmpAName">No file chosen</div>
+                      </div>
+                      <div class="drop-text">Drop a file here</div>
+                    </div>
+                  </div>
+                  <div>
+                    <label for="cmpB">Item B</label>
+                    <div class="drop" id="dropCmpB">
+                      <input id="cmpB" type="file" class="native-file"/>
+                      <div class="file-ui">
+                        <label class="file-choose" for="cmpB">Choose file</label>
+                        <div class="file-name" id="cmpBName">No file chosen</div>
+                      </div>
+                      <div class="drop-text">Drop a file here</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="btnrow">
+                  <button id="compareFiles" class="primary" type="button">Compare</button>
+                </div>
+              </div>
+
+              <div id="cmpFoldersBox" style="display:none;">
+                <div class="row two">
+                  <div>
+                    <label for="dirA">Folder A</label>
+                    <div class="drop" id="dropDirA">
+                      <input id="dirA" type="file" webkitdirectory directory multiple class="native-file"/>
+                      <div class="file-ui">
+                        <label class="file-choose" for="dirA">Choose folder</label>
+                        <div class="file-name" id="dirAName">No folder chosen</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label for="dirB">Folder B</label>
+                    <div class="drop" id="dropDirB">
+                      <input id="dirB" type="file" webkitdirectory directory multiple class="native-file"/>
+                      <div class="file-ui">
+                        <label class="file-choose" for="dirB">Choose folder</label>
+                        <div class="file-name" id="dirBName">No folder chosen</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="btnrow">
+                  <button id="compareFolders" class="primary" type="button">Compare</button>
+                  <button id="exportDiff" class="primary" type="button" style="display:none;">Export diff (JSON)</button>
+                </div>
+              </div>
+
+              <label id="cmpResultLabel" class="hidden-until">Compare result</label>
+              <div id="cmpOut" class="out hidden-until"></div>
+              <div class="kv hidden-until" id="cmpMeta"></div>
+
+              <div id="diffWrap" class="tablewrap hidden-until" style="margin-top:10px;">
+                <table id="diffTable">
+                  <thead>
+                    <tr>
+                      <th style="min-width:260px;">Path</th>
+                      <th style="min-width:120px;">Status</th>
+                      <th style="min-width:260px;">A</th>
+                      <th style="min-width:260px;">B</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- RIYST_INLINE_SCRIPT_START -->
+<script>
+const $ = (sel, el=document) => el.querySelector(sel);
+const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
+
+function promiseTimeout(p, ms, msg){
+  let t;
+  const timeout = new Promise((_, reject)=>{
+    t = setTimeout(()=>reject(new Error(msg || ("Timed out after " + ms + "ms"))), ms);
+  });
+  return Promise.race([p.finally(()=>clearTimeout(t)), timeout]);
+}
+
+function showEls(ids){
+  ids.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.classList.remove("hidden-until");
+  });
+}
+function hideEls(ids, clear=false){
+  ids.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){
+      el.classList.add("hidden-until");
+      if(clear){
+        if(el.tagName === "DIV") el.textContent = "";
+        if(el.tagName === "TABLE"){
+          const tb = el.querySelector("tbody");
+          if(tb) tb.innerHTML = "";
+        }
+      }
+      if(clear && el.classList.contains("kv")) el.innerHTML = "";
+    }
+  });
+}
+
+/* ------- Tabs ------- */
+let currentTab = "text";
+function setTab(tab){
+  currentTab = tab;
+  $$(".tabbtn").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
+  $$(".panel").forEach(p => p.hidden = p.dataset.panel !== tab);
+  const titles = {text:"Text hashing", file:"File hashing", files:"Multi-file hashing", compare:"Compare", disk:"Disk (folder-as-disk)"};
+  $("#panelTitle").textContent = titles[tab] || "Hashing";
+}
+$$(".tabbtn").forEach(b => b.addEventListener("click", () => setTab(b.dataset.tab)));
+
+/* ------- Helpers ------- */
+function humanBytes(n){
+  const u = ["B","KB","MB","GB","TB"];
+  let i=0, x=n;
+  while(x>=1024 && i<u.length-1){ x/=1024; i++; }
+  return `${x.toFixed(i?2:0)} ${u[i]}`;
+}
+function toHexLower(buf){
+  const bytes = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+  let s = "";
+  for (let i=0; i<bytes.length; i++) s += bytes[i].toString(16).padStart(2,"0");
+  return s.toLowerCase();
+}
+async function copyText(txt){
+  try{ await navigator.clipboard.writeText(txt); toast("Copied ✅"); }
+  catch{
+    const ta = document.createElement("textarea");
+    ta.value = txt; document.body.appendChild(ta);
+    ta.select(); document.execCommand("copy");
+    ta.remove(); toast("Copied ✅");
+  }
+}
+function downloadText(filename, text, mime="text/plain"){
+  const blob = new Blob([text], {type:mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+function nowISO(){ return new Date().toISOString(); }
+let toastTimer=null;
+function toast(msg){
+  let t = $("#__toast");
+  if(!t){
+    t = document.createElement("div");
+    t.id="__toast";
+    t.style.cssText="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.14);color:#fff;padding:10px 12px;border-radius:12px;z-index:9999;font-size:12px;box-shadow:0 10px 25px rgba(0,0,0,.35);";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.display="block";
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.style.display="none", 1400);
+}
+function badge(text, kind="warn"){
+  const s = document.createElement("span");
+  s.className = "badge " + (kind || "warn");
+  s.textContent = text;
+  return s;
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
+
+/* ------- Optional CDNs (auto-loaded when selected) ------- */
+const CDN = {
+  md5: "https://cdnjs.cloudflare.com/ajax/libs/js-md5/0.8.3/md5.min.js",
+  sha3: "https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.9.3/sha3.min.js",
+  blakejs: "https://cdn.jsdelivr.net/npm/blakejs@1.2.1/blake2b.js",
+  xxhash: "https://cdn.jsdelivr.net/npm/xxhashjs@0.2.2/build/xxhash.min.js"
+};
+function loadScript(src, timeoutMs=7000){
+  return new Promise((resolve,reject)=>{
+    const s = document.createElement("script");
+    s.src = src;
+    let done = false;
+    const timer = setTimeout(()=>{
+      if(done) return;
+      done = true;
+      try{ s.remove(); }catch{}
+      reject(new Error("Timed out loading: " + src));
+    }, timeoutMs);
+
+    s.onload = ()=>{
+      if(done) return;
+      done = true;
+      clearTimeout(timer);
+      resolve(true);
+    };
+    s.onerror = ()=>{
+      if(done) return;
+      done = true;
+      clearTimeout(timer);
+      reject(new Error("Failed to load: " + src));
+    };
+    document.head.appendChild(s);
+  });
+}
+async function ensureLibForAlg(alg){
+  // Only load what we need, when we need it.
+  if(alg==="MD5" && !window.md5) await loadScript(CDN.md5);
+  if((alg==="SHA3-256" || alg==="SHA3-512") && !(window.sha3_256 && window.sha3_512)) await loadScript(CDN.sha3);
+  if((alg==="BLAKE2B-256" || alg==="BLAKE2B-512") && !window.blake2b) await loadScript(CDN.blakejs);
+  if(alg==="XXH64" && !(window.XXH && window.XXH.h64)) await loadScript(CDN.xxhash);
+}
+
+/* ------- Core hashing ------- */
+function textToBytes(txt, enc){
+  if(enc === "utf-16le"){
+    const buf = new ArrayBuffer(txt.length * 2);
+    const view = new Uint16Array(buf);
+    for(let i=0;i<txt.length;i++) view[i] = txt.charCodeAt(i);
+    return new Uint8Array(buf); // practical LE in browsers
+  }
+  return new TextEncoder().encode(txt);
+}
+async function webcryptoDigest(alg, bytes){
+  if(!globalThis.crypto || !crypto.subtle || !crypto.subtle.digest){
+    throw new Error("WebCrypto unavailable (use HTTPS/localhost)");
+  }
+  const buf = await promiseTimeout(crypto.subtle.digest(alg, bytes), 8000, "Digest timed out");
+  return new Uint8Array(buf);
+}
+
+function sha1Bytes(bytes){
+  // bytes: Uint8Array -> Uint8Array(20)
+  const K = [0x5A827999,0x6ED9EBA1,0x8F1BBCDC,0xCA62C1D6];
+  const ml = bytes.length * 8;
+
+  // pad
+  const withOne = new Uint8Array(bytes.length + 1);
+  withOne.set(bytes);
+  withOne[bytes.length] = 0x80;
+
+  let padLen = (64 - ((withOne.length + 8) % 64)) % 64;
+  const padded = new Uint8Array(withOne.length + padLen + 8);
+  padded.set(withOne);
+
+  // length big-endian
+  const dv = new DataView(padded.buffer);
+  const lenPos = padded.length - 8;
+  dv.setUint32(lenPos, Math.floor(ml / 0x100000000), false);
+  dv.setUint32(lenPos + 4, ml >>> 0, false);
+
+  let h0=0x67452301, h1=0xEFCDAB89, h2=0x98BADCFE, h3=0x10325476, h4=0xC3D2E1F0;
+
+  const w = new Uint32Array(80);
+
+  for(let i=0;i<padded.length;i+=64){
+    for(let t=0;t<16;t++){
+      w[t] = dv.getUint32(i + t*4, false);
+    }
+    for(let t=16;t<80;t++){
+      const x = w[t-3]^w[t-8]^w[t-14]^w[t-16];
+      w[t] = ((x<<1) | (x>>>31)) >>> 0;
+    }
+
+    let a=h0,b=h1,c=h2,d=h3,e=h4;
+    for(let t=0;t<80;t++){
+      let f, k;
+      if(t<20){ f = (b & c) | ((~b) & d); k=K[0]; }
+      else if(t<40){ f = b ^ c ^ d; k=K[1]; }
+      else if(t<60){ f = (b & c) | (b & d) | (c & d); k=K[2]; }
+      else { f = b ^ c ^ d; k=K[3]; }
+      const temp = (((a<<5)|(a>>>27)) + f + e + k + w[t]) >>> 0;
+      e=d; d=c; c=((b<<30)|(b>>>2))>>>0; b=a; a=temp;
+    }
+    h0=(h0+a)>>>0; h1=(h1+b)>>>0; h2=(h2+c)>>>0; h3=(h3+d)>>>0; h4=(h4+e)>>>0;
+  }
+
+  const out = new Uint8Array(20);
+  const outdv = new DataView(out.buffer);
+  outdv.setUint32(0,h0,false);
+  outdv.setUint32(4,h1,false);
+  outdv.setUint32(8,h2,false);
+  outdv.setUint32(12,h3,false);
+  outdv.setUint32(16,h4,false);
+  return out;
+}
+
+async function webcryptoHmac(alg, keyStr, bytes){
+  const keyBytes = new TextEncoder().encode(keyStr);
+  const key = await crypto.subtle.importKey("raw", keyBytes, {name:"HMAC", hash:{name:alg}}, false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", key, bytes);
+  return new Uint8Array(sig);
+}
+function hexToBytes(hex){
+  const clean = hex.replace(/[^0-9a-fA-F]/g, "");
+  const out = new Uint8Array(Math.ceil(clean.length/2));
+  for(let i=0;i<out.length;i++) out[i] = parseInt(clean.substr(i*2,2),16);
+  return out;
+}
+async function hashBytes(bytes){
+  const alg = $("#algo").value;
+  if(["MD5","SHA3-256","SHA3-512","BLAKE2B-256","BLAKE2B-512","XXH64"].includes(alg)){
+    await ensureLibForAlg(alg);
+  }
+
+  let outBytes;
+
+  const hmacKey = "";
+  if(alg === "SHA-1" || alg === "SHA-256" || alg === "SHA-512"){
+    if(hmacKey){
+      outBytes = await webcryptoHmac(alg, hmacKey, bytes);
+    }else{
+      try{
+        outBytes = await webcryptoDigest(alg, bytes);
+      }catch(e){
+        // Fallback for SHA-1 to avoid hanging/unavailable WebCrypto contexts
+        if(alg === "SHA-1"){
+          outBytes = sha1Bytes(bytes);
+        }else{
+          throw e;
+        }
+      }
+    }
+  } else if(alg === "MD5"){
+    const hex = window.md5(Array.from(bytes));
+    outBytes = hexToBytes(hex);
+  } else if(alg === "SHA3-256"){
+    const hex = window.sha3_256.update(bytes).hex();
+    outBytes = hexToBytes(hex);
+  } else if(alg === "SHA3-512"){
+    const hex = window.sha3_512.update(bytes).hex();
+    outBytes = hexToBytes(hex);
+  } else if(alg === "BLAKE2B-256"){
+    outBytes = window.blake2b(bytes, null, 32);
+  } else if(alg === "BLAKE2B-512"){
+    outBytes = window.blake2b(bytes, null, 64);
+  } else if(alg === "XXH64"){
+    const seed = 0x0;
+    const h = window.XXH.h64(seed).update(bytes).digest().toString(16).padStart(16,"0");
+    outBytes = hexToBytes(h);
+  } else {
+    throw new Error("Unknown algorithm: " + alg);
+  }
+
+  return { alg, bytes: outBytes, text: toHexLower(outBytes) };
+}
+async function hashFileToHex(file){
+  const maxWarn = 800 * 1024 * 1024;
+  if(file.size > maxWarn) toast("Large file: may be slow / memory heavy");
+  const buf = await file.arrayBuffer();
+  return await hashBytes(new Uint8Array(buf));
+}
+
+/* ------- TEXT ------- */
+let lastResults = [];
+$("#hashText").addEventListener("click", async ()=>{
+  try{
+    const txt = $("#textInput").value;
+    const enc = "utf-8";
+    const bytes = textToBytes(txt, enc);
+    const t0 = performance.now();
+    const r = await hashBytes(bytes);
+    const t1 = performance.now();
+
+    $("#textOut").textContent = r.text;
+    showEls(["textResultLabel","textOut","textMeta"]);
+    $("#textMeta").innerHTML = "";
+    $("#textMeta").appendChild(badge(r.alg, "ok"));
+    $("#textMeta").appendChild(badge(`${bytes.length} bytes`, "warn"));
+    $("#textMeta").appendChild(badge(`${(t1-t0).toFixed(1)} ms`, "warn"));
+
+    lastResults = [{type:"text", name:"(text input)", size: bytes.length, alg:r.alg, hash:r.text, when: nowISO()}];
+    const copyBtn = $("#copyTextIn");
+    if(copyBtn && copyBtn.style.display === "none") copyBtn.style.display = "";
+
+  }catch(e){
+    $("#textOut").textContent = "Error: " + (e?.message || e);
+    toast("Hash failed");
+  }
+});
+$("#copyTextIn").addEventListener("click", ()=>copyText($("#textInput").value));
+
+/* ------- FILE ------- */
+$("#hashFile").addEventListener("click", async ()=>{
+  const f = $("#oneFile").files && $("#oneFile").files[0];
+  if(!f){ toast("Choose a file first"); return; }
+  await hashOneFile(f);
+});
+async function hashOneFile(f){
+  try{
+    const t0 = performance.now();
+    const r = await hashFileToHex(f);
+    const t1 = performance.now();
+
+    $("#fileOut").textContent = r.text;
+    showEls(["fileResultLabel","fileOut","fileMeta"]);
+    $("#fileMeta").innerHTML = "";
+    $("#fileMeta").appendChild(badge(f.name, "ok"));
+    $("#fileMeta").appendChild(badge(humanBytes(f.size), "warn"));
+    $("#fileMeta").appendChild(badge(r.alg, "ok"));
+    $("#fileMeta").appendChild(badge(`${(t1-t0).toFixed(1)} ms`, "warn"));
+    lastResults = [{type:"file", name:f.name, path:f.name, size:f.size, alg:r.alg, hash:r.text, when: nowISO()}];
+    const ch = $("#copyFileHash");
+    if(ch) ch.style.display = "";
+  }catch(e){
+    $("#fileOut").textContent = "Error: " + (e?.message || e);
+    toast("Hash failed");
+  }
+}
+$("#copyFileHash").addEventListener("click", ()=>copyText($("#fileOut").textContent.trim()));
+
+/* Drag/drop */
+function toFileList(files){
+  const dt = new DataTransfer();
+  files.forEach(f=>dt.items.add(f));
+  return dt.files;
+}
+function wireDrop(el, onFiles){
+  el.addEventListener("dragover", (e)=>{ e.preventDefault(); el.style.borderColor="rgba(127,211,255,.75)"; });
+  el.addEventListener("dragleave", ()=>{ el.style.borderColor="rgba(127,211,255,.35)"; });
+  el.addEventListener("drop", (e)=>{
+    e.preventDefault();
+    el.style.borderColor="rgba(127,211,255,.35)";
+    const files = Array.from(e.dataTransfer.files || []);
+    if(files.length) onFiles(files);
+  });
+}
+wireDrop($("#dropOne"), (files)=>{
+  $("#oneFile").files = toFileList(files.slice(0,1));
+  toast("File selected");
+});
+wireDrop($("#dropMany"), (files)=>{
+  $("#manyFiles").files = toFileList(files);
+  toast(`${files.length} files selected`);
+});
+
+// Compare drag/drop helpers
+wireDrop($("#dropCmpA"), (files)=>{
+  $("#cmpA").files = toFileList(files.slice(0,1));
+  toast("Selected A");
+});
+wireDrop($("#dropCmpB"), (files)=>{
+  $("#cmpB").files = toFileList(files.slice(0,1));
+  toast("Selected B");
+});
+wireDrop($("#dropDirA"), (files)=>{
+  $("#dirA").files = toFileList(files);
+  toast("Folder A selected");
+});
+wireDrop($("#dropDirB"), (files)=>{
+  $("#dirB").files = toFileList(files);
+  toast("Folder B selected");
+});
+
+// Compare type toggle (files vs folders)
+(function(){
+  const sel = $("#cmpType");
+  const fb = $("#cmpFilesBox");
+  const db = $("#cmpFoldersBox");
+  const reset = ()=>{
+    hideEls(["cmpResultLabel","cmpOut","cmpMeta","diffWrap"], true);
+    const ed = $("#exportDiff"); if(ed) ed.style.display="none";
+  };
+  if(sel){
+    sel.addEventListener("change", ()=>{
+      if(sel.value === "folders"){
+        if(fb) fb.style.display="none";
+        if(db) db.style.display="";
+      }else{
+        if(db) db.style.display="none";
+        if(fb) fb.style.display="";
+      }
+      reset();
+    });
+  }
+})();
+
+
+/* ------- FILES ------- */
+$("#hashFiles").addEventListener("click", async ()=>{
+  const files = Array.from($("#manyFiles").files || []);
+  if(!files.length){ toast("Select files first"); return; }
+  await hashMany(files);
+});
+async function hashMany(files){
+  showEls(["filesTable","filesMeta"]); const tbody = $("#filesTable tbody");
+  const fp = document.querySelector('.panel[data-panel="files"]'); if(fp) fp.classList.add("has-results");
+  tbody.innerHTML = "";
+  const results = [];
+  const t0 = performance.now();
+
+  for(const f of files){
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${escapeHtml(f.name)}</td><td>${humanBytes(f.size)}</td><td class="hashcell">…</td><td class="right"></td>`;
+    tbody.appendChild(tr);
+    try{
+      const r = await hashFileToHex(f);
+      tr.querySelector(".hashcell").textContent = r.text;
+      const btn = document.createElement("button");
+      btn.textContent = "Copy";
+      btn.addEventListener("click", ()=>copyText(r.text));
+      tr.querySelector(".right").appendChild(btn);
+      results.push({type:"file", name:f.name, path:f.name, size:f.size, alg:r.alg, hash:r.text, when: nowISO()});
+    }catch(e){
+      tr.querySelector(".hashcell").textContent = "Error";
+      results.push({type:"file", name:f.name, path:f.name, size:f.size, alg:$("#algo").value, hash:null, error:String(e), when: nowISO()});
+    }
+  }
+  const t1 = performance.now();
+  $("#filesMeta").innerHTML = "";
+  $("#filesMeta").appendChild(badge(`${files.length} files`, "ok"));
+  $("#filesMeta").appendChild(badge($("#algo").value, "ok"));
+  $("#filesMeta").appendChild(badge(`${(t1-t0).toFixed(1)} ms`, "warn"));
+
+  lastResults = results;
+  const ct = $("#copyTable");
+  const em = $("#exportManifest");
+  if(ct) ct.style.display = "";
+  if(em) em.style.display = "";
+}
+
+$("#copyTable").addEventListener("click", ()=>{
+  const rows = [];
+  $$("#filesTable tbody tr").forEach(tr=>{
+    const tds = tr.querySelectorAll("td");
+    rows.push([tds[0]?.textContent||"", tds[1]?.textContent||"", tds[2]?.textContent||""].join("\t"));
+  });
+  copyText(rows.join("\n"));
+});
+$("#exportManifest").addEventListener("click", ()=>{
+  if(!lastResults.length){ toast("No results to export"); return; }
+  const alg = $("#algo").value;
+  const lines = [];
+  lines.push(`; Manifest generated ${nowISO()}`);
+  lines.push(`; Algorithm: ${alg}`);
+  lines.push(`; Format: <hash> <space> <path>`);
+  for(const r of lastResults){ if(r.hash) lines.push(`${r.hash} ${r.path}`); }
+  downloadText(`manifest_${alg.replace(/[^A-Za-z0-9-]/g,"_")}.txt`, lines.join("\n"), "text/plain");
+});
+
+/* ------- COMPARE ------- */
+let lastDiff = null;
+$("#compareFiles").addEventListener("click", async ()=>{
+  const a = $("#cmpA").files && $("#cmpA").files[0];
+  const b = $("#cmpB").files && $("#cmpB").files[0];
+  if(!a || !b){ toast("Select File A and File B"); return; }
+  showEls(["cmpResultLabel","cmpOut","cmpMeta"]); hideEls(["diffWrap"], true); $("#cmpOut").textContent = "Working…";
+  $("#diffTable tbody").innerHTML = "";
+  try{
+    const ra = await hashFileToHex(a);
+    const rb = await hashFileToHex(b);
+    const same = ra.text === rb.text;
+
+    showEls(["cmpResultLabel","cmpOut","cmpMeta"]); hideEls(["diffWrap"], true); $("#cmpOut").textContent =
+      `File A: ${a.name}\n${ra.alg}: ${ra.text}\n\nFile B: ${b.name}\n${rb.alg}: ${rb.text}\n\nResult: ${same ? "MATCH" : "DIFFERENT"}`;
+
+    $("#cmpMeta").innerHTML = "";
+    $("#cmpMeta").appendChild(badge(ra.alg, "ok"));
+    $("#cmpMeta").appendChild(badge(same ? "MATCH" : "DIFFERENT", same ? "ok":"bad"));
+
+    lastDiff = {type:"fileCompare", alg: ra.alg, a:{name:a.name,size:a.size,hash:ra.text}, b:{name:b.name,size:b.size,hash:rb.text}, same, when: nowISO()};
+    const ed = $("#exportDiff");
+    if(ed) ed.style.display = "";
+  }catch(e){
+    showEls(["cmpResultLabel","cmpOut","cmpMeta"]); hideEls(["diffWrap"], true); $("#cmpOut").textContent = "Error: " + (e?.message || e);
+    toast("Compare failed");
+  }
+});
+
+async function hashDirectoryFiles(fileList){
+  const out = {};
+  for(const f of fileList){
+    const rel = f.webkitRelativePath || f.name;
+    try{
+      const r = await hashFileToHex(f);
+      out[rel] = {hash:r.text, size:f.size};
+    }catch(e){
+      out[rel] = {hash:null, size:f.size, error:String(e)};
+    }
+  }
+  return out;
+}
+function renderDiffTable(diffs){
+  const tbody = $("#diffTable tbody");
+  tbody.innerHTML = "";
+  for(const d of diffs){
+    const tr = document.createElement("tr");
+    const cls = d.status === "different" ? "bad" : (d.status === "only-in-A" || d.status === "only-in-B") ? "warn" : "warn";
+    tr.innerHTML = `
+      <td>${escapeHtml(d.path)}</td>
+      <td><span class="badge ${cls}">${escapeHtml(d.status)}</span></td>
+      <td>${escapeHtml(d.a || "")}</td>
+      <td>${escapeHtml(d.b || "")}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+
+$("#compareFolders").addEventListener("click", async ()=>{
+  const filesA = Array.from($("#dirA").files || []);
+  const filesB = Array.from($("#dirB").files || []);
+  if(!filesA.length || !filesB.length){ toast("Select Folder A and Folder B"); return; }
+
+  showEls(["cmpResultLabel","cmpOut","cmpMeta"]); hideEls(["diffWrap"], true); $("#cmpOut").textContent = "Working… (hashing can take time)";
+  $("#diffTable tbody").innerHTML = "";
+  try{
+    const mapA = await hashDirectoryFiles(filesA);
+    const mapB = await hashDirectoryFiles(filesB);
+
+    const allPaths = new Set([...Object.keys(mapA), ...Object.keys(mapB)]);
+    const diffs = [];
+    for(const p of Array.from(allPaths).sort()){
+      const a = mapA[p] || null;
+      const b = mapB[p] || null;
+      let status = "same";
+      if(a && !b) status = "only-in-A";
+      else if(!a && b) status = "only-in-B";
+      else if((a.hash || "") !== (b.hash || "")) status = "different";
+      if(status !== "same"){
+        diffs.push({path:p, status, a:a?a.hash:null, b:b?b.hash:null});
+      }
+    }
+
+    const sameCount = allPaths.size - diffs.length;
+    showEls(["cmpResultLabel","cmpOut","cmpMeta"]); hideEls(["diffWrap"], true); $("#cmpOut").textContent =
+      `Folder compare (${$("#algo").value})\n` +
+      `A files: ${Object.keys(mapA).length}\n` +
+      `B files: ${Object.keys(mapB).length}\n` +
+      `Total unique paths: ${allPaths.size}\n` +
+      `Same: ${sameCount}\n` +
+      `Differences: ${diffs.length}\n\n` +
+      (diffs.length ? "See table below." : "No differences");
+
+    $("#cmpMeta").innerHTML = "";
+    $("#cmpMeta").appendChild(badge($("#algo").value, "ok"));
+    $("#cmpMeta").appendChild(badge(diffs.length ? "DIFFERENCES" : "MATCH", diffs.length ? "bad":"ok"));
+
+    renderDiffTable(diffs);
+
+    showEls(["diffWrap"]);
+
+    lastDiff = {type:"folderCompare", alg: $("#algo").value, when: nowISO(), stats:{
+      aCount:Object.keys(mapA).length, bCount:Object.keys(mapB).length, total: allPaths.size, same:sameCount, diffs: diffs.length
+    }, diffs};
+    const ed = $("#exportDiff");
+    if(ed) ed.style.display = "";
+  }catch(e){
+    showEls(["cmpResultLabel","cmpOut","cmpMeta"]); hideEls(["diffWrap"], true); $("#cmpOut").textContent = "Error: " + (e?.message || e);
+    toast("Compare failed");
+  }
+});
+
+$("#exportDiff").addEventListener("click", ()=>{
+  if(!lastDiff){ toast("No compare results yet"); return; }
+  downloadText(`compare_${lastDiff.type}_${lastDiff.alg.replace(/[^A-Za-z0-9-]/g,"_")}.json`, JSON.stringify(lastDiff, null, 2), "application/json");
+});
+
+/* ------- Button visibility guards ------- */
+(function(){
+  const ct = $("#copyTable");
+  const em = $("#exportManifest");
+  const mf = $("#manyFiles");
+  if(mf){
+    mf.addEventListener("change", ()=>{
+      if(ct) ct.style.display = "none";
+      if(em) em.style.display = "none";
+      hideEls(["filesTable","filesMeta"], true);
+      const fp = document.querySelector('.panel[data-panel="files"]'); if(fp) fp.classList.remove("has-results");
+    });
+  }
+})(); 
+
+
+(function(){
+  const drm = $("#exportDiskManifest");
+  const dr = $("#diskRoot");
+  if(dr){
+    dr.addEventListener("change", ()=>{
+      if(drm) drm.style.display = "none";
+      hideEls(["diskResultLabel","diskOut","diskTable","diskMeta"], true);
+    });
+  }
+})();
+
+
+(function(){
+  const ed = $("#exportDiff");
+  const a = $("#dirA");
+  const b = $("#dirB");
+  const fa = $("#cmpA");
+  const fb = $("#cmpB");
+  const hide = ()=>{ if(ed) ed.style.display = "none"; };
+  if(a) a.addEventListener("change", hide);
+  if(b) b.addEventListener("change", hide);
+  if(fa) fa.addEventListener("change", hide);
+  if(fb) fb.addEventListener("change", hide);
+})();
+
+
+(function(){
+  const ch = $("#copyFileHash");
+  const of = $("#oneFile");
+  if(of){
+    of.addEventListener("change", ()=>{
+      if(ch) ch.style.display = "none";
+      hideEls(["fileResultLabel","fileOut","fileMeta"], true);
+    });
+  }
+})();
+
+
+(function(){
+  const ti = $("#textInput");
+  if(ti){
+    ti.addEventListener("input", ()=>{
+      hideEls(["textResultLabel","textOut","textMeta"], true);
+      const cb = $("#copyTextIn");
+      if(cb) cb.style.display = "none";
+    });
+  }
+})();
+
+/* ------- Init ------- */
+setTab("text");
+$("#textInput").addEventListener("keydown", (e)=>{
+  if((e.ctrlKey || e.metaKey) && e.key === "Enter") $("#hashText").click();
+});
+
+(function(){
+  function setName(inputId, labelId, emptyText, kind){
+    const inp = document.getElementById(inputId);
+    const lab = document.getElementById(labelId);
+    if(!inp || !lab) return;
+
+    const files = inp.files ? Array.from(inp.files) : [];
+    if(!files.length){
+      lab.textContent = emptyText;
+      return;
+    }
+
+    if(kind === "folder"){
+      const first = files[0];
+      const rel = first.webkitRelativePath || first.name || "";
+      const top = rel.split("/")[0] || rel;
+      lab.textContent = top ? (top + " (folder)") : (files.length + " items");
+      return;
+    }
+
+    if(kind === "multi"){
+      lab.textContent = files.length === 1 ? (files[0].name || "1 file") : (files.length + " files selected");
+      return;
+    }
+
+    lab.textContent = files[0].name || (files.length + " file(s)");
+  }
+
+  function bind(inputId, labelId, emptyText, kind){
+    const inp = document.getElementById(inputId);
+    if(!inp) return;
+    inp.addEventListener("change", ()=>setName(inputId,labelId,emptyText,kind));
+    // set initial
+    setName(inputId,labelId,emptyText,kind);
+  }
+
+  // File inputs
+  bind("oneFile","oneFileName","No file chosen","single");
+  bind("manyFiles","manyFilesName","No files chosen","multi");
+  bind("cmpA","cmpAName","No file chosen","single");
+  bind("cmpB","cmpBName","No file chosen","single");
+
+  // Folder inputs
+  bind("dirA","dirAName","No folder chosen","folder");
+  bind("dirB","dirBName","No folder chosen","folder");
+  bind("diskRoot","diskRootName","No folder chosen","folder");
+
+  // After drag-drop into drop zones, update labels (wireDrop sets .files programmatically)
+  const dropIds = [
+    ["dropOne","oneFile","oneFileName","No file chosen","single"],
+    ["dropMany","manyFiles","manyFilesName","No files chosen","multi"],
+    ["dropCmpA","cmpA","cmpAName","No file chosen","single"],
+    ["dropCmpB","cmpB","cmpBName","No file chosen","single"],
+    ["dropDirA","dirA","dirAName","No folder chosen","folder"],
+    ["dropDirB","dirB","dirBName","No folder chosen","folder"],
+    ["dropDiskRoot","diskRoot","diskRootName","No folder chosen","folder"]
+  ];
+  dropIds.forEach(([dropId,inputId,labelId,empty,kind])=>{
+    const d = document.getElementById(dropId);
+    if(!d) return;
+    d.addEventListener("drop", ()=>setTimeout(()=>setName(inputId,labelId,empty,kind), 0));
+  });
+
+  // Disk mode: keep empty table hidden until results exist
+  const diskRoot = document.getElementById("diskRoot");
+  if(diskRoot){
+    diskRoot.addEventListener("change", ()=>{ if(diskPanel) diskPanel.classList.remove("has-results"); });
+  }
+  const hashDiskBtn = document.getElementById("hashDisk");
+  if(hashDiskBtn){
+    hashDiskBtn.addEventListener("click", ()=>{ if(diskPanel) diskPanel.classList.add("has-results"); });
+  }
+})();
+
+(function(){
+  // Strip emojis from toast messages (e.g., "Copied ✅" -> "Copied")
+  if(typeof window.toast === "function"){
+    const _toast = window.toast;
+    window.toast = function(msg){
+      try{
+        msg = String(msg).replace(/[✅✔️☑️]/g, "").replace(/\s{2,}/g, " ").trim();
+      }catch(e){}
+      return _toast(msg);
+    };
+  }
+
+  // Add a timeout to dynamic CDN loads so compare/file hashing can't get stuck on "Working…"
+  if(typeof window.loadScript === "function"){
+    const _loadScript = window.loadScript;
+    window.loadScript = function(src){
+      return Promise.race([
+        _loadScript(src),
+        new Promise((_, reject)=>setTimeout(()=>reject(new Error("Timed out loading library: " + src)), 8000))
+      ]);
+    };
+  }
+})();
+
+/* --- Patch: Compare (files + folders) robust hashing like V22 --- */
+(function(){
+  const btnFiles = document.getElementById("compareFiles");
+  const btnFolders = document.getElementById("compareFolders");
+  const algoSel = document.getElementById("algo");
+  const out = document.getElementById("cmpOut");
+  const label = document.getElementById("cmpResultLabel");
+  const meta = document.getElementById("cmpMeta");
+
+  if(!btnFiles || !out || !label || !meta) return;
+
+  const show = (id)=>{ const el=document.getElementById(id); if(el) el.classList.remove("hidden-until"); };
+  const hide = (id)=>{ const el=document.getElementById(id); if(el) el.classList.add("hidden-until"); };
+
+  function toHex(u8){
+    return Array.from(u8).map(b=>b.toString(16).padStart(2,"0")).join("");
+  }
+
+  async function safeDigestBytes(alg, bytes){
+    // Limit to WebCrypto algs to prevent hangs caused by optional library loads.
+    const useAlg = ["SHA-1","SHA-256","SHA-512"].includes(alg) ? alg : "SHA-256";
+    try{
+      if(!globalThis.crypto || !crypto.subtle || !crypto.subtle.digest){
+        throw new Error("WebCrypto unavailable (use HTTPS/localhost)");
+      }
+      const buf = await promiseTimeout(crypto.subtle.digest(useAlg, bytes), 12000, "Digest timed out");
+      return {alg: useAlg, bytes: new Uint8Array(buf)};
+    }catch(e){
+      // Fallback: SHA-1 pure JS if available
+      if(useAlg === "SHA-1" && typeof sha1Bytes === "function"){
+        return {alg: "SHA-1", bytes: sha1Bytes(new Uint8Array(bytes))};
+      }
+      throw e;
+    }
+  }
+
+  async function hashFileWebCrypto(file, requestedAlg){
+    const alg = ["SHA-1","SHA-256","SHA-512"].includes(requestedAlg) ? requestedAlg : "SHA-256";
+    const buf = await file.arrayBuffer();
+    const r = await safeDigestBytes(alg, buf);
+    return {alg: r.alg, text: toHex(r.bytes)};
+  }
+
+  function normalizeAlgSelection(){
+    const requested = (algoSel && algoSel.value) || "SHA-256";
+    if(!["SHA-1","SHA-256","SHA-512"].includes(requested)){
+      if(algoSel) algoSel.value = "SHA-256";
+      return "SHA-256";
+    }
+    return requested;
+  }
+
+  // FILE vs FILE
+  btnFiles.addEventListener("click", function(e){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    (async ()=>{
+      const a = document.getElementById("cmpA")?.files?.[0];
+      const b = document.getElementById("cmpB")?.files?.[0];
+      if(!a || !b){ toast("Select Item A and Item B"); return; }
+
+      const alg = normalizeAlgSelection();
+
+      show("cmpResultLabel"); show("cmpOut"); show("cmpMeta"); hide("diffWrap");
+      out.textContent = "Working…";
+      const tbody = document.querySelector("#diffTable tbody"); if(tbody) tbody.innerHTML = "";
+
+      try{
+        const ra = await hashFileWebCrypto(a, alg);
+        const rb = await hashFileWebCrypto(b, alg);
+        const same = ra.text === rb.text;
+
+        out.textContent =
+          `Item A: ${a.name}\n${ra.alg}: ${ra.text}\n\nItem B: ${b.name}\n${rb.alg}: ${rb.text}\n\nResult: ${same ? "MATCH" : "DIFFERENT"}`;
+
+        meta.innerHTML = "";
+        meta.appendChild(badge(ra.alg, "ok"));
+        meta.appendChild(badge(same ? "MATCH" : "DIFFERENT", same ? "ok":"bad"));
+
+        // keep existing exportDiff logic if present
+        try{
+          lastDiff = {type:"fileCompare", alg: ra.alg, a:{name:a.name,size:a.size,hash:ra.text}, b:{name:b.name,size:b.size,hash:rb.text}, same, when: nowISO()};
+          const ed = document.getElementById("exportDiff");
+          if(ed) ed.style.display = "";
+        }catch(_){}
+      }catch(err){
+        out.textContent = "Error: " + (err?.message || err);
+        meta.innerHTML = "";
+        toast("Compare failed");
+      }
+    })();
+  }, true);
+
+  // FOLDER vs FOLDER (or multi-file lists)
+  if(btnFolders){
+    btnFolders.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      (async ()=>{
+        const filesA = Array.from(document.getElementById("dirA")?.files || []);
+        const filesB = Array.from(document.getElementById("dirB")?.files || []);
+        if(!filesA.length || !filesB.length){ toast("Select Item A and Item B"); return; }
+
+        const alg = normalizeAlgSelection();
+
+        show("cmpResultLabel"); show("cmpOut"); show("cmpMeta"); show("diffWrap");
+        out.textContent = "Working…";
+        const tbody = document.querySelector("#diffTable tbody"); if(tbody) tbody.innerHTML = "";
+
+        const mapA = {};
+        const mapB = {};
+
+        async function hashList(list, map){
+          for(const f of list){
+            const rel = f.webkitRelativePath || f.name;
+            try{
+              const r = await hashFileWebCrypto(f, alg);
+              map[rel] = {hash:r.text, size:f.size};
+            }catch(ex){
+              map[rel] = {hash:null, size:f.size, error:String(ex?.message || ex)};
+            }
+          }
+        }
+
+        try{
+          await hashList(filesA, mapA);
+          await hashList(filesB, mapB);
+
+          // build diffs
+          const all = new Set([...Object.keys(mapA), ...Object.keys(mapB)]);
+          const diffs = [];
+          for(const p of Array.from(all).sort()){
+            const a = mapA[p], b = mapB[p];
+            if(a && !b){
+              diffs.push({path:p, status:"only-in-A", a:a.hash || "", b:""});
+            }else if(!a && b){
+              diffs.push({path:p, status:"only-in-B", a:"", b:b.hash || ""});
+            }else{
+              const ah = a.hash, bh = b.hash;
+              if(ah && bh && ah === bh){
+                // omit "same" rows like QuickHash; keep only differences/missing
+                continue;
+              }
+              diffs.push({path:p, status:(ah && bh) ? "different" : "error", a:ah || "", b:bh || ""});
+            }
+          }
+
+          if(!diffs.length){
+            out.textContent = `Result: MATCH (all ${Object.keys(mapA).length} items)`;
+            meta.innerHTML = "";
+            meta.appendChild(badge(alg, "ok"));
+            meta.appendChild(badge("MATCH", "ok"));
+            hide("diffWrap");
+          }else{
+            out.textContent = `Result: DIFFERENT (${diffs.length} differences)`;
+            meta.innerHTML = "";
+            meta.appendChild(badge(alg, "ok"));
+            meta.appendChild(badge("DIFFERENT", "bad"));
+            if(typeof renderDiffTable === "function") renderDiffTable(diffs);
+          }
+
+          try{
+            lastDiff = {type:"folderCompare", alg, diffs, when: nowISO()};
+            const ed = document.getElementById("exportDiff");
+            if(ed) ed.style.display = "";
+          }catch(_){}
+        }catch(err){
+          out.textContent = "Error: " + (err?.message || err);
+          meta.innerHTML = "";
+          toast("Compare failed");
+        }
+      })();
+    }, true);
+  }
+})();
+</script>
+<!-- RIYST_INLINE_SCRIPT_END -->
+<script>
+(function(){
+  const y=document.getElementById('year');
+  if(y) y.textContent=new Date().getFullYear();
+})();
+</script>
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

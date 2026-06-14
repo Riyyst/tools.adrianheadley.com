@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tools | Temporary Email</title>
+<meta name="description" content="Generate a receive-only temporary email address and read incoming messages securely in your browser."/>
+<meta name="theme-color" content="#f5f5f7"/>
+<style>
+:root{
+  --bg:#f5f5f7;
+  --card:#ffffff;
+  --text:#111827;
+  --muted:#4b5563;
+  --accent:#2563eb;
+  --accent-hover:#1d4ed8;
+  --accent-soft:rgba(37,99,235,.08);
+  --border:#e5e7eb;
+  --border-strong:#d1d5db;
+  --shadow:0 12px 30px rgba(15,23,42,.08);
+  --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+  --max:1080px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;overflow-x:hidden}
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+  color:var(--text);
+  font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+main{flex:1}
+.container{width:min(var(--max),100% - 3rem);margin-inline:auto}
+.hide{display:none!important}
+
+.skip-link{
+  position:absolute;
+  left:-999px;
+  top:.5rem;
+  z-index:100;
+  padding:.45rem .75rem;
+  border-radius:999px;
+  background:#111827;
+  color:#fff;
+}
+.skip-link:focus{left:.5rem}
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  border-bottom:1px solid rgba(148,163,184,.28);
+  background:rgba(248,250,252,.95);
+  backdrop-filter:blur(16px);
+}
+.mast{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:58px;
+  padding:.55rem 0;
+}
+.nav-list{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.55rem;
+  flex-wrap:wrap;
+  list-style:none;
+  margin:0;
+  padding:0;
+  font-size:.86rem;
+}
+.nav-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:.3rem .8rem;
+  border:1px solid transparent;
+  border-radius:999px;
+  color:var(--muted);
+  transition:background .16s,color .16s,transform .12s,border-color .16s;
+}
+.nav-link:hover,.nav-link:focus-visible{
+  border-color:rgba(148,163,184,.26);
+  background:rgba(148,163,184,.18);
+  color:var(--text);
+  text-decoration:none;
+  transform:translateY(-1px);
+}
+.nav-link.active{
+  border-color:rgba(37,99,235,.18);
+  background:var(--accent-soft);
+  color:var(--accent);
+}
+
+.intro{text-align:center;padding:2.6rem 0 2.4rem}
+.intro h1{
+  margin:0 0 .8rem;
+  font-size:clamp(2.1rem,3vw,2.6rem);
+  line-height:1.15;
+  letter-spacing:-.03em;
+  font-weight:750;
+}
+.intro p{
+  max-width:660px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:.96rem;
+  font-weight:500;
+}
+
+.tool{padding:2.4rem 0 4rem}
+.card{
+  overflow:visible;
+  padding:clamp(1.15rem,3vw,1.7rem);
+  border:1px solid var(--border);
+  border-radius:24px;
+  background:rgba(255,255,255,.94);
+  box-shadow:var(--shadow);
+  transition:box-shadow .16s,border-color .16s;
+}
+.card:hover{
+  border-color:var(--border);
+  box-shadow:var(--shadow);
+}
+.top-actions{
+  display:flex;
+  justify-content:center;
+  margin-bottom:1rem;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
+  min-height:42px;
+  padding:.6rem 1.15rem;
+  border:1px solid transparent;
+  border-radius:999px;
+  background:var(--accent);
+  color:#fff;
+  font-size:.85rem;
+  font-weight:750;
+  transition:background .16s,transform .14s,box-shadow .16s,border-color .16s;
+}
+.btn:hover:not(:disabled){
+  background:var(--accent-hover);
+  transform:translateY(-1px);
+  box-shadow:0 10px 24px rgba(37,99,235,.18);
+}
+.btn.secondary{
+  border-color:var(--border-strong);
+  background:#fff;
+  color:var(--text);
+  box-shadow:none;
+}
+.btn.secondary:hover:not(:disabled){
+  background:#f8fafc;
+  box-shadow:none;
+}
+.btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  pointer-events:none;
+}
+
+.dashboard{
+  display:grid;
+  grid-template-columns:minmax(300px,.82fr) minmax(0,1.18fr);
+  gap:1rem;
+  align-items:start;
+}
+.panel{
+  min-width:0;
+  overflow:visible;
+  padding:1rem;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:#f8fafc;
+}
+.panel-title{
+  margin:.05rem 0 .65rem;
+  font-size:.95rem;
+  font-weight:800;
+}
+.address-box{
+  display:flex;
+  align-items:center;
+  min-height:48px;
+  padding:.75rem .9rem;
+  border:1px solid var(--border-strong);
+  border-radius:14px;
+  background:#fff;
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  font-size:.88rem;
+  font-weight:700;
+  overflow-wrap:anywhere;
+}
+.address-box.loading{color:var(--muted)}
+.inbox-actions{
+  display:flex;
+  justify-content:center;
+  margin-top:.75rem;
+}
+.inbox-list{
+  display:grid;
+  gap:.6rem;
+  margin-top:.8rem;
+  padding:2px;
+  max-height:470px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  scrollbar-width:thin;
+}
+.message-item{
+  display:block;
+  width:calc(100% - 2px);
+  margin:1px;
+  padding:.75rem .8rem;
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:#fff;
+  color:var(--text);
+  text-align:left;
+  transition:border-color .16s,background .16s,transform .12s;
+}
+.message-item:hover,.message-item.active{
+  border-color:rgba(37,99,235,.34);
+  background:rgba(37,99,235,.045);
+  transform:none;
+}
+.message-from{
+  color:var(--accent);
+  font-size:.72rem;
+  font-weight:800;
+  overflow-wrap:anywhere;
+}
+.message-subject{
+  margin-top:.15rem;
+  font-size:.88rem;
+  font-weight:800;
+  overflow-wrap:anywhere;
+}
+.message-date{
+  margin-top:.22rem;
+  color:var(--muted);
+  font-size:.7rem;
+}
+.empty{
+  padding:1rem;
+  border:1px dashed var(--border-strong);
+  border-radius:15px;
+  background:#fff;
+  color:var(--muted);
+  text-align:center;
+  font-size:.85rem;
+  font-weight:650;
+}
+
+.preview-wrap{
+  position:relative;
+  min-height:520px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:17px;
+  background:#111827;
+}
+.preview-wrap.light{background:#fff}
+.preview-toggle{
+  position:absolute;
+  top:.65rem;
+  right:.65rem;
+  z-index:3;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:36px;
+  height:36px;
+  padding:0;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:999px;
+  background:rgba(255,255,255,.1);
+  color:#fff;
+}
+.preview-wrap.light .preview-toggle{
+  border-color:var(--border);
+  background:#f8fafc;
+  color:var(--text);
+}
+.preview-toggle svg{width:18px;height:18px;fill:currentColor}
+.preview{
+  min-height:520px;
+  padding:1.1rem;
+  color:#e5e7eb;
+  overflow:auto;
+  overflow-wrap:anywhere;
+}
+.preview-wrap.light .preview{color:var(--text)}
+.preview h3{padding-right:2.8rem}
+.preview a{color:#60a5fa}
+.preview-wrap.light .preview a{color:var(--accent)}
+.placeholder{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2rem;
+  color:#9ca3af;
+  text-align:center;
+  font-size:.9rem;
+  font-weight:650;
+  pointer-events:none;
+}
+.preview-wrap.light .placeholder{color:var(--muted)}
+
+.status{
+  min-height:1.35rem;
+  margin-top:.7rem;
+  color:var(--muted);
+  text-align:center;
+  font-size:.82rem;
+  font-weight:650;
+}
+.status.error{color:#b91c1c}
+.spinner{
+  display:inline-block;
+  width:14px;
+  height:14px;
+  margin-right:.35rem;
+  border:2px solid rgba(37,99,235,.22);
+  border-top-color:var(--accent);
+  border-radius:50%;
+  vertical-align:-2px;
+  animation:spin .75s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.site-footer{
+  margin-top:auto;
+  padding:1.6rem 1.5rem 1.8rem;
+  border-top:1px solid rgba(148,163,184,.3);
+  background:rgba(248,250,252,.72);
+  color:var(--muted);
+  font-size:.85rem;
+}
+.footer-inner{text-align:center}
+.footer-inner p{margin:0}
+.footer-links{
+  display:flex;
+  justify-content:center;
+  gap:.45rem;
+  flex-wrap:wrap;
+  margin-top:.45rem;
+  font-size:.82rem;
+}
+.footer-links a{
+  padding:.25rem .55rem;
+  border-radius:999px;
+  color:var(--muted);
+  transition:background .16s,color .16s,transform .12s;
+}
+.footer-links a:hover{
+  background:rgba(148,163,184,.16);
+  color:var(--accent);
+  text-decoration:none;
+  transform:translateY(-1px);
+}
+
+@media(max-width:900px){
+  .dashboard{grid-template-columns:1fr}
+  .preview-wrap,.preview{min-height:440px}
+}
+@media(max-width:760px){
+  .container{width:min(100% - 2rem,var(--max))}
+  .nav-list{gap:.25rem}
+  .nav-link{padding:.28rem .65rem}
+  .intro{padding:2rem 0 2.1rem}
+  .tool{padding:1.6rem 0 3rem}
+}
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1>Temporary Email</h1>
+      <p>Generate a disposable, receive-only email address and read incoming messages without using your main inbox.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="card">
+        <div class="top-actions">
+          <button class="btn" id="generateBtn" type="button">Generate Address</button>
+        </div>
+
+        <div class="dashboard hide" id="dashboard">
+          <section class="panel" aria-label="Temporary inbox">
+            <h2 class="panel-title">Address</h2>
+            <div class="address-box" id="addressBox">
+              <span id="address">—</span>
+            </div>
+
+            <div class="inbox-actions">
+              <button class="btn secondary" id="refreshBtn" type="button" disabled>Refresh Inbox</button>
+            </div>
+
+            <div class="inbox-list" id="messageList">
+              <div class="empty">No messages yet.</div>
+            </div>
+
+            <div class="status" id="status" aria-live="polite"></div>
+          </section>
+
+          <section class="panel" aria-label="Message preview">
+            <h2 class="panel-title">Read</h2>
+            <div class="preview-wrap light" id="previewWrap">
+              <button class="preview-toggle" id="themeBtn" type="button" title="Toggle preview light or dark">
+                <svg class="hide" id="moonIcon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M21.64 13A9 9 0 1 1 11 2.36 7 7 0 1 0 21.64 13Z"></path>
+                </svg>
+                <svg id="sunIcon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M6.76 4.84 5.34 3.42 3.92 4.84l1.42 1.42L6.76 4.84ZM1 13h3v-2H1v2Zm10 10h2v-3h-2v3Zm7.66-3.16 1.42-1.42-1.42-1.42-1.42 1.42 1.42 1.42ZM20 11v2h3v-2h-3Zm-2.34-7.58-1.42 1.42 1.42 1.42 1.42-1.42-1.42-1.42ZM12 7a5 5 0 1 0 0 10A5 5 0 0 0 12 7Zm0-7h-2v3h2V0Z"></path>
+                </svg>
+              </button>
+              <div class="preview" id="preview"></div>
+              <div class="placeholder" id="placeholder">There are no messages in your inbox yet</div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  const API='https://api.mail.tm';
+  const POLL_MS=3000;
+
+  const generateBtn=document.getElementById('generateBtn');
+  const dashboard=document.getElementById('dashboard');
+  const addressBox=document.getElementById('addressBox');
+  const addressEl=document.getElementById('address');
+  const refreshBtn=document.getElementById('refreshBtn');
+  const messageList=document.getElementById('messageList');
+  const statusEl=document.getElementById('status');
+  const previewWrap=document.getElementById('previewWrap');
+  const preview=document.getElementById('preview');
+  const placeholder=document.getElementById('placeholder');
+  const themeBtn=document.getElementById('themeBtn');
+  const moonIcon=document.getElementById('moonIcon');
+  const sunIcon=document.getElementById('sunIcon');
+
+  const state={
+    token:null,
+    address:null,
+    messages:[],
+    selectedId:null,
+    pollTimer:null,
+    lightPreview:true,
+    refreshing:false
+  };
+
+  document.getElementById('year').textContent=new Date().getFullYear();
+
+  function randomString(length=12){
+    const bytes=new Uint8Array(length);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes,b=>(b%36).toString(36)).join('');
+  }
+
+  function escapeHtml(value){
+    return String(value??'')
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'",'&#039;');
+  }
+
+  function sanitiseIncomingHtml(html){
+    const parser=new DOMParser();
+    const doc=parser.parseFromString(html||'','text/html');
+
+    doc.querySelectorAll(
+      'script,iframe,object,embed,form,link,style,meta,base,video,audio,source'
+    ).forEach(el=>el.remove());
+
+    doc.querySelectorAll('*').forEach(el=>{
+      [...el.attributes].forEach(attr=>{
+        const name=attr.name.toLowerCase();
+        const value=attr.value.trim();
+
+        if(name.startsWith('on')){
+          el.removeAttribute(attr.name);
+          return;
+        }
+
+        if((name==='href'||name==='src') && /^javascript:/i.test(value)){
+          el.removeAttribute(attr.name);
+        }
+      });
+    });
+
+    doc.querySelectorAll('a[href]').forEach(a=>{
+      a.setAttribute('target','_blank');
+      a.setAttribute('rel','noopener noreferrer nofollow');
+    });
+
+    return doc.body.innerHTML||'';
+  }
+
+  function setStatus(message='',error=false){
+    statusEl.textContent=message;
+    statusEl.classList.toggle('error',Boolean(error));
+  }
+
+  function setBusy(button,busy,busyText){
+    if(!button.dataset.originalText){
+      button.dataset.originalText=button.textContent;
+    }
+    button.disabled=busy;
+    button.textContent=busy?busyText:button.dataset.originalText;
+  }
+
+  function clearPolling(){
+    if(state.pollTimer){
+      clearInterval(state.pollTimer);
+      state.pollTimer=null;
+    }
+  }
+
+  function blankPreview(text='No message has been selected to view'){
+    state.selectedId=null;
+    preview.innerHTML='';
+    placeholder.textContent=text;
+    placeholder.classList.remove('hide');
+    [...messageList.querySelectorAll('.message-item')].forEach(el=>el.classList.remove('active'));
+  }
+
+  function showPlaceholder(show){
+    placeholder.classList.toggle('hide',!show);
+  }
+
+  function buildIntroMessage(){
+    return {
+      id:'intro',
+      local:true,
+      subject:'Getting Started',
+      from:'Tool Tips',
+      date:new Date().toISOString(),
+      html:`
+        <p>Welcome to your receive-only temporary inbox.</p>
+        <ol>
+          <li><strong>Your address:</strong> use the address shown on the left wherever you need to receive a short-term email.</li>
+          <li><strong>Incoming messages:</strong> messages appear in the list automatically. You can also use <em>Refresh Inbox</em> for a manual check.</li>
+          <li><strong>Reading messages:</strong> select a message to open it in the preview panel. Select the same message again to close it.</li>
+          <li><strong>Safety:</strong> treat unfamiliar links and attachments with caution.</li>
+          <li><strong>Temporary use:</strong> do not rely on this inbox for important accounts, recovery emails or permanent records.</li>
+        </ol>
+        <p>This service is receive-only. It cannot send or reply to email.</p>
+      `,
+      text:'Welcome to your receive-only temporary inbox. Incoming messages will appear automatically. This service cannot send or reply to email.'
+    };
+  }
+
+  function ensureIntroMessage(){
+    if(!state.messages.some(message=>message.local)){
+      state.messages.unshift(buildIntroMessage());
+    }
+  }
+
+  function renderList(){
+    messageList.innerHTML='';
+
+    if(!state.messages.length){
+      messageList.innerHTML='<div class="empty">No messages yet.</div>';
+      blankPreview('There are no messages in your inbox yet');
+      return;
+    }
+
+    [...state.messages]
+      .sort((a,b)=>new Date(b.date||0)-new Date(a.date||0))
+      .forEach(message=>{
+        const item=document.createElement('button');
+        item.type='button';
+        item.className='message-item';
+        item.dataset.id=message.id;
+
+        const source=message.local?'Received - Tool Tips':`Received - ${message.from||'Unknown'}`;
+
+        item.innerHTML=`
+          <div class="message-from">${escapeHtml(source)}</div>
+          <div class="message-subject">${escapeHtml(message.subject||'(no subject)')}</div>
+          <div class="message-date">${new Date(message.date||Date.now()).toLocaleString()}</div>
+        `;
+
+        if(state.selectedId===message.id){
+          item.classList.add('active');
+        }
+
+        item.addEventListener('click',()=>{
+          if(state.selectedId===message.id){
+            blankPreview();
+          }else{
+            openMessage(message);
+          }
+        });
+
+        messageList.appendChild(item);
+      });
+  }
+
+  async function chooseDomain(){
+    const response=await fetch(`${API}/domains`,{
+      headers:{Accept:'application/ld+json'},
+      cache:'no-store'
+    });
+
+    if(!response.ok){
+      throw new Error(`Domain request failed (${response.status})`);
+    }
+
+    const data=await response.json();
+    const domains=data['hydra:member']||[];
+
+    if(!domains.length){
+      throw new Error('No temporary email domains are currently available.');
+    }
+
+    return domains[Math.floor(Math.random()*domains.length)].domain;
+  }
+
+  async function createMailbox(){
+    const domain=await chooseDomain();
+    const address=`u${randomString(10)}@${domain}`;
+    const password=randomString(18);
+
+    const accountResponse=await fetch(`${API}/accounts`,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        Accept:'application/ld+json'
+      },
+      body:JSON.stringify({address,password})
+    });
+
+    if(!accountResponse.ok && accountResponse.status!==201){
+      throw new Error(`Account creation failed (${accountResponse.status})`);
+    }
+
+    const tokenResponse=await fetch(`${API}/token`,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        Accept:'application/json'
+      },
+      body:JSON.stringify({address,password})
+    });
+
+    const tokenData=await tokenResponse.json();
+
+    if(!tokenResponse.ok||!tokenData.token){
+      throw new Error('Could not access the generated inbox.');
+    }
+
+    state.token=tokenData.token;
+    state.address=address;
+    return address;
+  }
+
+  async function fetchMessageList(){
+    if(!state.token) return [];
+
+    const response=await fetch(`${API}/messages`,{
+      headers:{
+        Authorization:`Bearer ${state.token}`,
+        Accept:'application/ld+json'
+      },
+      cache:'no-store'
+    });
+
+    if(!response.ok){
+      throw new Error(`Inbox refresh failed (${response.status})`);
+    }
+
+    const data=await response.json();
+
+    return (data['hydra:member']||[]).map(message=>({
+      id:message.id,
+      subject:message.subject,
+      from:message.from?.address||message.from?.name||'Unknown',
+      date:message.createdAt
+    }));
+  }
+
+  async function fetchFullMessage(id){
+    const response=await fetch(`${API}/messages/${id}`,{
+      headers:{
+        Authorization:`Bearer ${state.token}`,
+        Accept:'application/ld+json'
+      },
+      cache:'no-store'
+    });
+
+    if(!response.ok){
+      throw new Error(`Message request failed (${response.status})`);
+    }
+
+    const message=await response.json();
+
+    return {
+      id:message.id,
+      subject:message.subject,
+      from:message.from?.address||message.from?.name||'Unknown',
+      date:message.createdAt,
+      html:Array.isArray(message.html)?message.html.join('\n'):(message.html||''),
+      text:message.text||''
+    };
+  }
+
+  async function refreshInbox(manual=false){
+    if(!state.token||state.refreshing) return;
+
+    state.refreshing=true;
+
+    if(manual){
+      setBusy(refreshBtn,true,'Refreshing…');
+      setStatus('');
+    }
+
+    try{
+      const incoming=await fetchMessageList();
+      const local=state.messages.filter(message=>message.local);
+      const existing=new Map(state.messages.filter(message=>!message.local).map(message=>[message.id,message]));
+
+      incoming.forEach(message=>existing.set(message.id,{...existing.get(message.id),...message}));
+
+      state.messages=[...local,...existing.values()];
+      ensureIntroMessage();
+      renderList();
+    }catch(error){
+      if(manual){
+        setStatus(error.message||'Could not refresh the inbox.',true);
+      }
+      console.warn(error);
+    }finally{
+      state.refreshing=false;
+      if(manual){
+        setBusy(refreshBtn,false);
+      }
+    }
+  }
+
+  function renderPreview(message){
+    const body=message.html&&message.html.trim()
+      ? sanitiseIncomingHtml(message.html)
+      : `<pre style="white-space:pre-wrap;font:inherit">${escapeHtml(message.text||'(no content)')}</pre>`;
+
+    preview.innerHTML=`
+      <h3 style="margin-top:0">${escapeHtml(message.subject||'(no subject)')}</h3>
+      <div><strong>From:</strong> ${escapeHtml(message.from||'')}</div>
+      <div><strong>Date:</strong> ${new Date(message.date||Date.now()).toLocaleString()}</div>
+      <hr style="border:0;border-top:1px solid ${state.lightPreview?'#e5e7eb':'#334155'};margin:12px 0"/>
+      ${body}
+    `;
+
+    showPlaceholder(false);
+    renderList();
+  }
+
+  async function openMessage(meta){
+    state.selectedId=meta.id;
+    renderList();
+
+    try{
+      if(meta.local){
+        renderPreview(meta);
+        return;
+      }
+
+      preview.innerHTML='<p><span class="spinner"></span>Loading message…</p>';
+      showPlaceholder(false);
+
+      const full=await fetchFullMessage(meta.id);
+      renderPreview(full);
+    }catch(error){
+      preview.innerHTML='';
+      showPlaceholder(true);
+      placeholder.textContent='Could not open this message.';
+      setStatus(error.message||'Could not open this message.',true);
+    }
+  }
+
+  generateBtn.addEventListener('click',async()=>{
+    clearPolling();
+    state.token=null;
+    state.address=null;
+    state.messages=[];
+    state.selectedId=null;
+
+    dashboard.classList.remove('hide');
+    addressBox.classList.add('loading');
+    addressEl.innerHTML='<span class="spinner"></span>Generating address…';
+    refreshBtn.disabled=true;
+    messageList.innerHTML='<div class="empty">No messages yet.</div>';
+    blankPreview('There are no messages in your inbox yet');
+    setStatus('');
+    setBusy(generateBtn,true,'Generating…');
+
+    try{
+      const address=await createMailbox();
+      addressEl.textContent=address;
+      addressBox.classList.remove('loading');
+      refreshBtn.disabled=false;
+
+      ensureIntroMessage();
+      renderList();
+      await refreshInbox(false);
+
+      state.pollTimer=setInterval(()=>refreshInbox(false),POLL_MS);
+    }catch(error){
+      addressEl.textContent='—';
+      addressBox.classList.remove('loading');
+      setStatus(error.message||'Could not generate a temporary inbox.',true);
+    }finally{
+      setBusy(generateBtn,false);
+    }
+  });
+
+  refreshBtn.addEventListener('click',()=>refreshInbox(true));
+
+  document.addEventListener('visibilitychange',()=>{
+    if(!document.hidden) refreshInbox(false);
+  });
+
+  window.addEventListener('focus',()=>refreshInbox(false));
+
+  themeBtn.addEventListener('click',()=>{
+    state.lightPreview=!state.lightPreview;
+    previewWrap.classList.toggle('light',state.lightPreview);
+    moonIcon.classList.toggle('hide',state.lightPreview);
+    sunIcon.classList.toggle('hide',!state.lightPreview);
+
+    const hr=preview.querySelector('hr');
+    if(hr){
+      hr.style.borderTopColor=state.lightPreview?'#e5e7eb':'#334155';
+    }
+  });
+})();
+</script>
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

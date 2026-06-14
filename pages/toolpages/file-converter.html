@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tools | File Converter</title>
+<meta name="description" content="Convert common file types in your browser, including images, text files, JSON, CSV and PDF to Word text extraction."/>
+<meta name="theme-color" content="#f5f5f7"/>
+
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --bg-alt:#ffffff;
+    --text:#111827;
+    --text-soft:#4b5563;
+    --accent:#2563eb;
+    --accent-hover:#1d4ed8;
+    --accent-soft:rgba(37,99,235,.08);
+    --border-subtle:#e5e7eb;
+    --border-strong:#d1d5db;
+    --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+    --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+    --radius:20px;
+    --radius-pill:999px;
+    --max-w:980px;
+    --gap:14px;
+    --stack-gap:14px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%}
+  body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background:var(--bg);
+    color:var(--text);
+    font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  main{flex:1}
+  .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+  .skip-link{
+    position:absolute;
+    left:-999px;
+    top:.5rem;
+    padding:.45rem .75rem;
+    background:#111827;
+    color:#f9fafb;
+    z-index:100;
+    border-radius:var(--radius-pill);
+    font-size:.85rem;
+  }
+  .skip-link:focus{left:.5rem}
+
+  header.site-header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    border-bottom:1px solid rgba(148,163,184,.28);
+    backdrop-filter:blur(16px);
+    background:rgba(248,250,252,.95);
+  }
+  .mast{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:58px;
+    padding:.55rem 0;
+  }
+  .nav__list{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    list-style:none;
+    margin:0;
+    padding:0;
+    flex-wrap:wrap;
+    font-size:.86rem;
+  }
+  .nav__link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:.3rem .8rem;
+    border-radius:var(--radius-pill);
+    color:var(--text-soft);
+    border:1px solid transparent;
+    transition:background .16s,color .16s,transform .12s,border-color .16s;
+  }
+  .nav__link:hover,.nav__link:focus-visible{
+    background:rgba(148,163,184,.18);
+    color:var(--text);
+    transform:translateY(-1px);
+    text-decoration:none;
+    border-color:rgba(148,163,184,.26);
+  }
+  .nav__link--highlight{background:var(--accent-soft);color:var(--accent);border-color:rgba(37,99,235,.18)}
+
+  .intro{
+    text-align:center;
+    padding:2.6rem 0 2.4rem;
+  }
+  .intro__title{
+    font-size:clamp(2.1rem,3vw,2.6rem);
+    line-height:1.15;
+    margin:0 0 .8rem;
+    font-weight:750;
+    letter-spacing:-.03em;
+  }
+  .intro__subtitle{
+    max-width:650px;
+    margin:0 auto;
+    color:var(--text-soft);
+    font-size:.96rem;
+    font-weight:500;
+  }
+
+  .tool{padding:2.4rem 0 4rem}
+  .card{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--border-subtle);
+    border-radius:24px;
+    box-shadow:var(--shadow-soft);
+    padding:clamp(1.2rem,3vw,1.7rem);
+    max-width:980px;
+    margin:0 auto;
+    transition:box-shadow .16s,transform .16s,border-color .16s;
+  }
+  .card:hover{box-shadow:var(--shadow-lift);border-color:rgba(37,99,235,.18)}
+
+  .drop-zone{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:.45rem;
+    min-height:168px;
+    padding:1.4rem;
+    border:2px dashed var(--border-strong);
+    border-radius:20px;
+    background:#f8fafc;
+    color:var(--text-soft);
+    text-align:center;
+    cursor:pointer;
+    transition:border-color .16s,background .16s,box-shadow .16s,transform .14s;
+    font-weight:650;
+  }
+  .drop-zone:hover,.drop-zone.dragover,.drop-zone:focus-within{
+    border-color:var(--accent);
+    background:#f4f8ff;
+    box-shadow:0 0 0 4px rgba(37,99,235,.08);
+    transform:translateY(-1px);
+  }
+  .drop-zone input[type="file"]{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    cursor:pointer;
+  }
+  .drop-title{font-size:1rem;color:var(--text);font-weight:750}
+  .drop-subtitle{font-size:.88rem;color:var(--text-soft);max-width:560px}
+
+  .converter-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:var(--gap);
+    margin-top:1.1rem;
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:.35rem;
+  }
+  label{
+    display:block;
+    color:var(--text-soft);
+    font-size:.85rem;
+    font-weight:700;
+  }
+  select,input,textarea{
+    width:100%;
+    border-radius:14px;
+    border:1px solid var(--border-strong);
+    background:#ffffff;
+    color:var(--text);
+    outline:none;
+    transition:border-color .16s,box-shadow .16s,background .16s;
+    font:inherit;
+    padding:.8rem 1rem;
+  }
+  select:focus,input:focus,textarea:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+  }
+  textarea{
+    min-height:160px;
+    resize:vertical;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    font-size:.9rem;
+    line-height:1.5;
+  }
+
+  .actions{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.7rem;
+    flex-wrap:wrap;
+    margin-top:var(--stack-gap);
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    padding:.65rem 1.3rem;
+    border-radius:var(--radius-pill);
+    border:1px solid transparent;
+    background:var(--accent);
+    color:#f9fafb;
+    font-size:.86rem;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+    box-shadow:none;
+    transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+    font-family:inherit;
+    min-height:44px;
+  }
+  .btn:hover:not([disabled]){
+    transform:translateY(-1px);
+    background:var(--accent-hover);
+    text-decoration:none;
+    box-shadow:0 10px 25px rgba(37,99,235,.18);
+  }
+  .btn:active:not([disabled]){transform:translateY(0)}
+  .btn[disabled]{
+    opacity:.45;
+    cursor:not-allowed;
+  }
+  .btn.secondary{
+    background:transparent;
+    color:var(--text);
+    border-color:rgba(148,163,184,.8);
+    box-shadow:none;
+  }
+  .btn.secondary:hover:not([disabled]){
+    background:rgba(148,163,184,.15);
+    box-shadow:none;
+  }
+
+  .panel{
+    margin-top:1rem;
+    border-radius:20px;
+    border:1px solid var(--border-subtle);
+    background:#f8fafc;
+    padding:1rem;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
+  }
+  .file-meta{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:.65rem;
+  }
+  .kv{
+    background:#fff;
+    border:1px solid var(--border-subtle);
+    border-radius:14px;
+    padding:.7rem .8rem;
+    min-width:0;
+  }
+  .kv span{
+    display:block;
+    color:var(--text-soft);
+    font-size:.78rem;
+    font-weight:750;
+    margin-bottom:.15rem;
+  }
+  .kv b{
+    display:block;
+    color:var(--text);
+    font-size:.9rem;
+    overflow-wrap:anywhere;
+  }
+  .status{
+    margin-top:.8rem;
+    text-align:center;
+    color:var(--text-soft);
+    font-size:.9rem;
+    font-weight:650;
+    min-height:1.4rem;
+  }
+  .status.ok{color:#047857}
+  .status.err{color:#b91c1c}
+
+  .preview-box{
+    margin-top:1rem;
+    border-radius:18px;
+    border:1px solid var(--border-subtle);
+    background:#fff;
+    padding:1rem;
+    overflow:auto;
+    max-height:320px;
+  }
+  .preview-box img{
+    display:block;
+    max-width:100%;
+    height:auto;
+    margin:0 auto;
+    border-radius:14px;
+  }
+  .preview-box pre{
+    margin:0;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    font-size:.88rem;
+    color:var(--text);
+  }
+  .note{
+    margin:1rem 0 0;
+    color:var(--text-soft);
+    font-size:.84rem;
+    text-align:center;
+  }
+  .hidden{display:none!important}
+
+  footer.site-footer{
+    margin-top:auto;
+    padding:1.6rem 1.5rem 1.8rem;
+    font-size:.85rem;
+    color:var(--text-soft);
+    border-top:1px solid rgba(148,163,184,.3);
+    background:rgba(248,250,252,.72);
+  }
+  .fine{font-size:.95rem;color:var(--text-soft)}
+  .footer-legal{
+    margin-top:.45rem;
+    display:flex;
+    justify-content:center;
+    gap:.45rem;
+    font-size:.82rem;
+    flex-wrap:wrap;
+  }
+  .footer-legal a{
+    color:var(--text-soft);
+    padding:.25rem .55rem;
+    border-radius:var(--radius-pill);
+    transition:background .16s,color .16s,transform .12s;
+  }
+  .footer-legal a:hover{
+    color:var(--accent);
+    background:rgba(148,163,184,.16);
+    text-decoration:none;
+    transform:translateY(-1px);
+  }
+
+  @media (max-width:760px){
+    .container{width:min(100% - 2rem,var(--max-w))}
+    .nav__list{gap:.25rem}
+    .nav__link{padding:.28rem .65rem}
+    .intro{padding:2rem 0 2.1rem}
+    .tool{padding:1.6rem 0 3rem}
+    .converter-grid,.file-meta{grid-template-columns:1fr}
+    .actions .btn{width:100%;max-width:320px}
+  }
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">File Converter</h1>
+      <p class="intro__subtitle">Convert common files in your browser, including images, PDF, text, JSON, CSV, Markdown, HTML, SVG and Word text extraction.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="card" role="region" aria-label="File converter">
+        <label class="drop-zone" id="dropZone">
+          <input id="fileInput" type="file" accept=".png,.jpg,.jpeg,.webp,.bmp,.gif,.svg,.avif,.heic,.heif,.txt,.md,.csv,.tsv,.json,.html,.htm,.xml,.pdf,.docx,.webm,.mp4,.mov,.m4v,.ogg,.ogv,.mp3,.wav,.m4a,.aac,.flac,image/png,image/jpeg,image/webp,image/bmp,image/gif,image/svg+xml,image/avif,image/heic,image/heif,text/plain,text/markdown,text/csv,text/tab-separated-values,application/json,text/html,application/xml,text/xml,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,video/webm,video/mp4,video/quicktime,video/ogg,audio/mpeg,audio/wav,audio/ogg,audio/mp4,audio/aac,audio/flac"/>
+          <span class="drop-title">Choose file or drag and drop it here</span>
+          
+        </label>
+
+        <div class="panel hidden" id="filePanel">
+          <div class="file-meta">
+            <div class="kv"><span>File name</span><b id="fileName">—</b></div>
+            <div class="kv"><span>File type</span><b id="fileType">—</b></div>
+            <div class="kv"><span>File size</span><b id="fileSize">—</b></div>
+            <div class="kv"><span>Detected category</span><b id="fileCategory">—</b></div>
+          </div>
+
+          <div class="converter-grid">
+            <div class="field">
+              <label for="fromType">From</label>
+              <select id="fromType" aria-label="Source file type" disabled>
+                <option>Auto detect</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="toType">Convert to</label>
+              <select id="toType" aria-label="Target file type"></select>
+            </div>
+            <div class="field hidden" id="qualityField">
+              <label for="quality">Image quality</label>
+              <select id="quality" aria-label="Image quality">
+                <option value="0.72">Small file</option>
+                <option value="0.86" selected>Balanced</option>
+                <option value="0.95">High quality</option>
+              </select>
+            </div>
+            <div class="field hidden" id="scaleField">
+              <label for="pdfScale">PDF image scale</label>
+              <select id="pdfScale" aria-label="PDF image scale">
+                <option value="1">Standard</option>
+                <option value="1.5" selected>Sharp</option>
+                <option value="2">Very sharp</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="convertBtn" type="button">Convert</button>
+            <button class="btn secondary" id="clearBtn" type="button">Clear</button>
+          </div>
+
+          <div class="status" id="status"></div>
+          <div class="preview-box hidden" id="previewBox"></div>
+        </div>
+
+        
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.7.2/mammoth.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  const $ = sel => document.querySelector(sel);
+  const fileInput = $('#fileInput');
+  const dropZone = $('#dropZone');
+  const filePanel = $('#filePanel');
+  const fileName = $('#fileName');
+  const fileType = $('#fileType');
+  const fileSize = $('#fileSize');
+  const fileCategory = $('#fileCategory');
+  const fromType = $('#fromType');
+  const toType = $('#toType');
+  const convertBtn = $('#convertBtn');
+  const clearBtn = $('#clearBtn');
+  const status = $('#status');
+  const previewBox = $('#previewBox');
+  const qualityField = $('#qualityField');
+  const quality = $('#quality');
+  const scaleField = $('#scaleField');
+  const pdfScale = $('#pdfScale');
+
+  let currentFile = null;
+  let currentKind = null;
+  let currentExt = null;
+
+  function supportsCanvasMime(mime){
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 1;
+    try{
+      return canvas.toDataURL(mime).startsWith(`data:${mime}`);
+    }catch{
+      return false;
+    }
+  }
+
+  const CAN_WEBP = supportsCanvasMime('image/webp');
+  const CAN_AVIF = supportsCanvasMime('image/avif');
+  const CAN_MEDIA_WEBM = !!(window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported('video/webm;codecs=vp9'));
+  const CAN_AUDIO_WEBM = !!(window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported('audio/webm'));
+
+  const targets = {
+    image: [
+      {value:'png', label:'PNG image (.png)'},
+      {value:'jpg', label:'JPG image (.jpg)'},
+      {value:'webp', label:'WebP image (.webp)', needs:() => CAN_WEBP},
+      {value:'avif', label:'AVIF image (.avif)', needs:() => CAN_AVIF},
+      {value:'bmp', label:'BMP image (.bmp)'},
+      {value:'ico', label:'ICO icon (.ico)'},
+      {value:'pdf', label:'PDF document (.pdf)'},
+      {value:'base64', label:'Base64 text (.txt)'}
+    ],
+    heic: [
+      {value:'jpg', label:'JPG image (.jpg)'},
+      {value:'png', label:'PNG image (.png)'},
+      {value:'webp', label:'WebP image (.webp)', needs:() => CAN_WEBP},
+      {value:'base64', label:'Base64 text (.txt)'}
+    ],
+    svg: [
+      {value:'png', label:'PNG image (.png)'},
+      {value:'jpg', label:'JPG image (.jpg)'},
+      {value:'webp', label:'WebP image (.webp)', needs:() => CAN_WEBP},
+      {value:'avif', label:'AVIF image (.avif)', needs:() => CAN_AVIF},
+      {value:'pdf', label:'PDF document (.pdf)'},
+      {value:'txt', label:'Plain text source (.txt)'},
+      {value:'base64', label:'Base64 text (.txt)'}
+    ],
+    video: [
+      {value:'frame-png', label:'First frame PNG (.png)'},
+      {value:'frame-jpg', label:'First frame JPG (.jpg)'},
+      {value:'frame-webp', label:'First frame WebP (.webp)', needs:() => CAN_WEBP},
+      {value:'frame-avif', label:'First frame AVIF (.avif)', needs:() => CAN_AVIF},
+      {value:'webm', label:'Record to WebM where supported (.webm)', needs:() => CAN_MEDIA_WEBM},
+      {value:'metadata-json', label:'Media metadata (.json)'}
+    ],
+    audio: [
+      {value:'wav', label:'WAV audio (.wav)'},
+      {value:'webm-audio', label:'Record to WebM audio where supported (.webm)', needs:() => CAN_AUDIO_WEBM},
+      {value:'metadata-json', label:'Audio metadata (.json)'}
+    ],
+    pdf: [
+      {value:'docx', label:'Word document text extraction (.docx)'},
+      {value:'txt', label:'Plain text extraction (.txt)'},
+      {value:'json-pages', label:'JSON text by page (.json)'},
+      {value:'png-zip', label:'PNG images, all pages (.zip)'},
+      {value:'jpg-zip', label:'JPG images, all pages (.zip)'},
+      {value:'webp-zip', label:'WebP images, all pages (.zip)', needs:() => CAN_WEBP}
+    ],
+    docx: [
+      {value:'txt', label:'Plain text (.txt)'},
+      {value:'html', label:'HTML (.html)'},
+      {value:'md', label:'Markdown-style text (.md)'},
+      {value:'pdf', label:'PDF text document (.pdf)'}
+    ],
+    json: [
+      {value:'json-pretty', label:'Pretty JSON (.json)'},
+      {value:'json-min', label:'Minified JSON (.json)'},
+      {value:'csv', label:'CSV from array/object (.csv)'},
+      {value:'txt', label:'Plain text (.txt)'},
+      {value:'html', label:'HTML escaped view (.html)'}
+    ],
+    csv: [
+      {value:'json', label:'JSON rows (.json)'},
+      {value:'tsv', label:'TSV (.tsv)'},
+      {value:'txt', label:'Plain text (.txt)'},
+      {value:'html-table', label:'HTML table (.html)'}
+    ],
+    tsv: [
+      {value:'csv', label:'CSV (.csv)'},
+      {value:'json', label:'JSON rows (.json)'},
+      {value:'txt', label:'Plain text (.txt)'},
+      {value:'html-table', label:'HTML table (.html)'}
+    ],
+    markdown: [
+      {value:'html', label:'HTML (.html)'},
+      {value:'txt', label:'Plain text (.txt)'},
+      {value:'docx', label:'Word text document (.docx)'},
+      {value:'pdf', label:'PDF text document (.pdf)'}
+    ],
+    html: [
+      {value:'txt', label:'Plain text, tags removed (.txt)'},
+      {value:'md', label:'Markdown-style text (.md)'},
+      {value:'pdf', label:'PDF text document (.pdf)'}
+    ],
+    xml: [
+      {value:'txt', label:'Plain text (.txt)'},
+      {value:'json-basic', label:'Basic JSON structure (.json)'},
+      {value:'html-escaped', label:'HTML escaped view (.html)'}
+    ],
+    text: [
+      {value:'txt', label:'Plain text (.txt)'},
+      {value:'md', label:'Markdown (.md)'},
+      {value:'html', label:'HTML escaped view (.html)'},
+      {value:'json-string', label:'JSON string (.json)'},
+      {value:'docx', label:'Word text document (.docx)'},
+      {value:'pdf', label:'PDF text document (.pdf)'}
+    ]
+  };
+
+  function setStatus(message, type){
+    status.textContent = message || '';
+    status.className = 'status' + (type ? ' ' + type : '');
+  }
+
+  function formatSize(bytes){
+    if(bytes < 1024) return bytes + ' B';
+    if(bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+  }
+
+  function extFromName(name){
+    const m = String(name || '').toLowerCase().match(/\.([a-z0-9]+)$/);
+    return m ? m[1] : '';
+  }
+
+  function baseName(name){
+    return String(name || 'converted-file').replace(/\.[^.]+$/, '') || 'converted-file';
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, ch => ({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#039;'
+    }[ch]));
+  }
+
+  function stripHtml(str){
+    const doc = new DOMParser().parseFromString(String(str), 'text/html');
+    return doc.body ? doc.body.textContent.trim() : String(str).replace(/<[^>]*>/g, '').trim();
+  }
+
+  function detectKind(file){
+    const ext = extFromName(file.name);
+    const type = file.type || '';
+
+    if(['heic','heif'].includes(ext) || ['image/heic','image/heif'].includes(type)) return 'heic';
+    if(type === 'image/svg+xml' || ext === 'svg') return 'svg';
+    if(type.startsWith('image/') || ['png','jpg','jpeg','webp','bmp','gif','avif','ico'].includes(ext)) return 'image';
+    if(type.startsWith('video/') || ['webm','mp4','mov','m4v','ogg','ogv'].includes(ext)) return 'video';
+    if(type.startsWith('audio/') || ['mp3','wav','ogg','oga','m4a','aac','flac'].includes(ext)) return 'audio';
+    if(type === 'application/pdf' || ext === 'pdf') return 'pdf';
+    if(type.includes('wordprocessingml') || ext === 'docx') return 'docx';
+    if(type === 'application/json' || ext === 'json') return 'json';
+    if(type === 'text/csv' || ext === 'csv') return 'csv';
+    if(type === 'text/tab-separated-values' || ext === 'tsv') return 'tsv';
+    if(['md','markdown'].includes(ext)) return 'markdown';
+    if(['html','htm'].includes(ext) || type === 'text/html') return 'html';
+    if(['xml'].includes(ext) || type.includes('xml')) return 'xml';
+    if(type.startsWith('text/') || ['txt','log'].includes(ext)) return 'text';
+
+    return 'unknown';
+  }
+
+  function kindLabel(kind, ext){
+    const labels = {
+      image:`Image (${ext || 'detected'})`,
+      heic:'HEIC/HEIF image',
+      svg:'SVG image',
+      video:`Video (${ext || 'detected'})`,
+      audio:`Audio (${ext || 'detected'})`,
+      pdf:'PDF document',
+      docx:'Word document (.docx)',
+      json:'JSON file',
+      csv:'CSV file',
+      tsv:'TSV file',
+      markdown:'Markdown file',
+      html:'HTML file',
+      xml:'XML file',
+      text:`Text file (${ext || 'detected'})`,
+      unknown:'Unsupported file'
+    };
+    return labels[kind] || 'Unsupported file';
+  }
+
+  function availableTargets(kind){
+    return (targets[kind] || []).filter(item => !item.needs || item.needs());
+  }
+
+  function setTargets(kind, ext){
+    let list = availableTargets(kind);
+
+    if(kind === 'image'){
+      const normalized = ext === 'jpeg' ? 'jpg' : ext;
+      list = list.filter(t => t.value !== normalized);
+    }
+
+    toType.innerHTML = '';
+    if(!list.length){
+      const option = document.createElement('option');
+      option.value = '';
+      option.textContent = 'No supported conversion';
+      toType.appendChild(option);
+      convertBtn.disabled = true;
+    }else{
+      list.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.value;
+        option.textContent = item.label;
+        toType.appendChild(option);
+      });
+      convertBtn.disabled = false;
+    }
+
+    updateOptionFields();
+  }
+
+  function setFromLabel(kind, ext){
+    fromType.innerHTML = '';
+    const option = document.createElement('option');
+    option.textContent = kindLabel(kind, ext);
+    fromType.appendChild(option);
+  }
+
+  function updateOptionFields(){
+    const target = toType.value;
+    const showQuality = ['jpg','webp','avif','pdf','jpg-zip','webp-zip','frame-jpg','frame-webp','frame-avif'].includes(target);
+    const showScale = ['png-zip','jpg-zip','webp-zip'].includes(target);
+    qualityField.classList.toggle('hidden', !showQuality);
+    scaleField.classList.toggle('hidden', !showScale);
+  }
+
+  async function handleFile(file){
+    currentFile = file;
+    currentExt = extFromName(file.name);
+    currentKind = detectKind(file);
+
+    fileName.textContent = file.name || 'Untitled file';
+    fileType.textContent = file.type || currentExt || 'Unknown';
+    fileSize.textContent = formatSize(file.size || 0);
+    fileCategory.textContent = currentKind === 'unknown' ? 'Unsupported' : kindLabel(currentKind, currentExt);
+
+    filePanel.classList.remove('hidden');
+    previewBox.classList.add('hidden');
+    previewBox.innerHTML = '';
+    setFromLabel(currentKind, currentExt);
+    setTargets(currentKind, currentExt);
+
+    if(currentKind === 'unknown'){
+      setStatus('This file type is not supported yet.', 'err');
+    }else{
+      setStatus('Ready to convert.', 'ok');
+      await previewFile(file, currentKind);
+    }
+  }
+
+  async function previewFile(file, kind){
+    previewBox.innerHTML = '';
+
+    if(['text','json','csv','tsv','markdown','html','xml'].includes(kind)){
+      previewBox.classList.remove('hidden');
+      const text = await file.text();
+      const pre = document.createElement('pre');
+      pre.textContent = text.slice(0, 6000) || 'Empty file';
+      previewBox.appendChild(pre);
+      return;
+    }
+
+    // No previews for images, HEIC, SVG, PDF, Word, video or audio.
+    previewBox.classList.add('hidden');
+  }
+
+  function downloadBlob(blob, filename){
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    requestAnimationFrame(() => {
+      a.click();
+      setTimeout(() => {
+        a.remove();
+        URL.revokeObjectURL(url);
+      }, 1200);
+    });
+  }
+
+  function readAsDataUrl(file){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error('Could not read file.'));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function loadImage(source){
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = source instanceof Blob ? URL.createObjectURL(source) : source;
+      img.onload = () => {
+        if(source instanceof Blob) URL.revokeObjectURL(url);
+        resolve(img);
+      };
+      img.onerror = () => {
+        if(source instanceof Blob) URL.revokeObjectURL(url);
+        reject(new Error('This image format cannot be decoded by this browser.'));
+      };
+      img.src = url;
+    });
+  }
+
+  function dataUrlToBlob(dataURL){
+    const parts = dataURL.split(',');
+    const mime = parts[0].match(/:(.*?);/)[1];
+    const bin = atob(parts[1]);
+    const arr = new Uint8Array(bin.length);
+    for(let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    return new Blob([arr], {type:mime});
+  }
+
+  function canvasToBlob(canvas, mime, qualityValue){
+    return new Promise(resolve => canvas.toBlob(resolve, mime, qualityValue));
+  }
+
+  function canvasToBmpBlob(canvas){
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+    const imageData = ctx.getImageData(0, 0, w, h).data;
+    const rowSize = Math.floor((24 * w + 31) / 32) * 4;
+    const pixelArraySize = rowSize * h;
+    const fileSize = 54 + pixelArraySize;
+    const buffer = new ArrayBuffer(fileSize);
+    const dv = new DataView(buffer);
+
+    function writeString(offset, str){
+      for(let i = 0; i < str.length; i++) dv.setUint8(offset + i, str.charCodeAt(i));
+    }
+
+    writeString(0, 'BM');
+    dv.setUint32(2, fileSize, true);
+    dv.setUint32(10, 54, true);
+    dv.setUint32(14, 40, true);
+    dv.setInt32(18, w, true);
+    dv.setInt32(22, h, true);
+    dv.setUint16(26, 1, true);
+    dv.setUint16(28, 24, true);
+    dv.setUint32(34, pixelArraySize, true);
+
+    let offset = 54;
+    for(let y = h - 1; y >= 0; y--){
+      let rowOffset = offset;
+      for(let x = 0; x < w; x++){
+        const i = (y * w + x) * 4;
+        dv.setUint8(rowOffset++, imageData[i + 2]);
+        dv.setUint8(rowOffset++, imageData[i + 1]);
+        dv.setUint8(rowOffset++, imageData[i]);
+      }
+      while((rowOffset - offset) < rowSize) dv.setUint8(rowOffset++, 0);
+      offset += rowSize;
+    }
+
+    return new Blob([buffer], {type:'image/bmp'});
+  }
+
+  async function imageFileToCanvas(file){
+    const img = await loadImage(file);
+    const canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth || img.width;
+    canvas.height = img.naturalHeight || img.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    return canvas;
+  }
+
+  async function heicToBlob(file, target){
+    if(!window.heic2any){
+      throw new Error('HEIC support could not load. Please check your internet connection and try again.');
+    }
+    const toType = target === 'png' ? 'image/png' : 'image/jpeg';
+    const converted = await heic2any({blob:file, toType, quality:Number(quality.value || 0.86)});
+    return Array.isArray(converted) ? converted[0] : converted;
+  }
+
+  async function convertHeic(file, target){
+    if(target === 'base64'){
+      const blob = await heicToBlob(file, 'jpg');
+      const dataUrl = await readAsDataUrl(blob);
+      downloadBlob(new Blob([dataUrl], {type:'text/plain;charset=utf-8'}), `${baseName(file.name)}-base64.txt`);
+      setStatus('HEIC converted to Base64 text and downloaded.', 'ok');
+      return;
+    }
+
+    const actualTarget = target === 'webp' ? 'jpg' : target;
+    const blob = await heicToBlob(file, actualTarget);
+    if(target === 'webp'){
+      const tempFile = new File([blob], `${baseName(file.name)}.jpg`, {type:'image/jpeg'});
+      await convertImage(tempFile, 'webp');
+      return;
+    }
+
+    downloadBlob(blob, `${baseName(file.name)}.${target === 'png' ? 'png' : 'jpg'}`);
+    setStatus('HEIC/HEIF converted and downloaded.', 'ok');
+  }
+
+  async function convertImage(file, target){
+    const canvas = await imageFileToCanvas(file);
+    const q = Number(quality.value || 0.86);
+
+    if(target === 'pdf'){
+      if(!window.jspdf) throw new Error('PDF library could not load. Please check your internet connection and try again.');
+      const { jsPDF } = window.jspdf;
+      const imgData = canvas.toDataURL('image/jpeg', q);
+      const orientation = canvas.width >= canvas.height ? 'landscape' : 'portrait';
+      const pdf = new jsPDF({orientation, unit:'px', format:[canvas.width, canvas.height]});
+      pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
+      pdf.save(`${baseName(file.name)}.pdf`);
+      setStatus('Image converted to PDF and downloaded.', 'ok');
+      return;
+    }
+
+    if(target === 'base64'){
+      const data = canvas.toDataURL(file.type || 'image/png', q);
+      downloadBlob(new Blob([data], {type:'text/plain;charset=utf-8'}), `${baseName(file.name)}-base64.txt`);
+      setStatus('Base64 text downloaded.', 'ok');
+      return;
+    }
+
+    if(target === 'bmp'){
+      downloadBlob(canvasToBmpBlob(canvas), `${baseName(file.name)}.bmp`);
+      setStatus('Image converted to BMP and downloaded.', 'ok');
+      return;
+    }
+
+    if(target === 'ico'){
+      const iconCanvas = document.createElement('canvas');
+      iconCanvas.width = 256;
+      iconCanvas.height = 256;
+      const ctx = iconCanvas.getContext('2d');
+      ctx.clearRect(0, 0, 256, 256);
+      const ratio = Math.min(256 / canvas.width, 256 / canvas.height);
+      const w = canvas.width * ratio;
+      const h = canvas.height * ratio;
+      ctx.drawImage(canvas, (256 - w) / 2, (256 - h) / 2, w, h);
+      const blob = await canvasToBlob(iconCanvas, 'image/png', q);
+      downloadBlob(blob, `${baseName(file.name)}.ico`);
+      setStatus('Image converted to an icon file and downloaded.', 'ok');
+      return;
+    }
+
+    const mime = target === 'jpg' ? 'image/jpeg' : target === 'webp' ? 'image/webp' : target === 'avif' ? 'image/avif' : 'image/png';
+    const blob = await canvasToBlob(canvas, mime, q);
+    if(!blob) throw new Error('Conversion failed or this browser does not support that output format.');
+    downloadBlob(blob, `${baseName(file.name)}.${target}`);
+    setStatus('Image converted and downloaded.', 'ok');
+  }
+
+  async function svgToImageBlob(file, target){
+    const text = await file.text();
+
+    if(target === 'txt'){
+      downloadBlob(new Blob([text], {type:'text/plain;charset=utf-8'}), `${baseName(file.name)}.txt`);
+      setStatus('SVG source downloaded as text.', 'ok');
+      return;
+    }
+
+    if(target === 'base64'){
+      const dataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(text)));
+      downloadBlob(new Blob([dataUrl], {type:'text/plain;charset=utf-8'}), `${baseName(file.name)}-base64.txt`);
+      setStatus('SVG converted to Base64 text and downloaded.', 'ok');
+      return;
+    }
+
+    const svgBlob = new Blob([text], {type:'image/svg+xml'});
+    const img = await loadImage(svgBlob);
+    const canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth || 1200;
+    canvas.height = img.naturalHeight || 800;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
+
+    if(target === 'pdf'){
+      if(!window.jspdf) throw new Error('PDF library could not load. Please check your internet connection and try again.');
+      const { jsPDF } = window.jspdf;
+      const orientation = canvas.width >= canvas.height ? 'landscape' : 'portrait';
+      const pdf = new jsPDF({orientation, unit:'px', format:[canvas.width, canvas.height]});
+      pdf.addImage(canvas.toDataURL('image/jpeg', Number(quality.value || 0.86)), 'JPEG', 0, 0, canvas.width, canvas.height);
+      pdf.save(`${baseName(file.name)}.pdf`);
+      setStatus('SVG converted to PDF and downloaded.', 'ok');
+      return;
+    }
+
+    const mime = target === 'jpg' ? 'image/jpeg' : target === 'webp' ? 'image/webp' : target === 'avif' ? 'image/avif' : 'image/png';
+    const blob = await canvasToBlob(canvas, mime, Number(quality.value || 0.86));
+    if(!blob) throw new Error('Conversion failed or this browser does not support that output format.');
+    downloadBlob(blob, `${baseName(file.name)}.${target}`);
+    setStatus('SVG converted and downloaded.', 'ok');
+  }
+
+  function parseDelimited(text, delimiter){
+    const rows = [];
+    let row = [];
+    let cell = '';
+    let inQuotes = false;
+
+    for(let i = 0; i < text.length; i++){
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if(ch === '"' && inQuotes && next === '"'){
+        cell += '"';
+        i++;
+      }else if(ch === '"'){
+        inQuotes = !inQuotes;
+      }else if(ch === delimiter && !inQuotes){
+        row.push(cell);
+        cell = '';
+      }else if((ch === '\n' || ch === '\r') && !inQuotes){
+        if(ch === '\r' && next === '\n') i++;
+        row.push(cell);
+        if(row.some(v => v !== '')) rows.push(row);
+        row = [];
+        cell = '';
+      }else{
+        cell += ch;
+      }
+    }
+
+    row.push(cell);
+    if(row.some(v => v !== '')) rows.push(row);
+    return rows;
+  }
+
+  function rowsToObjects(rows){
+    if(!rows.length) return [];
+    const headers = rows[0].map((h, i) => h || `Column ${i + 1}`);
+    return rows.slice(1).map(r => {
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = r[i] ?? '');
+      return obj;
+    });
+  }
+
+  function toCsvValue(v, delimiter = ','){
+    const s = String(v ?? '');
+    if(s.includes('"') || s.includes('\n') || s.includes('\r') || s.includes(delimiter)){
+      return '"' + s.replace(/"/g, '""') + '"';
+    }
+    return s;
+  }
+
+  function objectsToCsv(data, delimiter = ','){
+    const rows = Array.isArray(data) ? data : [data];
+    const keys = [...new Set(rows.flatMap(obj => obj && typeof obj === 'object' && !Array.isArray(obj) ? Object.keys(obj) : ['value']))];
+
+    const lines = [keys.map(k => toCsvValue(k, delimiter)).join(delimiter)];
+    rows.forEach(item => {
+      const obj = item && typeof item === 'object' && !Array.isArray(item) ? item : {value:item};
+      lines.push(keys.map(k => toCsvValue(obj[k], delimiter)).join(delimiter));
+    });
+    return lines.join('\n');
+  }
+
+  function rowsToHtmlTable(rows){
+    const body = rows.map((row, index) => {
+      const tag = index === 0 ? 'th' : 'td';
+      return '<tr>' + row.map(cell => `<${tag}>${escapeHtml(cell)}</${tag}>`).join('') + '</tr>';
+    }).join('\n');
+
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>${escapeHtml(baseName(currentFile.name))}</title>
+<style>
+body{font-family:Arial,sans-serif;padding:2rem}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #ccc;padding:.45rem;text-align:left;vertical-align:top}
+th{background:#f2f2f2}
+</style>
+</head>
+<body>
+<table>
+${body}
+</table>
+</body>
+</html>`;
+  }
+
+  function markdownToHtml(text){
+    const lines = String(text).split(/\r?\n/);
+    return lines.map(line => {
+      if(/^###\s+/.test(line)) return `<h3>${escapeHtml(line.replace(/^###\s+/, ''))}</h3>`;
+      if(/^##\s+/.test(line)) return `<h2>${escapeHtml(line.replace(/^##\s+/, ''))}</h2>`;
+      if(/^#\s+/.test(line)) return `<h1>${escapeHtml(line.replace(/^#\s+/, ''))}</h1>`;
+      if(/^\s*[-*]\s+/.test(line)) return `<p>• ${escapeHtml(line.replace(/^\s*[-*]\s+/, ''))}</p>`;
+      if(!line.trim()) return '';
+      return `<p>${escapeHtml(line)}</p>`;
+    }).join('\n');
+  }
+
+  function htmlDocument(title, body){
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>${escapeHtml(title)}</title>
+<style>body{font-family:Arial,sans-serif;line-height:1.6;padding:2rem;max-width:900px;margin:auto}</style>
+</head>
+<body>
+${body}
+</body>
+</html>`;
+  }
+
+  async function textToDocx(text, filename){
+    if(!window.docx) throw new Error('Word document library could not load. Please check your internet connection and try again.');
+    const { Document, Packer, Paragraph, TextRun } = window.docx;
+    const lines = String(text).split(/\r?\n/);
+    const doc = new Document({
+      sections: [{
+        properties: {},
+        children: lines.length ? lines.map(line => new Paragraph({children:[new TextRun(line || ' ')]})) : [new Paragraph('')]
+      }]
+    });
+    const blob = await Packer.toBlob(doc);
+    downloadBlob(blob, filename);
+  }
+
+  function textToPdf(text, filename){
+    if(!window.jspdf) throw new Error('PDF library could not load. Please check your internet connection and try again.');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({unit:'pt', format:'a4'});
+    const margin = 40;
+    const lineHeight = 14;
+    const maxWidth = pdf.internal.pageSize.getWidth() - margin * 2;
+    let y = margin;
+
+    String(text).split(/\r?\n/).forEach(rawLine => {
+      const lines = pdf.splitTextToSize(rawLine || ' ', maxWidth);
+      lines.forEach(line => {
+        if(y > pdf.internal.pageSize.getHeight() - margin){
+          pdf.addPage();
+          y = margin;
+        }
+        pdf.text(line, margin, y);
+        y += lineHeight;
+      });
+    });
+
+    pdf.save(filename);
+  }
+
+  async function convertTextFile(file, kind, target){
+    const text = await file.text();
+    let output = text;
+    let ext = target;
+
+    if(kind === 'json'){
+      const parsed = JSON.parse(text);
+      if(target === 'json-pretty'){
+        output = JSON.stringify(parsed, null, 2);
+        ext = 'json';
+      }else if(target === 'json-min'){
+        output = JSON.stringify(parsed);
+        ext = 'json';
+      }else if(target === 'csv'){
+        output = objectsToCsv(parsed);
+        ext = 'csv';
+      }else if(target === 'html'){
+        output = htmlDocument(baseName(file.name), `<pre>${escapeHtml(JSON.stringify(parsed, null, 2))}</pre>`);
+        ext = 'html';
+      }else{
+        output = JSON.stringify(parsed, null, 2);
+        ext = 'txt';
+      }
+      downloadBlob(new Blob([output], {type:'text/plain;charset=utf-8'}), `${baseName(file.name)}.${ext}`);
+      setStatus('Converted and downloaded.', 'ok');
+      return;
+    }
+
+    if(kind === 'csv' || kind === 'tsv'){
+      const delimiter = kind === 'tsv' ? '\t' : ',';
+      const rows = parseDelimited(text, delimiter);
+
+      if(target === 'json'){
+        output = JSON.stringify(rowsToObjects(rows), null, 2);
+        ext = 'json';
+      }else if(target === 'csv'){
+        output = rows.map(r => r.map(v => toCsvValue(v, ',')).join(',')).join('\n');
+        ext = 'csv';
+      }else if(target === 'tsv'){
+        output = rows.map(r => r.map(v => toCsvValue(v, '\t')).join('\t')).join('\n');
+        ext = 'tsv';
+      }else if(target === 'html-table'){
+        output = rowsToHtmlTable(rows);
+        ext = 'html';
+      }else{
+        output = text;
+        ext = 'txt';
+      }
+
+      downloadBlob(new Blob([output], {type:'text/plain;charset=utf-8'}), `${baseName(file.name)}.${ext}`);
+      setStatus('Converted and downloaded.', 'ok');
+      return;
+    }
+
+    if(kind === 'markdown'){
+      if(target === 'html'){
+        output = htmlDocument(baseName(file.name), markdownToHtml(text));
+        ext = 'html';
+      }else if(target === 'docx'){
+        await textToDocx(text, `${baseName(file.name)}.docx`);
+        setStatus('Converted to Word and downloaded.', 'ok');
+        return;
+      }else if(target === 'pdf'){
+        textToPdf(text, `${baseName(file.name)}.pdf`);
+        setStatus('Converted to PDF and downloaded.', 'ok');
+        return;
+      }else{
+        output = text;
+        ext = 'txt';
+      }
+      downloadBlob(new Blob([output], {type:'text/plain;charset=utf-8'}), `${baseName(file.name)}.${ext}`);
+      setStatus('Converted and downloaded.', 'ok');
+      return;
+    }
+
+    if(kind === 'html'){
+      output = stripHtml(text);
+      if(target === 'md'){
+        ext = 'md';
+      }else if(target === 'pdf'){
+        textToPdf(output, `${baseName(file.name)}.pdf`);
+        setStatus('Converted to PDF and downloaded.', 'ok');
+        return;
+      }else{
+        ext = 'txt';
+      }
+      downloadBlob(new Blob([output], {type:'text/plain;charset=utf-8'}), `${baseName(file.name)}.${ext}`);
+      setStatus('Converted and downloaded.', 'ok');
+      return;
+    }
+
+    if(kind === 'xml'){
+      if(target === 'json-basic'){
+        const doc = new DOMParser().parseFromString(text, 'application/xml');
+        if(doc.querySelector('parsererror')) throw new Error('This is not valid XML.');
+        output = JSON.stringify(xmlNodeToObject(doc.documentElement), null, 2);
+        ext = 'json';
+      }else if(target === 'html-escaped'){
+        output = htmlDocument(baseName(file.name), `<pre>${escapeHtml(text)}</pre>`);
+        ext = 'html';
+      }else{
+        output = text;
+        ext = 'txt';
+      }
+      downloadBlob(new Blob([output], {type:'text/plain;charset=utf-8'}), `${baseName(file.name)}.${ext}`);
+      setStatus('Converted and downloaded.', 'ok');
+      return;
+    }
+
+    if(target === 'html'){
+      output = htmlDocument(baseName(file.name), `<pre>${escapeHtml(text)}</pre>`);
+      ext = 'html';
+    }else if(target === 'json-string'){
+      output = JSON.stringify({filename:file.name, text}, null, 2);
+      ext = 'json';
+    }else if(target === 'docx'){
+      await textToDocx(text, `${baseName(file.name)}.docx`);
+      setStatus('Converted to Word and downloaded.', 'ok');
+      return;
+    }else if(target === 'pdf'){
+      textToPdf(text, `${baseName(file.name)}.pdf`);
+      setStatus('Converted to PDF and downloaded.', 'ok');
+      return;
+    }else if(target === 'md'){
+      output = text;
+      ext = 'md';
+    }else{
+      output = text;
+      ext = 'txt';
+    }
+
+    downloadBlob(new Blob([output], {type:'text/plain;charset=utf-8'}), `${baseName(file.name)}.${ext}`);
+    setStatus('Converted and downloaded.', 'ok');
+  }
+
+  function xmlNodeToObject(node){
+    const obj = {};
+    if(node.attributes && node.attributes.length){
+      obj['@attributes'] = {};
+      Array.from(node.attributes).forEach(attr => obj['@attributes'][attr.name] = attr.value);
+    }
+    const children = Array.from(node.children || []);
+    if(children.length){
+      children.forEach(child => {
+        const value = xmlNodeToObject(child);
+        if(obj[child.nodeName]){
+          if(!Array.isArray(obj[child.nodeName])) obj[child.nodeName] = [obj[child.nodeName]];
+          obj[child.nodeName].push(value);
+        }else{
+          obj[child.nodeName] = value;
+        }
+      });
+    }else{
+      obj['#text'] = node.textContent || '';
+    }
+    return obj;
+  }
+
+  async function extractPdfPages(file){
+    if(!window.pdfjsLib) throw new Error('PDF library could not load. Please check your internet connection and try again.');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+    const buffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({data: buffer}).promise;
+    const pages = [];
+
+    for(let i = 1; i <= pdf.numPages; i++){
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const text = content.items.map(item => item.str).join(' ').replace(/\s+/g, ' ').trim();
+      pages.push({page:i, text});
+    }
+
+    return pages;
+  }
+
+  async function extractPdfText(file){
+    const pages = await extractPdfPages(file);
+    return pages.map(p => `Page ${p.page}\n${p.text}`).join('\n\n');
+  }
+
+  async function convertPdf(file, target){
+    if(target === 'png-zip' || target === 'jpg-zip' || target === 'webp-zip'){
+      if(!window.pdfjsLib || !window.JSZip) throw new Error('PDF or ZIP library could not load. Please check your internet connection and try again.');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+
+      const buffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({data: buffer}).promise;
+      const zip = new JSZip();
+      const scale = Number(pdfScale.value || 1.5);
+      const isJpg = target === 'jpg-zip';
+      const isWebp = target === 'webp-zip';
+
+      for(let i = 1; i <= pdf.numPages; i++){
+        setStatus(`Rendering page ${i} of ${pdf.numPages}...`, '');
+        const page = await pdf.getPage(i);
+        const viewport = page.getViewport({scale});
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.ceil(viewport.width);
+        canvas.height = Math.ceil(viewport.height);
+        const ctx = canvas.getContext('2d');
+        if(isJpg){
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        await page.render({canvasContext:ctx, viewport}).promise;
+        const mime = isJpg ? 'image/jpeg' : isWebp ? 'image/webp' : 'image/png';
+        const ext = isJpg ? 'jpg' : isWebp ? 'webp' : 'png';
+        const blob = await canvasToBlob(canvas, mime, Number(quality.value || 0.86));
+        zip.file(`${baseName(file.name)}-page-${String(i).padStart(3, '0')}.${ext}`, blob);
+      }
+
+      const zipBlob = await zip.generateAsync({type:'blob'});
+      downloadBlob(zipBlob, `${baseName(file.name)}-pages.zip`);
+      setStatus('PDF pages converted and downloaded as ZIP.', 'ok');
+      return;
+    }
+
+    const pages = target === 'json-pages' ? await extractPdfPages(file) : null;
+    const text = pages ? pages.map(p => `Page ${p.page}\n${p.text}`).join('\n\n') : await extractPdfText(file);
+
+    if(target === 'json-pages'){
+      downloadBlob(new Blob([JSON.stringify(pages, null, 2)], {type:'application/json;charset=utf-8'}), `${baseName(file.name)}.json`);
+      setStatus('PDF text extracted as JSON and downloaded.', 'ok');
+      return;
+    }
+
+    if(target === 'txt'){
+      downloadBlob(new Blob([text], {type:'text/plain;charset=utf-8'}), `${baseName(file.name)}.txt`);
+      setStatus('PDF text extracted and downloaded.', 'ok');
+      return;
+    }
+
+    await textToDocx(text, `${baseName(file.name)}.docx`);
+    setStatus('PDF text extracted to Word and downloaded.', 'ok');
+  }
+
+  async function convertDocx(file, target){
+    if(!window.mammoth) throw new Error('Word extraction library could not load. Please check your internet connection and try again.');
+    const buffer = await file.arrayBuffer();
+
+    if(target === 'html'){
+      const result = await mammoth.convertToHtml({arrayBuffer:buffer});
+      const output = htmlDocument(baseName(file.name), result.value);
+      downloadBlob(new Blob([output], {type:'text/html;charset=utf-8'}), `${baseName(file.name)}.html`);
+      setStatus('Word document converted to HTML and downloaded.', 'ok');
+      return;
+    }
+
+    const result = await mammoth.extractRawText({arrayBuffer:buffer});
+    const text = result.value || '';
+
+    if(target === 'pdf'){
+      textToPdf(text, `${baseName(file.name)}.pdf`);
+      setStatus('Word text converted to PDF and downloaded.', 'ok');
+      return;
+    }
+
+    downloadBlob(new Blob([text], {type:'text/plain;charset=utf-8'}), `${baseName(file.name)}.${target === 'md' ? 'md' : 'txt'}`);
+    setStatus('Word text extracted and downloaded.', 'ok');
+  }
+
+  function loadMediaElement(file, kind){
+    return new Promise((resolve, reject) => {
+      const el = document.createElement(kind === 'video' ? 'video' : 'audio');
+      const url = URL.createObjectURL(file);
+      el.preload = 'metadata';
+      el.muted = true;
+      el.playsInline = true;
+      el.onloadedmetadata = () => resolve({el, url});
+      el.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error(`This ${kind} format cannot be decoded by this browser.`));
+      };
+      el.src = url;
+    });
+  }
+
+  async function convertVideo(file, target){
+    const {el:video, url} = await loadMediaElement(file, 'video');
+
+    try{
+      if(target === 'metadata-json'){
+        const data = {
+          filename:file.name,
+          type:file.type || currentExt,
+          size:file.size,
+          duration:video.duration,
+          width:video.videoWidth,
+          height:video.videoHeight
+        };
+        downloadBlob(new Blob([JSON.stringify(data, null, 2)], {type:'application/json'}), `${baseName(file.name)}-metadata.json`);
+        setStatus('Video metadata downloaded.', 'ok');
+        return;
+      }
+
+      if(target.startsWith('frame-')){
+        video.currentTime = Math.min(0.2, video.duration || 0);
+        await new Promise(resolve => video.onseeked = resolve);
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth || 1280;
+        canvas.height = video.videoHeight || 720;
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const out = target.replace('frame-', '');
+        const mime = out === 'jpg' ? 'image/jpeg' : out === 'webp' ? 'image/webp' : out === 'avif' ? 'image/avif' : 'image/png';
+        const blob = await canvasToBlob(canvas, mime, Number(quality.value || 0.86));
+        if(!blob) throw new Error('Could not export frame in that format.');
+        downloadBlob(blob, `${baseName(file.name)}-frame.${out}`);
+        setStatus('First frame extracted and downloaded.', 'ok');
+        return;
+      }
+
+      if(target === 'webm'){
+        if(!video.captureStream || !window.MediaRecorder) throw new Error('This browser cannot record video to WebM.');
+        const stream = video.captureStream();
+        const recorder = new MediaRecorder(stream, {mimeType:'video/webm;codecs=vp9'});
+        const chunks = [];
+        recorder.ondataavailable = e => { if(e.data.size) chunks.push(e.data); };
+        const stopped = new Promise(resolve => recorder.onstop = resolve);
+        recorder.start();
+        await video.play();
+        await new Promise(resolve => video.onended = resolve);
+        recorder.stop();
+        await stopped;
+        downloadBlob(new Blob(chunks, {type:'video/webm'}), `${baseName(file.name)}.webm`);
+        setStatus('Video recorded to WebM and downloaded.', 'ok');
+      }
+    }finally{
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  async function audioBufferToWavBlob(buffer){
+    const numChannels = buffer.numberOfChannels;
+    const sampleRate = buffer.sampleRate;
+    const length = buffer.length * numChannels * 2 + 44;
+    const arrayBuffer = new ArrayBuffer(length);
+    const view = new DataView(arrayBuffer);
+
+    function writeString(offset, str){
+      for(let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+    }
+
+    writeString(0, 'RIFF');
+    view.setUint32(4, length - 8, true);
+    writeString(8, 'WAVE');
+    writeString(12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, numChannels, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * numChannels * 2, true);
+    view.setUint16(32, numChannels * 2, true);
+    view.setUint16(34, 16, true);
+    writeString(36, 'data');
+    view.setUint32(40, length - 44, true);
+
+    let offset = 44;
+    for(let i = 0; i < buffer.length; i++){
+      for(let ch = 0; ch < numChannels; ch++){
+        const sample = Math.max(-1, Math.min(1, buffer.getChannelData(ch)[i]));
+        view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
+        offset += 2;
+      }
+    }
+
+    return new Blob([arrayBuffer], {type:'audio/wav'});
+  }
+
+  async function convertAudio(file, target){
+    if(target === 'metadata-json'){
+      const {el:audio, url} = await loadMediaElement(file, 'audio');
+      try{
+        const data = {
+          filename:file.name,
+          type:file.type || currentExt,
+          size:file.size,
+          duration:audio.duration
+        };
+        downloadBlob(new Blob([JSON.stringify(data, null, 2)], {type:'application/json'}), `${baseName(file.name)}-metadata.json`);
+        setStatus('Audio metadata downloaded.', 'ok');
+      }finally{
+        URL.revokeObjectURL(url);
+      }
+      return;
+    }
+
+    if(target === 'webm-audio'){
+      const {el:audio, url} = await loadMediaElement(file, 'audio');
+      try{
+        if(!audio.captureStream || !window.MediaRecorder) throw new Error('This browser cannot record audio to WebM.');
+        const stream = audio.captureStream();
+        const recorder = new MediaRecorder(stream, {mimeType:'audio/webm'});
+        const chunks = [];
+        recorder.ondataavailable = e => { if(e.data.size) chunks.push(e.data); };
+        const stopped = new Promise(resolve => recorder.onstop = resolve);
+        recorder.start();
+        await audio.play();
+        await new Promise(resolve => audio.onended = resolve);
+        recorder.stop();
+        await stopped;
+        downloadBlob(new Blob(chunks, {type:'audio/webm'}), `${baseName(file.name)}.webm`);
+        setStatus('Audio recorded to WebM and downloaded.', 'ok');
+      }finally{
+        URL.revokeObjectURL(url);
+      }
+      return;
+    }
+
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if(!AudioContext) throw new Error('This browser cannot decode audio files.');
+    const ctx = new AudioContext();
+    const buffer = await ctx.decodeAudioData(await file.arrayBuffer());
+    const blob = await audioBufferToWavBlob(buffer);
+    downloadBlob(blob, `${baseName(file.name)}.wav`);
+    setStatus('Audio converted to WAV and downloaded.', 'ok');
+  }
+
+  async function convert(){
+    if(!currentFile) return;
+    const target = toType.value;
+    if(!target){
+      setStatus('Please choose a supported output format.', 'err');
+      return;
+    }
+
+    try{
+      setStatus('Converting...', '');
+      convertBtn.disabled = true;
+
+      if(currentKind === 'image') await convertImage(currentFile, target);
+      else if(currentKind === 'heic') await convertHeic(currentFile, target);
+      else if(currentKind === 'svg') await svgToImageBlob(currentFile, target);
+      else if(currentKind === 'video') await convertVideo(currentFile, target);
+      else if(currentKind === 'audio') await convertAudio(currentFile, target);
+      else if(currentKind === 'pdf') await convertPdf(currentFile, target);
+      else if(currentKind === 'docx') await convertDocx(currentFile, target);
+      else if(['text','json','csv','tsv','markdown','html','xml'].includes(currentKind)) await convertTextFile(currentFile, currentKind, target);
+      else setStatus('This file type is not supported yet.', 'err');
+    }catch(err){
+      setStatus(err.message || 'Conversion failed.', 'err');
+    }finally{
+      convertBtn.disabled = !availableTargets(currentKind).length;
+    }
+  }
+
+  function clearAll(){
+    currentFile = null;
+    currentKind = null;
+    currentExt = null;
+    fileInput.value = '';
+    filePanel.classList.add('hidden');
+    previewBox.classList.add('hidden');
+    previewBox.innerHTML = '';
+    setStatus('', '');
+  }
+
+  fileInput.addEventListener('change', e => {
+    const file = e.target.files && e.target.files[0];
+    if(file) handleFile(file);
+  });
+
+  toType.addEventListener('change', updateOptionFields);
+
+  ['dragenter','dragover'].forEach(evt => {
+    dropZone.addEventListener(evt, e => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+  });
+
+  ['dragleave','drop'].forEach(evt => {
+    dropZone.addEventListener(evt, e => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+    });
+  });
+
+  dropZone.addEventListener('drop', e => {
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    if(file) handleFile(file);
+  });
+
+  convertBtn.addEventListener('click', convert);
+  clearBtn.addEventListener('click', clearAll);
+
+  const y = document.getElementById('year');
+  if(y) y.textContent = new Date().getFullYear();
+})();
+</script>
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tools | Find &amp; Replace</title>
+<meta name="description" content="Search, highlight and replace text directly in your browser."/>
+<meta name="theme-color" content="#f5f5f7"/>
+
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --bg-alt:#ffffff;
+    --text:#111827;
+    --text-soft:#4b5563;
+    --accent:#2563eb;
+    --accent-hover:#1d4ed8;
+    --accent-soft:rgba(37,99,235,.08);
+    --border-subtle:#e5e7eb;
+    --border-strong:#d1d5db;
+    --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+    --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+    --radius:20px;
+    --radius-pill:999px;
+    --max-w:980px;
+    --gap:14px;
+    --stack-gap:14px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%}
+  body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background:var(--bg);
+    color:var(--text);
+    font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  main{flex:1}
+  .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+  .skip-link{
+    position:absolute;
+    left:-999px;
+    top:.5rem;
+    padding:.45rem .75rem;
+    background:#111827;
+    color:#f9fafb;
+    z-index:100;
+    border-radius:var(--radius-pill);
+    font-size:.85rem;
+  }
+  .skip-link:focus{left:.5rem}
+
+  header.site-header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    border-bottom:1px solid rgba(148,163,184,.28);
+    backdrop-filter:blur(16px);
+    background:rgba(248,250,252,.95);
+  }
+  .mast{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:58px;
+    padding:.55rem 0;
+  }
+  .nav__list{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    list-style:none;
+    margin:0;
+    padding:0;
+    flex-wrap:wrap;
+    font-size:.86rem;
+  }
+  .nav__link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:.3rem .8rem;
+    border-radius:var(--radius-pill);
+    color:var(--text-soft);
+    border:1px solid transparent;
+    transition:background .16s,color .16s,transform .12s,border-color .16s;
+  }
+  .nav__link:hover,.nav__link:focus-visible{
+    background:rgba(148,163,184,.18);
+    color:var(--text);
+    transform:translateY(-1px);
+    text-decoration:none;
+    border-color:rgba(148,163,184,.26);
+  }
+  .nav__link--highlight{background:var(--accent-soft);color:var(--accent);border-color:rgba(37,99,235,.18)}
+
+  .intro{
+    text-align:center;
+    padding:2.6rem 0 2.4rem;
+  }
+  .intro__title{
+    font-size:clamp(2.1rem,3vw,2.6rem);
+    line-height:1.15;
+    margin:0 0 .8rem;
+    font-weight:750;
+    letter-spacing:-.03em;
+  }
+  .intro__subtitle{
+    max-width:620px;
+    margin:0 auto;
+    color:var(--text-soft);
+    font-size:.96rem;
+    font-weight:500;
+  }
+
+  .tool{padding:2.4rem 0 4rem}
+  .card{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--border-subtle);
+    border-radius:24px;
+    box-shadow:var(--shadow-soft);
+    padding:clamp(1.2rem,3vw,1.7rem);
+    max-width:980px;
+    margin:0 auto;
+    transition:box-shadow .16s,transform .16s,border-color .16s;
+  }
+  .card:hover{box-shadow:var(--shadow-lift);border-color:rgba(37,99,235,.18)}
+
+  .row{
+    display:flex;
+    justify-content:center;
+    gap:var(--gap);
+    flex-wrap:wrap;
+    margin-top:var(--gap);
+  }
+  .row:first-child{margin-top:0}
+  .full{
+    min-width:260px;
+    max-width:100%;
+    flex:1 1 640px;
+  }
+  .col{
+    min-width:240px;
+    flex:1 1 280px;
+  }
+
+  label,.section-label{
+    display:block;
+    margin:0 0 .35rem;
+    color:var(--text-soft);
+    font-size:.85rem;
+    font-weight:700;
+  }
+
+  textarea,input,select{
+    width:100%;
+    border-radius:14px;
+    border:1px solid var(--border-strong);
+    background:#ffffff;
+    color:var(--text);
+    outline:none;
+    transition:border-color .16s,box-shadow .16s,background .16s;
+    font:inherit;
+  }
+  textarea{
+    min-height:215px;
+    resize:vertical;
+    padding:.9rem 1rem;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    font-size:.92rem;
+    line-height:1.5;
+  }
+  input,select{
+    padding:.78rem 1rem;
+  }
+  textarea:focus,input:focus,select:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+  }
+
+  .drop-merge{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:142px;
+    padding:1.4rem;
+    border:2px dashed var(--border-strong);
+    border-radius:20px;
+    background:#f8fafc;
+    color:var(--text-soft);
+    text-align:center;
+    cursor:pointer;
+    transition:border-color .16s,background .16s,box-shadow .16s,transform .14s;
+    font-weight:650;
+  }
+  .drop-merge:hover,.drop-merge:focus-within{
+    border-color:var(--accent);
+    background:#f4f8ff;
+    box-shadow:0 0 0 4px rgba(37,99,235,.08);
+    transform:translateY(-1px);
+  }
+  .drop-merge input[type="file"]{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    cursor:pointer;
+    padding:0;
+  }
+
+  .btn-grid,.dl-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.7rem;
+    flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    padding:.65rem 1.3rem;
+    border-radius:var(--radius-pill);
+    border:1px solid transparent;
+    background:var(--accent);
+    color:#f9fafb;
+    font-size:.86rem;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+    box-shadow:none;
+    transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+    font-family:inherit;
+    min-height:44px;
+  }
+  .btn:hover:not([disabled]){
+    transform:translateY(-1px);
+    background:var(--accent-hover);
+    text-decoration:none;
+    box-shadow:0 10px 25px rgba(37,99,235,.18);
+  }
+  .btn:active:not([disabled]){transform:translateY(0)}
+  .btn[disabled]{
+    opacity:.45;
+    cursor:not-allowed;
+  }
+  .btn.small,.btn.ghost{
+    background:transparent;
+    color:var(--text);
+    border-color:rgba(148,163,184,.8);
+    box-shadow:none;
+  }
+  .btn.small:hover:not([disabled]),.btn.ghost:hover:not([disabled]){
+    background:rgba(148,163,184,.15);
+    box-shadow:none;
+  }
+
+  .seg{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    flex-wrap:wrap;
+    border-radius:18px;
+    border:1px solid var(--border-subtle);
+    background:#f8fafc;
+    padding:.85rem 1rem;
+  }
+  .toggles{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.8rem;
+    flex-wrap:wrap;
+  }
+  .toggles label{
+    display:inline-flex;
+    align-items:center;
+    gap:.4rem;
+    margin:0;
+    color:var(--text);
+    font-size:.85rem;
+    font-weight:650;
+  }
+  input[type="checkbox"]{
+    width:16px;
+    height:16px;
+    accent-color:var(--accent);
+    padding:0;
+    box-shadow:none;
+  }
+
+  .preview{
+    min-height:170px;
+    max-height:360px;
+    overflow:auto;
+    border-radius:18px;
+    border:1px solid var(--border-subtle);
+    background:#f8fafc;
+    padding:1rem;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
+  }
+  #rendered{
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    font-size:.9rem;
+    color:var(--text);
+  }
+  .hl{
+    background:rgba(37,99,235,.18);
+    border-radius:5px;
+    padding:0 .08rem;
+    color:#111827;
+  }
+  .meta{
+    margin-top:.55rem;
+    color:var(--text-soft);
+    text-align:center;
+    font-size:.88rem;
+    font-weight:700;
+  }
+  .pill-select{
+    width:auto;
+    min-width:150px;
+    max-width:190px;
+    padding:.6rem .85rem;
+    border-radius:var(--radius-pill);
+    font-size:.84rem;
+    font-weight:650;
+  }
+
+  footer.site-footer{
+    margin-top:auto;
+    padding:1.6rem 1.5rem 1.8rem;
+    font-size:.85rem;
+    color:var(--text-soft);
+    border-top:1px solid rgba(148,163,184,.3);
+    background:rgba(248,250,252,.72);
+  }
+  .fine{font-size:.95rem;color:var(--text-soft)}
+  .footer-legal{
+    margin-top:.45rem;
+    display:flex;
+    justify-content:center;
+    gap:.45rem;
+    font-size:.82rem;
+    flex-wrap:wrap;
+  }
+  .footer-legal a{
+    color:var(--text-soft);
+    padding:.25rem .55rem;
+    border-radius:var(--radius-pill);
+    transition:background .16s,color .16s,transform .12s;
+  }
+  .footer-legal a:hover{
+    color:var(--accent);
+    background:rgba(148,163,184,.16);
+    text-decoration:none;
+    transform:translateY(-1px);
+  }
+
+  @media (max-width:760px){
+    .container{width:min(100% - 2rem,var(--max-w))}
+    .nav__list{gap:.25rem}
+    .nav__link{padding:.28rem .65rem}
+    .intro{padding:2rem 0 2.1rem}
+    .tool{padding:1.6rem 0 3rem}
+    .btn-grid .btn,.dl-row .btn{width:100%;max-width:320px}
+    .seg{justify-content:center}
+    .pill-select{width:100%;max-width:320px}
+  }
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Find &amp; Replace</h1>
+      <p class="intro__subtitle">Search, highlight, and replace text directly in your browser.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div aria-label="Find and replace tool" class="card" role="region">
+        <div class="row">
+          <div class="full">
+            <div class="section-label">Upload a file</div>
+            <label class="drop-merge" id="dropMerge">
+              <input accept=".txt,.doc,.docx,.pdf" id="fileInput" type="file"/>
+              Click to choose a file or drop it here
+            </label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="full">
+            <div class="section-label">Your text</div>
+            <textarea id="source" placeholder="Paste or type your text here"></textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="find">Find</label>
+            <input id="find" placeholder="What to find…" type="text"/>
+          </div>
+          <div class="col">
+            <label for="replace">Replace with</label>
+            <input id="replace" placeholder="Replacement (optional)" type="text"/>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="full">
+            <div aria-label="Find navigation" class="btn-grid" role="group">
+              <button class="btn small" id="btnFindPrev" type="button">&lt; Find Previous</button>
+              <button class="btn small" id="btnFindNext" type="button">Find Next &gt;</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="full">
+            <div aria-label="Replace actions" class="btn-grid" role="group">
+              <button class="btn small" id="btnReplace" type="button">Replace</button>
+              <button class="btn small" id="btnReplaceAll" type="button">Replace All</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="full">
+            <div aria-label="Options" class="seg" role="group">
+              <div class="toggles">
+                <label><input id="optCase" type="checkbox"/> Case sensitive</label>
+                <label><input id="optWord" type="checkbox"/> Whole words</label>
+                <label><input checked id="optHighlight" type="checkbox"/> Highlight matches</label>
+              </div>
+              <button class="btn small" id="btnClear" type="button">Clear Text</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="full">
+            <label for="preview">Preview</label>
+            <div aria-atomic="true" aria-live="polite" class="preview" id="preview">
+              <div id="rendered"></div>
+            </div>
+            <div aria-live="polite" class="meta" id="stats">0 matches</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="full">
+            <div class="dl-row">
+              <button class="btn small ghost" disabled id="btnCopy" type="button">Copy</button>
+              <select aria-label="Download type" class="pill-select" id="dlType">
+                <option selected value="">Download as...</option>
+                <option value="txt">TXT (.txt)</option>
+                <option value="doc">Word (.doc)</option>
+                <option value="pdf">PDF (.pdf)</option>
+              </select>
+              <button class="btn small ghost" id="btnDownload" style="display:none" type="button">Download</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- RIYST_INLINE_SCRIPT_START -->
+<script>
+const $ = sel => document.querySelector(sel);
+    const source = $('#source');
+    const findInput = $('#find');
+    const replaceInput = $('#replace');
+    const optCase = $('#optCase');
+    const optWord = $('#optWord');
+    const optHighlight = $('#optHighlight');
+    const rendered = $('#rendered');
+    const stats = $('#stats');
+
+    const btnFindPrev = $('#btnFindPrev');
+    const btnFindNext = $('#btnFindNext');
+    const btnReplace = $('#btnReplace');
+    const btnReplaceAll = $('#btnReplaceAll');
+    const btnCopy = $('#btnCopy');
+    const btnDownload = $('#btnDownload');
+    const btnClear = $('#btnClear');
+    const fileInput = $('#fileInput');
+    const dropMerge = $('#dropMerge');
+    const dlType = $('#dlType');
+
+    let matches = [];
+    let idx = -1;
+
+    function buildRegex(){
+      const query = findInput.value || '';
+      if(!query) return null;
+      let pattern = query.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');
+      if(optWord.checked) pattern = '\\\\b' + pattern + '\\\\b';
+      const flags = (optCase.checked ? '' : 'i') + 'g';
+      try { return new RegExp(pattern, flags); } catch(e) { return null; }
+    }
+
+    function findAll(){
+      matches = [];
+      idx = -1;
+      const text = source.value ?? '';
+      const re = buildRegex();
+      if(!re) { render(); stats.textContent = '0 matches'; return; }
+      let m;
+      while((m = re.exec(text)) !== null){
+        matches.push({ start: m.index, end: m.index + m[0].length });
+        if(m[0].length === 0) re.lastIndex++;
+      }
+      render();
+      stats.textContent = `${matches.length} match${matches.length===1?'':'es'}` + (idx>=0?` — at ${idx+1}/${matches.length}`:'');
+    }
+
+    function render(){
+      const text = source.value ?? '';
+      if(!text){
+        rendered.textContent = '';
+        updateDisabled();
+        return;
+      }
+      if(!optHighlight.checked || !findInput.value || matches.length === 0){
+        rendered.textContent = text;
+      } else {
+        let out = '';
+        let last = 0;
+        for(const m of matches){
+          out += safe(text.slice(last, m.start));
+          out += `<span class="hl">${safe(text.slice(m.start, m.end))}</span>`;
+          last = m.end;
+        }
+        out += safe(text.slice(last));
+        rendered.innerHTML = out;
+      }
+      updateDisabled();
+    }
+
+    function safe(s){
+      return s.replace(/[&<>\"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[ch]));
+    }
+
+    function selectCurrent(){
+      if(idx < 0 || idx >= matches.length) return;
+      const m = matches[idx];
+      source.focus();
+      source.setSelectionRange(m.start, m.end);
+      const lineCountBefore = (source.value.slice(0, m.start).match(/\\n/g) || []).length;
+      const approxLineHeight = 20;
+      source.scrollTop = Math.max(0, lineCountBefore * approxLineHeight - source.clientHeight/2);
+      stats.textContent = `${matches.length} match${matches.length===1?'':'es'} — at ${idx+1}/${matches.length}`;
+    }
+
+    function findStep(dir){
+      if(matches.length === 0) return;
+      if(idx === -1) idx = (dir > 0 ? 0 : matches.length - 1);
+      else idx = (idx + dir + matches.length) % matches.length;
+      selectCurrent();
+    }
+
+    function doReplace(){
+      if(matches.length === 0) return;
+      if(idx < 0) idx = 0;
+      const m = matches[idx];
+      const before = source.value.slice(0, m.start);
+      const after  = source.value.slice(m.end);
+      source.value = before + replaceInput.value + after;
+      const newPos = before.length + replaceInput.value.length;
+      source.setSelectionRange(newPos, newPos);
+      findAll();
+      if(matches.length){
+        let nextIndex = matches.findIndex(mm => mm.start >= newPos);
+        if(nextIndex === -1) nextIndex = 0;
+        idx = nextIndex;
+        selectCurrent();
+      }
+    }
+
+    function doReplaceAll(){
+      const re = buildRegex();
+      if(!re) return;
+      let text = source.value ?? '';
+      text = text.replace(re, replaceInput.value);
+      source.value = text;
+      findAll();
+    }
+
+    function doCopy(){
+      navigator.clipboard.writeText(source.value ?? '').then(()=>flash(btnCopy));
+    }
+
+    function onDlTypeChange(){
+      btnDownload.style.display = dlType.value ? '' : 'none';
+    }
+
+    function doDownload(){
+      const text = source.value ?? '';
+      const type = dlType.value;
+      if(!type) return;
+      if(type === 'txt'){
+        downloadBlob(new Blob([text], {type:'text/plain'}), 'text.txt');
+      } else if(type === 'doc'){
+        const html = `<!DOCTYPE html><html><body><pre style="font-family:Consolas,Monaco,monospace;white-space:pre-wrap">${escapeHtml(text)}</pre></body></html>`;
+        downloadBlob(new Blob([html], {type:'application/msword'}), 'text.doc');
+      } else if(type === 'pdf'){
+        const pdfBytes = generateSimplePDF(text);
+        downloadBlob(new Blob([pdfBytes], {type:'application/pdf'}), 'text.pdf');
+      }
+    }
+
+    function escapeHtml(s){
+      return s.replace(/[&<>\"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[ch]));
+    }
+
+    function downloadBlob(blob, filename){
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function doClear(){
+      source.value = '';
+      findInput.value = '';
+      replaceInput.value = '';
+      matches = []; idx = -1;
+      render(); stats.textContent = '0 matches';
+      if(!dlType.dataset.fromUpload) dlType.value = '';
+      onDlTypeChange();
+    }
+
+    function flash(el){
+      el.style.transform = 'translateY(-1px) scale(1.01)';
+      setTimeout(()=>{ el.style.transform=''; }, 120);
+    }
+
+    function updateDisabled(){
+      const hasText = (source.value ?? '').length > 0;
+      btnCopy.disabled = !hasText;
+      btnDownload.disabled = !hasText;
+    }
+
+    // Upload (merged control) — rely on label->input default click only to avoid double dialogs
+    const fileInputEl = $('#fileInput');
+    dropMerge.addEventListener('dragover', (e)=>{ e.preventDefault(); dropMerge.style.background='rgba(255,255,255,.08)'; });
+    dropMerge.addEventListener('dragleave', ()=>{ dropMerge.style.background='rgba(255,255,255,.05)'; });
+    dropMerge.addEventListener('drop', async (e)=>{
+      e.preventDefault(); dropMerge.style.background='rgba(255,255,255,.05)';
+      const f = e.dataTransfer.files && e.dataTransfer.files[0];
+      if(f) await handleFile(f);
+    });
+    fileInputEl.addEventListener('change', async (e)=>{
+      if(e.target.files && e.target.files[0]){ await handleFile(e.target.files[0]); e.target.value=''; }
+    });
+
+    async function handleFile(file){
+      const name = file.name.toLowerCase();
+      let inferred = '';
+      if(name.endsWith('.txt')){ inferred = 'txt'; source.value = await file.text(); }
+      else if(name.endsWith('.doc') && !name.endsWith('.docx')){ inferred = 'doc'; source.value = await file.text().catch(()=> ''); }
+      else if(name.endsWith('.docx')){ inferred = 'doc'; source.value = await extractDocxText(file).catch(()=> ''); }
+      else if(name.endsWith('.pdf')){ inferred = 'pdf'; source.value = await extractPdfText(file).catch(()=> ''); }
+      else { alert('Unsupported document. Please choose a .txt, .docx, or .pdf file.'); return; }
+      dlType.value = inferred || '';
+      dlType.dataset.fromUpload = inferred ? '1' : '';
+      onDlTypeChange();
+      findAll();
+    }
+
+    // Minimal DOCX extractor
+    async function extractDocxText(file){
+      const buf = new Uint8Array(await file.arrayBuffer());
+      let i = 0;
+      while(i + 30 < buf.length){
+        if(buf[i]===0x50&&buf[i+1]===0x4b&&buf[i+2]===0x03&&buf[i+3]===0x04){
+          const view = new DataView(buf.buffer, i);
+          const compression = view.getUint16(8, true);
+          const compSize = view.getUint32(18, true);
+          const nameLen = view.getUint16(26, true);
+          const extraLen = view.getUint16(28, true);
+          const nameBytes = buf.slice(i+30, i+30+nameLen);
+          const name = new TextDecoder('utf-8').decode(nameBytes);
+          const dataStart = i + 30 + nameLen + extraLen;
+          const dataEnd = dataStart + compSize;
+          if(name === 'word/document.xml'){
+            let xmlText = '';
+            if(compression === 0){
+              xmlText = new TextDecoder('utf-8').decode(buf.slice(dataStart, dataEnd));
+            } else if(compression === 8){
+              const ds = new DecompressionStream('deflate-raw');
+              const decompressed = await new Response(new Blob([buf.slice(dataStart, dataEnd)]).stream().pipeThrough(ds)).arrayBuffer();
+              xmlText = new TextDecoder('utf-8').decode(new Uint8Array(decompressed));
+            } else { throw new Error('Unsupported ZIP compression'); }
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(xmlText, 'text/xml');
+            const wNs = xml.documentElement.lookupNamespaceURI('w') || 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+            const paras = Array.from(xml.getElementsByTagNameNS(wNs, 'p'));
+            const parts = [];
+            for(const p of paras){
+              const texts = Array.from(p.getElementsByTagNameNS(wNs, 't')).map(t => t.textContent || '');
+              parts.push(texts.join(''));
+            }
+            return parts.join('\n');
+          }
+          i = dataEnd;
+        } else { i++; }
+      }
+      throw new Error('word/document.xml not found in DOCX');
+    }
+
+    // PDF extractor (naive)
+    async function extractPdfText(file){
+      const ab = await file.arrayBuffer();
+      const bytes = new Uint8Array(ab);
+      const text = new TextDecoder('iso-8859-1').decode(bytes);
+      const blocks = text.match(/BT[\\s\\S]*?ET/g) || [];
+      const out = [];
+      for(const b of blocks){
+        const strings = [];
+        const tj = b.match(/\\((?:\\\\.|[^\\\\\\)])*\\)\\s*Tj/g) || [];
+        for(const s of tj){
+          const m = s.match(/\\(((?:\\\\.|[^\\\\\\)])*)\\)\\s*Tj/);
+          if(m) strings.push(pdfUnescape(m[1]));
+        }
+        const tJ = b.match(/\\[(.*?)\\]\\s*TJ/g) || [];
+        for(const s of tJ){
+          const inner = s.match(/\\[(.*?)\\]\\s*TJ/)[1];
+          const parts = inner.match(/\\(((?:\\\\.|[^\\\\\\)])*)\\)|-?\\d+(?:\\.\\d+)?/g) || [];
+          for(const part of parts){
+            if(part.startsWith('(')){
+              const content = part.slice(1,-1);
+              strings.push(pdfUnescape(content));
+            }
+          }
+        }
+        if(strings.length) out.push(strings.join(''));
+      }
+      return out.join('\n');
+    }
+    function pdfUnescape(s){
+      return s.replace(/\\\\(\\d{1,3}|n|r|t|b|f|\\\\|\\(|\\))/g, (m, g1)=>{
+        if(g1==='n') return '\n';
+        if(g1==='r') return '\r';
+        if(g1==='t') return '\t';
+        if(g1==='b') return '\b';
+        if(g1==='f') return '\f';
+        if(g1==='\\\\') return '\\\\';
+        if(g1==='(') return '(';
+        if(g1===')') return ')';
+        const code = parseInt(g1, 8); return String.fromCharCode(code);
+      });
+    }
+
+    // Simple PDF generator
+    function generateSimplePDF(text){
+      const encoder = new TextEncoder();
+      const pages = paginateText(text);
+      const objects = [];
+      let pdf = '%PDF-1.4\n';
+      const fontObjNum = 1;
+      const fontObj = fontObjNum + ' 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n';
+      objects.push(fontObj);
+      const pagesObjNum = 2;
+      const kids = [];
+      let objNum = 3;
+      for(const pageLines of pages){
+        const content = buildContentStream(pageLines);
+        const contentObjNum = objNum++;
+        const contentObj = contentObjNum + ' 0 obj\n<< /Length ' + content.length + ' >>\nstream\n' + content + 'endstream\nendobj\n';
+        objects.push(contentObj);
+        const pageObjNum = objNum++;
+        const pageObj = pageObjNum + ' 0 obj\n<< /Type /Page /Parent ' + pagesObjNum + ' 0 R /MediaBox [0 0 595 842] /Contents ' + contentObjNum + ' 0 R /Resources << /Font << /F1 ' + fontObjNum + ' 0 R >> >> >>\nendobj\n';
+        objects.push(pageObj);
+        kids.push(pageObjNum + ' 0 R');
+      }
+      const pagesObj = pagesObjNum + ' 0 obj\n<< /Type /Pages /Count ' + kids.length + ' /Kids [ ' + kids.join(' ') + ' ] >>\nendobj\n';
+      objects.splice(1, 0, pagesObj);
+      const catalogObjNum = objNum++;
+      const catalogObj = catalogObjNum + ' 0 obj\n<< /Type /Catalog /Pages ' + pagesObjNum + ' 0 R >>\nendobj\n';
+      objects.push(catalogObj);
+      const xref = [];
+      let offset = pdf.length;
+      for(const obj of objects){
+        xref.push(strPad(offset,10) + ' 00000 n ');
+        pdf += obj;
+        offset = pdf.length;
+      }
+      const xrefStart = pdf.length;
+      pdf += 'xref\n';
+      pdf += '0 ' + (objects.length+1) + '\n';
+      pdf += '0000000000 65535 f \n';
+      for(const line of xref) pdf += line + '\n';
+      pdf += 'trailer\n';
+      pdf += '<< /Size ' + (objects.length+1) + ' /Root ' + catalogObjNum + ' 0 R >>\n';
+      pdf += 'startxref\n' + xrefStart + '\n%%EOF';
+      return new TextEncoder().encode(pdf);
+    }
+    function strPad(num, size){ const s = String(num); return '0'.repeat(Math.max(0,size-s.length)) + s; }
+    function buildContentStream(lines){
+      let yStart = 812, lineH = 16;
+      let out = 'BT\n/F1 12 Tf\n1 0 0 1 30 ' + yStart + ' Tm\n14 TL\n';
+      for(const line of lines){ out += '(' + pdfEscape(line) + ') Tj\nT*\n'; }
+      out += 'ET\n'; return out;
+    }
+    function pdfEscape(s){ return s.replace(/([\\()])/g, '\\$1').replace(/\\r?\\n/g, '\\n'); }
+    function paginateText(text){
+      const maxWidthChars = 85;
+      const words = text.replace(/\\r\\n/g,'\\n').split(/(\\s+)/);
+      const lines = []; let line = '';
+      for(let token of words){
+        if(token === '\\n'){ lines.push(line); line=''; }
+        else if(/\\s+/.test(token)){
+          if(line.length + token.length <= maxWidthChars) line += token;
+          else { lines.push(line); line=''; }
+        } else {
+          if((line + token).length <= maxWidthChars) line += token;
+          else { if(line) lines.push(line); while(token.length > maxWidthChars){ lines.push(token.slice(0, maxWidthChars)); token = token.slice(maxWidthChars); } line = token; }
+        }
+      }
+      if(line) lines.push(line);
+      const linesPerPage = 46, pages = [];
+      for(let i=0;i<lines.length;i+=linesPerPage) pages.push(lines.slice(i,i+linesPerPage));
+      return pages.length ? pages : [[]];
+    }
+
+    // Events
+    [source, findInput, replaceInput, optCase, optWord].forEach(el=>{ el.addEventListener('input', findAll); el.addEventListener('change', findAll); });
+    optHighlight.addEventListener('change', render);
+    dlType.addEventListener('change', onDlTypeChange);
+
+    btnFindNext.addEventListener('click', ()=> findStep(1));
+    btnFindPrev.addEventListener('click', ()=> findStep(-1));
+    btnReplace.addEventListener('click', doReplace);
+    btnReplaceAll.addEventListener('click', doReplaceAll);
+    btnCopy.addEventListener('click', doCopy);
+    btnDownload.addEventListener('click', doDownload);
+    btnClear.addEventListener('click', doClear);
+
+    findAll(); updateDisabled(); onDlTypeChange();
+</script>
+<!-- RIYST_INLINE_SCRIPT_END -->
+<script>
+(function(){
+  const y=document.getElementById('year');
+  if(y) y.textContent=new Date().getFullYear();
+})();
+</script>
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

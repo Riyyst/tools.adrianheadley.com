@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tools | Typing Speed Test</title>
+<meta name="description" content="Test your typing speed and accuracy with selectable difficulty and passage length, live per-character feedback and detailed statistics."/>
+<meta name="theme-color" content="#f5f5f7"/>
+<style>
+:root{
+  --bg:#f5f5f7;
+  --card:#ffffff;
+  --text:#111827;
+  --muted:#4b5563;
+  --accent:#2563eb;
+  --accent-hover:#1d4ed8;
+  --accent-soft:rgba(37,99,235,.08);
+  --border:#e5e7eb;
+  --border-strong:#d1d5db;
+  --shadow:0 12px 30px rgba(15,23,42,.08);
+  --max:1040px;
+  --good:#15803d;
+  --good-bg:#dcfce7;
+  --bad:#b91c1c;
+  --bad-bg:#fee2e2;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;overflow-x:hidden}
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+  color:var(--text);
+  font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+button,textarea,select{font:inherit}
+button,select{cursor:pointer}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+main{flex:1}
+.container{width:min(var(--max),100% - 3rem);margin-inline:auto}
+
+.skip-link{
+  position:absolute;
+  left:-999px;
+  top:.5rem;
+  z-index:100;
+  padding:.45rem .75rem;
+  border-radius:999px;
+  background:#111827;
+  color:#fff;
+}
+.skip-link:focus{left:.5rem}
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  border-bottom:1px solid rgba(148,163,184,.28);
+  background:rgba(248,250,252,.95);
+  backdrop-filter:blur(16px);
+}
+.mast{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:58px;
+  padding:.55rem 0;
+}
+.nav-list{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.55rem;
+  flex-wrap:wrap;
+  list-style:none;
+  margin:0;
+  padding:0;
+  font-size:.86rem;
+}
+.nav-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:.3rem .8rem;
+  border:1px solid transparent;
+  border-radius:999px;
+  color:var(--muted);
+  transition:background .16s,color .16s,transform .12s,border-color .16s;
+}
+.nav-link:hover,.nav-link:focus-visible{
+  border-color:rgba(148,163,184,.26);
+  background:rgba(148,163,184,.18);
+  color:var(--text);
+  text-decoration:none;
+  transform:translateY(-1px);
+}
+.nav-link.active{
+  border-color:rgba(37,99,235,.18);
+  background:var(--accent-soft);
+  color:var(--accent);
+}
+
+.intro{padding:2.6rem 0 2.4rem;text-align:center}
+.intro h1{
+  margin:0 0 .8rem;
+  font-size:clamp(2.1rem,3vw,2.6rem);
+  line-height:1.15;
+  letter-spacing:-.03em;
+  font-weight:750;
+}
+.intro p{
+  max-width:690px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:.96rem;
+  font-weight:500;
+}
+
+.tool{padding:2.4rem 0 4rem}
+.card{
+  padding:clamp(1.2rem,3vw,1.8rem);
+  border:1px solid var(--border);
+  border-radius:24px;
+  background:rgba(255,255,255,.94);
+  box-shadow:var(--shadow);
+}
+
+.options{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,230px));
+  justify-content:center;
+  gap:.8rem;
+  margin-bottom:1rem;
+}
+.field label{
+  display:block;
+  margin:0 0 .3rem;
+  color:var(--muted);
+  font-size:.75rem;
+  font-weight:750;
+}
+.select-shell{position:relative}
+.select-shell::after{
+  content:"";
+  position:absolute;
+  right:1rem;
+  top:50%;
+  width:7px;
+  height:7px;
+  border-right:2px solid var(--accent);
+  border-bottom:2px solid var(--accent);
+  transform:translateY(-70%) rotate(45deg);
+  pointer-events:none;
+}
+select{
+  width:100%;
+  min-height:44px;
+  appearance:none;
+  padding:.65rem 2.7rem .65rem .9rem;
+  border:1px solid var(--border-strong);
+  border-radius:14px;
+  outline:none;
+  background:#fff;
+  color:var(--text);
+  font-size:.84rem;
+  font-weight:700;
+  transition:border-color .16s,box-shadow .16s;
+}
+select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+.section-label{
+  display:block;
+  margin:0 0 .45rem;
+  color:var(--text);
+  font-size:.88rem;
+  font-weight:800;
+}
+.target-wrap{
+  min-height:165px;
+  padding:1rem;
+  border:1px solid var(--border);
+  border-radius:18px;
+  background:#f8fafc;
+  overflow:auto;
+}
+.target{
+  margin:0;
+  color:var(--text);
+  font:clamp(1rem,1.7vw,1.12rem)/1.85 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  letter-spacing:.01em;
+}
+.target span{
+  border-radius:4px;
+  padding:1px 0;
+  transition:background .08s,color .08s;
+}
+.target .future{color:#6b7280}
+.target .current{
+  color:var(--text);
+  background:rgba(37,99,235,.16);
+  box-shadow:inset 0 -2px 0 var(--accent);
+}
+.target .ok{
+  color:var(--good);
+  background:var(--good-bg);
+}
+.target .bad{
+  color:var(--bad);
+  background:var(--bad-bg);
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+}
+
+.actions{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.55rem;
+  flex-wrap:wrap;
+  margin-top:.8rem;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:40px;
+  padding:.55rem 1rem;
+  border:1px solid transparent;
+  border-radius:999px;
+  background:var(--accent);
+  color:#fff;
+  font-size:.82rem;
+  font-weight:750;
+  transition:background .16s,transform .14s,box-shadow .16s,border-color .16s;
+}
+.btn:hover:not(:disabled){
+  background:var(--accent-hover);
+  transform:translateY(-1px);
+  box-shadow:0 10px 24px rgba(37,99,235,.18);
+}
+.btn.secondary{
+  border-color:var(--border-strong);
+  background:#fff;
+  color:var(--text);
+  box-shadow:none;
+}
+.btn.secondary:hover:not(:disabled){
+  background:#f1f5f9;
+  box-shadow:none;
+}
+
+.typing-section{margin-top:1rem}
+textarea{
+  width:100%;
+  min-height:150px;
+  resize:vertical;
+  padding:1rem;
+  border:1px solid var(--border-strong);
+  border-radius:18px;
+  outline:none;
+  background:#fff;
+  color:var(--text);
+  font:15px/1.6 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
+  transition:border-color .16s,box-shadow .16s;
+}
+textarea:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+textarea:disabled{
+  background:#f8fafc;
+  color:var(--muted);
+}
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:.75rem;
+  margin-top:1rem;
+}
+.stat{
+  min-width:0;
+  padding:.9rem .7rem;
+  border:1px solid var(--border);
+  border-radius:17px;
+  background:#f8fafc;
+  text-align:center;
+}
+.stat-value{
+  color:var(--text);
+  font-size:clamp(1.15rem,2.2vw,1.45rem);
+  line-height:1.15;
+  font-weight:800;
+  overflow-wrap:anywhere;
+}
+.stat-label{
+  margin-top:.3rem;
+  color:var(--muted);
+  font-size:.7rem;
+  font-weight:750;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+.site-footer{
+  margin-top:auto;
+  padding:1.6rem 1.5rem 1.8rem;
+  border-top:1px solid rgba(148,163,184,.3);
+  background:rgba(248,250,252,.72);
+  color:var(--muted);
+  font-size:.85rem;
+}
+.footer-inner{text-align:center}
+.footer-inner p{margin:0}
+.footer-links{
+  display:flex;
+  justify-content:center;
+  gap:.45rem;
+  flex-wrap:wrap;
+  margin-top:.45rem;
+  font-size:.82rem;
+}
+.footer-links a{
+  padding:.25rem .55rem;
+  border-radius:999px;
+  color:var(--muted);
+  transition:background .16s,color .16s,transform .12s;
+}
+.footer-links a:hover{
+  background:rgba(148,163,184,.16);
+  color:var(--accent);
+  text-decoration:none;
+  transform:translateY(-1px);
+}
+
+@media(max-width:800px){
+  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .container{width:min(100% - 2rem,var(--max))}
+  .nav-list{gap:.25rem}
+  .nav-link{padding:.28rem .65rem}
+  .intro{padding:2rem 0 2.1rem}
+  .tool{padding:1.6rem 0 3rem}
+}
+@media(max-width:560px){
+  .options{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1>Typing Speed Test</h1>
+      <p>Test your speed and accuracy with selectable difficulty and passage length, live per-letter feedback and detailed statistics.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="card" role="region" aria-label="Typing speed test">
+        <div class="options">
+          <div class="field">
+            <label for="selDifficulty">Difficulty</label>
+            <div class="select-shell">
+              <select id="selDifficulty">
+                <option selected value="any">Any</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="selLength">Length</label>
+            <div class="select-shell">
+              <select id="selLength">
+                <option selected value="any">Any</option>
+                <option value="short">Short</option>
+                <option value="medium">Medium</option>
+                <option value="long">Long</option>
+                <option value="verylong">Very Long</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <section>
+          <span class="section-label">Passage</span>
+          <div class="target-wrap">
+            <p class="target" id="target"></p>
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="btnNew" type="button">New Passage</button>
+            <button class="btn secondary" id="btnReset" type="button">Reset</button>
+          </div>
+        </section>
+
+        <section class="typing-section">
+          <label class="section-label" for="typebox">Type here</label>
+          <textarea
+            aria-label="Typing area"
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            id="typebox"
+            placeholder="Start typing the passage…"
+            spellcheck="false"
+          ></textarea>
+        </section>
+
+        <section class="stats-grid" aria-label="Typing statistics">
+          <div class="stat"><div class="stat-value" id="kWpm">0.0</div><div class="stat-label">WPM</div></div>
+          <div class="stat"><div class="stat-value" id="kAcc">0%</div><div class="stat-label">Accuracy</div></div>
+          <div class="stat"><div class="stat-value" id="kTime">0.0s</div><div class="stat-label">Time</div></div>
+          <div class="stat"><div class="stat-value" id="kErrors">0</div><div class="stat-label">Errors</div></div>
+          <div class="stat"><div class="stat-value" id="kChars">0</div><div class="stat-label">Characters</div></div>
+          <div class="stat"><div class="stat-value" id="kWords">0</div><div class="stat-label">Words</div></div>
+          <div class="stat"><div class="stat-value" id="kGross">0.0</div><div class="stat-label">Gross WPM</div></div>
+          <div class="stat"><div class="stat-value" id="kNet">0.0</div><div class="stat-label">Net WPM</div></div>
+        </section>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* -------- Passages (ensure >=10 per difficulty x length) -------- */
+const BASE = {
+  "easy": {
+    "short": [
+      "Stay calm and take the next step.",
+      "Focus on what you can control.",
+      "Small progress still moves you forward.",
+      "Practice makes each task feel easier.",
+      "Clear thinking leads to better choices.",
+      "Good tools help people work faster.",
+      "A strong password protects your account.",
+      "Save your work before you close the file.",
+      "Learn one useful skill every day.",
+      "Patience turns effort into steady progress."
+    ],
+    "medium": [
+      "Take your time, stay calm, and focus on doing the next small task well.",
+      "You cannot control every result, but you can control your effort and response.",
+      "A simple plan is easier to follow than a perfect plan that never begins.",
+      "Technology works best when it saves time and makes difficult tasks feel simple.",
+      "Strong passwords and regular updates help keep your devices safe from common threats.",
+      "Mistakes are useful when you pause, learn from them, and improve your next attempt.",
+      "A clear desk and a quiet screen can help you think with greater focus.",
+      "Back up important files so one broken device does not erase valuable work.",
+      "Steady practice builds confidence because each session strengthens useful habits.",
+      "Choose progress over perfection and finish one meaningful task before starting another."
+    ],
+    "long": [
+      "A calm mind makes better decisions. Pause before you react, consider what is within your control, and give your full attention to the next useful action.",
+      "Technology should make life easier, not noisier. Use simple tools, remove distractions, and keep only the apps that help you complete important work.",
+      "Progress often feels slow while it is happening. Keep practising with patience, because steady effort builds skill even when the improvement is hard to notice.",
+      "Protect your digital life with strong passwords, software updates, and regular backups. Small safety habits can prevent large and stressful problems.",
+      "You do not need to solve every problem at once. Break the work into smaller steps, complete one step carefully, and then move forward with confidence.",
+      "A useful routine reduces the need for motivation. Choose a time, prepare your workspace, and begin even when you do not feel completely ready.",
+      "Good software feels clear and dependable. It explains what is happening, avoids needless complexity, and helps people recover when something goes wrong.",
+      "Do not waste energy worrying about things you cannot change. Put that energy into your preparation, your conduct, and the quality of your work.",
+      "Typing improves through accurate repetition. Keep your hands relaxed, read a little ahead, and let speed grow naturally from consistent practice.",
+      "A computer can process information quickly, but good judgement still matters. Check the facts, review the result, and think before you act."
+    ],
+    "verylong": [
+      "A steady life is built from steady choices. You may not control delays, setbacks, or the opinions of other people, but you can control your preparation and your response. Focus on the next useful action, complete it with care, and allow progress to grow from patient effort.",
+      "Technology is most valuable when it removes friction from ordinary work. A good tool should be easy to understand, dependable when needed, and quiet when it is not. Choose software that supports your goals instead of filling your day with alerts, clutter, and unnecessary choices.",
+      "When a task feels too large, reduce it to something you can begin now. Write the first sentence, organise the first folder, or solve the first small problem. Momentum often appears after action begins, not before, so make the starting point simple and clear.",
+      "Digital safety depends on ordinary habits repeated consistently. Use a different strong password for each account, enable two-factor authentication, install updates, and keep backups of important files. These small actions create layers of protection that are much stronger together.",
+      "A Stoic does not confuse calmness with passivity. Calmness creates room for clear judgement, disciplined action, and honest reflection. When events become difficult, pause long enough to choose a response that matches your values rather than your first emotion.",
+      "Learning a technical skill takes time because understanding grows in layers. First you follow instructions, then you recognise patterns, and eventually you solve new problems on your own. Keep notes, test your ideas, and treat every mistake as useful information.",
+      "Your attention is limited, so spend it carefully. Close unused tabs, silence unnecessary notifications, and give one task your full focus for a short period. A few quiet minutes of deliberate work can produce more than an hour of constant interruption.",
+      "Reliable systems are usually built from simple parts. Clear names, sensible defaults, useful error messages, and regular backups reduce confusion and make maintenance easier. Complexity should solve a real problem, not merely make a project look impressive.",
+      "You do not need perfect conditions to make progress. Begin with the tools you have, improve the process as you learn, and keep your standards high without demanding perfection. Consistent work done well will usually outperform rare bursts of intense effort.",
+      "Typing is a practical skill that rewards patience. Accuracy teaches your hands the correct movements, while speed develops as those movements become familiar. Relax your shoulders, keep a steady rhythm, and review your results without judging yourself too harshly."
+    ]
+  },
+  "medium": {
+    "short": [
+      "Discipline is choosing purpose over comfort.",
+      "Reliable systems begin with clear assumptions.",
+      "Control your response, not the circumstance.",
+      "Readable code is a gift to your future self.",
+      "Measure the problem before changing the system.",
+      "Calm judgement is stronger than quick anger.",
+      "Automate repetition, but review every outcome.",
+      "Secure defaults prevent avoidable mistakes.",
+      "Resilience grows through deliberate practice.",
+      "Good design makes the correct action obvious."
+    ],
+    "medium": [
+      "A disciplined routine protects important work from changing moods and temporary distractions.",
+      "Before optimising a system, measure where time and resources are actually being lost.",
+      "Stoic practice begins by separating what you control from what you merely influence.",
+      "Readable code reduces maintenance costs because other people can understand its purpose quickly.",
+      "Automation should remove repetition without hiding failures or weakening human oversight.",
+      "A useful error message explains what happened and gives the user a practical next step.",
+      "Security improves when permissions are limited, updates are timely, and backups are tested.",
+      "Progress becomes sustainable when high standards are matched with realistic daily habits.",
+      "A calm response does not ignore difficulty; it prevents difficulty from controlling your judgement.",
+      "Strong technical decisions balance performance, simplicity, cost, and long-term maintenance."
+    ],
+    "long": [
+      "Discipline is not endless intensity. It is the quiet decision to return to useful work, even when motivation is low and the result is still uncertain.",
+      "Reliable software begins with clear expectations. Define what success looks like, decide how failure should appear, and test the boundaries before release.",
+      "The Stoic distinction between control and concern is practical. Focus effort on your choices, preparation, and conduct rather than outcomes you cannot command.",
+      "Optimisation without measurement often creates complexity instead of speed. Gather evidence, identify the real bottleneck, and improve the part that matters most.",
+      "Good documentation reduces dependence on memory. Record the reason behind important decisions so future changes can be made with confidence and context.",
+      "A secure system assumes that mistakes will happen. Use limited permissions, separate important services, and make recovery simple enough to practise regularly.",
+      "Attention improves when choices are reduced. A short task list, a quiet workspace, and a defined stopping point make focused work easier to sustain.",
+      "Readable code is not merely attractive. It lowers the risk of defects, speeds up reviews, and helps new contributors understand the system more quickly.",
+      "When events challenge your plans, avoid wasting energy on resentment. Review the facts, adjust your approach, and act according to your principles.",
+      "Automation is valuable when it handles predictable work while making unusual results visible. Hidden failure is more dangerous than honest manual effort."
+    ],
+    "verylong": [
+      "A disciplined person does not wait for perfect motivation. They define a useful routine, reduce unnecessary choices, and begin at the agreed time. This approach turns progress into a normal part of the day instead of a rare event that depends on mood or inspiration.",
+      "Reliable software is designed for failure as well as success. Inputs are validated, timeouts are defined, errors are logged clearly, and recovery steps are tested. These habits make systems easier to trust because problems become visible, contained, and understandable.",
+      "The Stoic idea of control is not an excuse to withdraw from responsibility. It is a method for directing effort wisely. You cannot guarantee an outcome, but you can prepare thoroughly, communicate honestly, and choose conduct that remains defensible under pressure.",
+      "Technical debt grows when short-term decisions are left unexplained. A rushed workaround may be necessary, but it should be documented, measured, and scheduled for review. Otherwise temporary compromises become permanent sources of confusion and risk.",
+      "Good security is usually the result of several simple protections working together. Strong authentication, limited access, encrypted connections, tested backups, and prompt updates create a system that can resist common failures without relying on one perfect defence.",
+      "Complex projects become manageable when interfaces are clear. Each component should have a defined responsibility, predictable inputs, and understandable outputs. Clear boundaries reduce accidental coupling and allow teams to change one part without damaging the rest.",
+      "Calm judgement requires practice because emotion arrives before reflection. When something goes wrong, pause long enough to separate the event from the story you are telling yourself. Then choose the next action based on evidence, values, and likely consequences.",
+      "Useful metrics need context. A number may show that performance changed, but it does not explain why. Combine measurements with observation, user feedback, and technical investigation before deciding what should be altered.",
+      "A strong work habit includes rest as well as effort. Long sessions without recovery reduce accuracy and make simple problems feel difficult. Work in focused blocks, step away briefly, and return with enough attention to notice important details.",
+      "Automation should make responsibility clearer, not disappear. A well-designed automated process records what it did, explains failures, and allows a person to intervene safely. Speed is valuable, but transparency and control are essential."
+    ]
+  },
+  "hard": {
+    "short": [
+      "Equanimity preserves judgement under pressure.",
+      "Idempotent operations simplify reliable recovery.",
+      "Virtue matters more than public approval.",
+      "Observability turns hidden failure into evidence.",
+      "Least privilege limits the damage of compromise.",
+      "Adversity reveals the quality of preparation.",
+      "Deterministic behaviour improves reproducibility.",
+      "Restraint is often a form of technical wisdom.",
+      "Backpressure protects systems from uncontrolled load.",
+      "Clarity defeats both confusion and needless complexity."
+    ],
+    "medium": [
+      "Equanimity is not indifference; it is the disciplined preservation of judgement during uncertainty.",
+      "Idempotent operations make retries safer because repeating the same request does not corrupt state.",
+      "A robust architecture exposes failure clearly instead of disguising it behind silent recovery.",
+      "Stoic resilience depends on examining impressions before accepting them as accurate descriptions of reality.",
+      "Least-privilege access reduces the consequences of mistakes, compromised accounts, and malicious activity.",
+      "Observability combines logs, metrics, and traces so behaviour can be investigated rather than guessed.",
+      "Technical sophistication is valuable only when it solves a real problem without creating greater fragility.",
+      "A disciplined engineer distinguishes urgent symptoms from the underlying cause before changing production systems.",
+      "Backpressure prevents fast producers from overwhelming slower consumers during periods of intense demand.",
+      "Virtue requires consistent conduct when recognition is absent and convenient shortcuts are available."
+    ],
+    "long": [
+      "Equanimity allows a person to respond proportionately when circumstances are volatile. It does not suppress concern; it prevents concern from overwhelming reasoned judgement.",
+      "Idempotency is essential in distributed systems because networks fail in ambiguous ways. A client may retry a request without knowing whether the first attempt succeeded.",
+      "Observability should be designed into a system rather than added after an incident. Clear events, stable identifiers, and useful context make investigation substantially faster.",
+      "The Stoic practice of examining impressions interrupts automatic judgement. Before reacting, ask whether the event itself is harmful or whether your interpretation has magnified it.",
+      "Least privilege reduces risk by granting only the access required for a specific task. When an account is compromised, unnecessary permissions expand the possible damage.",
+      "Premature optimisation often exchanges simple correctness for fragile complexity. Measure representative workloads before changing an implementation that is already understandable.",
+      "Backpressure is a form of system-level restraint. It preserves stability by slowing or rejecting work when downstream components cannot safely process additional demand.",
+      "A resilient engineer treats incidents as evidence. The objective is not to assign blame, but to understand conditions, strengthen safeguards, and improve recovery.",
+      "Technical leadership requires intellectual honesty. State what is known, distinguish assumptions from evidence, and revise the plan when new information disproves an earlier belief.",
+      "Virtue is demonstrated through repeated choices rather than occasional declarations. Integrity matters most when pressure, convenience, or ambition makes compromise attractive."
+    ],
+    "verylong": [
+      "Equanimity is a disciplined relationship with uncertainty. It allows concern without panic, ambition without desperation, and disappointment without surrender. By separating events from immediate interpretations, a person creates enough mental distance to choose a response that is deliberate, proportionate, and consistent with their principles.",
+      "Distributed systems fail in partial and ambiguous ways. A request may reach the server while the response is lost, leaving the client uncertain about the result. Idempotent operations, unique request identifiers, and durable records make retries safer because uncertainty can be resolved without duplicating harmful effects.",
+      "Observability is more than collecting large volumes of data. Useful telemetry answers specific questions about system behaviour, preserves relevant context, and supports investigation across services. Logs, metrics, and traces become valuable when their names are stable, their relationships are clear, and their cost is controlled.",
+      "The Stoic examination of impressions is an exercise in intellectual discipline. An event occurs, the mind forms an immediate judgement, and emotion follows. By pausing to test that judgement against evidence and values, a person can replace reflexive reaction with a more accurate and constructive response.",
+      "Least-privilege design assumes that accounts, applications, and people may eventually make mistakes or become compromised. Access should therefore be narrow, temporary where possible, and auditable. This approach limits the blast radius of failure and makes unusual behaviour easier to identify.",
+      "Premature optimisation can conceal the original purpose of a system beneath layers of specialised code. Before accepting that cost, measure representative workloads, identify the true constraint, and compare simpler alternatives. Performance matters, but maintainability and correctness also determine whether an improvement is worthwhile.",
+      "Backpressure is necessary whenever producers can generate work faster than consumers can process it. Without limits, queues grow, latency rises, and failure spreads through dependent services. A resilient design uses bounded buffers, timeouts, admission control, and clear overload behaviour to preserve essential functions.",
+      "A blameless incident review does not deny responsibility. It examines how normal decisions, incomplete information, and system conditions combined to produce failure. The goal is to create durable improvements, such as clearer alerts, safer defaults, better testing, and recovery procedures that work under pressure.",
+      "Technical leadership depends on calibrated confidence. Leaders must make decisions before every fact is known, yet they should communicate uncertainty honestly and update their position when evidence changes. This balance encourages decisive action without turning assumptions into unquestionable doctrine.",
+      "Stoic virtue and engineering integrity share a common demand: conduct should remain dependable when no reward is guaranteed. Honest estimates, careful reviews, transparent limitations, and responsible handling of risk matter precisely because shortcuts can be tempting, profitable, or difficult for others to detect."
+    ]
+  }
+};
+
+/* Ensure >=10 per category; if shorter, synthesize extra variants */
+function fillCategory(list, difficulty, length){
+  const extrasA = [
+    "Stay on target and keep a steady pace.",
+    "Reduce scope, raise quality, and ship.",
+    "Short focused work blocks beat long unfocused hours.",
+    "Form first, speed second; results follow.",
+    "Protect your attention and the work improves."
+  ];
+  const extrasB = [
+    "Make the next action small and concrete.",
+    "Keep logs tidy and decisions visible.",
+    "Fewer moving parts, fewer late surprises.",
+    "Practice on real text to reveal real mistakes.",
+    "Clear names, clean hands, calm mind."
+  ];
+  const seed = (difficulty==="easy")?extrasA:extrasB;
+  while(list.length<10){
+    list.push(seed[(list.length)%seed.length]);
+  }
+  if(length==="verylong"){
+    for(let i=0;i<list.length;i++){
+      if(list[i].length < 320){
+        list[i] = list[i] + " Write down the goal, start the timer, and finish one pass. Then review calmly and note a single improvement for next time.";
+      }
+    }
+  }
+  if(length==="long"){
+    for(let i=0;i<list.length;i++){
+      if(!list[i].includes(".")){
+        list[i] += " Keep going until the timer ends.";
+      }
+    }
+  }
+  return list;
+}
+
+let PASSAGES=[];
+["easy","medium","hard"].forEach(d=>{
+  ["short","medium","long","verylong"].forEach(L=>{
+    PASSAGES = PASSAGES.concat(
+      fillCategory([...BASE[d][L]], d, L).map(t=>({text:t,difficulty:d,length:L}))
+    );
+  });
+});
+
+/* ---------- Elements ---------- */
+const targetEl=document.getElementById("target");
+const typebox=document.getElementById("typebox");
+const btnNew=document.getElementById("btnNew");
+const btnReset=document.getElementById("btnReset");
+const selDifficulty=document.getElementById("selDifficulty");
+const selLength=document.getElementById("selLength");
+
+const kWpm=document.getElementById("kWpm"),kAcc=document.getElementById("kAcc"),
+      kTime=document.getElementById("kTime"),kErrors=document.getElementById("kErrors"),
+      kChars=document.getElementById("kChars"),kWords=document.getElementById("kWords"),
+      kGross=document.getElementById("kGross"),kNet=document.getElementById("kNet");
+
+/* ---------- State ---------- */
+let targetStr='',startTime=null,timerId=null,typedChars=0,errorCount=0,lastValue='',finished=false;
+
+/* ---------- Helpers ---------- */
+function sanitizeASCII(str){
+  const map={'\u2018':"'",'\u2019':"'",'\u201C':'"','\u201D':'"','\u2013':'-','\u2014':'-','\u00A0':' '};
+  str=str.replace(/[\u2018\u2019\u201C\u201D\u2013\u2014\u00A0]/g,m=>map[m]||''); 
+  return str.replace(/[^\x00-\x7F]/g,'');
+}
+function escapeHtml(s){const map={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'};
+  return s.replace(/[&<>\"']/g,ch=>map[ch]);}
+function pickPassage(){
+  const wants={difficulty:selDifficulty.value,length:selLength.value};
+  const pool=PASSAGES.filter(p=>{
+    if(wants.difficulty!=="any"&&p.difficulty!==wants.difficulty) return false;
+    if(wants.length!=="any"&&p.length!==wants.length) return false;
+    return true;
+  });
+  const arr=pool.length?pool:PASSAGES;
+  return arr[Math.floor(Math.random()*arr.length)].text;
+}
+function renderTargetChars(target,typed){
+  const spans=[]; const tLen=typed.length;
+  for(let i=0;i<target.length;i++){
+    const ch=target[i];
+    let cls='future';
+    if(i<tLen){ cls=(typed[i]===ch)?'ok':'bad'; }
+    else if(i===tLen && !finished){ cls='current'; }
+    spans.push(`<span class="${cls}">${escapeHtml(ch)}</span>`);
+  }
+  if(tLen>target.length){
+    for(let j=target.length;j<tLen;j++){
+      spans.push(`<span class="bad">${escapeHtml(typed[j])}</span>`);
+    }
+  }
+  targetEl.innerHTML=spans.join('');
+}
+function setPassage(text){
+  targetStr = text;
+  renderTargetChars(targetStr,'');
+  // reset state
+  startTime=null; if(timerId) cancelAnimationFrame(timerId); timerId=null;
+  typedChars=0; errorCount=0; lastValue=''; finished=false;
+  typebox.value='';
+  updateStats();
+  renderTargetChars(targetStr,'');
+  typebox.disabled=false;
+  typebox.focus();
+}
+function tick(){ updateStats(); if(!finished) timerId=requestAnimationFrame(tick); }
+function secondsElapsed(){ return startTime? (performance.now()-startTime)/1000:0; }
+
+function handleTyping(){
+  const sanitized = sanitizeASCII(typebox.value);
+  if (sanitized !== typebox.value) {
+    const pos = typebox.selectionStart;
+    typebox.value = sanitized;
+    typebox.selectionStart = typebox.selectionEnd = Math.max(0, pos - 1);
+  }
+
+  const val = typebox.value;
+
+  if (!startTime && val.length > 0) {
+    startTime = performance.now();
+    tick();
+  }
+
+  if (val.length > lastValue.length) {
+    const newChars = val.slice(lastValue.length);
+    for (let i = 0; i < newChars.length; i++) {
+      const idx = lastValue.length + i;
+      if (idx < targetStr.length) {
+        if (newChars[i] !== targetStr[idx]) {
+          errorCount++; // accumulate mistake
+        }
+      } else {
+        errorCount++; // extra char beyond target
+      }
+    }
+    typedChars += (val.length - lastValue.length);
+  }
+  lastValue = val;
+
+  if (val.length === targetStr.length && val === targetStr) {
+    finished = true;
+    updateStats(true);
+    typebox.disabled = true;
+  }
+
+  renderTargetChars(targetStr, val);
+  updateStats();
+}
+
+function updateStats(){
+  const t=secondsElapsed(),minutes=t/60;
+  const typed=lastValue;
+  const wordsTyped=typed.trim().length?typed.trim().split(/\s+/).length:0;
+  const correctChars=calcCorrectChars(typed,targetStr);
+  const grossWpm=minutes>0?(typedChars/5)/minutes:0;
+  const netWpm=Math.max(0,grossWpm-(errorCount/minutes||0));
+  const acc=typedChars>0?(correctChars/Math.max(1,typedChars))*100:0;
+  kWpm.textContent=netWpm.toFixed(1);kAcc.textContent=acc.toFixed(0)+'%';
+  kTime.textContent=t.toFixed(1)+'s';kErrors.textContent=errorCount|0;
+  kChars.textContent=typedChars|0;kWords.textContent=wordsTyped|0;
+  kGross.textContent=grossWpm.toFixed(1);kNet.textContent=netWpm.toFixed(1);
+}
+
+function calcCorrectChars(typed,target){
+  let c=0; const L=Math.min(typed.length,target.length);
+  for(let i=0;i<L;i++){ if(typed[i]===target[i]) c++; }
+  return c;
+}
+
+/* ---------- Events ---------- */
+typebox.addEventListener('input',handleTyping);
+btnNew.addEventListener('click',()=>{ setPassage(pickPassage()); });
+btnReset.addEventListener('click',()=>{ setPassage(targetStr); });
+selDifficulty.addEventListener('change',()=>{ setPassage(pickPassage()); });
+selLength.addEventListener('change',()=>{ setPassage(pickPassage()); });
+
+// Init
+setPassage(pickPassage());
+
+const yearEl=document.getElementById('year');
+if(yearEl) yearEl.textContent=new Date().getFullYear();
+</script>
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

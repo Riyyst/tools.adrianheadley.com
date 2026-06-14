@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tools | URL Lengthener</title>
+<meta name="description" content="Lengthen a URL by adding a harmless random query parameter, then copy the result."/>
+<meta name="theme-color" content="#f5f5f7"/>
+<style>
+:root{
+  --bg:#f5f5f7;
+  --card:#ffffff;
+  --text:#111827;
+  --muted:#4b5563;
+  --accent:#2563eb;
+  --accent-hover:#1d4ed8;
+  --accent-soft:rgba(37,99,235,.08);
+  --border:#e5e7eb;
+  --border-strong:#d1d5db;
+  --shadow:0 12px 30px rgba(15,23,42,.08);
+  --max:860px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;overflow-x:hidden}
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+  color:var(--text);
+  font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+main{flex:1}
+.container{width:min(var(--max),100% - 3rem);margin-inline:auto}
+.hidden{display:none!important}
+
+.skip-link{
+  position:absolute;
+  left:-999px;
+  top:.5rem;
+  z-index:100;
+  padding:.45rem .75rem;
+  border-radius:999px;
+  background:#111827;
+  color:#fff;
+}
+.skip-link:focus{left:.5rem}
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  border-bottom:1px solid rgba(148,163,184,.28);
+  background:rgba(248,250,252,.95);
+  backdrop-filter:blur(16px);
+}
+.mast{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:58px;
+  padding:.55rem 0;
+}
+.nav-list{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.55rem;
+  flex-wrap:wrap;
+  list-style:none;
+  margin:0;
+  padding:0;
+  font-size:.86rem;
+}
+.nav-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:.3rem .8rem;
+  border:1px solid transparent;
+  border-radius:999px;
+  color:var(--muted);
+  transition:background .16s,color .16s,transform .12s,border-color .16s;
+}
+.nav-link:hover,.nav-link:focus-visible{
+  border-color:rgba(148,163,184,.26);
+  background:rgba(148,163,184,.18);
+  color:var(--text);
+  text-decoration:none;
+  transform:translateY(-1px);
+}
+.nav-link.active{
+  border-color:rgba(37,99,235,.18);
+  background:var(--accent-soft);
+  color:var(--accent);
+}
+
+.intro{padding:2.6rem 0 2.4rem;text-align:center}
+.intro h1{
+  margin:0 0 .8rem;
+  font-size:clamp(2.1rem,3vw,2.6rem);
+  line-height:1.15;
+  letter-spacing:-.03em;
+  font-weight:750;
+}
+.intro p{
+  max-width:650px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:.96rem;
+  font-weight:500;
+}
+
+.tool{padding:2.4rem 0 4rem}
+.card{
+  padding:clamp(1.2rem,3vw,1.8rem);
+  border:1px solid var(--border);
+  border-radius:24px;
+  background:rgba(255,255,255,.94);
+  box-shadow:var(--shadow);
+}
+
+.form-stack{
+  display:grid;
+  gap:1rem;
+}
+.field{
+  display:grid;
+  gap:.35rem;
+}
+.field label{
+  color:var(--text);
+  font-size:.82rem;
+  font-weight:800;
+}
+input{
+  width:100%;
+  min-height:48px;
+  padding:.75rem 1rem;
+  border:1px solid var(--border-strong);
+  border-radius:15px;
+  outline:none;
+  background:#fff;
+  color:var(--text);
+  transition:border-color .16s,box-shadow .16s;
+}
+input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+input[readonly]{
+  background:#f8fafc;
+  color:var(--text);
+  cursor:text;
+}
+
+.actions{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.55rem;
+  flex-wrap:wrap;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  padding:.6rem 1.15rem;
+  border:1px solid transparent;
+  border-radius:999px;
+  background:var(--accent);
+  color:#fff;
+  font-size:.84rem;
+  font-weight:750;
+  transition:background .16s,transform .14s,box-shadow .16s,border-color .16s;
+}
+.btn:hover:not(:disabled){
+  background:var(--accent-hover);
+  transform:translateY(-1px);
+  box-shadow:0 10px 24px rgba(37,99,235,.18);
+}
+.btn.secondary{
+  border-color:var(--border-strong);
+  background:#fff;
+  color:var(--text);
+  box-shadow:none;
+}
+.btn.secondary:hover:not(:disabled){
+  background:#f1f5f9;
+  box-shadow:none;
+}
+.btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  pointer-events:none;
+}
+
+.result{
+  display:grid;
+  gap:.8rem;
+  padding-top:1rem;
+  border-top:1px solid var(--border);
+}
+
+.site-footer{
+  margin-top:auto;
+  padding:1.6rem 1.5rem 1.8rem;
+  border-top:1px solid rgba(148,163,184,.3);
+  background:rgba(248,250,252,.72);
+  color:var(--muted);
+  font-size:.85rem;
+}
+.footer-inner{text-align:center}
+.footer-inner p{margin:0}
+.footer-links{
+  display:flex;
+  justify-content:center;
+  gap:.45rem;
+  flex-wrap:wrap;
+  margin-top:.45rem;
+  font-size:.82rem;
+}
+.footer-links a{
+  padding:.25rem .55rem;
+  border-radius:999px;
+  color:var(--muted);
+  transition:background .16s,color .16s,transform .12s;
+}
+.footer-links a:hover{
+  background:rgba(148,163,184,.16);
+  color:var(--accent);
+  text-decoration:none;
+  transform:translateY(-1px);
+}
+
+@media(max-width:760px){
+  .container{width:min(100% - 2rem,var(--max))}
+  .nav-list{gap:.25rem}
+  .nav-link{padding:.28rem .65rem}
+  .intro{padding:2rem 0 2.1rem}
+  .tool{padding:1.6rem 0 3rem}
+}
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1>URL Lengthener</h1>
+      <p>Paste a link, lengthen it and copy the result.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="card" role="region" aria-label="URL lengthener">
+        <div class="form-stack">
+          <div class="field">
+            <label for="longUrl">URL</label>
+            <input
+              id="longUrl"
+              inputmode="url"
+              autocomplete="url"
+              placeholder="tools.adrianheadley.com"
+              type="text"
+            />
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="lengthen" type="button">Lengthen URL</button>
+          </div>
+
+          <div class="result hidden" id="result">
+            <div class="field">
+              <label for="lengthenedUrl">Lengthened URL</label>
+              <input id="lengthenedUrl" readonly type="text"/>
+            </div>
+
+            <div class="actions">
+              <button class="btn secondary" id="copyBtn" type="button">Copy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  const sourceInput=document.getElementById('longUrl');
+  const outputInput=document.getElementById('lengthenedUrl');
+  const lengthenButton=document.getElementById('lengthen');
+  const copyButton=document.getElementById('copyBtn');
+  const result=document.getElementById('result');
+  const year=document.getElementById('year');
+
+  year.textContent=new Date().getFullYear();
+
+  function normaliseUrl(value){
+    let text=(value||'').trim();
+    if(!text) return null;
+
+    if(!/^[a-z][a-z0-9+.-]*:\/\//i.test(text)){
+      text='https://'+text;
+    }
+
+    try{
+      const parsed=new URL(text);
+      if(!/^https?:$/.test(parsed.protocol)) return null;
+      return parsed;
+    }catch{
+      return null;
+    }
+  }
+
+  function randomText(length){
+    const alphabet='abcdefghijklmnopqrstuvwxyz0123456789';
+    const bytes=new Uint8Array(length);
+
+    if(window.crypto&&window.crypto.getRandomValues){
+      window.crypto.getRandomValues(bytes);
+    }else{
+      for(let index=0;index<length;index++){
+        bytes[index]=Math.floor(Math.random()*256);
+      }
+    }
+
+    return Array.from(bytes,byte=>alphabet[byte%alphabet.length]).join('');
+  }
+
+  function lengthenUrl(){
+    const parsed=normaliseUrl(sourceInput.value);
+
+    if(!parsed){
+      sourceInput.focus();
+      return;
+    }
+
+    let key='extra';
+    let counter=1;
+
+    while(parsed.searchParams.has(key)){
+      key='extra'+counter;
+      counter+=1;
+    }
+
+    parsed.searchParams.set(key,randomText(48));
+    outputInput.value=parsed.toString();
+    result.classList.remove('hidden');
+    copyButton.focus();
+  }
+
+  lengthenButton.addEventListener('click',lengthenUrl);
+
+  sourceInput.addEventListener('keydown',event=>{
+    if(event.key==='Enter'){
+      event.preventDefault();
+      lengthenUrl();
+    }
+  });
+
+  copyButton.addEventListener('click',async()=>{
+    if(!outputInput.value) return;
+
+    try{
+      await navigator.clipboard.writeText(outputInput.value);
+    }catch{
+      outputInput.select();
+      document.execCommand('copy');
+      window.getSelection()?.removeAllRanges();
+    }
+
+    copyButton.textContent='Copied';
+    setTimeout(()=>copyButton.textContent='Copy',1200);
+  });
+})();
+</script>
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

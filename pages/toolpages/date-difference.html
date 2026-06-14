@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Tools | Date Difference</title>
+<meta content="Calculate the exact time difference between two dates or moments." name="description"/>
+<meta content="#f5f5f7" name="theme-color"/>
+
+<style>
+    :root{
+      --bg:#f5f5f7;
+      --bg-alt:#ffffff;
+      --text:#111827;
+      --text-soft:#4b5563;
+      --accent:#2563eb;
+      --accent-hover:#1d4ed8;
+      --accent-soft:rgba(37,99,235,.08);
+      --border-subtle:#e5e7eb;
+      --border-strong:#d1d5db;
+      --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+      --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+      --radius:20px;
+      --radius-pill:999px;
+      --max-w:980px;
+      --gap:14px;
+      --stack-gap:14px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%}
+    body{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      background:var(--bg);
+      color:var(--text);
+      font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    main{flex:1}
+    .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+    .skip-link{
+      position:absolute;
+      left:-999px;
+      top:.5rem;
+      padding:.45rem .75rem;
+      background:#111827;
+      color:#f9fafb;
+      z-index:100;
+      border-radius:var(--radius-pill);
+      font-size:.85rem;
+    }
+    .skip-link:focus{left:.5rem}
+
+    header.site-header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      border-bottom:1px solid rgba(148,163,184,.28);
+      backdrop-filter:blur(16px);
+      background:rgba(248,250,252,.95);
+    }
+    .mast{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:58px;
+      padding:.55rem 0;
+    }
+    .nav__list{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.55rem;
+      list-style:none;
+      margin:0;
+      padding:0;
+      flex-wrap:wrap;
+      font-size:.86rem;
+    }
+    .nav__link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:.3rem .8rem;
+      border-radius:var(--radius-pill);
+      color:var(--text-soft);
+      border:1px solid transparent;
+      transition:background .16s,color .16s,transform .12s,border-color .16s;
+    }
+    .nav__link:hover,.nav__link:focus-visible{
+      background:rgba(148,163,184,.18);
+      color:var(--text);
+      transform:translateY(-1px);
+      text-decoration:none;
+      border-color:rgba(148,163,184,.26);
+    }
+    .nav__link--highlight{background:var(--accent-soft);color:var(--accent);border-color:rgba(37,99,235,.18)}
+
+    .intro{
+      text-align:center;
+      padding:2.6rem 0 2.4rem;
+    }
+    .intro__title{
+      font-size:clamp(2.1rem,3vw,2.6rem);
+      line-height:1.15;
+      margin:0 0 .8rem;
+      font-weight:750;
+      letter-spacing:-.03em;
+    }
+    .intro__subtitle{
+      max-width:620px;
+      margin:0 auto;
+      color:var(--text-soft);
+      font-size:.96rem;
+      font-weight:500;
+    }
+
+    .tool{padding:2.4rem 0 4rem}
+    .card{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--border-subtle);
+      border-radius:24px;
+      box-shadow:var(--shadow-soft);
+      padding:clamp(1.2rem,3vw,1.7rem);
+      max-width:980px;
+      margin:0 auto;
+      transition:box-shadow .16s,transform .16s,border-color .16s;
+    }
+    .card:hover{box-shadow:var(--shadow-lift);border-color:rgba(37,99,235,.18)}
+
+    .row{
+      display:grid;
+      grid-template-columns:minmax(260px,380px) minmax(260px,1fr);
+      gap:var(--gap);
+      align-items:stretch;
+    }
+    .col{
+      min-width:0;
+    }
+
+    .head{
+      margin:0 0 1rem;
+      text-align:center;
+      font-size:1.05rem;
+      font-weight:750;
+      color:var(--text);
+    }
+
+    label{
+      display:block;
+      margin-bottom:.35rem;
+      color:var(--text-soft);
+      font-size:.85rem;
+      font-weight:600;
+    }
+    input{
+      width:100%;
+      border-radius:14px;
+      border:1px solid var(--border-strong);
+      background:#ffffff;
+      color:var(--text);
+      outline:none;
+      transition:border-color .16s,box-shadow .16s,background .16s;
+      font:inherit;
+      padding:.85rem 1rem;
+    }
+    input:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(37,99,235,.12);
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.7rem;
+      flex-wrap:wrap;
+      margin-top:var(--stack-gap);
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.55rem;
+      padding:.65rem 1.3rem;
+      border-radius:var(--radius-pill);
+      border:1px solid transparent;
+      background:var(--accent);
+      color:#f9fafb;
+      font-size:.86rem;
+      font-weight:600;
+      cursor:pointer;
+      text-decoration:none;
+      box-shadow:none;
+      transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+    }
+    .btn:hover:not([disabled]){
+      transform:translateY(-1px);
+      background:var(--accent-hover);
+      text-decoration:none;
+      box-shadow:0 10px 25px rgba(37,99,235,.18);
+    }
+    .btn:active:not([disabled]){transform:translateY(0)}
+    .btn.small{
+      background:transparent;
+      color:var(--text);
+      border-color:rgba(148,163,184,.8);
+      box-shadow:none;
+    }
+    .btn.small:hover:not([disabled]){
+      background:rgba(148,163,184,.15);
+      box-shadow:none;
+    }
+
+    .panel{
+      min-height:100%;
+      border-radius:18px;
+      border:1px solid var(--border-subtle);
+      background:#f8fafc;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
+      padding:1rem;
+    }
+    .grid{
+      display:grid;
+      gap:.75rem;
+    }
+    .kv{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:1rem;
+      padding:.8rem .9rem;
+      border-radius:14px;
+      background:#ffffff;
+      border:1px solid var(--border-subtle);
+      color:var(--text-soft);
+      font-size:.92rem;
+    }
+    .kv b{
+      color:var(--text);
+      font-weight:750;
+      text-align:right;
+    }
+    .kv .hl{
+      color:var(--accent);
+    }
+
+    .visually-hidden{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+
+    footer.site-footer{
+      margin-top:auto;
+      padding:1.6rem 1.5rem 1.8rem;
+      font-size:.85rem;
+      color:var(--text-soft);
+      border-top:1px solid rgba(148,163,184,.3);
+      background:rgba(248,250,252,.72);
+    }
+    .fine{font-size:.95rem;color:var(--text-soft)}
+    .footer-legal{
+      margin-top:.45rem;
+      display:flex;
+      justify-content:center;
+      gap:.45rem;
+      font-size:.82rem;
+      flex-wrap:wrap;
+    }
+    .footer-legal a{
+      color:var(--text-soft);
+      padding:.25rem .55rem;
+      border-radius:var(--radius-pill);
+      transition:background .16s,color .16s,transform .12s;
+    }
+    .footer-legal a:hover{
+      color:var(--accent);
+      background:rgba(148,163,184,.16);
+      text-decoration:none;
+      transform:translateY(-1px);
+    }
+
+    @media (max-width:760px){
+      .container{width:min(100% - 2rem,var(--max-w))}
+      .nav__list{gap:.25rem}
+      .nav__link{padding:.28rem .65rem}
+      .intro{padding:2rem 0 2.1rem}
+      .tool{padding:1.6rem 0 3rem}
+      .row{grid-template-columns:1fr}
+      .actions .btn{width:100%;max-width:320px}
+      .kv{align-items:flex-start;flex-direction:column;gap:.25rem}
+      .kv b{text-align:left}
+    }
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Date Difference</h1>
+      <p class="intro__subtitle">Calculate the exact time difference between two dates or moments.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div aria-label="Date difference calculator" class="card" role="region">
+        <div class="row">
+          <div class="col">
+            <h3 class="head">Date Difference</h3>
+
+            <label for="diffStart">Start</label>
+            <input aria-label="Start date and time" id="diffStart" type="datetime-local"/>
+
+            <div style="height:8px"></div>
+
+            <label for="diffEnd">End</label>
+            <input aria-label="End date and time" id="diffEnd" type="datetime-local"/>
+
+            <div class="actions">
+              <button class="btn primary" id="calcDiff" type="button">Calculate</button>
+              <button class="btn small" id="resetDiff" type="button">Reset</button>
+            </div>
+          </div>
+
+          <div class="col">
+            <label class="visually-hidden" for="diffOut">Result</label>
+            <div aria-live="polite" class="panel" id="diffOut">
+              <div class="grid">
+                <div class="kv"><span id="elapsedLabel">Elapsed/To go:</span><b class="hl" id="elapsedText">—</b></div>
+                <div class="kv"><span>Total seconds:</span><b id="sTotal">—</b></div>
+                <div class="kv"><span>Total minutes:</span><b id="mTotal">—</b></div>
+                <div class="kv"><span>Total hours:</span><b id="hTotal">—</b></div>
+                <div class="kv"><span>Total days:</span><b id="dTotal">—</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- RIYST_INLINE_SCRIPT_START -->
+<script>
+const $ = sel => document.querySelector(sel);
+const fromDatetimeLocalValue = (val) => {
+  if(!val) return null;
+  const [date, time] = val.split('T');
+  const [y,m,da] = date.split('-').map(Number);
+  let h=0, mi=0;
+  if(time){ [h,mi] = time.split(':').map(Number); }
+  return new Date(y, m-1, da, h, mi, 0, 0);
+};
+
+function calendarDiff(a, b){
+  let start = new Date(a), end = new Date(b);
+  const sign = (end - start) >= 0 ? 1 : -1;
+  if(sign < 0){ [start, end] = [end, start]; }
+
+  let years = end.getFullYear() - start.getFullYear();
+  let months = end.getMonth() - start.getMonth();
+  let days = end.getDate() - start.getDate();
+  let hours = end.getHours() - start.getHours();
+  let minutes = end.getMinutes() - start.getMinutes();
+  let seconds = end.getSeconds() - start.getSeconds();
+
+  if(seconds < 0){ seconds += 60; minutes--; }
+  if(minutes < 0){ minutes += 60; hours--; }
+  if(hours < 0){ hours += 24; days--; }
+  if(days < 0){
+    const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+    days += prevMonth.getDate();
+    months--;
+  }
+  if(months < 0){ months += 12; years--; }
+
+  return { years, months, days, hours, minutes, seconds };
+}
+
+function calcDifference(){
+  const a = fromDatetimeLocalValue($('#diffStart').value);
+  const b = fromDatetimeLocalValue($('#diffEnd').value);
+  if(!a || !b){ return; }
+  const ms = b - a;
+  $('#elapsedLabel').textContent = ms > 0 ? 'To go:' : 'Elapsed:';
+  const abs = Math.abs(ms);
+  $('#sTotal').textContent = Math.floor(abs/1000).toLocaleString();
+  $('#mTotal').textContent = Math.floor(abs/60000).toLocaleString();
+  $('#hTotal').textContent = Math.floor(abs/3600000).toLocaleString();
+  $('#dTotal').textContent = (abs/86400000).toLocaleString(undefined, { maximumFractionDigits: 6 });
+
+  const cal = calendarDiff(a, b);
+  const parts = [];
+  if(cal.years) parts.push(cal.years + ' year' + (cal.years!==1?'s':''));
+  if(cal.months) parts.push(cal.months + ' month' + (cal.months!==1?'s':''));
+  if(cal.days) parts.push(cal.days + ' day' + (cal.days!==1?'s':''));
+  if(cal.hours) parts.push(cal.hours + ' hour' + (cal.hours!==1?'s':''));
+  if(cal.minutes) parts.push(cal.minutes + ' minute' + (cal.minutes!==1?'s':''));
+  if(cal.seconds || parts.length===0) parts.push(cal.seconds + ' second' + (cal.seconds!==1?'s':''));
+  $('#elapsedText').textContent = parts.join(', ');
+}
+
+$('#calcDiff').addEventListener('click', calcDifference);
+$('#resetDiff').addEventListener('click', ()=>{
+  $('#diffStart').value = ''; $('#diffEnd').value = '';
+  $('#elapsedLabel').textContent = 'Elapsed/To go:';
+  ['elapsedText','sTotal','mTotal','hTotal','dTotal'].forEach(id=>{ $('#'+id).textContent='—'; });
+});
+document.querySelector('#yearNow').textContent = new Date().getFullYear();
+</script>
+<!-- RIYST_INLINE_SCRIPT_END -->
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Tools | Text Encoder / Decoder</title>
+<meta content="AES-GCM 256-bit text encryption and decryption. Client-side only." name="description"/>
+<meta content="#f5f5f7" name="theme-color"/>
+
+<style>
+    :root{
+      --bg:#f5f5f7;
+      --bg-alt:#ffffff;
+      --text:#111827;
+      --text-soft:#4b5563;
+      --accent:#2563eb;
+      --accent-hover:#1d4ed8;
+      --accent-soft:rgba(37,99,235,.08);
+      --border-subtle:#e5e7eb;
+      --border-strong:#d1d5db;
+      --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+      --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+      --radius:20px;
+      --radius-pill:999px;
+      --max-w:980px;
+      --gap:14px;
+      --stack-gap:14px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%}
+    body{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      background:var(--bg);
+      color:var(--text);
+      font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    main{flex:1}
+    .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+    .skip-link{
+      position:absolute;
+      left:-999px;
+      top:.5rem;
+      padding:.45rem .75rem;
+      background:#111827;
+      color:#f9fafb;
+      z-index:100;
+      border-radius:var(--radius-pill);
+      font-size:.85rem;
+    }
+    .skip-link:focus{left:.5rem}
+
+    header.site-header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      border-bottom:1px solid rgba(148,163,184,.28);
+      backdrop-filter:blur(16px);
+      background:rgba(248,250,252,.95);
+    }
+    .mast{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:58px;
+      padding:.55rem 0;
+    }
+    .nav__list{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.55rem;
+      list-style:none;
+      margin:0;
+      padding:0;
+      flex-wrap:wrap;
+      font-size:.86rem;
+    }
+    .nav__link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:.3rem .8rem;
+      border-radius:var(--radius-pill);
+      color:var(--text-soft);
+      border:1px solid transparent;
+      transition:background .16s,color .16s,transform .12s,border-color .16s;
+    }
+    .nav__link:hover,.nav__link:focus-visible{
+      background:rgba(148,163,184,.18);
+      color:var(--text);
+      transform:translateY(-1px);
+      text-decoration:none;
+      border-color:rgba(148,163,184,.26);
+    }
+    .nav__link--highlight{background:var(--accent-soft);color:var(--accent);border-color:rgba(37,99,235,.18)}
+
+    .intro{
+      text-align:center;
+      padding:2.6rem 0 2.4rem;
+    }
+    .intro__title{
+      font-size:clamp(2.1rem,3vw,2.6rem);
+      line-height:1.15;
+      margin:0 0 .8rem;
+      font-weight:750;
+      letter-spacing:-.03em;
+    }
+    .intro__subtitle{
+      max-width:620px;
+      margin:0 auto;
+      color:var(--text-soft);
+      font-size:.96rem;
+      font-weight:500;
+    }
+
+    .tool{padding:2.4rem 0 4rem}
+    .card{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--border-subtle);
+      border-radius:24px;
+      box-shadow:var(--shadow-soft);
+      padding:clamp(1.2rem,3vw,1.7rem);
+      max-width:980px;
+      margin:0 auto;
+      transition:box-shadow .16s,transform .16s,border-color .16s;
+    }
+    .card:hover{box-shadow:var(--shadow-lift);border-color:rgba(37,99,235,.18)}
+
+    .row{
+      display:flex;
+      justify-content:center;
+      gap:var(--gap);
+      flex-wrap:wrap;
+      margin-top:var(--gap);
+    }
+    .full{
+      min-width:260px;
+      max-width:100%;
+      flex:1 1 640px;
+    }
+
+    .mode{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin:.1rem 0 1.3rem;
+    }
+    .seg{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.65rem;
+      padding:.35rem;
+      border:1px solid var(--border-subtle);
+      border-radius:var(--radius-pill);
+      background:#f8fafc;
+      width:max-content;
+      max-width:100%;
+      margin-inline:auto;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+      flex-wrap:wrap;
+    }
+    .seg button{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:120px;
+      padding:.45rem 1rem;
+      border-radius:var(--radius-pill);
+      border:1px solid rgba(148,163,184,.8);
+      color:var(--text);
+      background:transparent;
+      cursor:pointer;
+      transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+      font-size:.84rem;
+      font-weight:600;
+      font-family:inherit;
+    }
+    .seg button:hover{
+      background:rgba(148,163,184,.15);
+      transform:translateY(-1px);
+    }
+    .seg button[aria-selected="true"]{
+      background:var(--accent);
+      color:#f9fafb;
+      border-color:var(--accent);
+      box-shadow:0 10px 25px rgba(37,99,235,.18);
+    }
+
+    label{
+      display:block;
+      margin-bottom:.35rem;
+      color:var(--text-soft);
+      font-size:.85rem;
+      font-weight:600;
+    }
+    input, textarea{
+      width:100%;
+      border-radius:14px;
+      border:1px solid var(--border-strong);
+      background:#ffffff;
+      color:var(--text);
+      outline:none;
+      transition:border-color .16s,box-shadow .16s,background .16s;
+      font:inherit;
+    }
+    textarea{
+      min-height:210px;
+      resize:vertical;
+      padding:.9rem 1rem;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+      font-size:.92rem;
+      line-height:1.5;
+    }
+    input{
+      padding:.85rem 6.2rem .85rem 1rem;
+    }
+    input:focus,textarea:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(37,99,235,.12);
+    }
+
+    .preview{
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid var(--border-subtle);
+      background:#f8fafc;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
+    }
+    .preview textarea{
+      border:0;
+      border-radius:0;
+      background:#f8fafc;
+      box-shadow:none;
+    }
+    .preview textarea:focus{
+      box-shadow:none;
+    }
+
+    .input-wrap{
+      position:relative;
+      display:flex;
+      align-items:center;
+    }
+    .gen-btn,.eye-btn{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      border:1px solid var(--border-subtle);
+      background:#f8fafc;
+      color:var(--text-soft);
+      cursor:pointer;
+      transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+    }
+    .gen-btn{
+      right:48px;
+    }
+    .eye-btn{
+      right:6px;
+    }
+    .gen-btn:hover,.eye-btn:hover{
+      background:var(--accent-soft);
+      color:var(--accent);
+      border-color:rgba(37,99,235,.22);
+    }
+    .icon{
+      width:18px;
+      height:18px;
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.7rem;
+      flex-wrap:wrap;
+      margin-top:var(--stack-gap);
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.55rem;
+      padding:.65rem 1.3rem;
+      border-radius:var(--radius-pill);
+      border:1px solid transparent;
+      background:var(--accent);
+      color:#f9fafb;
+      font-size:.86rem;
+      font-weight:600;
+      cursor:pointer;
+      text-decoration:none;
+      box-shadow:none;
+      transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+      font-family:inherit;
+    }
+    .btn:hover:not([disabled]){
+      transform:translateY(-1px);
+      background:var(--accent-hover);
+      text-decoration:none;
+      box-shadow:0 10px 25px rgba(37,99,235,.18);
+    }
+    .btn:active:not([disabled]){transform:translateY(0)}
+    .btn.small{
+      background:transparent;
+      color:var(--text);
+      border-color:rgba(148,163,184,.8);
+      box-shadow:none;
+    }
+    .btn.small:hover:not([disabled]){
+      background:rgba(148,163,184,.15);
+      box-shadow:none;
+    }
+
+    .drop-merge{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:150px;
+      padding:1.4rem;
+      border:2px dashed var(--border-strong);
+      border-radius:20px;
+      background:#f8fafc;
+      color:var(--text-soft);
+      text-align:center;
+      cursor:pointer;
+      transition:border-color .16s,background .16s,box-shadow .16s,transform .14s;
+      font-weight:600;
+    }
+    .drop-merge:hover,.drop-merge:focus{
+      border-color:var(--accent);
+      background:#f4f8ff;
+      box-shadow:0 0 0 4px rgba(37,99,235,.08);
+      transform:translateY(-1px);
+      outline:none;
+    }
+    .drop-merge input[type="file"]{
+      position:absolute;
+      inset:0;
+      opacity:0;
+      cursor:pointer;
+      padding:0;
+      pointer-events:none;
+    }
+
+    .msg{
+      min-height:1.4rem;
+      margin-top:.55rem;
+      text-align:center;
+      color:var(--text-soft);
+      font-size:.88rem;
+      font-weight:600;
+    }
+    .msg.ok{color:#047857}
+    .msg.err{color:#b91c1c}
+
+    footer.site-footer{
+      margin-top:auto;
+      padding:1.6rem 1.5rem 1.8rem;
+      font-size:.85rem;
+      color:var(--text-soft);
+      border-top:1px solid rgba(148,163,184,.3);
+      background:rgba(248,250,252,.72);
+    }
+    .fine{font-size:.95rem;color:var(--text-soft)}
+    .footer-legal{
+      margin-top:.45rem;
+      display:flex;
+      justify-content:center;
+      gap:.45rem;
+      font-size:.82rem;
+      flex-wrap:wrap;
+    }
+    .footer-legal a{
+      color:var(--text-soft);
+      padding:.25rem .55rem;
+      border-radius:var(--radius-pill);
+      transition:background .16s,color .16s,transform .12s;
+    }
+    .footer-legal a:hover{
+      color:var(--accent);
+      background:rgba(148,163,184,.16);
+      text-decoration:none;
+      transform:translateY(-1px);
+    }
+
+    @media (max-width:760px){
+      .container{width:min(100% - 2rem,var(--max-w))}
+      .nav__list{gap:.25rem}
+      .nav__link{padding:.28rem .65rem}
+      .intro{padding:2rem 0 2.1rem}
+      .tool{padding:1.6rem 0 3rem}
+      .seg{width:100%;border-radius:18px}
+      .seg button{flex:1 1 120px}
+      .actions .btn{width:100%;max-width:320px}
+      input{padding-right:6.2rem}
+    }
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Text Encoder / Decoder</h1>
+      <p class="intro__subtitle">AES-GCM 256-bit. Client-side only.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div aria-label="AES-GCM encrypt/decrypt tool" class="card" role="region">
+        <div aria-label="Mode" class="mode" role="tablist">
+          <div class="seg">
+            <button aria-selected="true" id="modeEncrypt" role="tab" type="button">Encrypt</button>
+            <button aria-selected="false" id="modeDecrypt" role="tab" type="button">Decrypt</button>
+          </div>
+        </div>
+
+        <div class="row" id="rowUpload" style="display:none">
+          <div class="full">
+            <div aria-label="Choose encrypted JSON file" class="drop-merge" id="dropMerge" role="button" tabindex="0">
+              <input accept=".json,.enc,.cipher" id="fileInput" type="file"/>
+              Click to choose a JSON file or drop it here
+            </div>
+            <div aria-live="polite" class="msg" id="fileMeta"></div>
+          </div>
+        </div>
+
+        <div class="row" id="rowText">
+          <div class="full">
+            <label for="ioText">Text</label>
+            <div class="preview">
+              <textarea aria-label="Text input and output" id="ioText" placeholder="Type text to encrypt…"></textarea>
+            </div>
+            <div class="actions" id="actionsEncrypt">
+              <button class="btn small" id="btnClear" type="button">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" id="rowPassword">
+          <div class="full">
+            <label for="password">Password / Passphrase</label>
+            <div class="input-wrap">
+              <input autocomplete="new-password" id="password" placeholder="Enter a strong password…" type="password"/>
+              <button aria-label="Generate password" class="gen-btn" id="btnGen" title="Generate and copy a strong password" type="button">
+                <svg class="icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0114.13-3.36L23 10"></path>
+                  <path d="M20.49 15a9 9 0 01-14.13 3.36L1 14"></path>
+                </svg>
+              </button>
+              <button aria-label="Show password" class="eye-btn" id="togglePwd" title="Show/Hide password" type="button">
+                <svg class="icon" fill="none" id="eyeIcon" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+            <div class="msg" id="hint"></div>
+          </div>
+        </div>
+
+        <div class="row" id="rowDecryptRun" style="display:none">
+          <div class="full">
+            <div class="actions">
+              <button class="btn btn-primary" id="btnDecrypt" type="button" disabled>Decrypt</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" id="rowRun">
+          <div class="full">
+            <div class="actions">
+              <button class="btn btn-primary" id="btnEncrypt" type="button">Encrypt</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- RIYST_INLINE_SCRIPT_START -->
+<script>
+// ---- Shorthands ----
+    const $ = sel => document.querySelector(sel);
+    const enc = new TextEncoder();
+    const dec = new TextDecoder();
+
+    // ---- Elements ----
+    const modeEncrypt = $('#modeEncrypt');
+    const modeDecrypt = $('#modeDecrypt');
+    const rowUpload = $('#rowUpload');
+    const dropMerge = $('#dropMerge');
+    const fileInput = $('#fileInput');
+    const fileMeta = $('#fileMeta');
+    const rowText = $('#rowText');
+    const ioText = $('#ioText');
+    const actionsEncrypt = $('#actionsEncrypt');
+    const btnClear = $('#btnClear');
+    const rowPassword = $('#rowPassword');
+    const pwd = $('#password');
+    const togglePwd = $('#togglePwd');
+    const eyeIcon = $('#eyeIcon');
+    const btnGen = $('#btnGen');
+    const rowRun = $('#rowRun');
+    const btnEncrypt = $('#btnEncrypt');
+    const rowDecryptRun = $('#rowDecryptRun');
+    const btnDecrypt = $('#btnDecrypt');
+    const hint = $('#hint');
+
+    // ---- Config ----
+    const DEFAULT_ITERS = 350000; // fixed
+    let decryptEnvelope = null; // holds uploaded JSON for decrypt
+
+    // ---- Base64 helpers ----
+    function toB64(bytes){
+      let bin = ''; const arr = new Uint8Array(bytes);
+      for(let i=0;i<arr.length;i++) bin += String.fromCharCode(arr[i]);
+      return btoa(bin);
+    }
+    function fromB64(b64){
+      const bin = atob(b64);
+      const arr = new Uint8Array(bin.length);
+      for(let i=0;i<bin.length;i++) arr[i] = bin.charCodeAt(i);
+      return arr.buffer;
+    }
+    function randBytes(len){ const b = new Uint8Array(len); crypto.getRandomValues(b); return b; }
+
+    // ---- Crypto (Web Crypto) ----
+    async function deriveKey(password, salt, iterations){
+      const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), {name:'PBKDF2'}, false, ['deriveKey']);
+      return crypto.subtle.deriveKey(
+        {name:'PBKDF2', hash:'SHA-256', salt, iterations},
+        keyMaterial,
+        {name:'AES-GCM', length:256},
+        false,
+        ['encrypt','decrypt']
+      );
+    }
+    async function encryptText(plaintext, password){
+      if(!password) throw new Error('Password required');
+      const salt = randBytes(16); // 128-bit
+      const iv = randBytes(12);   // 96-bit
+      const key = await deriveKey(password, salt, DEFAULT_ITERS);
+      const alg = {name:'AES-GCM', iv};
+      const ct = await crypto.subtle.encrypt(alg, key, enc.encode(plaintext || ''));
+      const envelope = {
+        v: 1,
+        scheme: 'AES-GCM',
+        kdf: { name:'PBKDF2', hash:'SHA-256', iterations: DEFAULT_ITERS },
+        salt: toB64(salt),
+        iv: toB64(iv),
+        ct: toB64(ct)
+      };
+      return JSON.stringify(envelope, null, 2);
+    }
+    async function decryptText(envelopeJSON, password){
+      if(!password) throw new Error('Password required');
+      const env = JSON.parse(envelopeJSON);
+      if(env.v !== 1) throw new Error('Unsupported version');
+      if(!env.kdf || env.kdf.name !== 'PBKDF2' || env.kdf.hash !== 'SHA-256') throw new Error('Unsupported KDF');
+      const salt = new Uint8Array(fromB64(env.salt));
+      const iv = new Uint8Array(fromB64(env.iv));
+      const key = await deriveKey(password, salt, Number(env.kdf.iterations));
+      const alg = {name:'AES-GCM', iv};
+      const ptBuf = await crypto.subtle.decrypt(alg, key, fromB64(env.ct));
+      return dec.decode(ptBuf);
+    }
+
+    // ---- Password show/hide ----
+    togglePwd.addEventListener('click', ()=>{
+      const show = pwd.type === 'password';
+      pwd.type = show ? 'text' : 'password';
+      togglePwd.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+      // toggle eye icon
+      eyeIcon.innerHTML = show
+        ? '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.77 21.77 0 0 1 5.06-6.94M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.8 21.8 0 0 1-3.23 4.31M1 1l22 22" />'
+        : '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle>';
+    });
+
+    // ---- Password generator + copy (Encrypt mode only) ----
+    btnGen.addEventListener('click', async ()=>{
+      const strong = generatePassword(20);
+      pwd.value = strong;
+      try {
+        await navigator.clipboard.writeText(strong);
+        flashHint('Strong password generated & copied', true);
+      } catch {
+        flashHint('Strong password generated (copy failed)', false);
+      }
+      pwd.focus(); pwd.select(); // allow manual copy if needed
+    });
+    function generatePassword(length=20){
+      const upper='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const lower='abcdefghijklmnopqrstuvwxyz';
+      const nums='0123456789';
+      const syms='!@#$%^&*()-_=+[]{};:,.<>?';
+      const all = upper+lower+nums+syms;
+      const req = [upper, lower, nums, syms];
+      let res = [];
+      req.forEach(set => res.push(set[rand(set.length)]));
+      for(let i=res.length;i<length;i++){ res.push(all[rand(all.length)]); }
+      for(let i=res.length-1;i>0;i--){ const j = rand(i+1); [res[i],res[j]]=[res[j],res[i]]; }
+      return res.join('');
+    }
+    function rand(n){ return crypto.getRandomValues(new Uint32Array(1))[0] % n; }
+    function flashHint(msg, ok){
+      hint.textContent = msg; hint.className = 'msg ' + (ok?'ok':'err');
+      setTimeout(()=>{ hint.textContent=''; hint.className='msg'; }, 1800);
+    }
+
+    // ---- Encrypt flow ----
+    btnClear.addEventListener('click', ()=>{ ioText.value=''; });
+    btnEncrypt.addEventListener('click', async ()=>{
+      try{
+        const out = await encryptText(ioText.value || '', pwd.value || '');
+        ioText.value = out;
+        const blob = new Blob([out], {type:'application/json'});
+        const ts = new Date().toISOString().replace(/[:.]/g,'-');
+        downloadBlob(blob, `encrypted-${ts}.json`);
+      }catch(e){
+        alert(e.message || 'Encryption failed');
+      }
+    });
+    function downloadBlob(blob, filename){
+      if (window.navigator && window.navigator.msSaveOrOpenBlob) { window.navigator.msSaveOrOpenBlob(blob, filename); return; }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; a.style.display='none';
+      document.body.appendChild(a);
+      requestAnimationFrame(()=>{ try{ a.click(); }catch(_){}
+        setTimeout(()=>{ a.remove(); URL.revokeObjectURL(url); }, 1500);
+      });
+    }
+
+    // ---- Mode management & Decrypt flow ----
+    function clearPassword(){
+      pwd.value = '';
+      pwd.type = 'password';
+      togglePwd.setAttribute('aria-label','Show password');
+      eyeIcon.innerHTML = '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle>';
+    }
+
+    
+    function setMode(mode){
+      const isEncrypt = mode === 'encrypt';
+      modeEncrypt.setAttribute('aria-selected', String(isEncrypt));
+      modeDecrypt.setAttribute('aria-selected', String(!isEncrypt));
+      rowUpload.style.display = isEncrypt ? 'none' : '';
+      if (dropMerge) dropMerge.style.display = isEncrypt ? 'none' : 'flex';
+      rowPassword.style.display = isEncrypt ? '' : (decryptEnvelope ? '' : 'none');
+      pwd.placeholder = isEncrypt ? 'Enter a strong password…' : 'Enter the password';
+      if (btnGen) btnGen.style.display = isEncrypt ? '' : 'none';
+      rowPassword.classList.toggle('with-gen', isEncrypt);
+      rowText.style.display = isEncrypt ? '' : (ioText.dataset.unlocked === 'true' ? '' : 'none');
+      actionsEncrypt.style.display = isEncrypt ? '' : 'none';
+      rowRun.style.display = isEncrypt ? '' : 'none';
+      if(rowDecryptRun) rowDecryptRun.style.display = isEncrypt ? 'none' : (decryptEnvelope ? '' : 'none');
+      if(btnDecrypt) btnDecrypt.disabled = true;
+      ioText.readOnly = !isEncrypt;
+      ioText.placeholder = isEncrypt ? 'Type text to encrypt…' : '';
+      ioText.value = ''; // always clear text area on mode switch
+      ioText.dataset.unlocked = isEncrypt ? 'false' : 'false';
+      hint.textContent = '';
+      clearPassword();
+    }
+
+    modeEncrypt.addEventListener('click', ()=> setMode('encrypt'));
+    modeDecrypt.addEventListener('click', ()=> setMode('decrypt'));
+    setMode('encrypt'); // default
+
+    // Upload handlers (Decrypt mode)
+    if(dropMerge){
+      dropMerge.addEventListener('click', ()=>{ if(fileInput) fileInput.click(); });
+      dropMerge.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); if(fileInput) fileInput.click(); }});
+      dropMerge.addEventListener('dragover', (e)=>{ e.preventDefault(); dropMerge.style.background='rgba(255,255,255,.08)'; });
+      dropMerge.addEventListener('dragleave', ()=>{ dropMerge.style.background='rgba(255,255,255,.05)'; });
+      dropMerge.addEventListener('drop', async (e)=>{
+        e.preventDefault(); dropMerge.style.background='rgba(255,255,255,.05)';
+        const f = e.dataTransfer.files && e.dataTransfer.files[0]; if(f) await handleFile(f);
+      });
+    }
+    if(fileInput){
+      fileInput.addEventListener('change', async (e)=>{
+        if(e.target.files && e.target.files[0]){ await handleFile(e.target.files[0]); e.target.value=''; }
+      });
+    }
+    async function handleFile(file){
+      const name = (file.name||'').toLowerCase();
+      if(!name.match(/\.(json|enc|cipher)$/)){ alert('Please choose an encrypted JSON (.json/.enc/.cipher)'); return; }
+      try{
+        decryptEnvelope = await file.text();
+        fileMeta.textContent = 'Loaded: ' + (file.name || 'file');
+        rowPassword.style.display = '';
+        if(rowDecryptRun) rowDecryptRun.style.display = '';
+        if(btnDecrypt) btnDecrypt.disabled = true;
+        pwd.placeholder = 'Enter the password';
+        clearPassword(); // ensure no remembered password
+        pwd.focus();
+      }catch(_){ alert('Unable to read file'); }
+    }
+
+    pwd.addEventListener('input', ()=>{
+      if(btnDecrypt) btnDecrypt.disabled = !(decryptEnvelope && pwd.value.trim());
+    });
+
+    if(btnDecrypt){
+      btnDecrypt.addEventListener('click', ()=>{
+        if(!btnDecrypt.disabled && decryptEnvelope){
+          triggerDecrypt();
+        }
+      });
+    }
+
+    // Decrypt on Enter key too
+    pwd.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' && decryptEnvelope){
+        e.preventDefault();
+        triggerDecrypt();
+      }
+    });
+    async function triggerDecrypt(){
+      try{
+        const out = await decryptText(decryptEnvelope, pwd.value || '');
+        ioText.value = out;
+        ioText.readOnly = true;
+        ioText.dataset.unlocked = 'true';
+        rowText.style.display = '';     // reveal preview
+        rowPassword.style.display = 'none'; // hide password box after success
+        if(rowDecryptRun) rowDecryptRun.style.display = 'none';
+        if(btnDecrypt) btnDecrypt.disabled = true;
+        clearPassword(); // wipe password after use
+        flashHint('Decrypted', true);
+      }catch(e){
+        hint.textContent = 'Wrong password or corrupted file';
+        hint.className = 'msg err';
+      }
+    }
+</script>
+<!-- RIYST_INLINE_SCRIPT_END -->
+<script>
+(function(){
+  const y=document.getElementById('year');
+  if(y) y.textContent=new Date().getFullYear();
+})();
+</script>
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

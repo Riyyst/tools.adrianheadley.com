@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tools | PDF Separator</title>
+<meta name="description" content="Split one PDF into separate page PDFs directly in your browser."/>
+<meta name="theme-color" content="#f5f5f7"/>
+
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --bg-alt:#ffffff;
+    --text:#111827;
+    --text-soft:#4b5563;
+    --accent:#2563eb;
+    --accent-hover:#1d4ed8;
+    --accent-soft:rgba(37,99,235,.08);
+    --border-subtle:#e5e7eb;
+    --border-strong:#d1d5db;
+    --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+    --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+    --radius:20px;
+    --radius-pill:999px;
+    --max-w:980px;
+    --gap:14px;
+    --stack-gap:14px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%;overflow-x:hidden}
+  body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background:var(--bg);
+    color:var(--text);
+    font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  main{flex:1}
+  .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+  .skip-link{
+    position:absolute;
+    left:-999px;
+    top:.5rem;
+    padding:.45rem .75rem;
+    background:#111827;
+    color:#f9fafb;
+    z-index:100;
+    border-radius:var(--radius-pill);
+    font-size:.85rem;
+  }
+  .skip-link:focus{left:.5rem}
+
+  header.site-header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    border-bottom:1px solid rgba(148,163,184,.28);
+    backdrop-filter:blur(16px);
+    background:rgba(248,250,252,.95);
+  }
+  .mast{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:58px;
+    padding:.55rem 0;
+  }
+  .nav__list{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    list-style:none;
+    margin:0;
+    padding:0;
+    flex-wrap:wrap;
+    font-size:.86rem;
+  }
+  .nav__link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:.3rem .8rem;
+    border-radius:var(--radius-pill);
+    color:var(--text-soft);
+    border:1px solid transparent;
+    transition:background .16s,color .16s,transform .12s,border-color .16s;
+  }
+  .nav__link:hover,.nav__link:focus-visible{
+    background:rgba(148,163,184,.18);
+    color:var(--text);
+    transform:translateY(-1px);
+    text-decoration:none;
+    border-color:rgba(148,163,184,.26);
+  }
+  .nav__link--highlight{background:var(--accent-soft);color:var(--accent);border-color:rgba(37,99,235,.18)}
+
+  .intro{
+    text-align:center;
+    padding:2.6rem 0 2.4rem;
+  }
+  .intro__title{
+    font-size:clamp(2.1rem,3vw,2.6rem);
+    line-height:1.15;
+    margin:0 0 .8rem;
+    font-weight:750;
+    letter-spacing:-.03em;
+  }
+  .intro__subtitle{
+    max-width:650px;
+    margin:0 auto;
+    color:var(--text-soft);
+    font-size:.96rem;
+    font-weight:500;
+  }
+
+  .tool{padding:2.4rem 0 4rem}
+  .card{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--border-subtle);
+    border-radius:24px;
+    box-shadow:var(--shadow-soft);
+    padding:clamp(1.2rem,3vw,1.7rem);
+    max-width:980px;
+    margin:0 auto;
+    transition:box-shadow .16s,transform .16s,border-color .16s;
+  }
+  .card:hover{box-shadow:var(--shadow-lift);border-color:rgba(37,99,235,.18)}
+
+  .row{
+    display:flex;
+    justify-content:center;
+    gap:var(--gap);
+    flex-wrap:wrap;
+    margin-top:var(--gap);
+  }
+  .row:first-child{margin-top:0}
+  .full{
+    min-width:260px;
+    max-width:100%;
+    flex:1 1 640px;
+  }
+
+  label{
+    display:block;
+    margin:0 0 .35rem;
+    color:var(--text-soft);
+    font-size:.85rem;
+    font-weight:700;
+  }
+
+  .drop{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:.5rem;
+    min-height:158px;
+    padding:1.35rem;
+    border:2px dashed var(--border-strong);
+    border-radius:20px;
+    background:#f8fafc;
+    color:var(--text-soft);
+    text-align:center;
+    cursor:pointer;
+    transition:border-color .16s,background .16s,box-shadow .16s,transform .14s;
+    font-weight:650;
+  }
+  .drop:hover,.drop.dragover,.drop:focus-within{
+    border-color:var(--accent);
+    background:#f4f8ff;
+    box-shadow:0 0 0 4px rgba(37,99,235,.08);
+    transform:translateY(-1px);
+  }
+  .drop input[type="file"]{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    cursor:pointer;
+  }
+  #dropText{
+    display:block;
+    color:var(--text);
+    font-size:1rem;
+    font-weight:750;
+  }
+
+  .filename{
+    margin-top:.65rem;
+    text-align:center;
+    color:var(--text-soft);
+    font-size:.88rem;
+    font-weight:650;
+    overflow-wrap:anywhere;
+  }
+  .filename.error{
+    color:#b91c1c;
+    min-height:1.4rem;
+  }
+
+  .details{
+    margin:1rem auto 0;
+    max-width:520px;
+    border:1px solid var(--border-subtle);
+    border-radius:18px;
+    background:#f8fafc;
+    padding:.8rem 1rem;
+    text-align:center;
+    color:var(--text);
+    font-size:.9rem;
+    font-weight:650;
+  }
+
+  .controls{
+    margin-top:1rem;
+    display:flex;
+    justify-content:center;
+  }
+  #pagesBlock{
+    width:min(100%,720px);
+  }
+  .input input{
+    width:100%;
+    border-radius:14px;
+    border:1px solid var(--border-strong);
+    background:#ffffff;
+    color:var(--text);
+    outline:none;
+    transition:border-color .16s,box-shadow .16s,background .16s;
+    font:inherit;
+    padding:.78rem 1rem;
+  }
+  .input input:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+  }
+  .hint{
+    margin:.45rem 0 0;
+    text-align:center;
+    color:var(--text-soft);
+    font-size:.82rem;
+    font-weight:600;
+  }
+  .hint code{
+    background:rgba(148,163,184,.15);
+    border:1px solid rgba(148,163,184,.25);
+    padding:.08rem .32rem;
+    border-radius:8px;
+  }
+
+  .progress{
+    margin-top:.8rem;
+    text-align:center;
+    color:var(--text-soft);
+    font-size:.9rem;
+    font-weight:650;
+    min-height:1.4rem;
+  }
+
+  .actions{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.7rem;
+    flex-wrap:wrap;
+    margin-top:var(--stack-gap);
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    padding:.65rem 1.3rem;
+    border-radius:var(--radius-pill);
+    border:1px solid transparent;
+    background:var(--accent);
+    color:#f9fafb;
+    font-size:.86rem;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+    box-shadow:none;
+    transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+    font-family:inherit;
+    min-height:44px;
+  }
+  .btn:hover:not([disabled]){
+    transform:translateY(-1px);
+    background:var(--accent-hover);
+    text-decoration:none;
+    box-shadow:0 10px 25px rgba(37,99,235,.18);
+  }
+  .btn:active:not([disabled]){transform:translateY(0)}
+  .btn[disabled]{
+    opacity:.45;
+    cursor:not-allowed;
+  }
+  #clear{
+    background:transparent;
+    color:var(--text);
+    border-color:rgba(148,163,184,.8);
+    box-shadow:none;
+  }
+  #clear:hover:not([disabled]){
+    background:rgba(148,163,184,.15);
+    box-shadow:none;
+  }
+
+  .dl-list{
+    margin:1rem auto 0;
+    max-width:760px;
+    display:flex;
+    flex-direction:column;
+    gap:.45rem;
+    border:1px solid var(--border-subtle);
+    border-radius:18px;
+    background:#f8fafc;
+    padding:.5rem;
+  }
+  .dl-list a{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:.75rem;
+    border:1px solid var(--border-subtle);
+    border-radius:14px;
+    background:#fff;
+    padding:.65rem .75rem;
+    color:var(--text);
+    font-size:.88rem;
+    font-weight:650;
+    transition:background .16s,transform .14s,border-color .16s;
+  }
+  .dl-list a:hover{
+    text-decoration:none;
+    background:#f4f8ff;
+    border-color:rgba(37,99,235,.18);
+    transform:translateY(-1px);
+  }
+  .dl-list .name{
+    min-width:0;
+    overflow-wrap:anywhere;
+  }
+  .dl-list .right{
+    color:var(--accent);
+    font-weight:750;
+    white-space:nowrap;
+  }
+
+  .hidden{display:none!important}
+
+  footer.site-footer{
+    margin-top:auto;
+    padding:1.6rem 1.5rem 1.8rem;
+    font-size:.85rem;
+    color:var(--text-soft);
+    border-top:1px solid rgba(148,163,184,.3);
+    background:rgba(248,250,252,.72);
+  }
+  .fine{font-size:.95rem;color:var(--text-soft)}
+  .footer-legal{
+    margin-top:.45rem;
+    display:flex;
+    justify-content:center;
+    gap:.45rem;
+    font-size:.82rem;
+    flex-wrap:wrap;
+  }
+  .footer-legal a{
+    color:var(--text-soft);
+    padding:.25rem .55rem;
+    border-radius:var(--radius-pill);
+    transition:background .16s,color .16s,transform .12s;
+  }
+  .footer-legal a:hover{
+    color:var(--accent);
+    background:rgba(148,163,184,.16);
+    text-decoration:none;
+    transform:translateY(-1px);
+  }
+
+  @media (max-width:760px){
+    .container{width:min(100% - 2rem,var(--max-w))}
+    .nav__list{gap:.25rem}
+    .nav__link{padding:.28rem .65rem}
+    .intro{padding:2rem 0 2.1rem}
+    .tool{padding:1.6rem 0 3rem}
+    .actions .btn{width:100%;max-width:320px}
+    .dl-list a{align-items:flex-start}
+  }
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">PDF Separator</h1>
+      <p class="intro__subtitle">Split one PDF into separate page PDFs directly in your browser.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="card">
+        <div class="row">
+          <div class="full">
+            <label for="file">Upload a single PDF</label>
+            <label class="drop" id="dropZone">
+              <input accept=".pdf,application/pdf" id="file" type="file"/>
+              <span id="dropText">Click to choose a PDF or drag and drop here</span>
+            </label>
+            <div class="filename" id="fileName">No file selected</div>
+            <div aria-live="polite" class="details hidden" id="pdfInfo"></div>
+
+            <div class="controls hidden" id="pagesBlock">
+              <div>
+                <label for="pages">Pages to extract</label>
+                <div class="input">
+                  <input id="pages" inputmode="numeric" placeholder="e.g. 1,3,5-7 or leave blank for all" type="text"/>
+                </div>
+                <p class="hint">Use commas and ranges, such as <strong>2-5</strong>, <strong>1,4,9</strong>, or leave blank for all pages.</p>
+              </div>
+            </div>
+
+            <div class="hidden" id="namingBlock" aria-hidden="true">
+              <label for="naming">Filename format</label>
+              <div class="input">
+                <input id="naming" type="text" value="{name} — Page {page}"/>
+              </div>
+            </div>
+
+            <div class="progress" id="status"></div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary hidden" disabled id="runUnified" type="button">Split</button>
+          <button class="btn btn-primary hidden" disabled id="run" type="button">Split Selected Pages</button>
+          <button class="btn hidden" disabled id="runAll" type="button">Split All Pages</button>
+          <a class="btn hidden" disabled download href="#" id="downloadAll">Download All</a>
+          <button class="btn hidden" id="clear" type="button">Clear</button>
+        </div>
+
+        <div aria-live="polite" class="dl-list hidden" id="downloads"></div>
+
+        <div class="actions">
+          <button class="btn hidden" disabled id="downloadAllZip" type="button">Download All</button>
+        </div>
+
+        <p aria-live="polite" class="filename error" id="err" role="alert"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<script>
+(function(){
+  'use strict';
+
+  const $ = s => document.querySelector(s);
+
+  const fileInput = $('#file');
+  const dropZone = $('#dropZone');
+  const fileNameEl = $('#fileName');
+  const pdfInfoEl = $('#pdfInfo');
+  const pagesBlock = $('#pagesBlock');
+  const pagesInput = $('#pages');
+  const namingInput = $('#naming');
+  const statusEl = $('#status');
+  const runBtn = $('#runUnified');
+  const clearBtn = $('#clear');
+  const errEl = $('#err');
+  const dlList = $('#downloads');
+  const zipBtn = $('#downloadAllZip');
+
+  let file = null;
+  let fileStem = '';
+  let totalPages = 0;
+  let sourceBytes = null;
+  let outLinks = [];
+
+  function show(el){ if(el) el.classList.remove('hidden'); }
+  function hide(el){ if(el) el.classList.add('hidden'); }
+  function setStatus(message){ statusEl.textContent = message || ''; }
+  function stem(name){
+    const i = name.toLowerCase().lastIndexOf('.pdf');
+    return i > -1 ? name.slice(0, i) : name;
+  }
+  function fmtName(stemName, page){
+    const tpl = namingInput.value || '{name} — Page {page}';
+    return tpl.replaceAll('{name}', stemName).replaceAll('{page}', String(page)) + '.pdf';
+  }
+
+  function revokeOutputs(){
+    outLinks.forEach(item => {
+      try{ URL.revokeObjectURL(item.url); }catch(_){}
+    });
+    outLinks = [];
+  }
+
+  function resetUI(full=true){
+    errEl.textContent = '';
+    setStatus('');
+    revokeOutputs();
+    hide(dlList);
+    dlList.innerHTML = '';
+    hide(zipBtn);
+    zipBtn.setAttribute('disabled', '');
+    if(full){
+      file = null;
+      fileStem = '';
+      totalPages = 0;
+      sourceBytes = null;
+      fileInput.value = '';
+      fileNameEl.textContent = 'No file selected';
+      pdfInfoEl.innerHTML = '';
+      hide(pdfInfoEl);
+      pagesInput.value = '';
+      hide(pagesBlock);
+      hide(runBtn);
+      runBtn.setAttribute('disabled', '');
+      hide(clearBtn);
+    }
+  }
+
+  function parsePagesSpec(spec, max){
+    if(!spec || !spec.trim()){
+      return Array.from({length:max}, (_,i) => i + 1);
+    }
+
+    const pages = new Set();
+    const parts = spec.split(/[, ]+/).filter(Boolean);
+
+    for(const part of parts){
+      if(/^\d+$/.test(part)){
+        const p = parseInt(part, 10);
+        if(p >= 1 && p <= max) pages.add(p);
+      }else if(/^\d+-\d+$/.test(part)){
+        const [a, b] = part.split('-').map(n => parseInt(n, 10));
+        if(a >= 1 && b >= 1 && a <= max && b <= max){
+          const start = Math.min(a, b);
+          const end = Math.max(a, b);
+          for(let i = start; i <= end; i++) pages.add(i);
+        }
+      }else{
+        throw new Error('Invalid page format. Use commas and ranges like 1,3,5-7.');
+      }
+    }
+
+    if(!pages.size) throw new Error('No valid pages selected.');
+    return Array.from(pages).sort((a, b) => a - b);
+  }
+
+  async function pickFile(f){
+    resetUI(false);
+    file = f;
+    fileStem = stem(f.name);
+    fileNameEl.textContent = f.name;
+
+    try{
+      setStatus('Reading PDF...');
+      sourceBytes = await f.arrayBuffer();
+      const pdf = await PDFLib.PDFDocument.load(sourceBytes);
+      totalPages = pdf.getPageCount();
+      pdfInfoEl.innerHTML = '<strong>Pages:</strong> ' + totalPages + (totalPages === 1 ? ' page' : ' pages');
+      show(pdfInfoEl);
+      show(pagesBlock);
+      show(runBtn);
+      runBtn.removeAttribute('disabled');
+      show(clearBtn);
+      setStatus('');
+    }catch(err){
+      console.error(err);
+      errEl.textContent = 'Failed to read PDF.';
+      resetUI(true);
+    }
+  }
+
+  dropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    const f = (e.dataTransfer.files && e.dataTransfer.files[0]) || null;
+    if(f && (/pdf$/i.test(f.type) || /\.pdf$/i.test(f.name))){
+      pickFile(f);
+    }else{
+      errEl.textContent = 'Please drop a PDF file.';
+    }
+  });
+
+  fileInput.addEventListener('change', e => {
+    const f = (e.target.files && e.target.files[0]) || null;
+    if(f && (/pdf$/i.test(f.type) || /\.pdf$/i.test(f.name))){
+      pickFile(f);
+    }else{
+      errEl.textContent = 'Please select a PDF.';
+    }
+  });
+
+  async function splitPages(pages){
+    const { PDFDocument } = PDFLib;
+    revokeOutputs();
+    dlList.innerHTML = '';
+    hide(dlList);
+    hide(zipBtn);
+    zipBtn.setAttribute('disabled', '');
+
+    const src = await PDFDocument.load(sourceBytes);
+
+    for(let i = 0; i < pages.length; i++){
+      const pageNumber = pages[i];
+      setStatus(`Separating page ${i + 1}/${pages.length}...`);
+
+      const out = await PDFDocument.create();
+      const [copied] = await out.copyPages(src, [pageNumber - 1]);
+      out.addPage(copied);
+
+      const bytes = await out.save({ useObjectStreams:false });
+      const blob = new Blob([bytes], {type:'application/pdf'});
+      const url = URL.createObjectURL(blob);
+      const name = fmtName(fileStem, pageNumber);
+
+      outLinks.push({page:pageNumber, url, name, blob});
+      addDownloadLink(pageNumber, url, name);
+    }
+
+    show(zipBtn);
+    zipBtn.removeAttribute('disabled');
+    setStatus('All done - pages ready below');
+  }
+
+  function addDownloadLink(page, url, name){
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+
+    const left = document.createElement('span');
+    left.className = 'name';
+    left.textContent = (fileStem || 'PDF') + ' — Page ' + page;
+
+    const right = document.createElement('span');
+    right.className = 'right';
+    right.textContent = 'Download';
+
+    a.appendChild(left);
+    a.appendChild(right);
+    dlList.appendChild(a);
+    show(dlList);
+  }
+
+  async function downloadAllAsZip(){
+    if(!outLinks.length) return;
+
+    zipBtn.setAttribute('disabled', '');
+    setStatus('Building ZIP...');
+
+    try{
+      const zip = new JSZip();
+      for(const item of outLinks){
+        zip.file(item.name, item.blob);
+      }
+
+      const content = await zip.generateAsync({type:'blob'});
+      const url = URL.createObjectURL(content);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = (fileStem || 'PDF') + ' — All Pages.zip';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      setStatus('ZIP download ready.');
+    }catch(err){
+      console.error(err);
+      errEl.textContent = 'Failed to build ZIP.';
+      setStatus('');
+    }finally{
+      zipBtn.removeAttribute('disabled');
+    }
+  }
+
+  runBtn.addEventListener('click', async () => {
+    errEl.textContent = '';
+
+    if(!file || !sourceBytes){
+      errEl.textContent = 'Please select a PDF first.';
+      return;
+    }
+
+    try{
+      const pages = parsePagesSpec(pagesInput.value, totalPages);
+      runBtn.setAttribute('disabled', '');
+      hide(clearBtn);
+      await splitPages(pages);
+    }catch(err){
+      console.error(err);
+      errEl.textContent = err && err.message ? err.message : 'Split failed.';
+      setStatus('');
+    }finally{
+      runBtn.removeAttribute('disabled');
+      show(clearBtn);
+    }
+  });
+
+  clearBtn.addEventListener('click', () => resetUI(true));
+  zipBtn.addEventListener('click', downloadAllAsZip);
+
+  const y = document.getElementById('year');
+  if(y) y.textContent = new Date().getFullYear();
+
+  resetUI(true);
+})();
+</script>
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

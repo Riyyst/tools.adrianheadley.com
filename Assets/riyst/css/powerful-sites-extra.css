@@ -1,0 +1,257 @@
+/* Powerful Websites: Tools-parity layer */
+
+body.powerful-sites-page .intro{
+  padding-top: var(--space-10);
+  padding-bottom: var(--space-8);
+}
+
+body.powerful-sites-page .intro__title--brand{
+  text-transform: none;
+}
+
+/* Two heads (Filters + Browse...) should feel cohesive */
+body.powerful-sites-page .section__head + .section__head{
+  margin-top: var(--space-6);
+}
+
+/* Normalize subcategory headings injected from old content */
+body.powerful-sites-page .subcategory-title{
+  font-size: 1.1rem !important;
+  font-weight: 650 !important;
+  margin-top: var(--space-6) !important;
+  margin-bottom: var(--space-4) !important;
+}
+
+body.powerful-sites-page section.stack > h3{
+  margin-top: var(--space-10);
+}
+
+/* --- Subcategory dropdown: legacy markup stays hidden --- */
+body.powerful-sites-page .chipwrap{ position: relative; }
+body.powerful-sites-page .chip-dropdown{ display:none !important; }
+
+/* Dedicated subcategory panel (appears UNDER the category pills, pushes content down) */
+body.powerful-sites-page .subcat-panel{
+  display:none;
+  position: absolute;
+  z-index: 30;
+  padding: 8px 8px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.76);
+  border: 1px solid rgba(59,130,246,0.32);
+  box-shadow: 0 14px 38px rgba(17, 24, 39, 0.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  /* width is set in JS to match the parent chip */
+  width: auto;
+}
+
+body.powerful-sites-page .subcat-panel.is-open{
+  display:flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+/* Small connector “stem” from the parent chip to the panel */
+body.powerful-sites-page .subcat-panel.is-open::before{
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 10px;
+  background: rgba(59,130,246,0.40);
+  border-radius: 99px;
+}
+
+/* Label above the subcategory pills */
+body.powerful-sites-page .subcat-panel .subcat-label{
+  font-size: 0.85rem;
+  font-weight: 650;
+  color: rgba(17,24,39,0.72);
+  padding: 2px 6px 6px;
+}
+
+/* Slightly smaller subcategory chips so they read as nested */
+body.powerful-sites-page .subcat-panel .chip{
+  font-size: 0.80rem;
+  padding: 0.30rem 0.62rem;
+  width: 100%;
+  white-space: normal;
+}
+
+/* Keep card tags (AI/Free etc) as compact pills */
+body.powerful-sites-page .tile__tags .chip{
+  padding: 0.18rem 0.55rem;
+  font-size: 0.78rem;
+}
+
+
+/* Center text inside pills (parent + sub) */
+body.powerful-sites-page .chip{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+
+/* Subcategory dropdown: anchored to active chip, but reserves space via spacer */
+body.powerful-sites-page .subcat-slot{
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 0; /* absolute panel overlaps upward into the chip row for seamless attachment */
+  overflow: visible;
+}
+
+body.powerful-sites-page .subcat-spacer{
+  height: 0;
+}
+
+/* The panel is absolutely positioned within the slot */
+body.powerful-sites-page .subcat-panel{
+  position: absolute;
+  z-index: 20;
+}
+
+/* Seamless connection: when a chip is open, flatten its bottom radius */
+body.powerful-sites-page a.chip.chip-open{
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+/* Panel top should attach to chip: remove top border + flatten top radius */
+body.powerful-sites-page .subcat-panel.is-open{
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-top: none !important;
+  padding-top: 10px; /* keep breathing room without a top border */
+  margin-top: 0;
+}
+
+/* Remove the old "stem" line when using seamless attachment */
+body.powerful-sites-page .subcat-panel.is-open::before{
+  display: none !important;
+}
+
+/* Make the panel visually narrower/compact */
+body.powerful-sites-page .subcat-panel .subcat-label{
+  text-align: center;
+}
+
+body.powerful-sites-page .subcat-panel .chip{
+  width: 100%;
+  justify-content: center;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.7rem;
+}
+
+
+/* --- Subcategory dropdown refinements: seamless + smooth --- */
+body.powerful-sites-page a.chip.chip-open{
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-bottom: 0 !important;
+}
+
+body.powerful-sites-page .subcat-panel{
+  /* ensure panel feels attached and doesn't "float" */
+  border-top: 0 !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  box-sizing: border-box;
+  will-change: transform, opacity;
+  transform: translate3d(0,-6px,0);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+body.powerful-sites-page .subcat-panel.is-open{
+  transform: translate3d(0,0,0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Make the whole refinement box never wider than its parent chip (JS sets width = chip width) */
+body.powerful-sites-page .subcat-panel.is-open{
+  max-width: 100%;
+}
+
+/* Keep child chips compact */
+body.powerful-sites-page .subcat-panel .chip{
+  font-size: 0.82rem;
+  padding: 0.32rem 0.65rem;
+}
+
+
+/* --- Subcategory refine panel: seamless attached dropdown --- */
+body.powerful-sites .chipwrap.chip--with-sub > a.chip{
+  min-width: 170px; /* ensures short labels (e.g., Other) don't create a too-narrow dropdown */
+  justify-content: center;
+  text-align: center;
+}
+
+body.powerful-sites a.chip.chip-open{
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: transparent; /* seamless join with panel */
+}
+
+body.powerful-sites .subcat-panel{
+  box-sizing: border-box;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  border-top: 0;                 /* seamless join */
+  border-top-left-radius: 0;     /* seamless join */
+  border-top-right-radius: 0;    /* seamless join */
+  padding: 10px 10px 12px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.10);
+  will-change: transform, opacity, left, top;
+}
+
+/* Keep it visually attached even with sub-pixel rounding */
+body.powerful-sites .subcat-panel.is-open{
+  margin-top: -1px;
+}
+
+/* Make inner refine chips stack cleanly and fill the panel width */
+body.powerful-sites .subcat-panel .chip{
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  font-size: .85rem; /* slightly smaller than parent */
+}
+
+/* Match hover accent and avoid purple remnants */
+body.powerful-sites .subcat-panel .chip:hover{
+  border-color: var(--accent-border);
+}
+
+
+/* ---- FIX: prevent 'Other' dropdown squashing + improve vertical chips ---- */
+body.powerful-sites-page nav.catnav a.chip.has-subcats{
+  min-width: 170px;
+  justify-content: center;
+  text-align: center;
+}
+body.powerful-sites-page .subcat-panel{
+  box-sizing: border-box;
+}
+body.powerful-sites-page .subcat-panel .chip{
+  display: block;
+  width: 100%;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 10px 12px;
+  line-height: 1.2;
+  white-space: normal;
+  text-align: center;
+}
+body.powerful-sites-page .subcat-panel .chip + .chip{
+  margin-top: 10px;
+}

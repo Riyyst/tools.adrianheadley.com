@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Privacy | Tools</title>
+<meta name="description" content="Privacy information for tools.adrianheadley.com: browser-only tools, no analytics, no tracking cookies and no stored tool data."/>
+<meta name="theme-color" content="#f5f5f7"/>
+<style>
+:root{
+  --bg:#f5f5f7;
+  --text:#111827;
+  --muted:#4b5563;
+  --accent:#2563eb;
+  --accent-soft:rgba(37,99,235,.08);
+  --border:#dfe3e8;
+  --max:940px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;overflow-x:hidden}
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+  color:var(--text);
+  font:16px/1.72 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:none}
+main{flex:1}
+.container{width:min(var(--max),100% - 3rem);margin-inline:auto}
+.skip-link{
+  position:absolute;
+  left:-999px;
+  top:.5rem;
+  z-index:100;
+  padding:.45rem .75rem;
+  border-radius:999px;
+  background:#111827;
+  color:#fff;
+}
+.skip-link:focus{left:.5rem}
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:60;
+  border-bottom:1px solid rgba(148,163,184,.28);
+  background:rgba(248,250,252,.98);
+}
+.mast{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:58px;
+  padding:.55rem 0;
+}
+.nav-list{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.55rem;
+  flex-wrap:wrap;
+  list-style:none;
+  margin:0;
+  padding:0;
+  font-size:.86rem;
+}
+.nav-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:.3rem .8rem;
+  border:1px solid transparent;
+  border-radius:999px;
+  color:var(--muted);
+  transition:background .16s,color .16s,transform .12s,border-color .16s;
+}
+.nav-link:hover,.nav-link:focus-visible{
+  border-color:rgba(148,163,184,.26);
+  background:rgba(148,163,184,.18);
+  color:var(--text);
+  transform:translateY(-1px);
+}
+.nav-link.active{
+  border-color:rgba(37,99,235,.18);
+  background:var(--accent-soft);
+  color:var(--accent);
+}
+.intro{
+  padding:2.6rem 0 2.4rem;
+  text-align:center;
+}
+.intro h1{
+  margin:0 0 .8rem;
+  font-size:clamp(2.1rem,3vw,2.6rem);
+  line-height:1.15;
+  letter-spacing:-.03em;
+  font-weight:750;
+}
+.intro p{
+  max-width:700px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:.96rem;
+  font-weight:500;
+}
+.privacy-section{padding:2.4rem 0 4rem}
+.privacy-content{padding:0}
+.section-heading{
+  margin:1.7rem 0 .55rem;
+  padding-bottom:.42rem;
+  border-bottom:1px solid var(--border);
+}
+.section-heading:first-child{margin-top:0}
+.section-heading h2{
+  margin:0;
+  font-size:1.12rem;
+  line-height:1.3;
+  font-weight:800;
+  letter-spacing:-.01em;
+}
+.privacy-content p{
+  margin:.65rem 0 0;
+  color:var(--muted);
+}
+.privacy-content strong{color:var(--text)}
+.privacy-content ul{
+  margin:.8rem 0 0;
+  padding-left:1.3rem;
+  list-style:disc;
+}
+.privacy-content li{
+  margin:.5rem 0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  color:var(--muted);
+}
+.privacy-content li::marker{color:var(--accent)}
+.privacy-content li strong{color:var(--text)}
+.last-updated{
+  margin-top:1.8rem!important;
+  text-align:center;
+  font-size:.88rem;
+}
+.site-footer{
+  margin-top:auto;
+  padding:1.6rem 1.5rem 1.8rem;
+  border-top:1px solid rgba(148,163,184,.3);
+  background:rgba(248,250,252,.72);
+  color:var(--muted);
+  font-size:.85rem;
+}
+.footer-inner{text-align:center}
+.footer-inner p{margin:0}
+.footer-links{
+  display:flex;
+  justify-content:center;
+  gap:.45rem;
+  flex-wrap:wrap;
+  margin-top:.45rem;
+  font-size:.82rem;
+}
+.footer-links a{
+  padding:.25rem .55rem;
+  border-radius:999px;
+  color:var(--muted);
+  transition:background .16s,color .16s,transform .12s;
+}
+.footer-links a:hover{
+  background:rgba(148,163,184,.16);
+  color:var(--accent);
+  transform:translateY(-1px);
+}
+@media(max-width:760px){
+  .container{width:min(100% - 2rem,var(--max))}
+  .nav-list{gap:.25rem}
+  .nav-link{padding:.28rem .65rem}
+  .intro{padding:2rem 0 2.1rem}
+  .privacy-section{padding:1.6rem 0 3rem}
+}
+</style>
+
+<link rel="icon" href="../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../index.html" class="tools-global-nav-link">Home</a>
+      <a href="tools.html" class="tools-global-nav-link">Tools</a>
+      <a href="toolpages/powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1>Privacy</h1>
+      <p>No cookies, no analytics, no tracking and no stored tool data.</p>
+    </div>
+  </section>
+
+  <section class="privacy-section">
+    <div class="container privacy-content">
+      <div class="section-heading">
+        <h2>Our Commitment</h2>
+      </div>
+      <p>
+        Welcome to <strong>tools.adrianheadley.com</strong>. Privacy is built into the way
+        the site works. The tools process information locally inside your browser rather
+        than sending it elsewhere.
+      </p>
+
+      <div class="section-heading">
+        <h2>Browser-Only Processing</h2>
+      </div>
+      <p>
+        All tools hosted on tools.adrianheadley.com run entirely in your browser. Text,
+        images, documents and other information used within the tools are processed on
+        your device.
+      </p>
+      <ul>
+        <li><strong>No processing servers</strong> — No separate server receives or processes your tool inputs.</li>
+        <li><strong>Website hosting only</strong> — The server only delivers the HTML, CSS, JavaScript and other files needed to open the website.</li>
+        <li><strong>No uploads</strong> — Files opened in supported tools remain on your device unless a tool clearly links to an independent external service.</li>
+        <li><strong>No retained tool data</strong> — Information entered into the tools is not saved, logged or stored by tools.adrianheadley.com.</li>
+      </ul>
+
+      <div class="section-heading">
+        <h2>Cookies, Analytics and Tracking</h2>
+      </div>
+      <ul>
+        <li><strong>No cookies</strong> — The website does not use cookies for analytics, advertising, personalisation or tracking.</li>
+        <li><strong>No analytics</strong> — No analytics service is used to monitor visitors or measure individual behaviour.</li>
+        <li><strong>No tracking</strong> — No tracking pixels, fingerprinting scripts or cross-site identifiers are included.</li>
+        <li><strong>No advertising profiles</strong> — User activity is not used to create profiles or target advertising.</li>
+        <li><strong>No sale or sharing of data</strong> — Tool data is not collected, so it cannot be sold, rented or shared.</li>
+      </ul>
+
+      <div class="section-heading">
+        <h2>Open-Source and Inspectable Code</h2>
+      </div>
+      <p>
+        The client-side code is openly accessible and can be inspected. This allows users
+        to review how each tool works and confirm that processing takes place locally in
+        the browser.
+      </p>
+
+      <div class="section-heading">
+        <h2>Local Browser Storage</h2>
+      </div>
+      <p>
+        Some tools may use temporary browser memory or local browser storage when needed
+        for a feature, such as retaining an in-progress setting or locally created wallet.
+        This information remains under the control of your browser and is not transmitted
+        to tools.adrianheadley.com. Clearing your browser data removes it.
+      </p>
+
+      <div class="section-heading">
+        <h2>External Websites</h2>
+      </div>
+      <p>
+        The Powerful Websites directory and some tool pages may contain links to independent
+        third-party websites. Those websites are separate from tools.adrianheadley.com and
+        may use their own servers, cookies, analytics or data practices. Review their privacy
+        policies before using them.
+      </p>
+
+      <div class="section-heading">
+        <h2>Accounts and Personal Information</h2>
+      </div>
+      <p>
+        No account is required to use the hosted tools. tools.adrianheadley.com does not ask
+        for names, email addresses, payment details or other personal information to use the
+        tool collection.
+      </p>
+
+      <div class="section-heading">
+        <h2>Changes to This Page</h2>
+      </div>
+      <p>
+        This page may be updated when the website changes. Any future feature that changes
+        how information is handled will be explained clearly before it is introduced.
+      </p>
+
+      <p class="last-updated"><em>Last updated: June 2026</em></p>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+<script src="../Assets/site-shell.js"></script>
+</body>
+</html>

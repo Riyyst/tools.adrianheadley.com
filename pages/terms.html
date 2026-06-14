@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Terms | Tools</title>
+<meta name="description" content="Terms of Use for tools.adrianheadley.com, including browser-only tools, appropriate use, third-party links, disclaimers and open-source code."/>
+<meta name="theme-color" content="#f5f5f7"/>
+<style>
+:root{
+  --bg:#f5f5f7;
+  --text:#111827;
+  --muted:#4b5563;
+  --accent:#2563eb;
+  --accent-soft:rgba(37,99,235,.08);
+  --border:#dfe3e8;
+  --max:940px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;overflow-x:hidden}
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+  color:var(--text);
+  font:16px/1.72 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:none}
+main{flex:1}
+.container{width:min(var(--max),100% - 3rem);margin-inline:auto}
+
+.skip-link{
+  position:absolute;
+  left:-999px;
+  top:.5rem;
+  z-index:100;
+  padding:.45rem .75rem;
+  border-radius:999px;
+  background:#111827;
+  color:#fff;
+}
+.skip-link:focus{left:.5rem}
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:60;
+  border-bottom:1px solid rgba(148,163,184,.28);
+  background:rgba(248,250,252,.98);
+}
+.mast{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:58px;
+  padding:.55rem 0;
+}
+.nav-list{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.55rem;
+  flex-wrap:wrap;
+  list-style:none;
+  margin:0;
+  padding:0;
+  font-size:.86rem;
+}
+.nav-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:.3rem .8rem;
+  border:1px solid transparent;
+  border-radius:999px;
+  color:var(--muted);
+  transition:background .16s,color .16s,transform .12s,border-color .16s;
+}
+.nav-link:hover,.nav-link:focus-visible{
+  border-color:rgba(148,163,184,.26);
+  background:rgba(148,163,184,.18);
+  color:var(--text);
+  transform:translateY(-1px);
+}
+.nav-link.active{
+  border-color:rgba(37,99,235,.18);
+  background:var(--accent-soft);
+  color:var(--accent);
+}
+
+.intro{
+  padding:2.6rem 0 2.4rem;
+  text-align:center;
+}
+.intro h1{
+  margin:0 0 .8rem;
+  font-size:clamp(2.1rem,3vw,2.6rem);
+  line-height:1.15;
+  letter-spacing:-.03em;
+  font-weight:750;
+}
+.intro p{
+  max-width:700px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:.96rem;
+  font-weight:500;
+}
+
+.terms-section{padding:2.4rem 0 4rem}
+.terms-content{padding:0}
+
+.section-heading{
+  margin:1.7rem 0 .55rem;
+  padding-bottom:.42rem;
+  border-bottom:1px solid var(--border);
+}
+.section-heading:first-child{margin-top:0}
+.section-heading h2{
+  margin:0;
+  font-size:1.12rem;
+  line-height:1.3;
+  font-weight:800;
+  letter-spacing:-.01em;
+}
+
+.terms-content p{
+  margin:.65rem 0 0;
+  color:var(--muted);
+}
+.terms-content strong{color:var(--text)}
+
+.terms-content ul{
+  margin:.8rem 0 0;
+  padding-left:1.3rem;
+  list-style:disc;
+}
+.terms-content li{
+  margin:.5rem 0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  color:var(--muted);
+}
+.terms-content li::marker{color:var(--accent)}
+.terms-content li strong{color:var(--text)}
+
+.last-updated{
+  margin-top:1.8rem!important;
+  text-align:center;
+  font-size:.88rem;
+}
+
+.site-footer{
+  margin-top:auto;
+  padding:1.6rem 1.5rem 1.8rem;
+  border-top:1px solid rgba(148,163,184,.3);
+  background:rgba(248,250,252,.72);
+  color:var(--muted);
+  font-size:.85rem;
+}
+.footer-inner{text-align:center}
+.footer-inner p{margin:0}
+.footer-links{
+  display:flex;
+  justify-content:center;
+  gap:.45rem;
+  flex-wrap:wrap;
+  margin-top:.45rem;
+  font-size:.82rem;
+}
+.footer-links a{
+  padding:.25rem .55rem;
+  border-radius:999px;
+  color:var(--muted);
+  transition:background .16s,color .16s,transform .12s;
+}
+.footer-links a:hover{
+  background:rgba(148,163,184,.16);
+  color:var(--accent);
+  transform:translateY(-1px);
+}
+
+@media(max-width:760px){
+  .container{width:min(100% - 2rem,var(--max))}
+  .nav-list{gap:.25rem}
+  .nav-link{padding:.28rem .65rem}
+  .intro{padding:2rem 0 2.1rem}
+  .terms-section{padding:1.6rem 0 3rem}
+}
+</style>
+
+<link rel="icon" href="../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../index.html" class="tools-global-nav-link">Home</a>
+      <a href="tools.html" class="tools-global-nav-link">Tools</a>
+      <a href="toolpages/powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1>Terms of Use</h1>
+      <p>Clear terms for using tools.adrianheadley.com and its browser-based utilities.</p>
+    </div>
+  </section>
+
+  <section class="terms-section">
+    <div class="container terms-content">
+      <div class="section-heading">
+        <h2>Acceptance</h2>
+      </div>
+      <p>
+        By accessing or using <strong>tools.adrianheadley.com</strong> (the “Site”),
+        you agree to these Terms of Use. If you do not agree, please do not use the Site.
+      </p>
+
+      <div class="section-heading">
+        <h2>How the Tools Work</h2>
+      </div>
+      <p>
+        The tools hosted on the Site are designed to run locally inside your browser.
+        The hosting server delivers the website files but does not process or retain the
+        text, files or other information you enter into the hosted tools.
+      </p>
+      <ul>
+        <li><strong>Local processing</strong> — Tool inputs and outputs are handled on your device.</li>
+        <li><strong>No stored tool data</strong> — The Site does not save or retain information entered into the hosted tools.</li>
+        <li><strong>No account required</strong> — The hosted tools can be used without creating an account.</li>
+        <li><strong>Your responsibility</strong> — You are responsible for reviewing outputs before relying on or sharing them.</li>
+      </ul>
+
+      <div class="section-heading">
+        <h2>Appropriate Use</h2>
+      </div>
+      <p>
+        The Site provides utilities and links intended for lawful personal or professional
+        use. You are responsible for how you use the tools, their outputs and any linked
+        resources.
+      </p>
+
+      <div class="section-heading">
+        <h2>Prohibited Activity</h2>
+      </div>
+      <ul>
+        <li><strong>No illegal misuse</strong> — Do not use the Site or its tools for unlawful purposes or to assist wrongdoing.</li>
+        <li><strong>No security attacks</strong> — Do not attempt unauthorised access, introduce malware, disrupt hosting, or interfere with the Site’s availability.</li>
+        <li><strong>No abusive automated access</strong> — Do not scrape, crawl or request pages at a volume that harms the Site or its hosting service.</li>
+        <li><strong>No misleading representation</strong> — Do not falsely claim that the Site endorses, certifies or guarantees your work or output.</li>
+      </ul>
+
+      <div class="section-heading">
+        <h2>Open-Source Code</h2>
+      </div>
+      <p>
+        The client-side code is openly accessible for inspection. Where code is published
+        with a licence, reuse and redistribution are governed by that licence. Making code
+        visible does not transfer ownership of branding, written content or other materials
+        unless expressly stated.
+      </p>
+
+      <div class="section-heading">
+        <h2>Third-Party Websites</h2>
+      </div>
+      <p>
+        The Powerful Websites directory and some pages link to independent third-party
+        websites. Those websites are not controlled by tools.adrianheadley.com and have
+        their own terms, privacy policies, availability and security practices. You use
+        them at your own discretion.
+      </p>
+
+      <div class="section-heading">
+        <h2>Accuracy and Suitability</h2>
+      </div>
+      <p>
+        The Site and its tools are provided for general utility and convenience. Outputs
+        may contain errors or may not suit every purpose. You should independently verify
+        important results, particularly where financial, legal, medical, safety or other
+        significant decisions are involved.
+      </p>
+
+      <div class="section-heading">
+        <h2>Availability and Changes</h2>
+      </div>
+      <p>
+        Tools, links and features may be added, changed, suspended or removed at any time.
+        The Site may occasionally be unavailable because of maintenance, hosting issues,
+        browser compatibility or circumstances outside reasonable control.
+      </p>
+
+      <div class="section-heading">
+        <h2>Disclaimers</h2>
+      </div>
+      <p>
+        To the maximum extent permitted by law, the Site and its tools are provided on an
+        <em>“as is”</em> and <em>“as available”</em> basis without warranties of accuracy,
+        reliability, availability, security or fitness for a particular purpose.
+      </p>
+
+      <div class="section-heading">
+        <h2>Limitation of Liability</h2>
+      </div>
+      <p>
+        To the maximum extent permitted by law, tools.adrianheadley.com and its operator
+        will not be liable for indirect, incidental, special, consequential or exemplary
+        losses arising from use of, inability to use, or reliance on the Site, its tools,
+        outputs or external links.
+      </p>
+
+      <div class="section-heading">
+        <h2>Nothing Excludes Legal Rights</h2>
+      </div>
+      <p>
+        Nothing in these Terms excludes or limits liability where doing so would be unlawful,
+        including liability that cannot be excluded under applicable consumer protection law.
+      </p>
+
+      <div class="section-heading">
+        <h2>Governing Law</h2>
+      </div>
+      <p>
+        These Terms are governed by the laws of England and Wales. Any dispute will be handled
+        by the courts of England and Wales, except where applicable law gives you the right to
+        bring proceedings elsewhere.
+      </p>
+
+      <div class="section-heading">
+        <h2>Updates</h2>
+      </div>
+      <p>
+        These Terms may be revised as the Site changes or to reflect legal requirements.
+        Updated terms will be posted on this page with a revised date.
+      </p>
+
+      <p class="last-updated"><em>Last updated: June 2026</em></p>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+<script src="../Assets/site-shell.js"></script>
+</body>
+</html>

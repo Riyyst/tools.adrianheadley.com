@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Tools | Fake Information Generator</title>
+<meta content="Generate rich, varied placeholder identities. All client-side." name="description"/>
+<meta content="#f5f5f7" name="theme-color"/>
+
+<style>
+    :root{
+      --bg:#f5f5f7;
+      --bg-alt:#ffffff;
+      --text:#111827;
+      --text-soft:#4b5563;
+      --accent:#2563eb;
+      --accent-hover:#1d4ed8;
+      --accent-soft:rgba(37,99,235,.08);
+      --border-subtle:#e5e7eb;
+      --border-strong:#d1d5db;
+      --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+      --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+      --radius:20px;
+      --radius-pill:999px;
+      --max-w:980px;
+      --gap:14px;
+      --stack-gap:14px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%}
+    body{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      background:var(--bg);
+      color:var(--text);
+      font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    main{flex:1}
+    .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+    .skip-link{
+      position:absolute;
+      left:-999px;
+      top:.5rem;
+      padding:.45rem .75rem;
+      background:#111827;
+      color:#f9fafb;
+      z-index:100;
+      border-radius:var(--radius-pill);
+      font-size:.85rem;
+    }
+    .skip-link:focus{left:.5rem}
+
+    header.site-header{
+      position:sticky;
+      top:0;
+      z-index:50;
+      border-bottom:1px solid rgba(148,163,184,.28);
+      backdrop-filter:blur(16px);
+      background:rgba(248,250,252,.95);
+    }
+    .mast{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:58px;
+      padding:.55rem 0;
+    }
+    .nav__list{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:.55rem;
+      list-style:none;
+      margin:0;
+      padding:0;
+      flex-wrap:wrap;
+      font-size:.86rem;
+    }
+    .nav__link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:.3rem .8rem;
+      border-radius:var(--radius-pill);
+      color:var(--text-soft);
+      border:1px solid transparent;
+      transition:background .16s,color .16s,transform .12s,border-color .16s;
+    }
+    .nav__link:hover,.nav__link:focus-visible{
+      background:rgba(148,163,184,.18);
+      color:var(--text);
+      transform:translateY(-1px);
+      text-decoration:none;
+      border-color:rgba(148,163,184,.26);
+    }
+    .nav__link--highlight{background:var(--accent-soft);color:var(--accent);border-color:rgba(37,99,235,.18)}
+
+    .intro{
+      text-align:center;
+      padding:2.6rem 0 2.4rem;
+    }
+    .intro__title{
+      font-size:clamp(2.1rem,3vw,2.6rem);
+      line-height:1.15;
+      margin:0 0 .8rem;
+      font-weight:750;
+      letter-spacing:-.03em;
+    }
+    .intro__subtitle{
+      max-width:620px;
+      margin:0 auto;
+      color:var(--text-soft);
+      font-size:.96rem;
+      font-weight:500;
+    }
+
+    .tool{padding:2.4rem 0 4rem}
+    .card{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--border-subtle);
+      border-radius:24px;
+      box-shadow:var(--shadow-soft);
+      padding:clamp(1.2rem,3vw,1.7rem);
+      max-width:980px;
+      margin:0 auto;
+      transition:box-shadow .16s,transform .16s,border-color .16s;
+    }
+    .card:hover{box-shadow:var(--shadow-lift);border-color:rgba(37,99,235,.18)}
+
+    .form-row{
+      display:flex;
+      align-items:end;
+      justify-content:center;
+      gap:.75rem;
+      flex-wrap:wrap;
+      margin:0 auto;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:.35rem;
+      min-width:min(100%,280px);
+    }
+    label{
+      display:block;
+      margin:0;
+      color:var(--text-soft);
+      font-size:.85rem;
+      font-weight:700;
+      text-align:center;
+    }
+
+    .select-wrap{
+      display:inline-flex;
+      max-width:100%;
+      position:relative;
+    }
+    select.select{
+      width:180px;
+      min-width:0;
+      border-radius:14px;
+      border:1px solid var(--border-strong);
+      background:#ffffff;
+      color:var(--text);
+      outline:none;
+      transition:border-color .16s,box-shadow .16s,background .16s;
+      font:inherit;
+      padding:.78rem 1rem;
+      text-align:center;
+      text-align-last:center;
+      appearance:none;
+    }
+    select.select option{
+      text-align:center;
+      color:#111827;
+      background:#ffffff;
+    }
+    select.select:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(37,99,235,.12);
+    }
+
+    .btn,.btn--primary{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.55rem;
+      padding:.65rem 1.3rem;
+      border-radius:var(--radius-pill);
+      border:1px solid transparent;
+      background:var(--accent);
+      color:#f9fafb;
+      font-size:.86rem;
+      font-weight:600;
+      cursor:pointer;
+      text-decoration:none;
+      box-shadow:none;
+      transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+      font-family:inherit;
+      min-height:44px;
+    }
+    .btn:hover:not([disabled]),.btn--primary:hover:not([disabled]){
+      transform:translateY(-1px);
+      background:var(--accent-hover);
+      text-decoration:none;
+      box-shadow:0 10px 25px rgba(37,99,235,.18);
+    }
+    .btn:active:not([disabled]),.btn--primary:active:not([disabled]){transform:translateY(0)}
+
+    .hidden{display:none!important}
+
+    .record{
+      margin-top:1.4rem;
+      border-radius:20px;
+      border:1px solid var(--border-subtle);
+      background:#f8fafc;
+      padding:1rem;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
+    }
+    .sections{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:var(--gap);
+    }
+    .section{
+      border-radius:18px;
+      background:#ffffff;
+      border:1px solid var(--border-subtle);
+      padding:1rem;
+      min-width:0;
+    }
+    .section h3{
+      margin:0 0 .8rem;
+      font-size:1rem;
+      color:var(--text);
+      font-weight:750;
+      text-align:center;
+    }
+    .section .grid{
+      display:grid;
+      grid-template-columns:minmax(100px,.45fr) minmax(0,1fr);
+      gap:.55rem .7rem;
+      align-items:start;
+    }
+    .label{
+      color:var(--text-soft);
+      font-size:.84rem;
+      font-weight:700;
+    }
+    .value{
+      color:var(--text);
+      font-size:.9rem;
+      font-weight:600;
+      min-width:0;
+      overflow-wrap:anywhere;
+    }
+    .link-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:.35rem .7rem;
+      border-radius:var(--radius-pill);
+      border:1px solid rgba(37,99,235,.18);
+      background:var(--accent-soft);
+      color:var(--accent);
+      font-weight:700;
+      font-size:.83rem;
+    }
+    .link-btn:hover{
+      background:rgba(37,99,235,.12);
+      text-decoration:none;
+    }
+    .error{
+      margin-top:1rem;
+      color:#b91c1c;
+      text-align:center;
+      font-size:.9rem;
+      font-weight:700;
+    }
+
+    footer.site-footer{
+      margin-top:auto;
+      padding:1.6rem 1.5rem 1.8rem;
+      font-size:.85rem;
+      color:var(--text-soft);
+      border-top:1px solid rgba(148,163,184,.3);
+      background:rgba(248,250,252,.72);
+    }
+    .fine{font-size:.95rem;color:var(--text-soft)}
+    .footer-legal{
+      margin-top:.45rem;
+      display:flex;
+      justify-content:center;
+      gap:.45rem;
+      font-size:.82rem;
+      flex-wrap:wrap;
+    }
+    .footer-legal a{
+      color:var(--text-soft);
+      padding:.25rem .55rem;
+      border-radius:var(--radius-pill);
+      transition:background .16s,color .16s,transform .12s;
+    }
+    .footer-legal a:hover{
+      color:var(--accent);
+      background:rgba(148,163,184,.16);
+      text-decoration:none;
+      transform:translateY(-1px);
+    }
+
+    @media (max-width:760px){
+      .container{width:min(100% - 2rem,var(--max-w))}
+      .nav__list{gap:.25rem}
+      .nav__link{padding:.28rem .65rem}
+      .intro{padding:2rem 0 2.1rem}
+      .tool{padding:1.6rem 0 3rem}
+      .form-row{align-items:center;flex-direction:column}
+      .field,select.select,.btn{width:100%;max-width:320px}
+      select.select{min-width:0}
+      .sections{grid-template-columns:1fr}
+      .section .grid{grid-template-columns:1fr;gap:.2rem .7rem}
+      .label{margin-top:.45rem}
+    }
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Fake Information Generator</h1>
+      <p class="intro__subtitle">Generate rich, varied placeholder identities. All client-side.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div aria-label="Fake information generator" class="card" role="region">
+        <div class="form-row">
+          <div class="field">
+            <label for="country">Country</label>
+            <span class="select-wrap"><select class="select" id="country"><option selected="" value="any">Any</option><option value="Afghanistan">Afghanistan</option><option value="Albania">Albania</option><option value="Algeria">Algeria</option><option value="Andorra">Andorra</option><option value="Angola">Angola</option><option value="Antigua and Barbuda">Antigua and Barbuda</option><option value="Argentina">Argentina</option><option value="Armenia">Armenia</option><option value="Australia">Australia</option><option value="Austria">Austria</option><option value="Azerbaijan">Azerbaijan</option><option value="Bahamas">Bahamas</option><option value="Bahrain">Bahrain</option><option value="Bangladesh">Bangladesh</option><option value="Barbados">Barbados</option><option value="Belarus">Belarus</option><option value="Belgium">Belgium</option><option value="Belize">Belize</option><option value="Benin">Benin</option><option value="Bhutan">Bhutan</option><option value="Bolivia">Bolivia</option><option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option><option value="Botswana">Botswana</option><option value="Brazil">Brazil</option><option value="Brunei">Brunei</option><option value="Bulgaria">Bulgaria</option><option value="Burkina Faso">Burkina Faso</option><option value="Burundi">Burundi</option><option value="Cabo Verde">Cabo Verde</option><option value="Cambodia">Cambodia</option><option value="Cameroon">Cameroon</option><option value="Canada">Canada</option><option value="Central African Republic">Central African Republic</option><option value="Chad">Chad</option><option value="Chile">Chile</option><option value="China">China</option><option value="Colombia">Colombia</option><option value="Comoros">Comoros</option><option value="Costa Rica">Costa Rica</option><option value="Croatia">Croatia</option><option value="Cuba">Cuba</option><option value="Cyprus">Cyprus</option><option value="Czechia">Czechia</option><option value="Democratic Republic of the Congo">Democratic Republic of the Congo</option><option value="Denmark">Denmark</option><option value="Djibouti">Djibouti</option><option value="Dominica">Dominica</option><option value="Dominican Republic">Dominican Republic</option><option value="Ecuador">Ecuador</option><option value="Egypt">Egypt</option><option value="El Salvador">El Salvador</option><option value="Equatorial Guinea">Equatorial Guinea</option><option value="Eritrea">Eritrea</option><option value="Estonia">Estonia</option><option value="Eswatini">Eswatini</option><option value="Ethiopia">Ethiopia</option><option value="Fantasy">Fantasy</option><option value="Federated States of Micronesia">Federated States of Micronesia</option><option value="Fiji">Fiji</option><option value="Finland">Finland</option><option value="France">France</option><option value="Gabon">Gabon</option><option value="Gambia">Gambia</option><option value="Georgia">Georgia</option><option value="Germany">Germany</option><option value="Ghana">Ghana</option><option value="Greece">Greece</option><option value="Grenada">Grenada</option><option value="Guatemala">Guatemala</option><option value="Guinea">Guinea</option><option value="Guinea-Bissau">Guinea-Bissau</option><option value="Guyana">Guyana</option><option value="Haiti">Haiti</option><option value="Honduras">Honduras</option><option value="Hungary">Hungary</option><option value="Iceland">Iceland</option><option value="India">India</option><option value="Indonesia">Indonesia</option><option value="Iran">Iran</option><option value="Iraq">Iraq</option><option value="Ireland">Ireland</option><option value="Israel">Israel</option><option value="Italy">Italy</option><option value="Ivory Coast">Ivory Coast</option><option value="Jamaica">Jamaica</option><option value="Japan">Japan</option><option value="Jordan">Jordan</option><option value="Kazakhstan">Kazakhstan</option><option value="Kenya">Kenya</option><option value="Kiribati">Kiribati</option><option value="Kosovo">Kosovo</option><option value="Kuwait">Kuwait</option><option value="Kyrgyzstan">Kyrgyzstan</option><option value="Laos">Laos</option><option value="Latvia">Latvia</option><option value="Lebanon">Lebanon</option><option value="Lesotho">Lesotho</option><option value="Liberia">Liberia</option><option value="Libya">Libya</option><option value="Liechtenstein">Liechtenstein</option><option value="Lithuania">Lithuania</option><option value="Luxembourg">Luxembourg</option><option value="Madagascar">Madagascar</option><option value="Malawi">Malawi</option><option value="Malaysia">Malaysia</option><option value="Maldives">Maldives</option><option value="Mali">Mali</option><option value="Malta">Malta</option><option value="Marshall Islands">Marshall Islands</option><option value="Mauritania">Mauritania</option><option value="Mauritius">Mauritius</option><option value="Mexico">Mexico</option><option value="Moldova">Moldova</option><option value="Monaco">Monaco</option><option value="Mongolia">Mongolia</option><option value="Montenegro">Montenegro</option><option value="Morocco">Morocco</option><option value="Mozambique">Mozambique</option><option value="Myanmar">Myanmar</option><option value="Namibia">Namibia</option><option value="Nauru">Nauru</option><option value="Nepal">Nepal</option><option value="Netherlands">Netherlands</option><option value="New Zealand">New Zealand</option><option value="Nicaragua">Nicaragua</option><option value="Niger">Niger</option><option value="Nigeria">Nigeria</option><option value="North Korea">North Korea</option><option value="North Macedonia">North Macedonia</option><option value="Norway">Norway</option><option value="Oman">Oman</option><option value="Pakistan">Pakistan</option><option value="Palau">Palau</option><option value="Panama">Panama</option><option value="Papua New Guinea">Papua New Guinea</option><option value="Paraguay">Paraguay</option><option value="Peru">Peru</option><option value="Philippines">Philippines</option><option value="Poland">Poland</option><option value="Portugal">Portugal</option><option value="Qatar">Qatar</option><option value="Republic of the Congo">Republic of the Congo</option><option value="Romania">Romania</option><option value="Russia">Russia</option><option value="Rwanda">Rwanda</option><option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option><option value="Saint Lucia">Saint Lucia</option><option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option><option value="Samoa">Samoa</option><option value="San Marino">San Marino</option><option value="Sao Tome and Principe">Sao Tome and Principe</option><option value="Saudi Arabia">Saudi Arabia</option><option value="Senegal">Senegal</option><option value="Serbia">Serbia</option><option value="Seychelles">Seychelles</option><option value="Sierra Leone">Sierra Leone</option><option value="Singapore">Singapore</option><option value="Slovakia">Slovakia</option><option value="Slovenia">Slovenia</option><option value="Solomon Islands">Solomon Islands</option><option value="Somalia">Somalia</option><option value="South Africa">South Africa</option><option value="South Korea">South Korea</option><option value="South Sudan">South Sudan</option><option value="Spain">Spain</option><option value="Sri Lanka">Sri Lanka</option><option value="Sudan">Sudan</option><option value="Suriname">Suriname</option><option value="Sweden">Sweden</option><option value="Switzerland">Switzerland</option><option value="Syria">Syria</option><option value="Taiwan">Taiwan</option><option value="Tajikistan">Tajikistan</option><option value="Tanzania">Tanzania</option><option value="Thailand">Thailand</option><option value="Timor-Leste">Timor-Leste</option><option value="Togo">Togo</option><option value="Tonga">Tonga</option><option value="Trinidad and Tobago">Trinidad and Tobago</option><option value="Tunisia">Tunisia</option><option value="Turkey">Turkey</option><option value="Turkmenistan">Turkmenistan</option><option value="Tuvalu">Tuvalu</option><option value="Uganda">Uganda</option><option value="Ukraine">Ukraine</option><option value="United Arab Emirates">United Arab Emirates</option><option value="United Kingdom">United Kingdom</option><option value="United States">United States</option><option value="Uruguay">Uruguay</option><option value="Uzbekistan">Uzbekistan</option><option value="Vanuatu">Vanuatu</option><option value="Vatican City">Vatican City</option><option value="Venezuela">Venezuela</option><option value="Vietnam">Vietnam</option><option value="Yemen">Yemen</option><option value="Zambia">Zambia</option><option value="Zimbabwe">Zimbabwe</option></select></span>
+          </div>
+          <button class="btn btn--primary pulse" id="generate" type="button">Generate</button>
+        </div>
+
+        <article aria-live="polite" class="record hidden" id="record"></article>
+        <div class="error hidden" id="error"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- RIYST_INLINE_SCRIPT_START -->
+<script>
+(function(){'use strict';
+  document.addEventListener('DOMContentLoaded', function(){
+
+    // Utilities
+    const R = (arr)=>arr[Math.floor(Math.random()*arr.length)];
+    const RI = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+    const pad2 = (n)=>String(n).padStart(2,'0');
+    const AtoZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    // Country list
+    const COUNTRY_LIST = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czechia", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fantasy", "Federated States of Micronesia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Ivory Coast", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Republic of the Congo", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"];
+
+    // Country -> language (for name sets)
+    const LANG = {
+      // English world
+      "United States":"english","United Kingdom":"english","Ireland":"english","Canada":"english","Australia":"english","New Zealand":"english",
+      // Western Europe
+      "France":"french","Belgium":"french","Luxembourg":"french","Switzerland":"german","Germany":"german","Austria":"german",
+      "Spain":"spanish","Mexico":"spanish","Argentina":"spanish","Colombia":"spanish","Chile":"spanish","Peru":"spanish","Uruguay":"spanish","Venezuela":"spanish","Ecuador":"spanish","Bolivia":"spanish","Paraguay":"spanish","Panama":"spanish","Costa Rica":"spanish","Guatemala":"spanish","Honduras":"spanish","El Salvador":"spanish","Nicaragua":"spanish","Dominican Republic":"spanish",
+      "Portugal":"portuguese","Brazil":"portuguese","Angola":"portuguese","Mozambique":"portuguese",
+      "Italy":"italian","San Marino":"italian","Vatican City":"italian","Netherlands":"dutch",
+      // Central & Eastern
+      "Poland":"polish","Czechia":"czech","Slovakia":"czech","Hungary":"hungarian","Romania":"romanian",
+      "Russia":"russian","Belarus":"russian","Ukraine":"ukrainian","Serbia":"serbian","Bosnia and Herzegovina":"serbian","Croatia":"croatian","Slovenia":"croatian","North Macedonia":"serbian","Bulgaria":"bulgarian",
+      // Greece/Turkey
+      "Greece":"greek","Cyprus":"greek","Turkey":"turkish",
+      // Middle East & North Africa
+      "Saudi Arabia":"arabic","United Arab Emirates":"arabic","Qatar":"arabic","Bahrain":"arabic","Kuwait":"arabic","Oman":"arabic","Yemen":"arabic",
+      "Jordan":"arabic","Lebanon":"arabic","Syria":"arabic","Iraq":"arabic","Egypt":"arabic","Morocco":"arabic","Algeria":"arabic","Tunisia":"arabic","Libya":"arabic",
+      "Iran":"persian","Israel":"hebrew",
+      // South & Southeast Asia
+      "India":"hindi","Pakistan":"hindi","Sri Lanka":"tamil","Bangladesh":"bengali","Nepal":"hindi",
+      "Indonesia":"indonesian","Malaysia":"malay","Singapore":"malay","Philippines":"filipino",
+      "Vietnam":"vietnamese","Thailand":"thai",
+      // East Asia
+      "China":"chinese","Taiwan":"chinese","Japan":"japanese","South Korea":"korean","North Korea":"korean",
+      // Africa samples
+      "Kenya":"swahili","Tanzania":"swahili","Uganda":"swahili","Rwanda":"swahili","Burundi":"swahili",
+      "Ethiopia":"amharic","Nigeria":"nigerian","Ghana":"nigerian","Cameroon":"nigerian","Sierra Leone":"nigerian","Liberia":"nigerian"
+    };
+
+    // Name datasets (trimmed but realistic)
+    const NAMES = {
+      english: { male:["James","John","William","Thomas","George","Daniel","David","Michael","Andrew","Christopher","Benjamin","Samuel","Oliver","Jack","Noah","Liam","Ethan","Logan","Lucas","Mason"],
+                 female:["Elizabeth","Mary","Catherine","Emma","Olivia","Ava","Sophia","Isabella","Mia","Charlotte","Amelia","Harper","Emily","Ella","Grace","Lily"],
+                 last:["Smith","Johnson","Brown","Taylor","Anderson","Thomas","Jackson","White","Harris","Martin","Thompson","Walker","King","Wright","Green","Baker","Ward","Turner","Cooper","Hill","Carter","Mitchell"] },
+      french:  { male:["Louis","Arthur","Jules","Hugo","Gabriel","Raphaël","Léo","Lucas","Noé","Paul"], female:["Emma","Louise","Chloé","Inès","Camille","Léa","Zoé","Sarah","Jeanne","Anna"], last:["Dubois","Durand","Lefebvre","Martin","Bernard","Petit","Robert","Richard","Moreau","Laurent"] },
+      german:  { male:["Maximilian","Felix","Lukas","Leon","Jonas","Paul","Noah","Elias","Finn"], female:["Mia","Emma","Lina","Hannah","Marie","Luisa","Amelie"], last:["Müller","Schmidt","Schneider","Fischer","Weber","Wagner","Becker","Hoffmann"] },
+      spanish: { male:["Alejandro","Daniel","Diego","Javier","José","Luis","Manuel","Miguel","Pablo","Sergio","Juan"], female:["Ana","Carmen","Claudia","Daniela","Elena","Isabel","Lucía","María","Marta","Paula","Sofía"], last:["García","Martínez","López","Sánchez","González","Rodríguez","Fernández","Pérez","Gómez","Díaz"] },
+      italian: { male:["Alessandro","Lorenzo","Leonardo","Matteo","Francesco","Andrea","Gabriele"], female:["Sofia","Giulia","Aurora","Alice","Giorgia","Martina","Chiara"], last:["Rossi","Russo","Ferrari","Esposito","Bianchi","Romano","Colombo"] },
+      dutch:   { male:["Daan","Sem","Lucas","Levi","Finn","Milan"], female:["Emma","Julia","Mila","Tess","Sophie","Lotte"], last:["de Jong","Jansen","de Vries","van den Berg","Bakker","van Dijk"] },
+      portuguese:{ male:["João","Miguel","Gabriel","Mateus","Gustavo","Pedro"], female:["Maria","Ana","Beatriz","Carolina","Fernanda"], last:["Silva","Santos","Oliveira","Pereira","Ferreira","Almeida","Costa"] },
+      polish:  { male:["Jakub","Kacper","Antoni","Jan","Szymon","Adam"], female:["Zuzanna","Julia","Maja","Zofia","Hanna"], last:["Nowak","Kowalski","Wiśniewski","Wójcik","Kamiński","Lewandowski"] },
+      romanian:{ male:["Andrei","Mihai","Alexandru","Cristian","Ştefan"], female:["Maria","Elena","Ioana","Ana","Andreea"], last:["Popescu","Ionescu","Stan","Dumitrescu","Popa"] },
+      greek:   { male:["Γεώργιος","Δημήτριος","Νικόλαος","Ιωάννης"], female:["Μαρία","Ελένη","Αναστασία","Γεωργία"], last:["Παπαδόπουλος","Νικολάου","Γεωργίου","Χριστοδούλου"] },
+      turkish: { male:["Mehmet","Mustafa","Ahmet","Ali","Hüseyin","Yusuf"], female:["Fatma","Ayşe","Emine","Hatice","Zeynep","Elif"], last:["Yılmaz","Kaya","Demir","Şahin","Çelik","Öztürk"] },
+      russian: { male:["Александр","Сергей","Дмитрий","Андрей","Алексей","Иван","Максим"], female:["Анна","Екатерина","Ольга","Наталья","Мария"], last:["Иванов","Петров","Смирнов","Кузнецов","Соколов"] },
+      ukrainian:{ male:["Олександр","Андрій","Дмитро","Іван","Максим","Богдан","Сергій"], female:["Софія","Анастасія","Олена","Наталія","Марія","Ірина"], last:["Шевченко","Ковальчук","Бондаренко","Мельник","Кравченко","Бойко"] },
+      czech:   { male:["Jakub","Jan","Tomáš","Lukáš","Petr"], female:["Anna","Eliška","Tereza","Adéla","Karolína"], last:["Novák","Svoboda","Novotný","Dvořák","Černý"] },
+      hungarian:{ male:["Bence","Máté","Levente","Dániel"], female:["Hanna","Luca","Anna","Zsófia"], last:["Nagy","Kovács","Tóth","Szabó"] },
+      arabic:  { male:["محمد","أحمد","علي","عمر","يوسف"], female:["فاطمة","مريم","آية","نور","ليلى"], last:["الخطيب","العتيبي","الزهراني","النجار","الحسيني"] },
+      persian: { male:["علی","محمدرضا","حسین","رضا"], female:["فاطمه","زهرا","نگار","مهسا"], last:["کریمی","محمدی","حسینی","رضایی"] },
+      hebrew:  { male:["דוד","יוסף","נעם","יואב"], female:["מיה","יעל","נועה","תמר"], last:["כהן","לוי","מזרחי","פרץ"] },
+      chinese: "custom", japanese: "custom", korean: "custom",
+      vietnamese: "custom",
+      thai:    { male:["สมชาย","วีรภัทร","นพดล","อนันต์"], female:["สุภาวดี","กมล","พรทิพย์","นลิน"], last:["ศรีสุข","จันทร์เพ็ญ","บุญช่วย","ทองดี"] },
+      hindi:   { male:["आरव","विवान","अर्जुन","आदित्य","राहुल"], female:["अनन्या","रिया","काव्या","नेहा","प्रियंका"], last:["शर्मा","वर्मा","अग्रवाल","गुप्ता","सिंह"] },
+      bengali: { male:["আরিফ","রাহাত","সাব্বির"], female:["সুমাইয়া","নুসরাত","মেহজাবিন"], last:["চৌধুরী","হোসেন","ইসলাম","সরকার"] },
+      tamil:   { male:["அருண்","விக்னேஷ்","முருகன்"], female:["அஞ்சலி","காயத்ரி","லட்சுமி"], last:["சுப்பிரமணியன்","நாராயணன்","ராமச்சந்திரன்"] },
+      indonesian:{ male:["Muhammad","Rizky","Budi","Agus"], female:["Siti","Nurul","Ayu","Dewi"], last:["Saputra","Pratama","Hidayat","Wijaya"] },
+      malay:   { male:["Ahmad","Muhammad","Adam","Hakim"], female:["Siti","Aisyah","Nadia","Hannah"], last:["bin Abdullah","bin Ismail","binti Ahmad","binti Ali"] },
+      filipino:{ male:["Juan","Jose","Mark","Paolo"], female:["Maria","Angelica","Jessa","Jasmine"], last:["Santos","Reyes","Cruz","Bautista","Garcia","Dela Cruz"] },
+      swahili: { male:["Juma","Hassan","Omar","Kelvin"], female:["Aisha","Zainab","Neema","Grace"], last:["Odhiambo","Mwangi","Njoroge","Ochieng","Kimani"] },
+      amharic: { male:["አብርሃም","ዳዊት","ከበደ"], female:["ማሪያም","ሀና","ሰላም"], last:["ተስፋዬ","ገብረ","አለም"] },
+      nigerian:{ male:["Oluwaseun","Emeka","Chinedu","Tunde","Ibrahim"], female:["Chioma","Amina","Ada","Ngozi"], last:["Okafor","Adeyemi","Balogun","Okoye","Oladipo"] }
+    };
+
+    function pickLang(country){ return LANG[country] || "english"; }
+
+    const LOCALITY_STYLE = {
+      "United Kingdom": {language:"English", timezone:"Europe/London", cities:["London","Manchester","Birmingham","Leeds","Edinburgh","Cardiff","Belfast","Bristol"], roads:["High Street","Station Road","Church Street","London Road","Victoria Road","Green Lane","King Street","Queen Street","Mill Lane","Park Road"]},
+      "United States": {language:"English", timezone:"America/New_York", cities:["New York","Los Angeles","Chicago","Houston","Phoenix","Philadelphia","Boston","Seattle","Denver","Washington"], roads:["Main Street","Broadway","Market Street","Elm Street","Maple Avenue","Washington Street","Park Avenue","5th Avenue","Madison Avenue","Cedar Street"]},
+      "Canada": {language:"English / French", timezone:"America/Toronto", cities:["Toronto","Montréal","Vancouver","Calgary","Ottawa","Winnipeg","Québec City","Hamilton"], roads:["Yonge Street","Queen Street","King Street","Rue Sainte-Catherine","Robson Street","Granville Street","Main Street","Bank Street"]},
+      "Australia": {language:"English", timezone:"Australia/Sydney", cities:["Sydney","Melbourne","Brisbane","Perth","Adelaide","Canberra"], roads:["George Street","Collins Street","Queen Street","Elizabeth Street","King William Street","Hay Street","Swanston Street","Pitt Street"]},
+      "New Zealand": {language:"English / Māori", timezone:"Pacific/Auckland", cities:["Auckland","Wellington","Christchurch","Hamilton","Dunedin"], roads:["Queen Street","Lambton Quay","Colombo Street","Victoria Street","George Street","High Street"]},
+      "Ireland": {language:"English / Irish", timezone:"Europe/Dublin", cities:["Dublin","Cork","Galway","Limerick","Waterford"], roads:["O'Connell Street","Grafton Street","Patrick Street","Shop Street","High Street","Main Street"]},
+
+      "France": {language:"French", timezone:"Europe/Paris", cities:["Paris","Marseille","Lyon","Toulouse","Nice","Nantes","Bordeaux","Lille"], roads:["Rue de Rivoli","Avenue Victor Hugo","Boulevard Saint-Germain","Rue Nationale","Rue de la République","Avenue Jean Jaurès"]},
+      "Germany": {language:"German", timezone:"Europe/Berlin", cities:["Berlin","Hamburg","München","Köln","Frankfurt am Main","Stuttgart","Düsseldorf"], roads:["Hauptstraße","Bahnhofstraße","Berliner Straße","Schulstraße","Gartenstraße","Dorfstraße","Münchener Straße"]},
+      "Spain": {language:"Spanish", timezone:"Europe/Madrid", cities:["Madrid","Barcelona","Valencia","Sevilla","Zaragoza","Málaga","Bilbao"], roads:["Calle Mayor","Gran Vía","Calle de Alcalá","Passeig de Gràcia","Avenida de la Constitución","Calle Real"]},
+      "Italy": {language:"Italian", timezone:"Europe/Rome", cities:["Roma","Milano","Napoli","Torino","Palermo","Firenze","Bologna"], roads:["Via Roma","Corso Italia","Via Garibaldi","Via Dante","Via Vittorio Veneto","Piazza della Repubblica"]},
+      "Netherlands": {language:"Dutch", timezone:"Europe/Amsterdam", cities:["Amsterdam","Rotterdam","Den Haag","Utrecht","Eindhoven","Groningen"], roads:["Kerkstraat","Dorpsstraat","Hoofdstraat","Stationsweg","Molenstraat","Langestraat","Nieuwezijds Voorburgwal"]},
+      "Belgium": {language:"Dutch / French / German", timezone:"Europe/Brussels", cities:["Brussels","Antwerpen","Gent","Brugge","Liège","Namur"], roads:["Rue Neuve","Avenue Louise","Meir","Kerkstraat","Stationsstraat","Grand-Place"]},
+      "Switzerland": {language:"German / French / Italian / Romansh", timezone:"Europe/Zurich", cities:["Zürich","Genève","Basel","Bern","Lausanne","Lugano"], roads:["Bahnhofstrasse","Rue du Rhône","Freie Strasse","Marktgasse","Avenue de la Gare","Via Nassa"]},
+      "Austria": {language:"German", timezone:"Europe/Vienna", cities:["Wien","Graz","Linz","Salzburg","Innsbruck"], roads:["Kärntner Straße","Mariahilfer Straße","Hauptplatz","Bahnhofstraße","Linzer Gasse","Landstraße"]},
+      "Portugal": {language:"Portuguese", timezone:"Europe/Lisbon", cities:["Lisboa","Porto","Braga","Coimbra","Faro"], roads:["Avenida da Liberdade","Rua Augusta","Rua de Santa Catarina","Avenida Central","Rua Ferreira Borges","Rua de São Bento"]},
+      "Greece": {language:"Greek", timezone:"Europe/Athens", cities:["Αθήνα (Athens)","Θεσσαλονίκη (Thessaloniki)","Πάτρα (Patras)","Ηράκλειο (Heraklion)"], roads:["Λεωφόρος Βασιλίσσης Σοφίας","Οδός Ερμού","Λεωφόρος Συγγρού","Οδός Τσιμισκή","Οδός Αγίου Δημητρίου"]},
+      "Poland": {language:"Polish", timezone:"Europe/Warsaw", cities:["Warszawa","Kraków","Łódź","Wrocław","Poznań","Gdańsk"], roads:["ulica Marszałkowska","ulica Długa","Rynek Główny","ulica Piotrkowska","ulica Święty Marcin","Długi Targ"]},
+      "Czechia": {language:"Czech", timezone:"Europe/Prague", cities:["Praha","Brno","Ostrava","Plzeň","Olomouc"], roads:["Václavské náměstí","Národní","Masarykova","Českobratrská","Smetanovy sady","Dlouhá"]},
+      "Romania": {language:"Romanian", timezone:"Europe/Bucharest", cities:["București","Cluj-Napoca","Timișoara","Iași","Brașov"], roads:["Calea Victoriei","Bulevardul Unirii","Strada Republicii","Bulevardul Eroilor","Strada Memorandumului"]},
+      "Sweden": {language:"Swedish", timezone:"Europe/Stockholm", cities:["Stockholm","Göteborg","Malmö","Uppsala","Västerås"], roads:["Drottninggatan","Kungsgatan","Sveavägen","Avenyn","Södra Förstadsgatan","Storgatan"]},
+      "Norway": {language:"Norwegian", timezone:"Europe/Oslo", cities:["Oslo","Bergen","Trondheim","Stavanger","Tromsø"], roads:["Karl Johans gate","Dronningens gate","Strandgaten","Kongens gate","Storgata","Nedre Strandgate"]},
+      "Denmark": {language:"Danish", timezone:"Europe/Copenhagen", cities:["København","Aarhus","Odense","Aalborg","Esbjerg"], roads:["Strøget","Nørrebrogade","Vesterbrogade","Algade","Jernbanegade","Østergade"]},
+
+      "Russia": {language:"Russian", timezone:"Europe/Moscow", cities:["Москва (Moscow)","Санкт-Петербург (Saint Petersburg)","Казань (Kazan)","Екатеринбург (Yekaterinburg)"], roads:["Тверская улица","Невский проспект","Арбат","Садовая улица","Московский проспект"]},
+      "Ukraine": {language:"Ukrainian", timezone:"Europe/Kyiv", cities:["Київ (Kyiv)","Львів (Lviv)","Одеса (Odesa)","Харків (Kharkiv)","Дніпро (Dnipro)"], roads:["Хрещатик","вулиця Сагайдачного","Дерибасівська вулиця","Сумська вулиця","Соборна площа"]},
+      "Turkey": {language:"Turkish", timezone:"Europe/Istanbul", cities:["İstanbul","Ankara","İzmir","Bursa","Antalya"], roads:["İstiklal Caddesi","Bağdat Caddesi","Atatürk Bulvarı","Cumhuriyet Caddesi","Kordonboyu"]},
+
+      "China": {language:"Chinese", timezone:"Asia/Shanghai", cities:["北京 (Beijing)","上海 (Shanghai)","广州 (Guangzhou)","深圳 (Shenzhen)","成都 (Chengdu)"], roads:["南京路 (Nanjing Road)","王府井大街 (Wangfujing Street)","淮海中路 (Huaihai Road)","北京路 (Beijing Road)","深南大道 (Shennan Boulevard)"]},
+      "Japan": {language:"Japanese", timezone:"Asia/Tokyo", cities:["東京 (Tokyo)","大阪 (Osaka)","京都 (Kyoto)","名古屋 (Nagoya)","札幌 (Sapporo)"], roads:["銀座通り (Ginza-dori)","表参道 (Omotesandō)","御堂筋 (Midosuji)","四条通 (Shijō-dori)","大通公園 (Odori Park)"]},
+      "South Korea": {language:"Korean", timezone:"Asia/Seoul", cities:["서울 (Seoul)","부산 (Busan)","인천 (Incheon)","대구 (Daegu)","대전 (Daejeon)"], roads:["세종대로 (Sejong-daero)","강남대로 (Gangnam-daero)","테헤란로 (Teheran-ro)","중앙대로 (Jungang-daero)","동성로 (Dongseong-ro)"]},
+      "India": {language:"Hindi / English", timezone:"Asia/Kolkata", cities:["Mumbai","Delhi","Bengaluru","Kolkata","Chennai","Hyderabad"], roads:["Mahatma Gandhi Road","Park Street","Linking Road","Brigade Road","Anna Salai","Connaught Place"]},
+      "Pakistan": {language:"Urdu / English", timezone:"Asia/Karachi", cities:["Karachi","Lahore","Islamabad","Rawalpindi","Faisalabad"], roads:["Shahrah-e-Faisal","Mall Road","Jinnah Avenue","Murree Road","College Road"]},
+      "Bangladesh": {language:"Bengali", timezone:"Asia/Dhaka", cities:["ঢাকা (Dhaka)","চট্টগ্রাম (Chattogram)","সিলেট (Sylhet)","খুলনা (Khulna)"], roads:["ধানমন্ডি রোড (Dhanmondi Road)","গুলশান এভিনিউ (Gulshan Avenue)","মিরপুর রোড (Mirpur Road)","স্টেশন রোড (Station Road)"]},
+      "Thailand": {language:"Thai", timezone:"Asia/Bangkok", cities:["กรุงเทพมหานคร (Bangkok)","เชียงใหม่ (Chiang Mai)","ภูเก็ต (Phuket)","ขอนแก่น (Khon Kaen)"], roads:["ถนนสุขุมวิท (Sukhumvit Road)","ถนนสีลม (Silom Road)","ถนนเจริญกรุง (Charoen Krung Road)","ถนนนิมมานเหมินท์ (Nimmanhaemin Road)"]},
+      "Vietnam": {language:"Vietnamese", timezone:"Asia/Ho_Chi_Minh", cities:["Hà Nội","Thành phố Hồ Chí Minh","Đà Nẵng","Huế","Cần Thơ"], roads:["Phố Huế","Đường Nguyễn Huệ","Đường Lê Lợi","Đường Trần Hưng Đạo","Đường Điện Biên Phủ"]},
+      "Malaysia": {language:"Malay", timezone:"Asia/Kuala_Lumpur", cities:["Kuala Lumpur","George Town","Johor Bahru","Ipoh","Kota Kinabalu"], roads:["Jalan Bukit Bintang","Jalan Ampang","Lebuh Chulia","Jalan Tun Razak","Jalan Wong Ah Fook"]},
+      "Singapore": {language:"English / Malay / Mandarin / Tamil", timezone:"Asia/Singapore", cities:["Singapore"], roads:["Orchard Road","Raffles Place","Serangoon Road","North Bridge Road","Victoria Street","Cecil Street"]},
+      "Philippines": {language:"Filipino / English", timezone:"Asia/Manila", cities:["Manila","Quezon City","Cebu City","Davao City","Makati"], roads:["Rizal Avenue","Ayala Avenue","EDSA","Bonifacio Drive","Colon Street","Roxas Boulevard"]},
+
+      "United Arab Emirates": {language:"Arabic / English", timezone:"Asia/Dubai", cities:["دبي (Dubai)","أبوظبي (Abu Dhabi)","الشارقة (Sharjah)"], roads:["شارع الشيخ زايد (Sheikh Zayed Road)","شارع الكورنيش (Corniche Road)","شارع الملك فيصل (King Faisal Street)"]},
+      "Saudi Arabia": {language:"Arabic", timezone:"Asia/Riyadh", cities:["الرياض (Riyadh)","جدة (Jeddah)","مكة (Makkah)","الدمام (Dammam)"], roads:["طريق الملك فهد (King Fahd Road)","شارع التحلية (Tahlia Street)","طريق الأمير سلطان (Prince Sultan Road)"]},
+      "Israel": {language:"Hebrew / Arabic", timezone:"Asia/Jerusalem", cities:["ירושלים (Jerusalem)","תל אביב-יפו (Tel Aviv-Yafo)","חיפה (Haifa)"], roads:["רחוב יפו (Jaffa Road)","רחוב דיזנגוף (Dizengoff Street)","שדרות רוטשילד (Rothschild Boulevard)"]},
+      "Egypt": {language:"Arabic", timezone:"Africa/Cairo", cities:["القاهرة (Cairo)","الإسكندرية (Alexandria)","الجيزة (Giza)"], roads:["شارع التحرير (Tahrir Street)","شارع الهرم (Al Haram Street)","طريق الكورنيش (Corniche Road)"]},
+      "South Africa": {language:"English / Afrikaans / Zulu and others", timezone:"Africa/Johannesburg", cities:["Johannesburg","Cape Town","Durban","Pretoria","Gqeberha"], roads:["Long Street","Main Road","Jan Smuts Avenue","Florida Road","Church Street","Adderley Street"]},
+      "Nigeria": {language:"English / Hausa / Yoruba / Igbo", timezone:"Africa/Lagos", cities:["Lagos","Abuja","Kano","Ibadan","Port Harcourt"], roads:["Broad Street","Awolowo Road","Ahmadu Bello Way","Aminu Kano Crescent","Aba Road","Marina Road"]},
+      "Kenya": {language:"Swahili / English", timezone:"Africa/Nairobi", cities:["Nairobi","Mombasa","Kisumu","Nakuru","Eldoret"], roads:["Kenyatta Avenue","Moi Avenue","Uhuru Highway","Haile Selassie Avenue","Mama Ngina Drive"]},
+
+      "Brazil": {language:"Portuguese", timezone:"America/Sao_Paulo", cities:["São Paulo","Rio de Janeiro","Brasília","Salvador","Curitiba"], roads:["Avenida Paulista","Rua Augusta","Avenida Atlântica","Eixo Monumental","Rua XV de Novembro"]},
+      "Mexico": {language:"Spanish", timezone:"America/Mexico_City", cities:["Ciudad de México","Guadalajara","Monterrey","Puebla","Tijuana"], roads:["Paseo de la Reforma","Avenida Insurgentes","Avenida Juárez","Calzada de Tlalpan","Avenida Chapultepec"]},
+      "Argentina": {language:"Spanish", timezone:"America/Argentina/Buenos_Aires", cities:["Buenos Aires","Córdoba","Rosario","Mendoza","La Plata"], roads:["Avenida Corrientes","Avenida 9 de Julio","Avenida Santa Fe","Calle Florida","Avenida Colón"]},
+      "Chile": {language:"Spanish", timezone:"America/Santiago", cities:["Santiago","Valparaíso","Concepción","La Serena","Antofagasta"], roads:["Avenida Providencia","Alameda","Avenida Libertador Bernardo O'Higgins","Calle Prat","Avenida Brasil"]},
+      "Colombia": {language:"Spanish", timezone:"America/Bogota", cities:["Bogotá","Medellín","Cali","Barranquilla","Cartagena"], roads:["Carrera Séptima","Avenida El Dorado","Avenida Caracas","Calle 70","Avenida San Martín"]},
+      "Peru": {language:"Spanish / Quechua / Aymara", timezone:"America/Lima", cities:["Lima","Arequipa","Cusco","Trujillo","Piura"], roads:["Avenida Arequipa","Jirón de la Unión","Avenida Larco","Avenida El Sol","Calle Mercaderes"]}
+    };
+
+    const FALLBACK_TIMEZONE = {
+      "Afghanistan":"Asia/Kabul","Albania":"Europe/Tirane","Algeria":"Africa/Algiers","Andorra":"Europe/Andorra","Angola":"Africa/Luanda","Antigua and Barbuda":"America/Antigua","Armenia":"Asia/Yerevan","Azerbaijan":"Asia/Baku",
+      "Bahamas":"America/Nassau","Bahrain":"Asia/Bahrain","Barbados":"America/Barbados","Belarus":"Europe/Minsk","Belize":"America/Belize","Benin":"Africa/Porto-Novo","Bhutan":"Asia/Thimphu","Bolivia":"America/La_Paz","Bosnia and Herzegovina":"Europe/Sarajevo","Botswana":"Africa/Gaborone","Brunei":"Asia/Brunei","Bulgaria":"Europe/Sofia","Burkina Faso":"Africa/Ouagadougou","Burundi":"Africa/Bujumbura",
+      "Cabo Verde":"Atlantic/Cape_Verde","Cambodia":"Asia/Phnom_Penh","Cameroon":"Africa/Douala","Central African Republic":"Africa/Bangui","Chad":"Africa/Ndjamena","Comoros":"Indian/Comoro","Costa Rica":"America/Costa_Rica","Croatia":"Europe/Zagreb","Cuba":"America/Havana","Cyprus":"Asia/Nicosia",
+      "Democratic Republic of the Congo":"Africa/Kinshasa","Djibouti":"Africa/Djibouti","Dominica":"America/Dominica","Dominican Republic":"America/Santo_Domingo","Ecuador":"America/Guayaquil","El Salvador":"America/El_Salvador","Equatorial Guinea":"Africa/Malabo","Eritrea":"Africa/Asmara","Estonia":"Europe/Tallinn","Eswatini":"Africa/Mbabane","Ethiopia":"Africa/Addis_Ababa",
+      "Federated States of Micronesia":"Pacific/Chuuk","Fiji":"Pacific/Fiji","Finland":"Europe/Helsinki","Gabon":"Africa/Libreville","Gambia":"Africa/Banjul","Georgia":"Asia/Tbilisi","Ghana":"Africa/Accra","Grenada":"America/Grenada","Guatemala":"America/Guatemala","Guinea":"Africa/Conakry","Guinea-Bissau":"Africa/Bissau","Guyana":"America/Guyana","Haiti":"America/Port-au-Prince","Honduras":"America/Tegucigalpa","Hungary":"Europe/Budapest","Iceland":"Atlantic/Reykjavik","Indonesia":"Asia/Jakarta","Iran":"Asia/Tehran","Iraq":"Asia/Baghdad","Ivory Coast":"Africa/Abidjan","Jamaica":"America/Jamaica","Jordan":"Asia/Amman","Kazakhstan":"Asia/Almaty","Kiribati":"Pacific/Tarawa","Kosovo":"Europe/Pristina","Kuwait":"Asia/Kuwait","Kyrgyzstan":"Asia/Bishkek","Laos":"Asia/Vientiane","Latvia":"Europe/Riga","Lebanon":"Asia/Beirut","Lesotho":"Africa/Maseru","Liberia":"Africa/Monrovia","Libya":"Africa/Tripoli","Liechtenstein":"Europe/Vaduz","Lithuania":"Europe/Vilnius","Luxembourg":"Europe/Luxembourg","Madagascar":"Indian/Antananarivo","Malawi":"Africa/Blantyre","Maldives":"Indian/Maldives","Mali":"Africa/Bamako","Malta":"Europe/Malta","Marshall Islands":"Pacific/Majuro","Mauritania":"Africa/Nouakchott","Mauritius":"Indian/Mauritius","Moldova":"Europe/Chisinau","Monaco":"Europe/Monaco","Mongolia":"Asia/Ulaanbaatar","Montenegro":"Europe/Podgorica","Morocco":"Africa/Casablanca","Mozambique":"Africa/Maputo","Myanmar":"Asia/Yangon","Namibia":"Africa/Windhoek","Nauru":"Pacific/Nauru","Nepal":"Asia/Kathmandu","Nicaragua":"America/Managua","Niger":"Africa/Niamey","North Korea":"Asia/Pyongyang","North Macedonia":"Europe/Skopje","Oman":"Asia/Muscat","Palau":"Pacific/Palau","Panama":"America/Panama","Papua New Guinea":"Pacific/Port_Moresby","Paraguay":"America/Asuncion","Qatar":"Asia/Qatar","Republic of the Congo":"Africa/Brazzaville","Rwanda":"Africa/Kigali","Saint Kitts and Nevis":"America/St_Kitts","Saint Lucia":"America/St_Lucia","Saint Vincent and the Grenadines":"America/St_Vincent","Samoa":"Pacific/Apia","San Marino":"Europe/San_Marino","Sao Tome and Principe":"Africa/Sao_Tome","Senegal":"Africa/Dakar","Serbia":"Europe/Belgrade","Seychelles":"Indian/Mahe","Sierra Leone":"Africa/Freetown","Slovakia":"Europe/Bratislava","Slovenia":"Europe/Ljubljana","Solomon Islands":"Pacific/Guadalcanal","Somalia":"Africa/Mogadishu","South Sudan":"Africa/Juba","Sri Lanka":"Asia/Colombo","Sudan":"Africa/Khartoum","Suriname":"America/Paramaribo","Syria":"Asia/Damascus","Taiwan":"Asia/Taipei","Tajikistan":"Asia/Dushanbe","Tanzania":"Africa/Dar_es_Salaam","Timor-Leste":"Asia/Dili","Togo":"Africa/Lome","Tonga":"Pacific/Tongatapu","Trinidad and Tobago":"America/Port_of_Spain","Tunisia":"Africa/Tunis","Turkmenistan":"Asia/Ashgabat","Tuvalu":"Pacific/Funafuti","Uganda":"Africa/Kampala","Uruguay":"America/Montevideo","Uzbekistan":"Asia/Tashkent","Vanuatu":"Pacific/Efate","Vatican City":"Europe/Vatican","Venezuela":"America/Caracas","Yemen":"Asia/Aden","Zambia":"Africa/Lusaka","Zimbabwe":"Africa/Harare"
+    };
+
+    const LANGUAGE_NAME = {
+      english:"English", french:"French", german:"German", spanish:"Spanish", portuguese:"Portuguese", italian:"Italian", dutch:"Dutch", polish:"Polish", romanian:"Romanian", greek:"Greek", turkish:"Turkish", russian:"Russian", ukrainian:"Ukrainian", czech:"Czech", hungarian:"Hungarian", arabic:"Arabic", persian:"Persian", hebrew:"Hebrew", chinese:"Chinese", japanese:"Japanese", korean:"Korean", vietnamese:"Vietnamese", thai:"Thai", hindi:"Hindi", bengali:"Bengali", tamil:"Tamil", indonesian:"Indonesian", malay:"Malay", filipino:"Filipino", swahili:"Swahili", amharic:"Amharic", nigerian:"English / local languages"
+    };
+
+    const NAME_ROMAN = {
+      "Γεώργιος":"Georgios","Δημήτριος":"Dimitrios","Νικόλαος":"Nikolaos","Ιωάννης":"Ioannis","Μαρία":"Maria","Ελένη":"Eleni","Αναστασία":"Anastasia","Γεωργία":"Georgia","Παπαδόπουλος":"Papadopoulos","Νικολάου":"Nikolaou","Γεωργίου":"Georgiou","Χριστοδούλου":"Christodoulou",
+      "Александр":"Alexander","Сергей":"Sergey","Дмитрий":"Dmitry","Андрей":"Andrey","Алексей":"Alexey","Иван":"Ivan","Максим":"Maxim","Анна":"Anna","Екатерина":"Ekaterina","Ольга":"Olga","Наталья":"Natalia","Мария":"Maria","Иванов":"Ivanov","Петров":"Petrov","Смирнов":"Smirnov","Кузнецов":"Kuznetsov","Соколов":"Sokolov",
+      "Олександр":"Oleksandr","Андрій":"Andrii","Дмитро":"Dmytro","Іван":"Ivan","Богдан":"Bohdan","Сергій":"Serhii","Софія":"Sofiia","Олена":"Olena","Наталія":"Nataliia","Ірина":"Iryna","Шевченко":"Shevchenko","Ковальчук":"Kovalchuk","Бондаренко":"Bondarenko","Мельник":"Melnyk","Кравченко":"Kravchenko","Бойко":"Boiko",
+      "محمد":"Mohammed","أحمد":"Ahmed","علي":"Ali","عمر":"Omar","يوسف":"Yusuf","فاطمة":"Fatima","مريم":"Mariam","آية":"Aya","نور":"Noor","ليلى":"Layla","الخطيب":"Al-Khatib","العتيبي":"Al-Otaibi","الزهراني":"Al-Zahrani","النجار":"Al-Najjar","الحسيني":"Al-Husseini",
+      "علی":"Ali","محمدرضا":"Mohammad Reza","حسین":"Hossein","رضا":"Reza","فاطمه":"Fatemeh","زهرا":"Zahra","نگار":"Negar","مهسا":"Mahsa","کریمی":"Karimi","محمدی":"Mohammadi","حسینی":"Hosseini","رضایی":"Rezaei",
+      "דוד":"David","יוסף":"Yosef","נעם":"Noam","יואב":"Yoav","מיה":"Maya","יעל":"Yael","נועה":"Noa","תמר":"Tamar","כהן":"Cohen","לוי":"Levi","מזרחי":"Mizrahi","פרץ":"Peretz",
+      "आरव":"Aarav","विवान":"Vivaan","अर्जुन":"Arjun","आदित्य":"Aditya","राहुल":"Rahul","अनन्या":"Ananya","रिया":"Riya","काव्या":"Kavya","नेहा":"Neha","प्रियंका":"Priyanka","शर्मा":"Sharma","वर्मा":"Verma","अग्रवाल":"Agrawal","गुप्ता":"Gupta","सिंह":"Singh",
+      "আরিফ":"Arif","রাহাত":"Rahat","সাব্বির":"Sabbir","সুমাইয়া":"Sumaiya","নুসরাত":"Nusrat","মেহজাবিন":"Mehjabin","চৌধুরী":"Chowdhury","হোসেন":"Hossain","ইসলাম":"Islam","সরকার":"Sarkar",
+      "அருண்":"Arun","விக்னேஷ்":"Vignesh","முருகன்":"Murugan","அஞ்சலி":"Anjali","காயத்ரி":"Gayathri","லட்சுமி":"Lakshmi","சுப்பிரமணியன்":"Subramanian","நாராயணன்":"Narayanan","ராமச்சந்திரன்":"Ramachandran",
+      "สมชาย":"Somchai","วีรภัทร":"Wiraphat","นพดล":"Noppadon","อนันต์":"Anan","สุภาวดี":"Supawadee","กมล":"Kamon","พรทิพย์":"Porntip","นลิน":"Nalin","ศรีสุข":"Srisuk","จันทร์เพ็ญ":"Chanphen","บุญช่วย":"Boonchuay","ทองดี":"Thongdee",
+      "አብርሃም":"Abraham","ዳዊት":"Dawit","ከበደ":"Kebede","ማሪያም":"Mariam","ሀና":"Hana","ሰላም":"Selam","ተስፋዬ":"Tesfaye","ገብረ":"Gebre","አለም":"Alem"
+    };
+
+    const CJK_ROMAN = {
+      "王":"Wang","李":"Li","张":"Zhang","刘":"Liu","陈":"Chen","杨":"Yang","赵":"Zhao","黄":"Huang","周":"Zhou","吴":"Wu","徐":"Xu","孙":"Sun","胡":"Hu","朱":"Zhu","高":"Gao","林":"Lin","何":"He","郭":"Guo","马":"Ma","罗":"Luo",
+      "伟":"Wei","芳":"Fang","娜":"Na","敏":"Min","静":"Jing","磊":"Lei","强":"Qiang","军":"Jun","杰":"Jie","涛":"Tao","艳":"Yan","超":"Chao","明":"Ming","勇":"Yong",
+      "佐藤":"Sato","鈴木":"Suzuki","高橋":"Takahashi","田中":"Tanaka","伊藤":"Ito","渡辺":"Watanabe","山本":"Yamamoto","中村":"Nakamura","小林":"Kobayashi","加藤":"Kato","陽斗":"Haruto","蓮":"Ren","葵":"Aoi","結衣":"Yui","大和":"Yamato","空":"Sora","蒼":"Ao","さくら":"Sakura","楓":"Kaede",
+      "김":"Kim","이":"Lee","박":"Park","최":"Choi","정":"Jung","윤":"Yoon","장":"Jang","임":"Im","한":"Han","민준":"Min-jun","서준":"Seo-jun","예준":"Ye-jun","도윤":"Do-yoon","하준":"Ha-jun","서연":"Seo-yeon","지우":"Ji-woo","지민":"Ji-min","윤서":"Yoon-seo","하윤":"Ha-yoon"
+    };
+
+    function englishSpelling(name, country){
+      if(!/[^\u0000-\u024F\s.'’\-]/.test(name)) return name;
+      if(country==="China"){
+        return name.split('').map(ch=>CJK_ROMAN[ch]||ch).join(' ');
+      }
+      if(country==="Japan"){
+        return name.split(/\s+/).map(part=>CJK_ROMAN[part]||part).join(' ');
+      }
+      if(country==="South Korea" || country==="North Korea"){
+        const surname = name.slice(0,1);
+        const given = name.slice(1);
+        return [CJK_ROMAN[surname]||surname, CJK_ROMAN[given]||given].join(' ');
+      }
+      return name.split(/\s+/).map(part=>NAME_ROMAN[part]||part).join(' ');
+    }
+
+    function languageForCountry(country){
+      return (LOCALITY_STYLE[country] && LOCALITY_STYLE[country].language) || LANGUAGE_NAME[pickLang(country)] || "Local language";
+    }
+
+    function timezoneForCountry(country){
+      return (LOCALITY_STYLE[country] && LOCALITY_STYLE[country].timezone) || FALLBACK_TIMEZONE[country] || "UTC";
+    }
+
+    function makeRealisticLocation(country){
+      if(country==="Fantasy"){
+        const door=RI(1,9999);
+        const streets=["Moonshadow Lane","Dragonspire Way","Aetherial Road","Whispering Grove","Ember Path","Rune Circle","Starlight Avenue","Frostfall Street"];
+        const cities=["Whiterun","Balmora","Solitude","Riften","Winterhold","Daggerfall","Raven Rock","Mournhold","Ald’ruhn","Cheydinhal","Skingrad","Bruma","Anvil","Vivec"];
+        const city=R(cities);
+        const code=R(['IV-42','MK-7','DR-13','EL-88','DW-21']);
+        return { address:`${door} ${R(streets)}, ${city}, ${code}, Fantasy`, city, language:"Common Tongue", timezone:"Tamriel Standard Time" };
+      }
+
+      const style = LOCALITY_STYLE[country] || {
+        language: languageForCountry(country),
+        timezone: timezoneForCountry(country),
+        cities: CITY_BASE[country] || [makeCity(country)],
+        roads: ["High Street","Main Street","Station Road","Market Street","Church Street","King Street","Queen Street","Central Avenue"]
+      };
+
+      const city = R(style.cities);
+      const road = R(style.roads);
+      const number = RI(1,220);
+      return {
+        address: `${number} ${road}, ${city}, ${postcode(country)}, ${country}`,
+        city,
+        language: style.language,
+        timezone: style.timezone
+      };
+    }
+
+
+    function buildChinese(){ const s=["王","李","张","刘","陈","杨","赵","黄","周","吴","徐","孙","胡","朱","高","林","何","郭","马","罗"]; const g=["伟","芳","娜","敏","静","磊","强","军","杰","涛","艳","超","明","勇"]; return R(s)+R(g)+(Math.random()>0.6?R(g):""); }
+    function buildJapanese(){ const s=["佐藤","鈴木","高橋","田中","伊藤","渡辺","山本","中村","小林","加藤"]; const g=["陽斗","蓮","葵","結衣","大和","空","蒼","さくら","楓"]; return R(s)+" "+R(g); }
+    function buildKorean(){ const s=["김","이","박","최","정","윤","장","임","한"]; const g=["민준","서준","예준","도윤","하준","서연","지우","지민","윤서","하윤"]; return R(s)+R(g); }
+    function buildVietnamese(gender){ const last=["Nguyễn","Trần","Lê","Phạm","Hoàng","Huỳnh","Phan","Vũ","Đặng"]; const midM=["Văn","Hữu","Minh","Quang"]; const midF=["Thị","Ngọc","Thuỳ","Bích","Kim"]; const given = gender==="Male"?["An","Bảo","Dũng","Hùng","Khánh","Long","Nam","Phong","Quân","Thắng"]:["Anh","Chi","Duyên","Giang","Hà","Linh","Mai","Ngân","Vy"]; return `${R(last)} ${gender==="Male"?R(midM):R(midF)} ${R(given)}`; }
+
+    function makeNameByCountry(country,gender){
+      if(country==="Fantasy"){ return R(["Aela","Seren","Thorin","Elara","Kael","Rowan","Dorian","Lyra","Gideon","Mira"])+" "+R(["Stormwind","Blackthorn","Ravenwood","Emberfall","Nightbloom","Ironhart","Frostvale"]); }
+      const lang = pickLang(country);
+      if(lang==="chinese") return buildChinese();
+      if(lang==="japanese") return buildJapanese();
+      if(lang==="korean") return buildKorean();
+      if(lang==="vietnamese") return buildVietnamese(gender);
+      const ds = NAMES[lang] || NAMES.english;
+      const first = gender==="Male" ? R(ds.male) : R(ds.female);
+      const last  = R(ds.last);
+      return `${first} ${last}`;
+    }
+
+    // Phone formats by country (simplified but realistic)
+    const PHONE = {
+      "United States": () => `+1 ${RI(201,989)}-${RI(200,999)}-${RI(1000,9999)}`,
+      "United Kingdom": () => `+44 7${RI(0,9)} ${RI(1000,9999)} ${RI(1000,9999)}`,
+      "Canada": () => `+1 ${RI(200,999)}-${RI(200,999)}-${RI(1000,9999)}`,
+      "Australia": () => `+61 4${RI(0,9)} ${RI(100,999)} ${RI(100,999)}`,
+      "Germany": () => `+49 1${RI(5,7)} ${RI(1000000,9999999)}`,
+      "France": () => `+33 6 ${RI(10000000,99999999)}`,
+      "Spain": () => `+34 6${RI(0,9)} ${RI(100,999)} ${RI(100,999)}`,
+      "Italy": () => `+39 3${RI(0,9)} ${RI(1000000,9999999)}`,
+      "Netherlands": () => `+31 6 ${RI(10000000,99999999)}`,
+      "Poland": () => `+48 ${RI(500,799)} ${RI(100,999)} ${RI(100,999)}`,
+      "Czechia": () => `+420 ${RI(600,799)} ${RI(100,999)} ${RI(100,999)}`,
+      "Hungary": () => `+36 20 ${RI(100,999)} ${RI(1000,9999)}`,
+      "Romania": () => `+40 7${RI(0,9)}${RI(0,9)} ${RI(100,999)} ${RI(100,999)}`,
+      "Greece": () => `+30 69${RI(0,9)} ${RI(100,999)} ${RI(1000,9999)}`,
+      "Turkey": () => `+90 5${RI(0,5)} ${RI(100,999)} ${RI(1000,9999)}`,
+      "Russia": () => `+7 9${RI(0,9)}${RI(0,9)} ${RI(100,999)}-${RI(10,99)}-${RI(10,99)}`,
+      "Ukraine": () => `+380 ${RI(39,99)} ${RI(100,999)} ${RI(10,99)} ${RI(10,99)}`,
+      "Sweden": () => `+46 7${RI(0,9)} ${RI(100,999)} ${RI(100,999)}`,
+      "Norway": () => `+47 4${RI(0,9)} ${RI(10,99)} ${RI(10,99)} ${RI(10,99)}`,
+      "Denmark": () => `+45 ${RI(20,29)} ${RI(10,99)} ${RI(10,99)} ${RI(10,99)}`,
+      "Switzerland": () => `+41 7${RI(0,9)} ${RI(100,999)} ${RI(10,99)} ${RI(10,99)}`,
+      "India": () => `+91 ${RI(60000,99999)} ${RI(10000,99999)}`,
+      "Pakistan": () => `+92 3${RI(0,9)} ${RI(100,999)} ${RI(1000000,9999999)}`,
+      "Bangladesh": () => `+880 1${RI(3,9)} ${RI(100,999)} ${RI(100,999)}`,
+      "Sri Lanka": () => `+94 7${RI(0,9)} ${RI(100,999)} ${RI(100,999)}`,
+      "Nepal": () => `+977 98${RI(0,9)}-${RI(100,999)}-${RI(1000,9999)}`,
+      "China": () => `+86 1${RI(3,9)}${RI(0,9)} ${RI(1000,9999)} ${RI(1000,9999)}`,
+      "Japan": () => `+81 0${RI(7,9)}-${RI(1000,9999)}-${RI(1000,9999)}`,
+      "South Korea": () => `+82 010-${RI(1000,9999)}-${RI(1000,9999)}`,
+      "Vietnam": () => `+84 0${RI(3,9)} ${RI(1000,9999)} ${RI(100,999)}`,
+      "Thailand": () => `+66 0${RI(6,9)}-${RI(1000,9999)}-${RI(100,999)}`,
+      "Israel": () => `+972 5${RI(0,9)}-${RI(100,999)}-${RI(1000,9999)}`,
+      "Iran": () => `+98 9${RI(0,9)}${RI(0,9)} ${RI(100,999)} ${RI(1000,9999)}`,
+      "Saudi Arabia": () => `+966 5${RI(0,9)} ${RI(100,999)} ${RI(100,999)}`,
+      "United Arab Emirates": () => `+971 5${RI(0,9)} ${RI(100,999)} ${RI(1000,9999)}`,
+      "South Africa": () => `+27 0${RI(6,8)} ${RI(100,999)} ${RI(1000,9999)}`,
+      "Nigeria": () => `+234 8${RI(0,1)}0 ${RI(100,999)} ${RI(1000,9999)}`,
+      "Brazil": () => `+55 ${RI(11,99)} ${RI(90000,99999)}-${RI(1000,9999)}`
+    };
+
+    // Currency map
+    const CUR = {
+      "United States":"USD","United Kingdom":"GBP","Eurozone":"EUR","Germany":"EUR","France":"EUR","Spain":"EUR","Italy":"EUR","Netherlands":"EUR","Portugal":"EUR","Ireland":"EUR","Belgium":"EUR","Austria":"EUR","Finland":"EUR","Greece":"EUR","Croatia":"EUR",
+      "Poland":"PLN","Czechia":"CZK","Hungary":"HUF","Romania":"RON","Bulgaria":"BGN","Sweden":"SEK","Norway":"NOK","Denmark":"DKK","Switzerland":"CHF",
+      "Russia":"RUB","Ukraine":"UAH","Belarus":"BYN","Turkey":"TRY","Serbia":"RSD","Bosnia and Herzegovina":"BAM","North Macedonia":"MKD",
+      "Canada":"CAD","Australia":"AUD","New Zealand":"NZD","Japan":"JPY","China":"CNY","India":"INR","Pakistan":"PKR","Bangladesh":"BDT","Sri Lanka":"LKR","Nepal":"NPR",
+      "Indonesia":"IDR","Malaysia":"MYR","Singapore":"SGD","Philippines":"PHP","Vietnam":"VND","Thailand":"THB","Israel":"ILS","Iran":"IRR",
+      "Saudi Arabia":"SAR","United Arab Emirates":"AED","Qatar":"QAR","Kuwait":"KWD","Jordan":"JOD","Egypt":"EGP","Morocco":"MAD","Algeria":"DZD","Tunisia":"TND","Libya":"LYD",
+      "South Africa":"ZAR","Nigeria":"NGN","Kenya":"KES","Tanzania":"TZS","Uganda":"UGX","Ghana":"GHS","Ethiopia":"ETB","Brazil":"BRL","Mexico":"MXN","Argentina":"ARS","Chile":"CLP","Peru":"PEN","Colombia":"COP","Uruguay":"UYU","Venezuela":"VES"
+    };
+
+    // IBAN support and length (subset but broad)
+    const IBAN_LEN = {
+      AT:20, AZ:28, BA:20, BE:16, BG:22, BH:22, BR:29, BY:28, CH:21, CR:22, CY:28, CZ:24,
+      DE:22, DK:18, DO:28, EE:20, ES:24, FI:18, FO:18, FR:27, GB:22, GE:22, GI:23, GL:18, GR:27, GT:28, HR:21,
+      HU:28, IE:22, IL:23, IQ:23, IS:26, IT:27, JO:30, KZ:20, KW:30, LB:28, LC:32, LI:21, LT:20, LU:20,
+      LV:21, MC:27, MD:24, ME:22, MK:19, MR:27, MT:31, MU:30, NL:18, NO:15, PK:24, PL:28, PS:29, PT:25, QA:29,
+      RO:24, RS:22, SA:24, SC:31, SE:24, SI:19, SK:24, SM:27, TL:23, TN:24, TR:26, UA:29, AE:23, VG:24
+    };
+    function iso2(country){
+      const map = {"United Kingdom":"GB","United States":"US","Netherlands":"NL","Czechia":"CZ","South Africa":"ZA","United Arab Emirates":"AE"};
+      // Quick heuristic: take first two letters otherwise
+      return map[country] || (country.slice(0,2).toUpperCase());
+    }
+    function makeIBAN(country){
+      const cc = iso2(country);
+      if(!(cc in IBAN_LEN)) return null;
+      const len = IBAN_LEN[cc];
+      // Build with country + checksum + BBAN digits/letters
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let bban = "";
+      for(let i=0;i<len-4;i++){ bban += chars[Math.floor(Math.random()*chars.length)]; }
+      const chk = RI(10,99);
+      return `${cc}${chk} ${bban.match(/.{1,4}/g).join(" ")}`;
+    }
+    function makeBIC(country){
+      const cc = iso2(country);
+      const bank = Array.from({length:4}, _=>AtoZ[RI(0,25)]).join("");
+      const loc  = AtoZ[RI(0,25)] + AtoZ[RI(0,25)];
+      const branch = Math.random()>0.5 ? (AtoZ[RI(0,25)] + AtoZ[RI(0,25)] + AtoZ[RI(0,25)]) : "";
+      return `${bank}${cc}${loc}${branch}`;
+    }
+
+    // Card brands per country
+    function cardBrands(country){
+      if(country==="China") return ["UnionPay","Visa","Mastercard"];
+      if(country==="Japan") return ["JCB","Visa","Mastercard"];
+      if(country==="India") return ["RuPay","Visa","Mastercard"];
+      if(country==="Russia") return ["MIR","Visa","Mastercard"];
+      if(country==="Turkey") return ["Troy","Visa","Mastercard"];
+      if(country==="Brazil") return ["Elo","Visa","Mastercard"];
+      if(country==="Nigeria") return ["Verve","Visa","Mastercard"];
+      return ["Visa","Mastercard"]; // global default
+    }
+    function luhnGen(prefix,len=16){
+      const d = Array(len).fill(0); d[0]=prefix; for(let i=1;i<len-1;i++) d[i]=RI(0,9);
+      let sum=0; for(let i=0;i<len-1;i++){ let x=d[i]; if(((len-1-i)%2)===1){ x*=2; if(x>9)x-=9; } sum+=x; }
+      d[len-1]=(10-(sum%10))%10; return d.join("");
+    }
+    function genCard(country){
+      const brand = R(cardBrands(country));
+      let number;
+      if(brand==="Visa") number = luhnGen(4);
+      else if(brand==="Mastercard") number = luhnGen(5);
+      else if(brand==="UnionPay") number = "62"+Array.from({length:14},()=>RI(0,9)).join("");
+      else if(brand==="JCB") number = "35"+Array.from({length:14},()=>RI(0,9)).join("");
+      else if(brand==="MIR") number = "220"+Array.from({length:13},()=>RI(0,9)).join("");
+      else if(brand==="RuPay") number = "608"+Array.from({length:13},()=>RI(0,9)).join("");
+      else if(brand==="Troy") number = "9792"+Array.from({length:12},()=>RI(0,9)).join("");
+      else if(brand==="Elo") number = "636368"+Array.from({length:10},()=>RI(0,9)).join("");
+      else if(brand==="Verve") number = "5061"+Array.from({length:12},()=>RI(0,9)).join("");
+      else number = luhnGen(4);
+      const exp = `${pad2(RI(1,12))}/${String(RI(26,35))}`;
+      const cvv = String(RI(100,999));
+      return {type: brand, num:number, exp, cvv};
+    }
+
+    // Government ID per country
+    function govProfile(country){
+      if(country==="Fantasy") return { label:"Citizen Mark", id:()=>`${R(['SIG','RUNE','GLYPH'])}-${RI(1000,9999)}-${AtoZ[RI(0,25)]}${AtoZ[RI(0,25)]}` };
+      const map = {
+        "United States": {label:"SSN", id:()=>`${RI(100,899)}-${RI(10,99)}-${RI(1000,9999)}`},
+        "United Kingdom": {label:"NINo", id:()=>`${AtoZ[RI(0,25)]}${AtoZ[RI(0,25)]}${RI(10,99)} ${RI(10,99)} ${AtoZ[RI(0,25)]}`},
+        "Canada": {label:"SIN", id:()=>`${RI(100,999)} ${RI(100,999)} ${RI(100,999)}`},
+        "Australia": {label:"TFN", id:()=>`${RI(100,999)} ${RI(100,999)} ${RI(100,999)}`},
+        "Germany": {label:"Steuer-ID", id:()=>`${RI(100,999)} ${RI(100,999)} ${RI(100,999)} ${RI(10,99)}`},
+        "France": {label:"INSEE", id:()=>`${RI(1,2)} ${RI(10,99)} ${RI(1,12)} ${RI(1,95)} ${RI(100,999)} ${RI(100,999)} ${RI(10,99)}`},
+        "Spain": {label:"DNI", id:()=>`${RI(10000000,99999999)}-${AtoZ[RI(0,25)]}`},
+        "Italy": {label:"Codice Fiscale", id:()=>`${AtoZ[RI(0,25)]}${AtoZ[RI(0,25)]}${AtoZ[RI(0,25)]}${RI(10,99)}${AtoZ[RI(0,25)]}${RI(100,999)}${AtoZ[RI(0,25)]}${RI(100,999)}${AtoZ[RI(0,25)]}`},
+        "Netherlands": {label:"BSN", id:()=>`${RI(100000000,999999999)}`},
+        "Poland": {label:"PESEL", id:()=>`${RI(10,99)}${pad2(RI(1,12))}${pad2(RI(1,28))}${RI(10000,99999)}`},
+        "Czechia": {label:"Rodné číslo", id:()=>`${RI(10,99)}${pad2(RI(1,12))}${pad2(RI(1,28))}/${RI(100,999)}`},
+        "Hungary": {label:"Személyi szám", id:()=>`${RI(1000000000,9999999999)}`},
+        "Romania": {label:"CNP", id:()=>`${RI(1,8)}${RI(10,99)}${pad2(RI(1,12))}${pad2(RI(1,28))}${RI(100,999)}${RI(0,9)}`},
+        "Greece": {label:"AMKA", id:()=>`${pad2(RI(1,28))}${pad2(RI(1,12))}${RI(10,99)}${RI(10000,99999)}`},
+        "Turkey": {label:"TCKN", id:()=>`${RI(10000000000,99999999999)}`},
+        "Russia": {label:"SNILS", id:()=>`${RI(100,999)}-${RI(100,999)}-${RI(100,999)} ${RI(10,99)}`},
+        "Ukraine": {label:"RNOKPP", id:()=>`${RI(1000000000,9999999999)}`},
+        "Japan": {label:"My Number", id:()=>`${RI(1000,9999)}-${RI(1000,9999)}-${RI(1000,9999)}`},
+        "China": {label:"Resident ID", id:()=>`${RI(100000,999999)}${RI(1950,2004)}${pad2(RI(1,12))}${pad2(RI(1,28))}${RI(100,999)}`},
+        "India": {label:"Aadhaar", id:()=>`${RI(1000,9999)} ${RI(1000,9999)} ${RI(1000,9999)}`},
+        "Israel": {label:"Teudat Zehut", id:()=>`${RI(10000000,99999999)}`},
+        "Iran": {label:"National Code", id:()=>`${RI(1000000000,9999999999)}`},
+        "South Africa": {label:"ID Number", id:()=>`${RI(50,99)}${pad2(RI(1,12))}${pad2(RI(1,28))}${RI(1000,9999)}${RI(100,999)}`},
+        "Brazil": {label:"CPF", id:()=>`${RI(100,999)}.${RI(100,999)}.${RI(100,999)}-${RI(10,99)}`},
+        "Mexico": {label:"CURP", id:()=>`${AtoZ[RI(0,25)]}${AtoZ[RI(0,25)]}${AtoZ[RI(0,25)]}${AtoZ[RI(0,25)]}${RI(1950,2004)}${pad2(RI(1,12))}${pad2(RI(1,28))}${AtoZ[RI(0,25)]}${AtoZ[RI(0,25)]}${RI(0,9)}${RI(0,9)}`}
+      };
+      return map[country] || {label:"National ID", id:()=>`ID-${RI(100000,999999)}`};
+    }
+
+    // Address / city generators (some localized bases)
+    const CITY_BASE = {
+      "United States":["New York","Los Angeles","Chicago","Houston","Phoenix","Philadelphia","San Diego","Dallas","San Jose","Austin","Boston","Seattle","Denver","Washington"],
+      "United Kingdom":["London","Birmingham","Manchester","Leeds","Glasgow","Sheffield","Liverpool","Bristol","Edinburgh","Cardiff","Belfast"],
+      "Canada":["Toronto","Montreal","Vancouver","Calgary","Edmonton","Ottawa","Winnipeg","Hamilton","Kitchener","Quebec City"],
+      "Australia":["Sydney","Melbourne","Brisbane","Perth","Adelaide","Gold Coast","Canberra","Wollongong","Geelong"],
+      "Germany":["Berlin","Hamburg","Munich","Cologne","Frankfurt","Stuttgart","Düsseldorf","Dortmund","Leipzig"],
+      "France":["Paris","Marseille","Lyon","Toulouse","Nice","Nantes","Strasbourg","Bordeaux","Lille"],
+      "Spain":["Madrid","Barcelona","Valencia","Seville","Zaragoza","Málaga","Palma","Bilbao","Alicante"],
+      "Italy":["Rome","Milan","Naples","Turin","Palermo","Genoa","Bologna","Florence","Bari","Catania"],
+      "Netherlands":["Amsterdam","Rotterdam","The Hague","Utrecht","Eindhoven","Tilburg","Groningen","Almere","Breda","Nijmegen"],
+      "Poland":["Warsaw","Kraków","Łódź","Wrocław","Poznań","Gdańsk"],
+      "Ukraine":["Kyiv","Kharkiv","Odesa","Dnipro","Lviv","Mariupol","Zaporizhzhia"],
+      "Russia":["Moscow","Saint Petersburg","Novosibirsk","Yekaterinburg","Kazan"]
+    };
+    const CITY_SUFFIX=["ville","ford","ton","mouth","bury","chester","borough","dale","view","field","bridge","side","stead","worth","port","vale","ridge"];
+    const CITY_PREFIX=["Green","Clear","Spring","Fair","River","Ash","Kings","Queens","Mill","Oak","Pine","Stone","Rock","New","Old","North","South","East","West"];
+    const STREET_PREFIX=["Oak","Pine","Maple","Cedar","Elm","Willow","Birch","Cherry","Walnut","Hickory","Aspen","Sycamore","Poplar","Chestnut","Spruce","Laurel","Magnolia","Juniper","Holly","Ivy","Silver","Golden","Kings","Queens","Victoria","Prince","Duke","Mill","River","Sunset","Meadow","Hill","Valley","Lake","Forest","Garden","Harbor","Bayside","Park","Station","Church","Union","Liberty","Grand","High","Low","Bridge","Stone","Rock","Fox","Deer","Eagle","Crown"];
+    const STREET_TYPE=["St","Street","Ave","Avenue","Rd","Road","Ln","Lane","Blvd","Boulevard","Dr","Drive","Ct","Court","Pl","Place","Ter","Terrace","Way","Close"];
+    function makeCity(country){ const base=CITY_BASE[country]; if(base) return R(base); return `${R(CITY_PREFIX)}${R(CITY_SUFFIX)}`; }
+    function postcode(country){ if(country==="United Kingdom") return String.fromCharCode(65+RI(0,25))+String.fromCharCode(65+RI(0,25))+RI(1,9)+' '+RI(1,9)+String.fromCharCode(65+RI(0,25))+String.fromCharCode(65+RI(0,25)); if(country==="Ukraine") return String(RI(1000,98999)); return String(RI(10000,99999)); }
+    function makeStreet(){ return `${R(STREET_PREFIX)} ${R(STREET_TYPE)}`; }
+    function makeAddress(country){ return makeRealisticLocation(country).address; }
+
+    // Contact helpers
+    function phoneByCountry(country){ return (PHONE[country]||(()=>`+${RI(1,99)} ${RI(100,999)} ${RI(1000,9999)}`))(); }
+
+
+    const CULTURE_GROUPS = {
+      english:{male:[["James","James"],["Oliver","Oliver"],["Noah","Noah"],["George","George"]],female:[["Olivia","Olivia"],["Amelia","Amelia"],["Isla","Isla"],["Ava","Ava"]],last:[["Smith","Smith"],["Jones","Jones"],["Taylor","Taylor"],["Brown","Brown"]],roads:["High Street","Station Road","Church Street","King Street"],language:"English"},
+      afghan:{male:[["احمد","Ahmad"],["محمد","Mohammad"],["عبدالله","Abdullah"],["فرید","Farid"],["حامد","Hamid"]],female:[["فاطمه","Fatima"],["مریم","Maryam"],["زینب","Zainab"],["فرشته","Fereshta"],["لیلا","Laila"]],last:[["احمدی","Ahmadi"],["محمدی","Mohammadi"],["خان","Khan"],["رحیمی","Rahimi"],["نوری","Noori"]],roads:["سرک دارالامان (Darul Aman Road)","جاده میوند (Maiwand Road)","سرک وزیر اکبر خان (Wazir Akbar Khan Road)","جاده شهید مزاری (Shahid Mazari Road)"],language:"Pashto / Dari"},
+      arabic:{male:[["محمد","Mohammed"],["أحمد","Ahmed"],["علي","Ali"],["عمر","Omar"],["يوسف","Yusuf"]],female:[["صوفي","Sophie"],["فاطمة","Fatima"],["مريم","Mariam"],["نور","Noor"],["ليلى","Layla"]],last:[["الخطيب","Al-Khatib"],["النجار","Al-Najjar"],["الحسيني","Al-Husseini"],["العتيبي","Al-Otaibi"],["الزهراني","Al-Zahrani"]],roads:["شارع الملك فهد (King Fahd Road)","شارع محمد الخامس (Mohammed V Avenue)","شارع الحبيب بورقيبة (Habib Bourguiba Avenue)","طريق الكورنيش (Corniche Road)"],language:"Arabic"},
+      french:{male:[["Louis","Louis"],["Gabriel","Gabriel"],["Jules","Jules"],["Hugo","Hugo"]],female:[["Louise","Louise"],["Emma","Emma"],["Chloé","Chloe"],["Inès","Ines"]],last:[["Martin","Martin"],["Bernard","Bernard"],["Dubois","Dubois"],["Durand","Durand"]],roads:["Rue de Rivoli","Avenue Victor Hugo","Boulevard Saint-Germain","Rue Nationale"],language:"French"},
+      german:{male:[["Maximilian","Maximilian"],["Leon","Leon"],["Paul","Paul"],["Felix","Felix"]],female:[["Mia","Mia"],["Emma","Emma"],["Hannah","Hannah"],["Lina","Lina"]],last:[["Müller","Mueller"],["Schmidt","Schmidt"],["Schneider","Schneider"],["Fischer","Fischer"]],roads:["Hauptstraße","Bahnhofstraße","Berliner Straße","Schulstraße"],language:"German"},
+      spanish:{male:[["Alejandro","Alejandro"],["Daniel","Daniel"],["Diego","Diego"],["José","Jose"]],female:[["Sofía","Sofia"],["Lucía","Lucia"],["María","Maria"],["Valentina","Valentina"]],last:[["García","Garcia"],["Martínez","Martinez"],["López","Lopez"],["Sánchez","Sanchez"]],roads:["Calle Mayor","Gran Vía","Avenida Central","Paseo de la Reforma"],language:"Spanish"},
+      portuguese:{male:[["João","Joao"],["Miguel","Miguel"],["Gabriel","Gabriel"],["Pedro","Pedro"]],female:[["Maria","Maria"],["Ana","Ana"],["Beatriz","Beatriz"],["Carolina","Carolina"]],last:[["Silva","Silva"],["Santos","Santos"],["Oliveira","Oliveira"],["Pereira","Pereira"]],roads:["Avenida da Liberdade","Rua Augusta","Rua de Santa Catarina","Avenida Paulista"],language:"Portuguese"},
+      italian:{male:[["Alessandro","Alessandro"],["Lorenzo","Lorenzo"],["Leonardo","Leonardo"],["Matteo","Matteo"]],female:[["Sofia","Sofia"],["Giulia","Giulia"],["Aurora","Aurora"],["Alice","Alice"]],last:[["Rossi","Rossi"],["Russo","Russo"],["Ferrari","Ferrari"],["Esposito","Esposito"]],roads:["Via Roma","Corso Italia","Via Garibaldi","Via Dante"],language:"Italian"},
+      dutch:{male:[["Daan","Daan"],["Sem","Sem"],["Lucas","Lucas"],["Levi","Levi"]],female:[["Emma","Emma"],["Julia","Julia"],["Mila","Mila"],["Tess","Tess"]],last:[["de Jong","de Jong"],["Jansen","Jansen"],["de Vries","de Vries"],["van den Berg","van den Berg"]],roads:["Kerkstraat","Dorpsstraat","Hoofdstraat","Stationsweg"],language:"Dutch"},
+      nordic:{male:[["Noah","Noah"],["Emil","Emil"],["Oliver","Oliver"],["Lukas","Lukas"]],female:[["Emma","Emma"],["Freja","Freja"],["Nora","Nora"],["Sofie","Sofie"]],last:[["Hansen","Hansen"],["Jensen","Jensen"],["Johansson","Johansson"],["Andersson","Andersson"]],roads:["Drottninggatan","Kungsgatan","Karl Johans gate","Strøget"],language:"Nordic local language"},
+      slavicLatin:{male:[["Jakub","Jakub"],["Jan","Jan"],["Luka","Luka"],["Marko","Marko"]],female:[["Ema","Ema"],["Ana","Ana"],["Zuzanna","Zuzanna"],["Lucija","Lucija"]],last:[["Novák","Novak"],["Kovačević","Kovacevic"],["Nowak","Nowak"],["Horvat","Horvat"]],roads:["ulica Marszałkowska","Václavské náměstí","Ilica","Slovenska cesta"],language:"Local Slavic language"},
+      cyrillic:{male:[["Александр","Alexander"],["Сергей","Sergey"],["Дмитрий","Dmitry"],["Иван","Ivan"]],female:[["София","Sofia"],["Анна","Anna"],["Мария","Maria"],["Ольга","Olga"]],last:[["Иванов","Ivanov"],["Петров","Petrov"],["Смирнов","Smirnov"],["Кузнецов","Kuznetsov"]],roads:["Тверская улица (Tverskaya Street)","Невский проспект (Nevsky Prospekt)","Садовая улица (Sadovaya Street)","проспект Независимости (Independence Avenue)"],language:"Cyrillic local language"},
+      ukrainian:{male:[["Олександр","Oleksandr"],["Андрій","Andrii"],["Дмитро","Dmytro"],["Богдан","Bohdan"]],female:[["Софія","Sofiia"],["Анастасія","Anastasiia"],["Олена","Olena"],["Марія","Mariia"]],last:[["Шевченко","Shevchenko"],["Ковальчук","Kovalchuk"],["Бондаренко","Bondarenko"],["Мельник","Melnyk"]],roads:["Хрещатик (Khreshchatyk)","вулиця Сагайдачного (Sahaidachnoho Street)","Дерибасівська вулиця (Derybasivska Street)","Сумська вулиця (Sumska Street)"],language:"Ukrainian"},
+      greek:{male:[["Γεώργιος","Georgios"],["Δημήτριος","Dimitrios"],["Νικόλαος","Nikolaos"],["Ιωάννης","Ioannis"]],female:[["Σοφία","Sofia"],["Μαρία","Maria"],["Ελένη","Eleni"],["Αναστασία","Anastasia"]],last:[["Παπαδόπουλος","Papadopoulos"],["Νικολάου","Nikolaou"],["Γεωργίου","Georgiou"],["Χριστοδούλου","Christodoulou"]],roads:["Οδός Ερμού (Ermou Street)","Λεωφόρος Συγγρού (Syngrou Avenue)","Λεωφόρος Βασιλίσσης Σοφίας (Vasilissis Sofias Avenue)","Οδός Τσιμισκή (Tsimiski Street)"],language:"Greek"},
+      turkish:{male:[["Mehmet","Mehmet"],["Mustafa","Mustafa"],["Ahmet","Ahmet"],["Ali","Ali"]],female:[["Fatma","Fatma"],["Ayşe","Ayse"],["Emine","Emine"],["Zeynep","Zeynep"]],last:[["Yılmaz","Yilmaz"],["Kaya","Kaya"],["Demir","Demir"],["Şahin","Sahin"]],roads:["İstiklal Caddesi","Bağdat Caddesi","Atatürk Bulvarı","Cumhuriyet Caddesi"],language:"Turkish"},
+      persian:{male:[["علی","Ali"],["محمدرضا","Mohammad Reza"],["حسین","Hossein"],["رضا","Reza"]],female:[["فاطمه","Fatemeh"],["زهرا","Zahra"],["نگار","Negar"],["مهسا","Mahsa"]],last:[["کریمی","Karimi"],["محمدی","Mohammadi"],["حسینی","Hosseini"],["رضایی","Rezaei"]],roads:["خیابان ولیعصر (Valiasr Street)","خیابان انقلاب (Enghelab Street)","بلوار کشاورز (Keshavarz Boulevard)","خیابان چهارباغ (Chaharbagh Street)"],language:"Persian"},
+      hebrew:{male:[["דוד","David"],["יוסף","Yosef"],["נעם","Noam"],["יואב","Yoav"]],female:[["מיה","Maya"],["יעל","Yael"],["נועה","Noa"],["תמר","Tamar"]],last:[["כהן","Cohen"],["לוי","Levi"],["מזרחי","Mizrahi"],["פרץ","Peretz"]],roads:["רחוב יפו (Jaffa Road)","רחוב דיזנגוף (Dizengoff Street)","שדרות רוטשילד (Rothschild Boulevard)","דרך מנחם בגין (Menachem Begin Road)"],language:"Hebrew / Arabic"},
+      hindi:{male:[["आरव","Aarav"],["विवान","Vivaan"],["अर्जुन","Arjun"],["आदित्य","Aditya"]],female:[["अनन्या","Ananya"],["रिया","Riya"],["काव्या","Kavya"],["नेहा","Neha"]],last:[["शर्मा","Sharma"],["वर्मा","Verma"],["गुप्ता","Gupta"],["सिंह","Singh"]],roads:["Mahatma Gandhi Road","Park Street","Linking Road","Brigade Road"],language:"Hindi / English"},
+      urdu:{male:[["محمد","Mohammad"],["علی","Ali"],["احمد","Ahmed"],["حسن","Hassan"]],female:[["فاطمہ","Fatima"],["عائشہ","Ayesha"],["مریم","Maryam"],["زینب","Zainab"]],last:[["خان","Khan"],["احمد","Ahmed"],["حسین","Hussain"],["ملک","Malik"]],roads:["شاہراہ فیصل (Shahrah-e-Faisal)","مال روڈ (Mall Road)","جناح ایونیو (Jinnah Avenue)","مری روڈ (Murree Road)"],language:"Urdu / English"},
+      bengali:{male:[["আরিফ","Arif"],["রাহাত","Rahat"],["সাব্বির","Sabbir"],["তানভীর","Tanvir"]],female:[["সুমাইয়া","Sumaiya"],["নুসরাত","Nusrat"],["মেহজাবিন","Mehjabin"],["তাসনিম","Tasnim"]],last:[["চৌধুরী","Chowdhury"],["হোসেন","Hossain"],["ইসলাম","Islam"],["সরকার","Sarkar"]],roads:["ধানমন্ডি রোড (Dhanmondi Road)","গুলশান এভিনিউ (Gulshan Avenue)","মিরপুর রোড (Mirpur Road)","স্টেশন রোড (Station Road)"],language:"Bengali"},
+      thai:{male:[["สมชาย","Somchai"],["วีรภัทร","Wiraphat"],["นพดล","Noppadon"],["อนันต์","Anan"]],female:[["สุภาวดี","Supawadee"],["กมล","Kamon"],["พรทิพย์","Porntip"],["นลิน","Nalin"]],last:[["ศรีสุข","Srisuk"],["จันทร์เพ็ญ","Chanphen"],["บุญช่วย","Boonchuay"],["ทองดี","Thongdee"]],roads:["ถนนสุขุมวิท (Sukhumvit Road)","ถนนสีลม (Silom Road)","ถนนเจริญกรุง (Charoen Krung Road)","ถนนนิมมานเหมินท์ (Nimmanhaemin Road)"],language:"Thai"},
+      chinese:{male:[["伟","Wei"],["强","Qiang"],["磊","Lei"],["杰","Jie"]],female:[["芳","Fang"],["娜","Na"],["敏","Min"],["静","Jing"]],last:[["王","Wang"],["李","Li"],["张","Zhang"],["刘","Liu"]],roads:["南京路 (Nanjing Road)","王府井大街 (Wangfujing Street)","淮海中路 (Huaihai Road)","深南大道 (Shennan Boulevard)"],language:"Chinese"},
+      japanese:{male:[["陽斗","Haruto"],["蓮","Ren"],["大和","Yamato"],["蒼","Ao"]],female:[["葵","Aoi"],["結衣","Yui"],["さくら","Sakura"],["楓","Kaede"]],last:[["佐藤","Sato"],["鈴木","Suzuki"],["高橋","Takahashi"],["田中","Tanaka"]],roads:["銀座通り (Ginza-dori)","表参道 (Omotesando)","御堂筋 (Midosuji)","四条通 (Shijo-dori)"],language:"Japanese"},
+      korean:{male:[["민준","Min-jun"],["서준","Seo-jun"],["도윤","Do-yoon"],["하준","Ha-jun"]],female:[["서연","Seo-yeon"],["지우","Ji-woo"],["지민","Ji-min"],["하윤","Ha-yoon"]],last:[["김","Kim"],["이","Lee"],["박","Park"],["최","Choi"]],roads:["세종대로 (Sejong-daero)","강남대로 (Gangnam-daero)","테헤란로 (Teheran-ro)","중앙대로 (Jungang-daero)"],language:"Korean"},
+      swahili:{male:[["Juma","Juma"],["Hassan","Hassan"],["Omar","Omar"],["Amani","Amani"]],female:[["Aisha","Aisha"],["Zainab","Zainab"],["Neema","Neema"],["Rehema","Rehema"]],last:[["Mushi","Mushi"],["Mwangi","Mwangi"],["Odhiambo","Odhiambo"],["Njoroge","Njoroge"]],roads:["Kenyatta Avenue","Moi Avenue","Uhuru Highway","Samora Avenue"],language:"Swahili / English"},
+      westAfrican:{male:[["Mamadou","Mamadou"],["Ibrahima","Ibrahima"],["Moussa","Moussa"],["Ousmane","Ousmane"]],female:[["Aminata","Aminata"],["Fatoumata","Fatoumata"],["Awa","Awa"],["Mariam","Mariam"]],last:[["Diallo","Diallo"],["Camara","Camara"],["Traoré","Traore"],["Diop","Diop"]],roads:["Avenue de l'Indépendance","Boulevard de la République","Avenue Kwame Nkrumah","Rue du Commerce"],language:"French / local languages"},
+      southernAfrican:{male:[["Thabo","Thabo"],["Sipho","Sipho"],["Mandla","Mandla"],["Tendai","Tendai"]],female:[["Nomsa","Nomsa"],["Thandiwe","Thandiwe"],["Lerato","Lerato"],["Chipo","Chipo"]],last:[["Dlamini","Dlamini"],["Ndlovu","Ndlovu"],["Mokoena","Mokoena"],["Banda","Banda"]],roads:["Independence Avenue","Samora Machel Avenue","Main Road","Nelson Mandela Drive"],language:"English / local languages"},
+      latinFallback:{male:[["Marco","Marco"],["Luca","Luca"],["Daniel","Daniel"],["Victor","Victor"]],female:[["Sofia","Sofia"],["Maria","Maria"],["Ana","Ana"],["Laura","Laura"]],last:[["Costa","Costa"],["Silva","Silva"],["Martins","Martins"],["Garcia","Garcia"]],roads:["Main Street","Market Street","Station Road","Central Avenue"],language:"Local language"}
+    };
+
+    const COUNTRY_EXACT = {
+      "Afghanistan":["afghan","AFN","Asia/Kabul","+93",["کابل (Kabul)","هرات (Herat)","کندهار (Kandahar)","مزار شریف (Mazar-i-Sharif)"]],
+      "Albania":["slavicLatin","ALL","Europe/Tirane","+355",["Tiranë","Durrës","Vlorë","Shkodër"]],
+      "Algeria":["arabic","DZD","Africa/Algiers","+213",["الجزائر (Algiers)","وهران (Oran)","قسنطينة (Constantine)","عنابة (Annaba)"]],
+      "Andorra":["spanish","EUR","Europe/Andorra","+376",["Andorra la Vella","Escaldes-Engordany","Encamp","La Massana"]],
+      "Angola":["portuguese","AOA","Africa/Luanda","+244",["Luanda","Benguela","Huambo","Lobito"]],
+      "Antigua and Barbuda":["english","XCD","America/Antigua","+1-268",["St John's","All Saints","Liberta","Piggotts"]],
+      "Argentina":["spanish","ARS","America/Argentina/Buenos_Aires","+54",["Buenos Aires","Córdoba","Rosario","Mendoza"]],
+      "Armenia":["cyrillic","AMD","Asia/Yerevan","+374",["Երևան (Yerevan)","Գյումրի (Gyumri)","Վանաձոր (Vanadzor)","Դիլիջան (Dilijan)"]],
+      "Australia":["english","AUD","Australia/Sydney","+61",["Sydney","Melbourne","Brisbane","Perth"]],
+      "Austria":["german","EUR","Europe/Vienna","+43",["Wien","Graz","Linz","Salzburg"]],
+      "Azerbaijan":["turkish","AZN","Asia/Baku","+994",["Bakı (Baku)","Gəncə (Ganja)","Sumqayıt (Sumqayit)","Şəki (Sheki)"]],
+      "Bahamas":["english","BSD","America/Nassau","+1-242",["Nassau","Freeport","West End","Marsh Harbour"]],
+      "Bahrain":["arabic","BHD","Asia/Bahrain","+973",["المنامة (Manama)","المحرق (Muharraq)","الرفاع (Riffa)","مدينة عيسى (Isa Town)"]],
+      "Bangladesh":["bengali","BDT","Asia/Dhaka","+880",["ঢাকা (Dhaka)","চট্টগ্রাম (Chattogram)","সিলেট (Sylhet)","খুলনা (Khulna)"]],
+      "Barbados":["english","BBD","America/Barbados","+1-246",["Bridgetown","Speightstown","Oistins","Holetown"]],
+      "Belarus":["cyrillic","BYN","Europe/Minsk","+375",["Мінск (Minsk)","Гомель (Gomel)","Гродна (Grodno)","Брэст (Brest)"]],
+      "Belgium":["french","EUR","Europe/Brussels","+32",["Bruxelles (Brussels)","Antwerpen","Gent","Liège"]],
+      "Belize":["spanish","BZD","America/Belize","+501",["Belize City","Belmopan","San Ignacio","Orange Walk"]],
+      "Benin":["westAfrican","XOF","Africa/Porto-Novo","+229",["Cotonou","Porto-Novo","Parakou","Abomey-Calavi"]],
+      "Bhutan":["hindi","BTN","Asia/Thimphu","+975",["ཐིམ་ཕུ (Thimphu)","སྤ་རོ (Paro)","Punakha","Phuentsholing"]],
+      "Bolivia":["spanish","BOB","America/La_Paz","+591",["La Paz","Santa Cruz de la Sierra","Cochabamba","Sucre"]],
+      "Bosnia and Herzegovina":["slavicLatin","BAM","Europe/Sarajevo","+387",["Sarajevo","Banja Luka","Mostar","Tuzla"]],
+      "Botswana":["southernAfrican","BWP","Africa/Gaborone","+267",["Gaborone","Francistown","Maun","Molepolole"]],
+      "Brazil":["portuguese","BRL","America/Sao_Paulo","+55",["São Paulo","Rio de Janeiro","Brasília","Salvador"]],
+      "Brunei":["urdu","BND","Asia/Brunei","+673",["Bandar Seri Begawan","Kuala Belait","Seria","Tutong"]],
+      "Bulgaria":["cyrillic","BGN","Europe/Sofia","+359",["София (Sofia)","Пловдив (Plovdiv)","Варна (Varna)","Бургас (Burgas)"]],
+      "Burkina Faso":["westAfrican","XOF","Africa/Ouagadougou","+226",["Ouagadougou","Bobo-Dioulasso","Koudougou","Banfora"]],
+      "Burundi":["swahili","BIF","Africa/Bujumbura","+257",["Bujumbura","Gitega","Ngozi","Rumonge"]],
+      "Cabo Verde":["portuguese","CVE","Atlantic/Cape_Verde","+238",["Praia","Mindelo","Santa Maria","Assomada"]],
+      "Cambodia":["thai","KHR","Asia/Phnom_Penh","+855",["ភ្នំពេញ (Phnom Penh)","សៀមរាប (Siem Reap)","បាត់ដំបង (Battambang)","កំពង់ចាម (Kampong Cham)"]],
+      "Cameroon":["westAfrican","XAF","Africa/Douala","+237",["Yaoundé","Douala","Bamenda","Bafoussam"]],
+      "Canada":["english","CAD","America/Toronto","+1",["Toronto","Montréal","Vancouver","Calgary"]],
+      "Central African Republic":["westAfrican","XAF","Africa/Bangui","+236",["Bangui","Bimbo","Berbérati","Carnot"]],
+      "Chad":["arabic","XAF","Africa/Ndjamena","+235",["N'Djamena","Moundou","Sarh","Abéché"]],
+      "Chile":["spanish","CLP","America/Santiago","+56",["Santiago","Valparaíso","Concepción","La Serena"]],
+      "China":["chinese","CNY","Asia/Shanghai","+86",["北京 (Beijing)","上海 (Shanghai)","广州 (Guangzhou)","深圳 (Shenzhen)"]],
+      "Colombia":["spanish","COP","America/Bogota","+57",["Bogotá","Medellín","Cali","Barranquilla"]],
+      "Comoros":["arabic","KMF","Indian/Comoro","+269",["Moroni","Mutsamudu","Fomboni","Domoni"]],
+      "Costa Rica":["spanish","CRC","America/Costa_Rica","+506",["San José","Alajuela","Cartago","Heredia"]],
+      "Croatia":["slavicLatin","EUR","Europe/Zagreb","+385",["Zagreb","Split","Rijeka","Osijek"]],
+      "Cuba":["spanish","CUP","America/Havana","+53",["La Habana","Santiago de Cuba","Camagüey","Holguín"]],
+      "Cyprus":["greek","EUR","Asia/Nicosia","+357",["Λευκωσία (Nicosia)","Λεμεσός (Limassol)","Λάρνακα (Larnaca)","Πάφος (Paphos)"]],
+      "Czechia":["slavicLatin","CZK","Europe/Prague","+420",["Praha","Brno","Ostrava","Plzeň"]],
+      "Democratic Republic of the Congo":["westAfrican","CDF","Africa/Kinshasa","+243",["Kinshasa","Lubumbashi","Mbuji-Mayi","Kisangani"]],
+      "Denmark":["nordic","DKK","Europe/Copenhagen","+45",["København","Aarhus","Odense","Aalborg"]],
+      "Djibouti":["arabic","DJF","Africa/Djibouti","+253",["Djibouti City","Ali Sabieh","Tadjoura","Dikhil"]],
+      "Dominica":["english","XCD","America/Dominica","+1-767",["Roseau","Portsmouth","Marigot","Mahaut"]],
+      "Dominican Republic":["spanish","DOP","America/Santo_Domingo","+1-809",["Santo Domingo","Santiago de los Caballeros","La Romana","San Pedro de Macorís"]],
+      "Ecuador":["spanish","USD","America/Guayaquil","+593",["Quito","Guayaquil","Cuenca","Santo Domingo"]],
+      "Egypt":["arabic","EGP","Africa/Cairo","+20",["القاهرة (Cairo)","الإسكندرية (Alexandria)","الجيزة (Giza)","المنصورة (Mansoura)"]],
+      "El Salvador":["spanish","USD","America/El_Salvador","+503",["San Salvador","Santa Ana","San Miguel","Soyapango"]],
+      "Equatorial Guinea":["spanish","XAF","Africa/Malabo","+240",["Malabo","Bata","Ebebiyín","Aconibe"]],
+      "Eritrea":["arabic","ERN","Africa/Asmara","+291",["ኣስመራ (Asmara)","Keren","Massawa","Mendefera"]],
+      "Estonia":["nordic","EUR","Europe/Tallinn","+372",["Tallinn","Tartu","Narva","Pärnu"]],
+      "Eswatini":["southernAfrican","SZL","Africa/Mbabane","+268",["Mbabane","Manzini","Lobamba","Siteki"]],
+      "Ethiopia":["southernAfrican","ETB","Africa/Addis_Ababa","+251",["አዲስ አበባ (Addis Ababa)","ድሬዳዋ (Dire Dawa)","መቀሌ (Mekelle)","ባሕር ዳር (Bahir Dar)"]],
+      "Fantasy":["latinFallback","GLD","Tamriel Standard Time","+00",["Whiterun","Balmora","Solitude","Riften"]],
+      "Federated States of Micronesia":["english","USD","Pacific/Chuuk","+691",["Palikir","Weno","Kolonia","Tofol"]],
+      "Fiji":["hindi","FJD","Pacific/Fiji","+679",["Suva","Nadi","Lautoka","Labasa"]],
+      "Finland":["nordic","EUR","Europe/Helsinki","+358",["Helsinki","Espoo","Tampere","Turku"]],
+      "France":["french","EUR","Europe/Paris","+33",["Paris","Marseille","Lyon","Toulouse"]],
+      "Gabon":["westAfrican","XAF","Africa/Libreville","+241",["Libreville","Port-Gentil","Franceville","Oyem"]],
+      "Gambia":["westAfrican","GMD","Africa/Banjul","+220",["Banjul","Serekunda","Brikama","Bakau"]],
+      "Georgia":["cyrillic","GEL","Asia/Tbilisi","+995",["თბილისი (Tbilisi)","ბათუმი (Batumi)","ქუთაისი (Kutaisi)","რუსთავი (Rustavi)"]],
+      "Germany":["german","EUR","Europe/Berlin","+49",["Berlin","Hamburg","München","Köln"]],
+      "Ghana":["westAfrican","GHS","Africa/Accra","+233",["Accra","Kumasi","Tamale","Sekondi-Takoradi"]],
+      "Greece":["greek","EUR","Europe/Athens","+30",["Αθήνα (Athens)","Θεσσαλονίκη (Thessaloniki)","Πάτρα (Patras)","Ηράκλειο (Heraklion)"]],
+      "Grenada":["english","XCD","America/Grenada","+1-473",["St George's","Gouyave","Grenville","Victoria"]],
+      "Guatemala":["spanish","GTQ","America/Guatemala","+502",["Ciudad de Guatemala","Quetzaltenango","Escuintla","Antigua Guatemala"]],
+      "Guinea":["westAfrican","GNF","Africa/Conakry","+224",["Conakry","Kankan","Nzérékoré","Kindia"]],
+      "Guinea-Bissau":["portuguese","XOF","Africa/Bissau","+245",["Bissau","Bafatá","Gabú","Cacheu"]],
+      "Guyana":["hindi","GYD","America/Guyana","+592",["Georgetown","Linden","New Amsterdam","Anna Regina"]],
+      "Haiti":["french","HTG","America/Port-au-Prince","+509",["Port-au-Prince","Cap-Haïtien","Les Cayes","Jacmel"]],
+      "Honduras":["spanish","HNL","America/Tegucigalpa","+504",["Tegucigalpa","San Pedro Sula","La Ceiba","Choloma"]],
+      "Hungary":["slavicLatin","HUF","Europe/Budapest","+36",["Budapest","Debrecen","Szeged","Miskolc"]],
+      "Iceland":["nordic","ISK","Atlantic/Reykjavik","+354",["Reykjavík","Kópavogur","Akureyri","Hafnarfjörður"]],
+      "India":["hindi","INR","Asia/Kolkata","+91",["Mumbai","Delhi","Bengaluru","Kolkata"]],
+      "Indonesia":["latinFallback","IDR","Asia/Jakarta","+62",["Jakarta","Surabaya","Bandung","Medan"]],
+      "Iran":["persian","IRR","Asia/Tehran","+98",["تهران (Tehran)","مشهد (Mashhad)","اصفهان (Isfahan)","شیراز (Shiraz)"]],
+      "Iraq":["arabic","IQD","Asia/Baghdad","+964",["بغداد (Baghdad)","البصرة (Basra)","الموصل (Mosul)","أربيل (Erbil)"]],
+      "Ireland":["english","EUR","Europe/Dublin","+353",["Dublin","Cork","Galway","Limerick"]],
+      "Israel":["hebrew","ILS","Asia/Jerusalem","+972",["ירושלים (Jerusalem)","תל אביב-יפו (Tel Aviv-Yafo)","חיפה (Haifa)","באר שבע (Be'er Sheva)"]],
+      "Italy":["italian","EUR","Europe/Rome","+39",["Roma","Milano","Napoli","Torino"]],
+      "Ivory Coast":["westAfrican","XOF","Africa/Abidjan","+225",["Abidjan","Bouaké","Yamoussoukro","Daloa"]],
+      "Jamaica":["english","JMD","America/Jamaica","+1-876",["Kingston","Montego Bay","Spanish Town","Mandeville"]],
+      "Japan":["japanese","JPY","Asia/Tokyo","+81",["東京 (Tokyo)","大阪 (Osaka)","京都 (Kyoto)","名古屋 (Nagoya)"]],
+      "Jordan":["arabic","JOD","Asia/Amman","+962",["عمّان (Amman)","إربد (Irbid)","الزرقاء (Zarqa)","العقبة (Aqaba)"]],
+      "Kazakhstan":["cyrillic","KZT","Asia/Almaty","+7",["Алматы (Almaty)","Астана (Astana)","Шымкент (Shymkent)","Қарағанды (Karaganda)"]],
+      "Kenya":["swahili","KES","Africa/Nairobi","+254",["Nairobi","Mombasa","Kisumu","Nakuru"]],
+      "Kiribati":["english","AUD","Pacific/Tarawa","+686",["South Tarawa","Betio","Bikenibeu","Teaoraereke"]],
+      "Kosovo":["slavicLatin","EUR","Europe/Pristina","+383",["Prishtinë (Pristina)","Prizren","Pejë (Peja)","Mitrovicë (Mitrovica)"]],
+      "Kuwait":["arabic","KWD","Asia/Kuwait","+965",["مدينة الكويت (Kuwait City)","حولي (Hawalli)","السالمية (Salmiya)","الفروانية (Farwaniya)"]],
+      "Kyrgyzstan":["cyrillic","KGS","Asia/Bishkek","+996",["Бишкек (Bishkek)","Ош (Osh)","Жалал-Абад (Jalal-Abad)","Каракол (Karakol)"]],
+      "Laos":["thai","LAK","Asia/Vientiane","+856",["ວຽງຈັນ (Vientiane)","ຫຼວງພະບາງ (Luang Prabang)","ປາກເຊ (Pakse)","ສະຫວັນນະເຂດ (Savannakhet)"]],
+      "Latvia":["nordic","EUR","Europe/Riga","+371",["Rīga","Daugavpils","Liepāja","Jelgava"]],
+      "Lebanon":["arabic","LBP","Asia/Beirut","+961",["بيروت (Beirut)","طرابلس (Tripoli)","صيدا (Sidon)","زحلة (Zahle)"]],
+      "Lesotho":["southernAfrican","LSL","Africa/Maseru","+266",["Maseru","Teyateyaneng","Mafeteng","Leribe"]],
+      "Liberia":["westAfrican","LRD","Africa/Monrovia","+231",["Monrovia","Gbarnga","Buchanan","Kakata"]],
+      "Libya":["arabic","LYD","Africa/Tripoli","+218",["طرابلس (Tripoli)","بنغازي (Benghazi)","مصراتة (Misrata)","سبها (Sabha)"]],
+      "Liechtenstein":["german","CHF","Europe/Vaduz","+423",["Vaduz","Schaan","Triesen","Balzers"]],
+      "Lithuania":["slavicLatin","EUR","Europe/Vilnius","+370",["Vilnius","Kaunas","Klaipėda","Šiauliai"]],
+      "Luxembourg":["french","EUR","Europe/Luxembourg","+352",["Luxembourg","Esch-sur-Alzette","Differdange","Dudelange"]],
+      "Madagascar":["french","MGA","Indian/Antananarivo","+261",["Antananarivo","Toamasina","Antsirabe","Fianarantsoa"]],
+      "Malawi":["southernAfrican","MWK","Africa/Blantyre","+265",["Lilongwe","Blantyre","Mzuzu","Zomba"]],
+      "Malaysia":["urdu","MYR","Asia/Kuala_Lumpur","+60",["Kuala Lumpur","George Town","Johor Bahru","Ipoh"]],
+      "Maldives":["urdu","MVR","Indian/Maldives","+960",["މާލެ (Malé)","Addu City","Fuvahmulah","Kulhudhuffushi"]],
+      "Mali":["westAfrican","XOF","Africa/Bamako","+223",["Bamako","Sikasso","Ségou","Mopti"]],
+      "Malta":["italian","EUR","Europe/Malta","+356",["Valletta","Birkirkara","Sliema","Mosta"]],
+      "Marshall Islands":["english","USD","Pacific/Majuro","+692",["Majuro","Ebeye","Laura","Rita"]],
+      "Mauritania":["arabic","MRU","Africa/Nouakchott","+222",["نواكشوط (Nouakchott)","نواذيبو (Nouadhibou)","كيهيدي (Kaédi)","روصو (Rosso)"]],
+      "Mauritius":["hindi","MUR","Indian/Mauritius","+230",["Port Louis","Beau Bassin-Rose Hill","Vacoas-Phoenix","Curepipe"]],
+      "Mexico":["spanish","MXN","America/Mexico_City","+52",["Ciudad de México","Guadalajara","Monterrey","Puebla"]],
+      "Moldova":["slavicLatin","MDL","Europe/Chisinau","+373",["Chișinău","Bălți","Tiraspol","Bender"]],
+      "Monaco":["french","EUR","Europe/Monaco","+377",["Monaco","Monte-Carlo","La Condamine","Fontvieille"]],
+      "Mongolia":["cyrillic","MNT","Asia/Ulaanbaatar","+976",["Улаанбаатар (Ulaanbaatar)","Эрдэнэт (Erdenet)","Дархан (Darkhan)","Чойбалсан (Choibalsan)"]],
+      "Montenegro":["slavicLatin","EUR","Europe/Podgorica","+382",["Podgorica","Nikšić","Herceg Novi","Budva"]],
+      "Morocco":["arabic","MAD","Africa/Casablanca","+212",["الدار البيضاء (Casablanca)","الرباط (Rabat)","مراكش (Marrakesh)","فاس (Fes)"]],
+      "Mozambique":["portuguese","MZN","Africa/Maputo","+258",["Maputo","Matola","Beira","Nampula"]],
+      "Myanmar":["thai","MMK","Asia/Yangon","+95",["ရန်ကုန် (Yangon)","မန္တလေး (Mandalay)","နေပြည်တော် (Naypyidaw)","ပဲခူး (Bago)"]],
+      "Namibia":["southernAfrican","NAD","Africa/Windhoek","+264",["Windhoek","Walvis Bay","Swakopmund","Rundu"]],
+      "Nauru":["english","AUD","Pacific/Nauru","+674",["Yaren","Aiwo","Anabar","Boe"]],
+      "Nepal":["hindi","NPR","Asia/Kathmandu","+977",["काठमाडौं (Kathmandu)","पोखरा (Pokhara)","ललितपुर (Lalitpur)","भरतपुर (Bharatpur)"]],
+      "Netherlands":["dutch","EUR","Europe/Amsterdam","+31",["Amsterdam","Rotterdam","Den Haag","Utrecht"]],
+      "New Zealand":["english","NZD","Pacific/Auckland","+64",["Auckland","Wellington","Christchurch","Hamilton"]],
+      "Nicaragua":["spanish","NIO","America/Managua","+505",["Managua","León","Masaya","Granada"]],
+      "Niger":["westAfrican","XOF","Africa/Niamey","+227",["Niamey","Zinder","Maradi","Agadez"]],
+      "Nigeria":["westAfrican","NGN","Africa/Lagos","+234",["Lagos","Abuja","Kano","Ibadan"]],
+      "North Korea":["korean","KPW","Asia/Pyongyang","+850",["평양 (Pyongyang)","함흥 (Hamhung)","청진 (Chongjin)","남포 (Nampo)"]],
+      "North Macedonia":["cyrillic","MKD","Europe/Skopje","+389",["Скопје (Skopje)","Битола (Bitola)","Куманово (Kumanovo)","Охрид (Ohrid)"]],
+      "Norway":["nordic","NOK","Europe/Oslo","+47",["Oslo","Bergen","Trondheim","Stavanger"]],
+      "Oman":["arabic","OMR","Asia/Muscat","+968",["مسقط (Muscat)","صلالة (Salalah)","نزوى (Nizwa)","صحار (Sohar)"]],
+      "Pakistan":["urdu","PKR","Asia/Karachi","+92",["کراچی (Karachi)","لاہور (Lahore)","اسلام آباد (Islamabad)","راولپنڈی (Rawalpindi)"]],
+      "Palau":["english","USD","Pacific/Palau","+680",["Ngerulmud","Koror","Melekeok","Airai"]],
+      "Panama":["spanish","PAB","America/Panama","+507",["Ciudad de Panamá","Colón","David","Santiago"]],
+      "Papua New Guinea":["english","PGK","Pacific/Port_Moresby","+675",["Port Moresby","Lae","Mount Hagen","Madang"]],
+      "Paraguay":["spanish","PYG","America/Asuncion","+595",["Asunción","Ciudad del Este","San Lorenzo","Luque"]],
+      "Peru":["spanish","PEN","America/Lima","+51",["Lima","Arequipa","Cusco","Trujillo"]],
+      "Philippines":["spanish","PHP","Asia/Manila","+63",["Manila","Quezon City","Cebu City","Davao City"]],
+      "Poland":["slavicLatin","PLN","Europe/Warsaw","+48",["Warszawa","Kraków","Łódź","Wrocław"]],
+      "Portugal":["portuguese","EUR","Europe/Lisbon","+351",["Lisboa","Porto","Braga","Coimbra"]],
+      "Qatar":["arabic","QAR","Asia/Qatar","+974",["الدوحة (Doha)","الريان (Al Rayyan)","الوكرة (Al Wakrah)","الخور (Al Khor)"]],
+      "Republic of the Congo":["westAfrican","XAF","Africa/Brazzaville","+242",["Brazzaville","Pointe-Noire","Dolisie","Nkayi"]],
+      "Romania":["slavicLatin","RON","Europe/Bucharest","+40",["București","Cluj-Napoca","Timișoara","Iași"]],
+      "Russia":["cyrillic","RUB","Europe/Moscow","+7",["Москва (Moscow)","Санкт-Петербург (Saint Petersburg)","Новосибирск (Novosibirsk)","Казань (Kazan)"]],
+      "Rwanda":["swahili","RWF","Africa/Kigali","+250",["Kigali","Butare","Gisenyi","Musanze"]],
+      "Saint Kitts and Nevis":["english","XCD","America/St_Kitts","+1-869",["Basseterre","Charlestown","Sandy Point Town","Cayon"]],
+      "Saint Lucia":["english","XCD","America/St_Lucia","+1-758",["Castries","Gros Islet","Vieux Fort","Soufrière"]],
+      "Saint Vincent and the Grenadines":["english","XCD","America/St_Vincent","+1-784",["Kingstown","Georgetown","Byera Village","Barrouallie"]],
+      "Samoa":["english","WST","Pacific/Apia","+685",["Apia","Vaitele","Faleula","Siusega"]],
+      "San Marino":["italian","EUR","Europe/San_Marino","+378",["Città di San Marino","Serravalle","Borgo Maggiore","Domagnano"]],
+      "Sao Tome and Principe":["portuguese","STN","Africa/Sao_Tome","+239",["São Tomé","Santo António","Trindade","Neves"]],
+      "Saudi Arabia":["arabic","SAR","Asia/Riyadh","+966",["الرياض (Riyadh)","جدة (Jeddah)","مكة (Makkah)","الدمام (Dammam)"]],
+      "Senegal":["westAfrican","XOF","Africa/Dakar","+221",["Dakar","Touba","Thiès","Saint-Louis"]],
+      "Serbia":["cyrillic","RSD","Europe/Belgrade","+381",["Београд (Belgrade)","Нови Сад (Novi Sad)","Ниш (Niš)","Крагујевац (Kragujevac)"]],
+      "Seychelles":["french","SCR","Indian/Mahe","+248",["Victoria","Anse Boileau","Beau Vallon","Takamaka"]],
+      "Sierra Leone":["westAfrican","SLE","Africa/Freetown","+232",["Freetown","Bo","Kenema","Makeni"]],
+      "Singapore":["chinese","SGD","Asia/Singapore","+65",["Singapore"]],
+      "Slovakia":["slavicLatin","EUR","Europe/Bratislava","+421",["Bratislava","Košice","Prešov","Žilina"]],
+      "Slovenia":["slavicLatin","EUR","Europe/Ljubljana","+386",["Ljubljana","Maribor","Celje","Kranj"]],
+      "Solomon Islands":["english","SBD","Pacific/Guadalcanal","+677",["Honiara","Gizo","Auki","Kirakira"]],
+      "Somalia":["arabic","SOS","Africa/Mogadishu","+252",["Muqdisho (Mogadishu)","Hargeysa (Hargeisa)","Kismaayo (Kismayo)","Boosaaso (Bosaso)"]],
+      "South Africa":["southernAfrican","ZAR","Africa/Johannesburg","+27",["Johannesburg","Cape Town","Durban","Pretoria"]],
+      "South Korea":["korean","KRW","Asia/Seoul","+82",["서울 (Seoul)","부산 (Busan)","인천 (Incheon)","대구 (Daegu)"]],
+      "South Sudan":["southernAfrican","SSP","Africa/Juba","+211",["Juba","Wau","Malakal","Yei"]],
+      "Spain":["spanish","EUR","Europe/Madrid","+34",["Madrid","Barcelona","Valencia","Sevilla"]],
+      "Sri Lanka":["hindi","LKR","Asia/Colombo","+94",["කොළඹ (Colombo)","Kandy","Galle","Jaffna"]],
+      "Sudan":["arabic","SDG","Africa/Khartoum","+249",["الخرطوم (Khartoum)","أم درمان (Omdurman)","بورتسودان (Port Sudan)","كسلا (Kassala)"]],
+      "Suriname":["dutch","SRD","America/Paramaribo","+597",["Paramaribo","Lelydorp","Nieuw Nickerie","Moengo"]],
+      "Sweden":["nordic","SEK","Europe/Stockholm","+46",["Stockholm","Göteborg","Malmö","Uppsala"]],
+      "Switzerland":["german","CHF","Europe/Zurich","+41",["Zürich","Genève","Basel","Bern"]],
+      "Syria":["arabic","SYP","Asia/Damascus","+963",["دمشق (Damascus)","حلب (Aleppo)","حمص (Homs)","اللاذقية (Latakia)"]],
+      "Taiwan":["chinese","TWD","Asia/Taipei","+886",["台北 (Taipei)","高雄 (Kaohsiung)","台中 (Taichung)","台南 (Tainan)"]],
+      "Tajikistan":["cyrillic","TJS","Asia/Dushanbe","+992",["Душанбе (Dushanbe)","Хуҷанд (Khujand)","Бохтар (Bokhtar)","Кӯлоб (Kulob)"]],
+      "Tanzania":["swahili","TZS","Africa/Dar_es_Salaam","+255",["Dar es Salaam","Dodoma","Arusha","Mwanza"]],
+      "Thailand":["thai","THB","Asia/Bangkok","+66",["กรุงเทพมหานคร (Bangkok)","เชียงใหม่ (Chiang Mai)","ภูเก็ต (Phuket)","ขอนแก่น (Khon Kaen)"]],
+      "Timor-Leste":["portuguese","USD","Asia/Dili","+670",["Dili","Baucau","Maliana","Suai"]],
+      "Togo":["westAfrican","XOF","Africa/Lome","+228",["Lomé","Sokodé","Kara","Kpalimé"]],
+      "Tonga":["english","TOP","Pacific/Tongatapu","+676",["Nukuʻalofa","Neiafu","Haveluloto","Vaini"]],
+      "Trinidad and Tobago":["english","TTD","America/Port_of_Spain","+1-868",["Port of Spain","San Fernando","Chaguanas","Arima"]],
+      "Tunisia":["arabic","TND","Africa/Tunis","+216",["تونس (Tunis)","صفاقس (Sfax)","سوسة (Sousse)","القيروان (Kairouan)"]],
+      "Turkey":["turkish","TRY","Europe/Istanbul","+90",["İstanbul","Ankara","İzmir","Bursa"]],
+      "Turkmenistan":["turkish","TMT","Asia/Ashgabat","+993",["Aşgabat (Ashgabat)","Türkmenabat","Daşoguz","Mary"]],
+      "Tuvalu":["english","AUD","Pacific/Funafuti","+688",["Funafuti","Vaiaku","Asau","Savave"]],
+      "Uganda":["swahili","UGX","Africa/Kampala","+256",["Kampala","Entebbe","Jinja","Mbarara"]],
+      "Ukraine":["ukrainian","UAH","Europe/Kyiv","+380",["Київ (Kyiv)","Львів (Lviv)","Одеса (Odesa)","Харків (Kharkiv)"]],
+      "United Arab Emirates":["arabic","AED","Asia/Dubai","+971",["دبي (Dubai)","أبوظبي (Abu Dhabi)","الشارقة (Sharjah)","العين (Al Ain)"]],
+      "United Kingdom":["english","GBP","Europe/London","+44",["London","Manchester","Birmingham","Leeds"]],
+      "United States":["english","USD","America/New_York","+1",["New York","Los Angeles","Chicago","Houston"]],
+      "Uruguay":["spanish","UYU","America/Montevideo","+598",["Montevideo","Salto","Paysandú","Maldonado"]],
+      "Uzbekistan":["turkish","UZS","Asia/Tashkent","+998",["Toshkent (Tashkent)","Samarqand (Samarkand)","Buxoro (Bukhara)","Fargʻona (Fergana)"]],
+      "Vanuatu":["english","VUV","Pacific/Efate","+678",["Port Vila","Luganville","Isangel","Lakatoro"]],
+      "Vatican City":["italian","EUR","Europe/Vatican","+379",["Città del Vaticano (Vatican City)"]],
+      "Venezuela":["spanish","VES","America/Caracas","+58",["Caracas","Maracaibo","Valencia","Barquisimeto"]],
+      "Vietnam":["latinFallback","VND","Asia/Ho_Chi_Minh","+84",["Hà Nội","Thành phố Hồ Chí Minh","Đà Nẵng","Huế"]],
+      "Yemen":["arabic","YER","Asia/Aden","+967",["صنعاء (Sana'a)","عدن (Aden)","تعز (Taiz)","الحديدة (Hodeidah)"]],
+      "Zambia":["southernAfrican","ZMW","Africa/Lusaka","+260",["Lusaka","Ndola","Kitwe","Livingstone"]],
+      "Zimbabwe":["southernAfrican","ZWG","Africa/Harare","+263",["Harare","Bulawayo","Mutare","Gweru"]]
+    };
+
+    function countryExact(country){
+      const raw = COUNTRY_EXACT[country] || COUNTRY_EXACT["United Kingdom"];
+      const group = CULTURE_GROUPS[raw[0]] || CULTURE_GROUPS.english;
+      return { groupKey:raw[0], group, currency:raw[1], timezone:raw[2], phone:raw[3], cities:raw[4] };
+    }
+
+    function showPair(pair){
+      return pair[0] === pair[1] ? pair[0] : `${pair[0]} (${pair[1]})`;
+    }
+
+    function makeAccurateName(country, gender){
+      const p = countryExact(country);
+      const first = gender === "Male" ? R(p.group.male) : R(p.group.female);
+      const last = R(p.group.last);
+      return {
+        native:`${first[0]} ${last[0]}`,
+        roman:`${first[1]} ${last[1]}`,
+        display:`${showPair(first)} ${showPair(last)}`
+      };
+    }
+
+    function makeAccurateLocation(country){
+      const p = countryExact(country);
+      const city = R(p.cities);
+      const road = R(p.group.roads);
+      const number = RI(1,220);
+      return {
+        address:`${number} ${road}, ${city}, ${postcode(country)}, ${country}`,
+        city,
+        language:p.group.language,
+        timezone:p.timezone,
+        currency:p.currency
+      };
+    }
+
+    function makeAccuratePhone(country){
+      const p = countryExact(country);
+      const cc = p.phone;
+      if(cc === "+1") return `${cc} ${RI(200,999)}-${RI(200,999)}-${RI(1000,9999)}`;
+      if(cc.startsWith("+1-")) return `${cc} ${RI(200,999)}-${RI(1000,9999)}`;
+      if(country === "United Kingdom") return `+44 7${RI(0,9)} ${RI(1000,9999)} ${RI(1000,9999)}`;
+      if(country === "India") return `+91 ${RI(60000,99999)} ${RI(10000,99999)}`;
+      if(country === "Pakistan") return `+92 3${RI(0,9)}${RI(0,9)} ${RI(100,999)} ${RI(1000000,9999999)}`;
+      if(country === "China") return `+86 1${RI(3,9)}${RI(0,9)} ${RI(1000,9999)} ${RI(1000,9999)}`;
+      if(country === "Japan") return `+81 90-${RI(1000,9999)}-${RI(1000,9999)}`;
+      if(country === "South Korea") return `+82 10-${RI(1000,9999)}-${RI(1000,9999)}`;
+      if(country === "Australia") return `+61 4${RI(0,9)} ${RI(100,999)} ${RI(100,999)}`;
+      if(country === "Germany") return `+49 1${RI(5,7)} ${RI(1000000,9999999)}`;
+      if(country === "France") return `+33 6 ${RI(10,99)} ${RI(10,99)} ${RI(10,99)} ${RI(10,99)}`;
+      if(country === "Brazil") return `+55 ${RI(11,99)} 9${RI(1000,9999)}-${RI(1000,9999)}`;
+      return `${cc} ${RI(100,999)} ${RI(100,999)} ${RI(1000,9999)}`;
+    }
+
+
+    function build(country){
+      const chosen = (country==='any') ? R(COUNTRY_LIST.filter(x=>x!=='Fantasy')) : country;
+      const gender = (chosen==='Fantasy') ? R(['Male','Female','Elf','Orc','Khajiit','Argonian']) : (Math.random()>0.5?'Male':'Female');
+      const profileName = makeAccurateName(chosen, gender);
+      const name = profileName.native;
+      const nameEnglish = profileName.roman;
+      const displayName = profileName.display;
+      const location = makeAccurateLocation(chosen);
+      const dobY=RI(1950,2004), dobM=RI(1,12), dobD=RI(1,28);
+      const dob = `${pad2(dobD)}/${pad2(dobM)}/${dobY}`;
+      const now=new Date(), age=now.getFullYear()-dobY - (((now.getMonth()+1)<dobM || ((now.getMonth()+1)===dobM && now.getDate()<dobD))?1:0);
+
+      const idProf = govProfile(chosen);
+      const currency = location.currency;
+
+      // Finance
+      const card = (chosen==='Fantasy') ? {type:'Guild Credit Token', num:`${RI(1000,9999)}-${RI(1000,9999)}-${RI(1000,9999)}`, exp:`Era ${RI(1,9)}`, cvv:RI(100,999)} : genCard(chosen);
+      const iban = makeIBAN(chosen);
+      const bic = (iban? makeBIC(chosen) : null);
+
+      // Non-IBAN local details
+      let localBank = null;
+      if(!iban && chosen!=="Fantasy"){
+        if(chosen==="United States"){ localBank = {label:"Routing / Account", value:`${RI(100000000,999999999)} / ${RI(10000000,99999999)}`}; }
+        else if(chosen==="Canada"){ localBank = {label:"Transit/Institution/Account", value:`${pad2(RI(1,99))}${RI(0,9)}${RI(0,9)}-${RI(100,999)} / ${RI(1000000,9999999)}`}; }
+        else if(chosen==="Australia"){ localBank = {label:"BSB / Account", value:`${RI(100,999)}-${RI(100,999)} / ${RI(100000,999999)}`}; }
+        else if(chosen==="India"){ localBank = {label:"IFSC / Account", value:`${AtoZ[RI(0,25)]}${AtoZ[RI(0,25)]}${AtoZ[RI(0,25)]}${AtoZ[RI(0,25)]}${RI(0,9)}${RI(0,9)}${RI(0,9)}${RI(0,9)} / ${RI(10000000000,99999999999)}`}; }
+        else { localBank = {label:"Account No", value:`${RI(10000000,999999999)}`}; }
+      }
+
+      return {
+        chosen, gender, name, nameEnglish, displayName, dob, age, currency, idProf,
+        address: location.address,
+        city: location.city,
+        language: location.language,
+        timezone: location.timezone,
+        phone: makeAccuratePhone(chosen),
+        card, iban, bic, localBank
+      };
+    }
+
+    // Render
+    function section(title, rows){
+      const sec=document.createElement('section'); sec.className='section';
+      const h=document.createElement('h3'); h.textContent=title; sec.appendChild(h);
+      const grid=document.createElement('div'); grid.className='grid';
+      rows.forEach(([k,v,isHtml])=>{
+        const lk=document.createElement('div'); lk.className='label'; lk.textContent=k;
+        const lv=document.createElement('div'); lv.className='value'; if(isHtml) lv.innerHTML=v; else lv.textContent=v;
+        grid.appendChild(lk); grid.appendChild(lv);
+      });
+      sec.appendChild(grid); return sec;
+    }
+
+    async function render(data){
+      const recordEl=document.getElementById('record');
+      recordEl.classList.remove('hidden');
+      recordEl.innerHTML='';
+
+      const wrap=document.createElement('div'); wrap.className='sections';
+
+      wrap.appendChild(section('Identity', [['Name', data.displayName || data.name],['Gender', data.gender],['DOB', data.dob],['Age', String(data.age)]]));
+      wrap.appendChild(section('Location', [['Address', data.address],['Area / City', data.city],['Country', data.chosen],['Language', data.language]]));
+      wrap.appendChild(section('Contact', [['Phone', data.phone],['Email', '<a class="link-btn" href="https://tools.adrianheadley.com/pages/toolpages/temp-email.html">Click here to get a real email</a>', true]]));
+
+      const govTitle = (data.chosen==='Fantasy')?'Guild & Papers':'Government IDs';
+      wrap.appendChild(section(govTitle, [[data.idProf.label, data.idProf.id()],['Passport', (data.chosen==='Fantasy'?`Travel Writ ${RI(100000,999999)}` : `${AtoZ[RI(0,25)]}${AtoZ[RI(0,25)]}${RI(1000000,9999999)}`)],[(data.chosen==='Fantasy'?'Rider Permit':'Driving Licence'), `${AtoZ[RI(0,25)]}${AtoZ[RI(0,25)]}-${RI(100000,999999)}`]]));
+
+      const finRows = [];
+      finRows.push([(data.chosen==='Fantasy'?'Guild Token':'Card'), `${data.card.type} ${data.card.num} (Exp: ${data.card.exp}${data.chosen==='Fantasy'?'':(' CVV:'+data.card.cvv)})`]);
+      if(data.iban){ finRows.push(['IBAN', data.iban]); finRows.push(['BIC/SWIFT', data.bic]); }
+      if(data.localBank){ finRows.push([data.localBank.label, data.localBank.value]); }
+      finRows.push(['Currency', data.currency]);
+      wrap.appendChild(section('Finance', finRows));
+
+      wrap.appendChild(section('Misc', [['Timezone', data.timezone]]));
+
+      recordEl.appendChild(wrap);
+      }
+
+    async function generate(){
+      try{
+        const c = document.getElementById('country').value;
+        const data = build(c);
+        await render(data);
+        const e=document.getElementById('error'); e.classList.add('hidden'); e.textContent='';
+      }catch(err){
+        console.error(err);
+        const e=document.getElementById('error'); e.classList.remove('hidden'); e.textContent='Error: '+err.message;
+      }
+    }
+
+    window._gen = generate;
+    document.getElementById('generate').addEventListener('click', generate);
+  });
+})();
+</script>
+<!-- RIYST_INLINE_SCRIPT_END -->
+<script>
+(function(){
+  const y=document.getElementById('year');
+  if(y) y.textContent=new Date().getFullYear();
+})();
+</script>
+</body<script src="../../Assets/site-shell.js"></script>
+>
+</html>

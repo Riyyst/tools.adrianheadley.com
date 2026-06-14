@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tools | Random Spinner</title>
+<meta name="description" content="Add weighted options and spin a colourful random choice wheel locally in your browser."/>
+<meta name="theme-color" content="#f5f5f7"/>
+
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --bg-alt:#ffffff;
+    --text:#111827;
+    --text-soft:#4b5563;
+    --accent:#2563eb;
+    --accent-hover:#1d4ed8;
+    --accent-soft:rgba(37,99,235,.08);
+    --border-subtle:#e5e7eb;
+    --border-strong:#d1d5db;
+    --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+    --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+    --radius-pill:999px;
+    --max-w:1100px;
+    --gap:14px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;min-height:100%;scroll-behavior:smooth;overflow-x:hidden}
+  body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background:var(--bg);
+    color:var(--text);
+    font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  main{flex:1}
+  .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+  .skip-link{
+    position:absolute;
+    left:-999px;
+    top:.5rem;
+    padding:.45rem .75rem;
+    background:#111827;
+    color:#fff;
+    z-index:100;
+    border-radius:999px;
+  }
+  .skip-link:focus{left:.5rem}
+
+  .site-header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    border-bottom:1px solid rgba(148,163,184,.28);
+    backdrop-filter:blur(16px);
+    background:rgba(248,250,252,.95);
+  }
+  .mast{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:58px;
+    padding:.55rem 0;
+  }
+  .nav__list{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    list-style:none;
+    margin:0;
+    padding:0;
+    flex-wrap:wrap;
+    font-size:.86rem;
+  }
+  .nav__link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:.3rem .8rem;
+    border-radius:999px;
+    color:var(--text-soft);
+    border:1px solid transparent;
+    transition:background .16s,color .16s,transform .12s,border-color .16s;
+  }
+  .nav__link:hover,.nav__link:focus-visible{
+    background:rgba(148,163,184,.18);
+    color:var(--text);
+    transform:translateY(-1px);
+    text-decoration:none;
+    border-color:rgba(148,163,184,.26);
+  }
+  .nav__link--highlight{
+    background:var(--accent-soft);
+    color:var(--accent);
+    border-color:rgba(37,99,235,.18);
+  }
+
+  .intro{text-align:center;padding:2.6rem 0 2.4rem}
+  .intro__title{
+    font-size:clamp(2.1rem,3vw,2.6rem);
+    line-height:1.15;
+    margin:0 0 .8rem;
+    font-weight:750;
+    letter-spacing:-.03em;
+  }
+  .intro__subtitle{
+    max-width:680px;
+    margin:0 auto;
+    color:var(--text-soft);
+    font-size:.96rem;
+    font-weight:500;
+  }
+
+  .tool{padding:2.4rem 0 4rem}
+  .card{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--border-subtle);
+    border-radius:24px;
+    box-shadow:var(--shadow-soft);
+    padding:clamp(1.2rem,3vw,1.7rem);
+    transition:box-shadow .16s,border-color .16s;
+  }
+  .card:hover{
+    box-shadow:var(--shadow-lift);
+    border-color:rgba(37,99,235,.18);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:minmax(0,.9fr) minmax(360px,1.1fr);
+    gap:1rem;
+    align-items:start;
+  }
+  .panel{
+    min-width:0;
+    border:1px solid var(--border-subtle);
+    border-radius:20px;
+    background:#f8fafc;
+    padding:1rem;
+  }
+
+  .add-row{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:.6rem;
+  }
+
+  input{
+    width:100%;
+    border-radius:14px;
+    border:1px solid var(--border-strong);
+    background:#fff;
+    color:var(--text);
+    outline:none;
+    transition:border-color .16s,box-shadow .16s;
+    font:inherit;
+    padding:.78rem 1rem;
+  }
+  input:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+  }
+
+  .actions{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.65rem;
+    flex-wrap:wrap;
+    margin-top:var(--gap);
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.5rem;
+    min-height:42px;
+    padding:.6rem 1.15rem;
+    border-radius:999px;
+    border:1px solid transparent;
+    background:var(--accent);
+    color:#fff;
+    font:inherit;
+    font-size:.85rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:background .16s,transform .14s,box-shadow .16s,border-color .16s;
+  }
+  .btn:hover:not(:disabled){
+    transform:translateY(-1px);
+    background:var(--accent-hover);
+    box-shadow:0 10px 24px rgba(37,99,235,.18);
+  }
+  .btn.secondary{
+    background:#fff;
+    color:var(--text);
+    border-color:var(--border-strong);
+    box-shadow:none;
+  }
+  .btn.secondary:hover:not(:disabled){
+    background:#f8fafc;
+    box-shadow:none;
+  }
+  .btn.danger{
+    background:rgba(185,28,28,.08);
+    color:#b91c1c;
+    border-color:rgba(185,28,28,.18);
+    box-shadow:none;
+  }
+  .btn.danger:hover:not(:disabled){
+    background:rgba(185,28,28,.14);
+    box-shadow:none;
+  }
+  .btn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+    pointer-events:none;
+  }
+
+  .items{
+    display:grid;
+    gap:.65rem;
+    margin-top:1rem;
+  }
+  .item{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 92px auto;
+    gap:.55rem;
+    align-items:center;
+    border:1px solid var(--border-subtle);
+    border-radius:16px;
+    background:#fff;
+    padding:.7rem;
+  }
+  .item .weight-wrap{
+    position:relative;
+  }
+  .item .weight-wrap::before{
+    content:"Weight";
+    position:absolute;
+    left:.65rem;
+    top:-.48rem;
+    padding:0 .25rem;
+    background:#fff;
+    color:var(--text-soft);
+    font-size:.64rem;
+    font-weight:750;
+  }
+  .item input[type="number"]{
+    text-align:center;
+    padding-inline:.45rem;
+  }
+  .item-meta{
+    display:flex;
+    align-items:center;
+    gap:.45rem;
+  }
+  .color-dot{
+    width:20px;
+    height:20px;
+    border-radius:999px;
+    border:2px solid #fff;
+    box-shadow:0 0 0 1px var(--border-strong);
+    flex:0 0 auto;
+  }
+  .remove{
+    width:34px;
+    height:34px;
+    border-radius:999px;
+    border:1px solid rgba(185,28,28,.18);
+    background:rgba(185,28,28,.08);
+    color:#b91c1c;
+    font-size:.9rem;
+    font-weight:800;
+    cursor:pointer;
+    transition:background .16s,transform .14s;
+  }
+  .remove:hover{background:rgba(185,28,28,.14);transform:translateY(-1px)}
+  .empty{
+    text-align:center;
+    color:var(--text-soft);
+    border:1px dashed var(--border-strong);
+    border-radius:16px;
+    background:#fff;
+    padding:1rem;
+    font-size:.9rem;
+    font-weight:650;
+  }
+
+  .wheel-panel{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:520px;
+    overflow:hidden;
+  }
+  .wheel-wrap{
+    position:relative;
+    width:min(100%,520px);
+    aspect-ratio:1/1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .wheel{
+    display:block;
+    width:100%;
+    height:auto;
+    aspect-ratio:1/1;
+    border-radius:50%;
+    filter:drop-shadow(0 16px 28px rgba(15,23,42,.18));
+    will-change:transform;
+  }
+  .pin{
+    position:absolute;
+    top:-2px;
+    left:50%;
+    z-index:5;
+    width:0;
+    height:0;
+    transform:translateX(-50%);
+    border-left:18px solid transparent;
+    border-right:18px solid transparent;
+    border-top:34px solid var(--accent);
+    filter:drop-shadow(0 5px 6px rgba(15,23,42,.18));
+  }
+  .wheel-winner{
+    position:absolute;
+    inset:50% auto auto 50%;
+    z-index:8;
+    transform:translate(-50%,-50%) scale(.88);
+    min-width:min(78%,320px);
+    max-width:82%;
+    padding:.8rem 1rem;
+    border-radius:18px;
+    border:1px solid rgba(37,99,235,.18);
+    background:rgba(255,255,255,.96);
+    color:var(--text);
+    box-shadow:0 18px 40px rgba(15,23,42,.18);
+    text-align:center;
+    font-size:clamp(1rem,2.4vw,1.35rem);
+    font-weight:850;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .22s,transform .22s;
+    overflow-wrap:anywhere;
+  }
+  .wheel-winner.show{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+  }
+  .wheel-winner.pulse{animation:winnerPulse .55s ease}
+  @keyframes winnerPulse{
+    0%{transform:translate(-50%,-50%) scale(.86)}
+    65%{transform:translate(-50%,-50%) scale(1.06)}
+    100%{transform:translate(-50%,-50%) scale(1)}
+  }
+
+  .confetti{
+    position:absolute;
+    inset:-12% 0 0;
+    overflow:hidden;
+    z-index:7;
+    pointer-events:none;
+  }
+  .piece{
+    position:absolute;
+    top:-15vh;
+    border-radius:2px;
+    animation:fall var(--dur,3.6s) linear forwards;
+  }
+  @keyframes fall{
+    0%{transform:translate3d(0,-15vh,0) rotate(0deg);opacity:1}
+    100%{transform:translate3d(var(--drift,20px),120vh,0) rotate(850deg);opacity:.95}
+  }
+
+  .status{
+    min-height:1.35rem;
+    margin-top:.75rem;
+    text-align:center;
+    color:var(--text-soft);
+    font-size:.85rem;
+    font-weight:650;
+  }
+
+  .site-footer{
+    margin-top:auto;
+    padding:1.6rem 1.5rem 1.8rem;
+    font-size:.85rem;
+    color:var(--text-soft);
+    border-top:1px solid rgba(148,163,184,.3);
+    background:rgba(248,250,252,.72);
+  }
+  .footer-legal{
+    margin-top:.45rem;
+    display:flex;
+    justify-content:center;
+    gap:.45rem;
+    font-size:.82rem;
+    flex-wrap:wrap;
+  }
+  .footer-legal a{
+    color:var(--text-soft);
+    padding:.25rem .55rem;
+    border-radius:999px;
+    transition:background .16s,color .16s,transform .12s;
+  }
+  .footer-legal a:hover{
+    color:var(--accent);
+    background:rgba(148,163,184,.16);
+    text-decoration:none;
+    transform:translateY(-1px);
+  }
+
+  @media(max-width:900px){
+    .grid{grid-template-columns:1fr}
+    .wheel-panel{min-height:0}
+  }
+  @media(max-width:760px){
+    .container{width:min(100% - 2rem,var(--max-w))}
+    .nav__list{gap:.25rem}
+    .nav__link{padding:.28rem .65rem}
+    .intro{padding:2rem 0 2.1rem}
+    .tool{padding:1.6rem 0 3rem}
+    .add-row{grid-template-columns:1fr}
+    .add-row .btn{width:100%}
+    .item{grid-template-columns:1fr 84px auto}
+  }
+  @media(max-width:520px){
+    .item{
+      grid-template-columns:1fr auto;
+    }
+    .item .weight-wrap{grid-column:1/2}
+    .item-meta{grid-column:2/3;grid-row:1/3}
+  }
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Random Spinner</h1>
+      <p class="intro__subtitle">Add choices, adjust their weights, then spin the wheel to select a random winner.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="card">
+        <div class="grid">
+          <section class="panel" aria-label="Spinner options">
+            <div class="add-row">
+              <label class="skip-link" for="newText">Add option</label>
+              <input id="newText" placeholder="Add option, e.g. Pizza" type="text"/>
+              <button class="btn" id="addBtn" type="button">Add</button>
+            </div>
+
+            <div class="actions">
+              <button class="btn" id="spinBtn" type="button">Spin</button>
+              <button class="btn danger" id="clearBtn" type="button">Clear</button>
+            </div>
+
+            <div class="actions">
+              <button class="btn secondary" id="saveBtn" type="button">Save List</button>
+              <button class="btn secondary" id="loadBtn" type="button">Load List</button>
+              <input id="loadFile" type="file" accept=".json,application/json" hidden/>
+            </div>
+
+            <div aria-live="polite" class="items" id="items"></div>
+            <div class="status" id="status" aria-live="polite"></div>
+          </section>
+
+          <section class="panel wheel-panel" aria-label="Random spinner wheel">
+            <div class="wheel-wrap">
+              <div aria-hidden="true" class="pin"></div>
+              <canvas class="wheel" height="800" id="wheel" width="800"></canvas>
+              <div aria-hidden="true" class="confetti" id="confetti"></div>
+              <div aria-live="polite" class="wheel-winner" id="wheelWinner"></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  const itemsEl = document.getElementById('items');
+  const wheelCanvas = document.getElementById('wheel');
+  const ctx = wheelCanvas.getContext('2d');
+  const spinBtn = document.getElementById('spinBtn');
+  const addBtn = document.getElementById('addBtn');
+  const newTextEl = document.getElementById('newText');
+  const clearBtn = document.getElementById('clearBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const loadBtn = document.getElementById('loadBtn');
+  const loadFile = document.getElementById('loadFile');
+  const confettiBox = document.getElementById('confetti');
+  const wheelWinner = document.getElementById('wheelWinner');
+  const statusEl = document.getElementById('status');
+  const yearEl = document.getElementById('year');
+
+  if(yearEl) yearEl.textContent = new Date().getFullYear();
+
+  let items = [];
+  let rotation = 0;
+  let spinning = false;
+  let hideWinnerTimer = null;
+
+  function uid(){
+    return (window.crypto && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2);
+  }
+
+  function setStatus(message){
+    statusEl.textContent = message || '';
+  }
+
+  function randomColor(i,n){
+    return `hsl(${((i/n)*360 + (n*11.8)) % 360} 78% 62%)`;
+  }
+
+  function ensureColors(){
+    const n=items.length||1;
+    items.forEach((it,i)=>it.color=randomColor(i,n));
+  }
+
+  function addItem(text,weight=1){
+    const clean=String(text||'').trim();
+    if(!clean) return;
+    items.push({
+      id:uid(),
+      text:clean,
+      weight:Math.max(1,Math.floor(Number(weight)||1)),
+      color:'#7aa2ff'
+    });
+    ensureColors();
+    renderItems();
+    drawWheel();
+    setStatus('');
+  }
+
+  function removeItem(id){
+    items=items.filter(item=>item.id!==id);
+    ensureColors();
+    renderItems();
+    drawWheel();
+  }
+
+  function renderItems(){
+    itemsEl.innerHTML='';
+
+    if(!items.length){
+      const empty=document.createElement('div');
+      empty.className='empty';
+      empty.textContent='Add at least one option to begin.';
+      itemsEl.appendChild(empty);
+      spinBtn.disabled=true;
+      return;
+    }
+
+    spinBtn.disabled=false;
+
+    items.forEach(it=>{
+      const row=document.createElement('div');
+      row.className='item';
+
+      const name=document.createElement('input');
+      name.type='text';
+      name.value=it.text;
+      name.placeholder='Label';
+      name.setAttribute('aria-label','Option label');
+      name.addEventListener('input',e=>{
+        it.text=e.target.value;
+        drawWheel();
+      });
+
+      const weightWrap=document.createElement('div');
+      weightWrap.className='weight-wrap';
+
+      const weight=document.createElement('input');
+      weight.type='number';
+      weight.min='1';
+      weight.step='1';
+      weight.value=it.weight;
+      weight.setAttribute('aria-label','Option weight');
+      weight.addEventListener('input',e=>{
+        it.weight=Math.max(1,Math.floor(Number(e.target.value)||1));
+        weight.value=it.weight;
+        drawWheel();
+      });
+      weightWrap.appendChild(weight);
+
+      const meta=document.createElement('div');
+      meta.className='item-meta';
+
+      const dot=document.createElement('div');
+      dot.className='color-dot';
+      dot.style.background=it.color;
+
+      const remove=document.createElement('button');
+      remove.className='remove';
+      remove.type='button';
+      remove.title='Remove option';
+      remove.setAttribute('aria-label','Remove '+(it.text||'option'));
+      remove.textContent='×';
+      remove.addEventListener('click',()=>removeItem(it.id));
+
+      meta.append(dot,remove);
+      row.append(name,weightWrap,meta);
+      itemsEl.appendChild(row);
+    });
+  }
+
+  function distributeEvenly(counts){
+    const total=counts.reduce((a,b)=>a+b,0);
+    const sequence=new Array(total).fill(null);
+    let pointer=0;
+
+    for(let index=0;index<counts.length;index++){
+      const count=counts[index];
+      if(count<=0) continue;
+
+      const step=total/count;
+      let position=(pointer+index)%total;
+
+      for(let j=0;j<count;j++){
+        let slot=Math.floor(position)%total;
+        const start=slot;
+
+        while(sequence[slot]!==null){
+          slot=(slot+1)%total;
+          if(slot===start) break;
+        }
+
+        sequence[slot]=index;
+        position+=step;
+      }
+
+      pointer=(pointer+Math.floor(step/2))%total;
+    }
+
+    return sequence.map(index=>items[index]).filter(Boolean);
+  }
+
+  function effectivePool(){
+    if(!items.length) return [];
+    const counts=items.map(item=>Math.max(1,Math.floor(item.weight||1)));
+    return distributeEvenly(counts);
+  }
+
+  function fitText(text,maxWidth,startSize){
+    let size=startSize;
+    ctx.font=`750 ${size}px system-ui`;
+    while(size>12 && ctx.measureText(text).width>maxWidth){
+      size-=1;
+      ctx.font=`750 ${size}px system-ui`;
+    }
+    return size;
+  }
+
+  function drawWheel(){
+    const width=wheelCanvas.width;
+    const height=wheelCanvas.height;
+    const cx=width/2;
+    const cy=height/2;
+    const radius=Math.min(cx,cy)-16;
+    const pool=effectivePool();
+    const count=pool.length;
+
+    ctx.clearRect(0,0,width,height);
+
+    if(!count){
+      ctx.beginPath();
+      ctx.arc(cx,cy,radius,0,Math.PI*2);
+      ctx.fillStyle='#e5e7eb';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(cx,cy,42,0,Math.PI*2);
+      ctx.fillStyle='#111827';
+      ctx.fill();
+      return;
+    }
+
+    const slice=(Math.PI*2)/count;
+    const base=-Math.PI/2-slice/2;
+
+    if(count===1){
+      const option=pool[0];
+
+      ctx.beginPath();
+      ctx.arc(cx,cy,radius,0,Math.PI*2);
+      ctx.closePath();
+      ctx.fillStyle=option.color||'#7aa2ff';
+      ctx.fill();
+
+      const raw=String(option.text||'').trim()||'Option';
+      const label=raw.length>20?raw.slice(0,18)+'…':raw;
+      const fontSize=fitText(label,radius*1.1,24);
+
+      ctx.save();
+      ctx.fillStyle='#111827';
+      ctx.font=`750 ${fontSize}px system-ui`;
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.fillText(label,cx,cy-radius*.62,radius*1.1);
+      ctx.restore();
+    }else{
+      for(let i=0;i<count;i++){
+        const start=base+i*slice;
+        const end=start+slice;
+        const mid=(start+end)/2;
+        const option=pool[i];
+
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,radius,start,end);
+        ctx.closePath();
+        ctx.fillStyle=option.color||'#7aa2ff';
+        ctx.fill();
+
+        ctx.lineWidth=2;
+        ctx.strokeStyle='rgba(255,255,255,.82)';
+        ctx.stroke();
+
+        const raw=String(option.text||'').trim()||'Option';
+        const label=raw.length>20?raw.slice(0,18)+'…':raw;
+        const labelRadius=radius*.62;
+        const maxTextWidth=Math.max(48,(2*Math.PI*labelRadius/count)*.8);
+        const fontSize=fitText(label,maxTextWidth,24);
+
+        ctx.save();
+        ctx.translate(
+          cx+Math.cos(mid)*labelRadius,
+          cy+Math.sin(mid)*labelRadius
+        );
+        ctx.rotate(mid+Math.PI/2);
+        ctx.fillStyle='#111827';
+        ctx.font=`750 ${fontSize}px system-ui`;
+        ctx.textAlign='center';
+        ctx.textBaseline='middle';
+        ctx.fillText(label,0,0,maxTextWidth);
+        ctx.restore();
+      }
+    }
+
+    ctx.beginPath();
+    ctx.arc(cx,cy,42,0,Math.PI*2);
+    ctx.fillStyle='#111827';
+    ctx.fill();
+
+    ctx.lineWidth=4;
+    ctx.strokeStyle='rgba(255,255,255,.88)';
+    ctx.stroke();
+  }
+
+  function confettiProgressive(totalPieces=320,spawnWindowMs=1200){
+    confettiBox.innerHTML='';
+    const colors=['#ef4444','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ec4899'];
+    const width=confettiBox.clientWidth||600;
+    const start=performance.now();
+    let created=0;
+
+    const ease=x=>1-Math.pow(1-x,3);
+
+    function frame(time){
+      const elapsed=time-start;
+      const progress=Math.min(1,elapsed/spawnWindowMs);
+      const target=Math.floor(ease(progress)*totalPieces);
+
+      while(created<target){
+        const piece=document.createElement('div');
+        piece.className='piece';
+        piece.style.background=colors[created%colors.length];
+        piece.style.left=(Math.random()*width)+'px';
+        piece.style.top=(-10-Math.random()*14)+'vh';
+        piece.style.setProperty('--dur',(3+Math.random()*1.2)+'s');
+        piece.style.setProperty('--drift',(-80+Math.random()*160)+'px');
+        piece.style.width=(7+Math.random()*7)+'px';
+        piece.style.height=(9+Math.random()*9)+'px';
+        confettiBox.appendChild(piece);
+        created++;
+      }
+
+      if(progress<1) requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
+    setTimeout(()=>{confettiBox.innerHTML='';},spawnWindowMs+4500);
+  }
+
+  function mod(value,base){
+    return ((value%base)+base)%base;
+  }
+
+  function spin(){
+    if(spinning||!items.length) return;
+
+    if(hideWinnerTimer){
+      clearTimeout(hideWinnerTimer);
+      hideWinnerTimer=null;
+    }
+
+    wheelWinner.textContent='';
+    wheelWinner.classList.remove('show','pulse');
+    confettiBox.innerHTML='';
+
+    const pool=effectivePool();
+    const count=pool.length;
+    const slice=360/count;
+    const index=Math.floor(Math.random()*count);
+    const winner=pool[index];
+
+    const itemAngle=-90+index*slice;
+    const pixelAngle=360/(Math.PI*(wheelCanvas.width/2));
+    const safeMargin=Math.min(slice*.22,pixelAngle*1.2);
+    const availableJitter=Math.max(0,slice/2-safeMargin);
+    const jitter=(Math.random()*2-1)*availableJitter;
+    const targetAngle=-90+jitter;
+
+    const current=mod(rotation,360);
+    const extraSpins=8;
+    const duration=5;
+    const delta=360*extraSpins+(targetAngle-itemAngle)-current;
+    rotation+=delta;
+
+    spinning=true;
+    spinBtn.disabled=true;
+    wheelCanvas.style.transition=`transform ${duration}s cubic-bezier(.2,.8,.1,1)`;
+
+    requestAnimationFrame(()=>{
+      wheelCanvas.style.transform=`rotate(${rotation}deg)`;
+    });
+
+    setTimeout(()=>{
+      spinning=false;
+      spinBtn.disabled=false;
+
+      wheelWinner.textContent=winner.text||'Winner';
+      wheelWinner.classList.remove('pulse');
+      void wheelWinner.offsetWidth;
+      wheelWinner.classList.add('show','pulse');
+
+      hideWinnerTimer=setTimeout(()=>{
+        wheelWinner.classList.remove('show');
+      },3400);
+
+      confettiProgressive();
+
+      try{
+        if(navigator.vibrate) navigator.vibrate(60);
+      }catch(_){}
+    },duration*1000+40);
+  }
+
+  addBtn.addEventListener('click',()=>{
+    const value=newTextEl.value.trim();
+    if(!value) return;
+    addItem(value);
+    newTextEl.value='';
+    newTextEl.focus();
+  });
+
+  newTextEl.addEventListener('keydown',event=>{
+    if(event.key==='Enter') addBtn.click();
+  });
+
+  clearBtn.addEventListener('click',()=>{
+    items=[];
+    renderItems();
+    drawWheel();
+    wheelWinner.textContent='';
+    wheelWinner.classList.remove('show','pulse');
+    confettiBox.innerHTML='';
+    if(hideWinnerTimer){
+      clearTimeout(hideWinnerTimer);
+      hideWinnerTimer=null;
+    }
+    setStatus('List cleared.');
+  });
+
+  saveBtn.addEventListener('click',()=>{
+    const exportData={
+      app:'riyst-random-spinner',
+      version:1,
+      exportedAt:new Date().toISOString(),
+      items:items.map(({text,weight})=>({
+        text:String(text||'').trim(),
+        weight:Math.max(1,Math.floor(Number(weight)||1))
+      }))
+    };
+
+    const blob=new Blob([JSON.stringify(exportData,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('a');
+    link.href=url;
+    link.download='random-spinner-list.json';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    setStatus('');
+  });
+
+  loadBtn.addEventListener('click',()=>{
+    loadFile.value='';
+    loadFile.click();
+  });
+
+  loadFile.addEventListener('change',async()=>{
+    const file=loadFile.files&&loadFile.files[0];
+    if(!file) return;
+
+    try{
+      const parsed=JSON.parse(await file.text());
+      const saved=Array.isArray(parsed) ? parsed : parsed.items;
+
+      if(!Array.isArray(saved)) throw new Error('Invalid list');
+
+      items=saved
+        .filter(entry=>entry&&String(entry.text||'').trim())
+        .map(entry=>({
+          id:uid(),
+          text:String(entry.text).trim(),
+          weight:Math.max(1,Math.floor(Number(entry.weight)||1)),
+          color:'#7aa2ff'
+        }));
+
+      ensureColors();
+      renderItems();
+      drawWheel();
+      setStatus('');
+    }catch(_){
+      setStatus('Could not load that list file.');
+    }finally{
+      loadFile.value='';
+    }
+  });
+
+  spinBtn.addEventListener('click',spin);
+
+  ensureColors();
+  renderItems();
+  drawWheel();
+})();
+</script>
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

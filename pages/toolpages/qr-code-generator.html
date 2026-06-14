@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="Browse developer utilities on riyst.com — grouped by category with quick-jump filters." name="description"/><title>Tools | QR Code Generator</title>
+
+
+
+
+
+
+
+
+
+
+
+<style>
+:root{
+  --bg:#f5f5f7;--bg-alt:#fff;--text:#111827;--text-soft:#4b5563;--accent:#2563eb;
+  --accent-hover:#1d4ed8;--accent-soft:rgba(37,99,235,.08);--border-subtle:#e5e7eb;
+  --border-strong:#d1d5db;--shadow-soft:0 12px 30px rgba(15,23,42,.08);
+  --shadow-lift:0 18px 36px rgba(15,23,42,.12);--radius-pill:999px;--max-w:980px;--gap:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;min-height:100%;scroll-behavior:smooth;overflow-x:hidden}
+body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--text);
+font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+main{flex:1}.container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+.skip-link{position:absolute;left:-999px;top:.5rem;padding:.45rem .75rem;background:#111827;color:#fff;z-index:100;border-radius:999px}
+.skip-link:focus{left:.5rem}
+.site-header{position:sticky;top:0;z-index:50;border-bottom:1px solid rgba(148,163,184,.28);
+backdrop-filter:blur(16px);background:rgba(248,250,252,.95)}
+.mast{display:flex;align-items:center;justify-content:center;min-height:58px;padding:.55rem 0}
+.nav__list{display:flex;align-items:center;justify-content:center;gap:.55rem;list-style:none;margin:0;padding:0;flex-wrap:wrap;font-size:.86rem}
+.nav__link{display:inline-flex;align-items:center;justify-content:center;padding:.3rem .8rem;border-radius:999px;color:var(--text-soft);
+border:1px solid transparent;transition:.16s}
+.nav__link:hover,.nav__link:focus-visible{background:rgba(148,163,184,.18);color:var(--text);transform:translateY(-1px);
+text-decoration:none;border-color:rgba(148,163,184,.26)}
+.nav__link--highlight{background:var(--accent-soft);color:var(--accent);border-color:rgba(37,99,235,.18)}
+.intro{text-align:center;padding:2.6rem 0 2.4rem}
+.intro__title{font-size:clamp(2.1rem,3vw,2.6rem);line-height:1.15;margin:0 0 .8rem;font-weight:750;letter-spacing:-.03em}
+.intro__subtitle{max-width:680px;margin:0 auto;color:var(--text-soft);font-size:.96rem;font-weight:500}
+.tool{padding:2.4rem 0 4rem}
+.card{background:rgba(255,255,255,.92);border:1px solid var(--border-subtle);border-radius:24px;box-shadow:var(--shadow-soft);
+padding:clamp(1.2rem,3vw,1.7rem);max-width:980px;margin:0 auto;transition:.16s}
+.card:hover{box-shadow:var(--shadow-lift);border-color:rgba(37,99,235,.18)}
+.tool .card>.row:first-child{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:1rem;align-items:start}
+.left,.right,.col{min-width:0}
+.left>div:not(.row){margin-top:var(--gap);border:1px solid var(--border-subtle);border-radius:18px;background:#f8fafc;padding:.9rem}
+.left>label:first-child{margin-top:0}
+.left>input#qrText{margin-bottom:.15rem}
+label,.section-label{display:block;margin:0 0 .35rem;color:var(--text-soft);font-size:.85rem;font-weight:700}
+input,select{width:100%;border-radius:14px;border:1px solid var(--border-strong);background:#fff;color:var(--text);
+outline:none;transition:.16s;font:inherit;padding:.78rem 1rem}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+input[type=color]{min-height:48px;padding:.3rem;cursor:pointer}
+input[type=checkbox]{width:17px;height:17px;padding:0;accent-color:var(--accent);box-shadow:none}
+.seg{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem!important}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{display:flex;align-items:center;justify-content:center;min-height:40px;margin:0;padding:.45rem .65rem;border-radius:999px;
+border:1px solid var(--border-subtle);background:#fff;color:var(--text-soft);cursor:pointer;font-size:.8rem;font-weight:750;text-align:center;transition:.16s}
+.seg input:checked+label{background:var(--accent);border-color:var(--accent);color:#fff}
+.seg label:hover{transform:translateY(-1px);background:#f4f8ff;border-color:rgba(37,99,235,.18)}
+.seg input:checked+label:hover{background:var(--accent-hover)}
+.left>.row{display:grid!important;grid-template-columns:1fr 1fr;gap:.8rem!important;margin-top:var(--gap)!important}
+.right{display:flex;align-items:flex-start;justify-content:center}
+.canvas{display:flex;align-items:center;justify-content:center;width:100%;min-height:0;border:0;border-radius:0;background:transparent;padding:0;overflow:visible}
+#previewBox{
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  width:100%;
+  height:100%;
+}
+#qrMount{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:min(100%,360px);
+  height:auto;
+  aspect-ratio:1 / 1;
+  flex:0 0 auto;
+  overflow:hidden;
+}
+#qrMount canvas,#qrMount svg{
+  display:block;
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:1 / 1;
+  object-fit:contain;
+  max-width:100%;
+  border-radius:0;
+  box-shadow:none;
+}
+.pair-row{display:grid!important;grid-template-columns:1fr 1fr;gap:1rem!important;margin-top:1rem!important}
+.pair{border:1px solid var(--border-subtle);border-radius:18px;background:#f8fafc;padding:.9rem;min-width:0}
+.drop{position:relative;display:flex;align-items:center;justify-content:center;min-height:112px;border:2px dashed var(--border-strong);
+border-radius:18px;background:#fff;cursor:pointer;text-align:center;transition:.16s}
+.drop:hover,.drop.dragover{border-color:var(--accent);background:#f4f8ff;box-shadow:0 0 0 4px rgba(37,99,235,.08);transform:translateY(-1px)}
+.drop input[type=file]{position:absolute;inset:0;opacity:0;pointer-events:none}
+.logo-cta{color:var(--text-soft);font-size:.88rem;font-weight:700}
+.logo-preview{display:none;align-items:center;justify-content:center;gap:.65rem;padding:.65rem;width:100%}
+.logo-preview img{width:56px;height:56px;object-fit:contain;border-radius:12px;border:1px solid var(--border-subtle);background:#fff}
+.logo-preview span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.icon-btn{width:32px;height:32px;min-width:32px;border-radius:999px;border:1px solid rgba(185,28,28,.18);
+background:rgba(185,28,28,.08);color:#b91c1c;cursor:pointer;font-size:1.05rem;font-weight:800;line-height:1}
+.actions{display:flex;align-items:center;justify-content:center;gap:.7rem;flex-wrap:wrap;margin-top:14px}
+.actions.equal .btn{flex:1 1 140px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;padding:.65rem 1.3rem;border-radius:999px;
+border:1px solid transparent;background:var(--accent);color:#fff;font-size:.86rem;font-weight:600;cursor:pointer;text-decoration:none;
+box-shadow:none;transition:.16s;font-family:inherit;min-height:44px}
+.btn:hover{transform:translateY(-1px);background:var(--accent-hover);text-decoration:none;box-shadow:0 10px 25px rgba(37,99,235,.18)}
+
+.colour-controls{
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  flex-wrap:wrap;
+}
+.colour-control{
+  display:inline-flex;
+  align-items:center;
+  gap:.45rem;
+  margin:0;
+  white-space:nowrap;
+}
+.colour-control input[type="color"]{
+  width:46px;
+  min-width:46px;
+  height:34px;
+  min-height:34px;
+  padding:3px;
+  border-radius:10px;
+}
+.transparent-control{
+  display:inline-flex;
+  align-items:center;
+  gap:.45rem;
+  margin:0;
+  white-space:nowrap;
+  cursor:pointer;
+}
+.transparent-control input{
+  width:17px;
+  height:17px;
+}
+#qrMount.transparent-preview{
+  width:min(100%,360px);
+  aspect-ratio:1 / 1;
+  background:
+    linear-gradient(45deg,#e5e7eb 25%,transparent 25%),
+    linear-gradient(-45deg,#e5e7eb 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#e5e7eb 75%),
+    linear-gradient(-45deg,transparent 75%,#e5e7eb 75%);
+  background-size:18px 18px;
+  background-position:0 0,0 9px,9px -9px,-9px 0;
+}
+.logo-size-control{
+  margin-top:.85rem;
+  border-top:1px solid var(--border-subtle);
+  padding-top:.75rem;
+}
+.logo-size-label{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.75rem;
+}
+.logo-size-label label{margin:0}
+.logo-size-label span{
+  color:var(--accent);
+  font-size:.84rem;
+  font-weight:800;
+}
+.logo-size-control input[type="range"]{
+  width:100%;
+  padding:0;
+  accent-color:var(--accent);
+}
+.hidden{display:none!important}
+
+
+.eye-style-seg{grid-template-columns:repeat(3,minmax(0,1fr))}
+.eye-dot-style-seg{grid-template-columns:repeat(2,minmax(0,1fr))}
+.background-controls{justify-content:flex-start}
+.shape-colour-control{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.75rem;
+  margin:.65rem 0 0;
+  padding:.45rem .55rem .45rem .75rem;
+  border:1px solid var(--border-subtle);
+  border-radius:14px;
+  background:#fff;
+}
+.shape-colour-control input[type="color"]{
+  width:46px;
+  min-width:46px;
+  height:34px;
+  min-height:34px;
+  padding:3px;
+  border-radius:10px;
+}
+.format-select-wrap{
+  position:relative;
+  width:100%;
+}
+.format-select-wrap::after{
+  content:"";
+  position:absolute;
+  right:1rem;
+  top:50%;
+  width:9px;
+  height:9px;
+  border-right:3px solid var(--accent);
+  border-bottom:3px solid var(--accent);
+  transform:translateY(-68%) rotate(45deg);
+  pointer-events:none;
+}
+.format-select{
+  appearance:none;
+  -webkit-appearance:none;
+  width:100%;
+  min-height:50px;
+  padding:.75rem 3rem .75rem 1rem;
+  border:2px solid #cbd5e1;
+  border-radius:14px;
+  background:#fff;
+  color:var(--text);
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 5px 14px rgba(15,23,42,.07);
+}
+.format-select:hover{
+  border-color:rgba(37,99,235,.55);
+  background:#f8fbff;
+}
+.format-select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+.site-footer{margin-top:auto;padding:1.6rem 1.5rem 1.8rem;font-size:.85rem;color:var(--text-soft);
+border-top:1px solid rgba(148,163,184,.3);background:rgba(248,250,252,.72)}
+.footer-legal{margin-top:.45rem;display:flex;justify-content:center;gap:.45rem;font-size:.82rem;flex-wrap:wrap}
+.footer-legal a{color:var(--text-soft);padding:.25rem .55rem;border-radius:999px;transition:.16s}
+.footer-legal a:hover{color:var(--accent);background:rgba(148,163,184,.16);text-decoration:none;transform:translateY(-1px)}
+@media(max-width:900px){.tool .card>.row:first-child{grid-template-columns:1fr}.right{margin-top:0!important}.canvas{height:auto!important;min-height:360px}}
+@media(max-width:760px){
+  .container{width:min(100% - 2rem,var(--max-w))}.nav__list{gap:.25rem}.nav__link{padding:.28rem .65rem}
+  .intro{padding:2rem 0 2.1rem}.tool{padding:1.6rem 0 3rem}.pair-row,.left>.row{grid-template-columns:1fr!important}
+  .seg{grid-template-columns:repeat(2,minmax(0,1fr))}.colour-controls{align-items:flex-start}.transparent-control{flex-basis:100%}.canvas{min-height:340px}.actions.equal .btn{width:100%;flex-basis:100%}
+}
+</style>
+
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head><body data-in-pages="true"><a class="skip-link" href="#main">Skip to main content</a><header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header><main id="main">
+<section class="intro"><div class="container">
+<h1 class="intro__title">QR Code Generator</h1>
+<p class="intro__subtitle">Create a custom QR code with your preferred shapes, colours and optional logo.</p>
+</div></section>
+<section class="tool">
+<div class="container">
+<div class="card">
+<div class="row">
+<!-- LEFT: controls (unchanged) -->
+<div class="left">
+<label for="qrText">URL</label>
+<input id="qrText" placeholder="https://riyst.com" type="text"/>
+<div class="dots-section" style="margin-top:var(--gap)">
+<label>Dots</label>
+<div aria-label="Dots shape" class="seg" role="radiogroup">
+<input checked="" id="d-square" name="dots" type="radio" value="square"/><label for="d-square">Square</label>
+<input id="d-rounded" name="dots" type="radio" value="rounded"/><label for="d-rounded">Rounded</label>
+<input id="d-dots" name="dots" type="radio" value="dots"/><label for="d-dots">Dots</label>
+<input id="d-classy" name="dots" type="radio" value="classy"/><label for="d-classy">Classy</label>
+<input id="d-classy-rounded" name="dots" type="radio" value="classy-rounded"/><label for="d-classy-rounded">Classy Rounded</label>
+<input id="d-extra" name="dots" type="radio" value="extra-rounded"/><label for="d-extra">Extra Rounded</label>
+</div>
+<label class="shape-colour-control" for="dotColor">
+<span>Dots colour</span>
+<input id="dotColor" type="color" value="#000000"/>
+</label>
+</div>
+<div class="eyes-section" style="margin-top:var(--gap)">
+<label>Eyes</label>
+<div aria-label="Eye style" class="seg eye-style-seg" role="radiogroup">
+<input checked="" id="e-square" name="eyes" type="radio" value="square"/><label for="e-square">Square</label>
+<input id="e-dot" name="eyes" type="radio" value="dot"/><label for="e-dot">Circle</label>
+<input id="e-extra-rounded" name="eyes" type="radio" value="extra-rounded"/><label for="e-extra-rounded">Extra Rounded</label>
+</div>
+<label class="shape-colour-control" for="eyeColor">
+<span>Eyes colour</span>
+<input id="eyeColor" type="color" value="#000000"/>
+</label>
+</div>
+<div class="eye-dots-section" style="margin-top:var(--gap)">
+<label>Eye dots</label>
+<div aria-label="Eye dot style" class="seg eye-dot-style-seg" role="radiogroup">
+<input checked="" id="ed-square" name="eyeDots" type="radio" value="square"/><label for="ed-square">Square</label>
+<input id="ed-dot" name="eyeDots" type="radio" value="dot"/><label for="ed-dot">Circle</label>
+</div>
+<label class="shape-colour-control" for="eyeDotColor">
+<span>Eye dots colour</span>
+<input id="eyeDotColor" type="color" value="#000000"/>
+</label>
+</div>
+<div class="colour-controls background-controls" style="margin-top:var(--gap)">
+<label class="colour-control" for="bgColor">
+<span>Background</span>
+<input id="bgColor" type="color" value="#ffffff"/>
+</label>
+<label class="transparent-control" for="bgTransparent">
+<input id="bgTransparent" type="checkbox"/>
+<span>Transparent background</span>
+</label>
+</div>
+</div>
+<!-- RIGHT: preview (same place) -->
+<div class="right">
+<div class="canvas"><div id="previewBox"><div aria-live="polite" id="qrMount"></div></div></div>
+</div>
+</div>
+<div class="row pair-row" style="align-items:stretch">
+<div class="col pair">
+<label class="section-label">Logo (optional)</label>
+<div class="drop box" id="logoDrop">
+<span class="logo-cta">Drop or click to upload</span>
+<div class="logo-preview" id="logoPreview">
+<img alt="" id="logoThumb"/>
+<span id="logoName" style="font-weight:700"></span>
+<button aria-label="Remove logo" class="icon-btn" id="btnClearLogo" type="button">×</button>
+</div>
+<input accept="image/*" id="logoFile" type="file"/>
+</div>
+<div class="logo-size-control hidden" id="logoSizeControl">
+<div class="logo-size-label">
+<label for="logoSize">Logo size</label>
+<span id="logoSizeValue">24%</span>
+</div>
+<input id="logoSize" min="10" max="30" step="1" type="range" value="24"/>
+
+</div>
+</div>
+<div class="col pair">
+<label class="section-label" for="format">Download as</label>
+<div class="format-select-wrap">
+<select class="format-select" id="format" aria-label="Download file format">
+<option selected="" value="png">PNG image</option>
+<option value="svg">SVG vector</option>
+<option value="jpeg">JPEG image</option>
+<option value="webp">WEBP image</option>
+</select>
+</div>
+<div class="actions equal" style="margin-top:.8rem;justify-content:center;width:100%">
+<button class="btn box" id="btnDownload">Download</button>
+<button class="btn box" id="btnCopy">Copy</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main><footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer><script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0/lib/qr-code-styling.js"></script>
+
+<!-- RIYST_INLINE_SCRIPT_START -->
+<script>
+(function(){const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();})();
+
+    const qrText = document.getElementById('qrText');
+    const format = document.getElementById('format');
+    const dotColor = document.getElementById('dotColor');
+    const bgColor = document.getElementById('bgColor');
+    const bgTransparent = document.getElementById('bgTransparent');
+    const eyeColor = document.getElementById('eyeColor');
+    const eyeDotColor = document.getElementById('eyeDotColor');
+    const logoFile = document.getElementById('logoFile');
+    const logoDrop = document.getElementById('logoDrop');
+    const logoPreview = document.getElementById('logoPreview');
+    const logoThumb = document.getElementById('logoThumb');
+    const logoName = document.getElementById('logoName');
+    const mount = document.getElementById('qrMount');
+    const btnDownload = document.getElementById('btnDownload');
+    const btnCopy = document.getElementById('btnCopy');
+    const btnClearLogo = document.getElementById('btnClearLogo');
+    const logoSizeControl = document.getElementById('logoSizeControl');
+    const logoSize = document.getElementById('logoSize');
+    const logoSizeValue = document.getElementById('logoSizeValue');
+
+    const dotsRadios = Array.from(document.querySelectorAll('input[name="dots"]'));
+    const eyesRadios = Array.from(document.querySelectorAll('input[name="eyes"]'));
+    const eyeDotsRadios = Array.from(document.querySelectorAll('input[name="eyeDots"]'));
+
+    const FIXED_SIZE = 360;
+    const FIXED_MARGIN = 4;
+    const FIXED_ECC = 'H';
+    let logoSizePct = 24;
+    let logoRefreshTimer = null;
+    let colourRefreshTimer = null;
+    const DEFAULT_LOGO_MARGIN = 2;
+    let logoDataUrl = null;
+    const state = { dotsType:'square', cornersType:'square', cornersDotType:'square' };
+    (function initStateFromRadios(){
+      const d=document.querySelector('input[name="dots"]:checked'); if(d) state.dotsType=d.value;
+      const e=document.querySelector('input[name="eyes"]:checked'); if(e) state.cornersType=e.value;
+      const ed=document.querySelector('input[name="eyeDots"]:checked'); if(ed) state.cornersDotType=ed.value;
+    })();
+
+    // QR instance
+    let qr = new QRCodeStyling({
+      width: FIXED_SIZE,
+      height: FIXED_SIZE,
+      type: 'canvas',
+      data: '',
+      margin: FIXED_MARGIN,
+      qrOptions: { errorCorrectionLevel: FIXED_ECC },
+      backgroundOptions: { color: bgColor.value },
+      dotsOptions: { color: dotColor.value, type: state.dotsType },
+      cornersSquareOptions: { type: state.cornersType, color: eyeColor.value },
+      cornersDotOptions: { type: state.cornersDotType, color: eyeDotColor.value },
+      imageOptions: { imageSize: logoSizePct/100, margin: DEFAULT_LOGO_MARGIN, crossOrigin: 'anonymous' }
+    });
+    qr.append(mount);
+
+    function mapDotsType(v){
+      if(v==='rounded') return 'rounded';
+      if(v==='dots') return 'dots';
+      if(v==='classy') return 'classy';
+      if(v==='classy-rounded') return 'classy-rounded';
+      if(v==='extra-rounded') return 'extra-rounded';
+      return 'square';
+    }
+
+    function refresh(){
+      const isTransparent = bgTransparent.checked;
+      const bg = isTransparent ? 'transparent' : bgColor.value;
+      mount.classList.toggle('transparent-preview', isTransparent);
+      bgColor.disabled = isTransparent;
+      qr.update({
+        width: FIXED_SIZE, height: FIXED_SIZE, data: qrText.value || '', margin: FIXED_MARGIN,
+        qrOptions: { errorCorrectionLevel: FIXED_ECC },
+        backgroundOptions: { color: bg },
+        dotsOptions: { color: dotColor.value, type: mapDotsType(state.dotsType) },
+        cornersSquareOptions: { type: state.cornersType, color: eyeColor.value },
+        cornersDotOptions: { type: state.cornersDotType, color: eyeDotColor.value },
+        image: logoDataUrl || null,
+        imageOptions: { imageSize: logoSizePct/100, margin: DEFAULT_LOGO_MARGIN, crossOrigin:'anonymous' }
+      });
+    }
+
+    // Segments
+    dotsRadios.forEach(r => r.addEventListener('change', ()=>{ state.dotsType = r.value; refresh(); }));
+    eyesRadios.forEach(r => r.addEventListener('change', ()=>{
+      state.cornersType = r.value;
+      refresh();
+    }));
+
+    eyeDotsRadios.forEach(r => r.addEventListener('change', ()=>{
+      state.cornersDotType = r.value;
+      refresh();
+    }));
+
+    qrText.addEventListener('input', refresh);
+    bgTransparent.addEventListener('change', refresh);
+
+    function closeColourPicker(input){
+      window.setTimeout(function(){
+        try{ input.blur(); }catch(_){}
+        try{
+          if(document.activeElement === input){
+            document.body.setAttribute('tabindex', '-1');
+            document.body.focus({preventScroll:true});
+            document.body.removeAttribute('tabindex');
+          }
+        }catch(_){}
+      }, 20);
+    }
+
+    function scheduleColourRefresh(immediate){
+      clearTimeout(colourRefreshTimer);
+      if(immediate){
+        refresh();
+        return;
+      }
+      colourRefreshTimer = setTimeout(refresh, 85);
+    }
+
+    [dotColor, eyeColor, eyeDotColor, bgColor].forEach(function(input){
+      input.addEventListener('input', function(){
+        scheduleColourRefresh(false);
+      });
+      input.addEventListener('change', function(){
+        scheduleColourRefresh(true);
+        closeColourPicker(input);
+      });
+    });
+
+    // Logo upload / preview / remove
+    logoFile.addEventListener('change', handleLogoFile);
+    ['dragenter','dragover'].forEach(ev => logoDrop.addEventListener(ev, e => { e.preventDefault(); logoDrop.classList.add('dragover'); }));
+    ['dragleave','drop'].forEach(ev => logoDrop.addEventListener(ev, e => { e.preventDefault(); logoDrop.classList.remove('dragover'); }));
+    logoDrop.addEventListener('drop', e => { const file = e.dataTransfer.files && e.dataTransfer.files[0]; if(file) setLogoFile(file); });
+    logoDrop.addEventListener('click', (e) => { if(e.target.closest('#btnClearLogo')) return; logoFile.click(); });
+
+    function handleLogoFile(e){ const file = e.target.files && e.target.files[0]; if(file) setLogoFile(file); }
+    function setLogoFile(file){
+      if(!file || !file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = () => { logoDataUrl = reader.result; showLogoPreview(file); refresh(); };
+      reader.readAsDataURL(file);
+    }
+    function showLogoPreview(file){
+      const name = file.name || 'logo';
+      logoThumb.src = logoDataUrl; logoThumb.alt = name; logoName.textContent = name;
+      document.querySelector('.logo-cta').style.display='none';
+      logoPreview.style.display='flex';
+      logoSizeControl.classList.remove('hidden');
+    }
+    btnClearLogo.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); clearLogo(); });
+    function clearLogo(){
+      logoDataUrl=null; logoFile.value=''; logoThumb.src=''; logoName.textContent='';
+      logoSizePct=24; logoSize.value='24'; logoSizeValue.textContent='24%';
+      logoPreview.style.display='none'; logoSizeControl.classList.add('hidden');
+      document.querySelector('.logo-cta').style.display=''; refresh();
+    }
+
+    function updateLogoSizeFromSlider(){
+      logoSizePct = Math.max(10, Math.min(30, Number(logoSize.value) || 24));
+      logoSizeValue.textContent = logoSizePct + '%';
+    }
+
+    function scheduleLogoRefresh(immediate){
+      clearTimeout(logoRefreshTimer);
+      if(immediate){
+        refresh();
+        return;
+      }
+      logoRefreshTimer = setTimeout(refresh, 110);
+    }
+
+    logoSize.addEventListener('input', function(){
+      updateLogoSizeFromSlider();
+      scheduleLogoRefresh(false);
+    });
+
+    logoSize.addEventListener('change', function(){
+      updateLogoSizeFromSlider();
+      scheduleLogoRefresh(true);
+    });
+
+    // Download & Copy (same behavior as before) 
+    btnDownload.addEventListener('click', async () => {
+      const ext = format.value||'png';
+      if(ext==='svg'){ const t=qr._options.type; qr.update({type:'svg'}); await qr.download({name:'qr-code',extension:'svg'}); qr.update({type:t}); }
+      else{ await qr.download({name:'qr-code',extension:ext}); }
+    });
+    btnCopy.addEventListener('click', async () => {
+      try{
+        const t=qr._options.type; qr.update({type:'canvas'});
+        const raw = await qr.getRawData('png');
+        const blob = raw instanceof Blob ? raw : await (await fetch(raw)).blob();
+        await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+        qr.update({type:t});
+        btnCopy.textContent = 'Copied!'; setTimeout(()=> btnCopy.textContent='Copy', 900);
+      }catch(e){ btnCopy.textContent='Copy failed'; setTimeout(()=> btnCopy.textContent='Copy', 900); }
+    });
+
+    // Align the QR itself with the Dots, Eyes and Eye dots controls.
+    function syncPreviewToStyleControls(){
+      const right = document.querySelector('.right');
+      const canvas = document.querySelector('.canvas');
+      const mount = document.getElementById('qrMount');
+      const left = document.querySelector('.left');
+      const dots = document.querySelector('.dots-section');
+      const eyeDots = document.querySelector('.eye-dots-section');
+
+      if(!right || !canvas || !mount || !left || !dots || !eyeDots) return;
+
+      if(window.matchMedia('(max-width: 900px)').matches){
+        right.style.marginTop = '';
+        right.style.height = '';
+        canvas.style.height = '';
+        mount.style.width = '';
+        mount.style.height = '';
+        return;
+      }
+
+      const leftRect = left.getBoundingClientRect();
+      const dotsRect = dots.getBoundingClientRect();
+      const eyeDotsRect = eyeDots.getBoundingClientRect();
+      const spanHeight = Math.max(1, eyeDotsRect.bottom - dotsRect.top);
+
+      right.style.marginTop = Math.max(0, dotsRect.top - leftRect.top) + 'px';
+      right.style.height = spanHeight + 'px';
+      canvas.style.height = spanHeight + 'px';
+
+      const availableWidth = Math.max(1, right.clientWidth);
+      const squareSize = Math.min(spanHeight, availableWidth, 430);
+      mount.style.width = squareSize + 'px';
+      mount.style.height = squareSize + 'px';
+    }
+
+    window.addEventListener('resize', syncPreviewToStyleControls);
+    if('ResizeObserver' in window){
+      const previewObserver = new ResizeObserver(syncPreviewToStyleControls);
+      const observedLeft = document.querySelector('.left');
+      if(observedLeft) previewObserver.observe(observedLeft);
+    }
+
+    // Initial
+    function initialiseQrPage(){
+      refresh();
+      requestAnimationFrame(syncPreviewToStyleControls);
+      setTimeout(syncPreviewToStyleControls, 120);
+    }
+    if(document.readyState==='loading'){
+      document.addEventListener('DOMContentLoaded', initialiseQrPage);
+    }else{
+      initialiseQrPage();
+    }
+</script>
+<!-- RIYST_INLINE_SCRIPT_END -->
+<script src="../../Assets/site-shell.js"></script>
+</body></html>

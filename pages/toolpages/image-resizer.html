@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tools | Image Resizer</title>
+<meta name="description" content="Resize images by width and height, with fit or fill modes, alignment, padding colour and PNG or JPG export."/>
+<meta name="theme-color" content="#f5f5f7"/>
+
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --bg-alt:#ffffff;
+    --text:#111827;
+    --text-soft:#4b5563;
+    --accent:#2563eb;
+    --accent-hover:#1d4ed8;
+    --accent-soft:rgba(37,99,235,.08);
+    --border-subtle:#e5e7eb;
+    --border-strong:#d1d5db;
+    --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+    --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+    --radius:20px;
+    --radius-pill:999px;
+    --max-w:980px;
+    --gap:14px;
+    --stack-gap:14px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%;overflow-x:hidden;overflow-y:auto}
+  body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background:var(--bg);
+    color:var(--text);
+    font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  main{flex:1}
+  .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+  .skip-link{
+    position:absolute;
+    left:-999px;
+    top:.5rem;
+    padding:.45rem .75rem;
+    background:#111827;
+    color:#f9fafb;
+    z-index:100;
+    border-radius:var(--radius-pill);
+    font-size:.85rem;
+  }
+  .skip-link:focus{left:.5rem}
+
+  header.site-header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    border-bottom:1px solid rgba(148,163,184,.28);
+    backdrop-filter:blur(16px);
+    background:rgba(248,250,252,.95);
+  }
+  .mast{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:58px;
+    padding:.55rem 0;
+  }
+  .nav__list{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    list-style:none;
+    margin:0;
+    padding:0;
+    flex-wrap:wrap;
+    font-size:.86rem;
+  }
+  .nav__link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:.3rem .8rem;
+    border-radius:var(--radius-pill);
+    color:var(--text-soft);
+    border:1px solid transparent;
+    transition:background .16s,color .16s,transform .12s,border-color .16s;
+  }
+  .nav__link:hover,.nav__link:focus-visible{
+    background:rgba(148,163,184,.18);
+    color:var(--text);
+    transform:translateY(-1px);
+    text-decoration:none;
+    border-color:rgba(148,163,184,.26);
+  }
+  .nav__link--highlight{background:var(--accent-soft);color:var(--accent);border-color:rgba(37,99,235,.18)}
+
+  .intro{
+    text-align:center;
+    padding:2.6rem 0 2.4rem;
+  }
+  .intro__title{
+    font-size:clamp(2.1rem,3vw,2.6rem);
+    line-height:1.15;
+    margin:0 0 .8rem;
+    font-weight:750;
+    letter-spacing:-.03em;
+  }
+  .intro__subtitle{
+    max-width:620px;
+    margin:0 auto;
+    color:var(--text-soft);
+    font-size:.96rem;
+    font-weight:500;
+  }
+
+  .tool{padding:2.4rem 0 4rem}
+  .card{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--border-subtle);
+    border-radius:24px;
+    box-shadow:var(--shadow-soft);
+    padding:clamp(1.2rem,3vw,1.7rem);
+    max-width:980px;
+    margin:0 auto;
+    transition:box-shadow .16s,transform .16s,border-color .16s;
+  }
+  .card:hover{box-shadow:var(--shadow-lift);border-color:rgba(37,99,235,.18)}
+
+  .row{
+    display:flex;
+    justify-content:center;
+    gap:var(--gap);
+    flex-wrap:wrap;
+    margin-top:var(--gap);
+  }
+  .row:first-child{margin-top:0}
+  .col{
+    min-width:230px;
+    flex:1 1 250px;
+  }
+  .col.full{
+    flex:1 1 100%;
+    min-width:260px;
+  }
+
+  label{
+    display:block;
+    margin:0 0 .35rem;
+    color:var(--text-soft);
+    font-size:.85rem;
+    font-weight:700;
+  }
+  input,select{
+    width:100%;
+    border-radius:14px;
+    border:1px solid var(--border-strong);
+    background:#ffffff;
+    color:var(--text);
+    outline:none;
+    transition:border-color .16s,box-shadow .16s,background .16s;
+    font:inherit;
+    padding:.78rem 1rem;
+  }
+  input:focus,select:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+  }
+
+  .file-input{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:.6rem;
+    min-height:142px;
+    padding:1.3rem;
+    border:2px dashed var(--border-strong);
+    border-radius:20px;
+    background:#f8fafc;
+    color:var(--text-soft);
+    text-align:center;
+    transition:border-color .16s,background .16s,box-shadow .16s,transform .14s;
+  }
+  .file-input:hover,.file-input:focus-within{
+    border-color:var(--accent);
+    background:#f4f8ff;
+    box-shadow:0 0 0 4px rgba(37,99,235,.08);
+    transform:translateY(-1px);
+  }
+  .file-input input[type="file"]{
+    position:absolute;
+    width:1px;
+    height:1px;
+    opacity:0;
+    pointer-events:none;
+  }
+  .file-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    min-height:42px;
+    padding:.62rem 1.2rem;
+    border-radius:var(--radius-pill);
+    border:1px solid transparent;
+    background:var(--accent);
+    color:#f9fafb;
+    font-size:.86rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:background .16s,transform .14s,box-shadow .16s;
+    font-family:inherit;
+  }
+  .file-btn:hover{
+    transform:translateY(-1px);
+    background:var(--accent-hover);
+    box-shadow:0 10px 25px rgba(37,99,235,.18);
+  }
+  .file-input::after{
+    content:"Click to choose an image";
+    color:var(--text-soft);
+    font-size:.84rem;
+    font-weight:650;
+  }
+  .filename{
+    margin-top:.55rem;
+    text-align:center;
+    color:var(--text-soft);
+    font-size:.88rem;
+    font-weight:650;
+    overflow-wrap:anywhere;
+  }
+
+  .seg{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:.45rem;
+    border-radius:18px;
+    border:1px solid var(--border-subtle);
+    background:#f8fafc;
+    padding:.45rem;
+  }
+  .seg input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+  }
+  .seg label{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:40px;
+    margin:0;
+    padding:.45rem .8rem;
+    border-radius:var(--radius-pill);
+    color:var(--text-soft);
+    background:transparent;
+    cursor:pointer;
+    font-size:.86rem;
+    font-weight:750;
+    transition:background .16s,color .16s,transform .12s;
+  }
+  .seg input:checked + label{
+    background:var(--accent);
+    color:#fff;
+  }
+  .seg label:hover{
+    transform:translateY(-1px);
+    background:rgba(148,163,184,.15);
+  }
+  .seg input:checked + label:hover{
+    background:var(--accent-hover);
+  }
+
+  .color-wrap{
+    display:grid;
+    grid-template-columns:54px minmax(0,1fr);
+    gap:.55rem;
+    align-items:center;
+  }
+  .chip{
+    height:47px;
+    border-radius:14px;
+    border:1px solid var(--border-strong);
+    background:#fff;
+    padding:.25rem;
+    overflow:hidden;
+  }
+  .chip input[type="color"]{
+    width:100%;
+    height:100%;
+    padding:0;
+    border:0;
+    border-radius:10px;
+    cursor:pointer;
+  }
+
+  .canvas{
+    margin-top:var(--gap);
+    min-height:190px;
+    border-radius:22px;
+    border:1px solid var(--border-subtle);
+    background:
+      linear-gradient(45deg, #eef2f7 25%, transparent 25%),
+      linear-gradient(-45deg, #eef2f7 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #eef2f7 75%),
+      linear-gradient(-45deg, transparent 75%, #eef2f7 75%);
+    background-size:22px 22px;
+    background-position:0 0,0 11px,11px -11px,-11px 0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:auto;
+    padding:1rem;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
+  }
+  .hidden{display:none!important}
+
+  canvas{
+    display:block;
+    max-width:100%;
+    border-radius:14px;
+    box-shadow:0 12px 28px rgba(15,23,42,.12);
+    background:transparent;
+  }
+  #canvas.can-drag{
+    cursor:grab;
+    touch-action:none;
+  }
+  #canvas.can-drag:active{
+    cursor:grabbing;
+  }
+
+  .actions{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.7rem;
+    flex-wrap:wrap;
+    margin-top:var(--stack-gap);
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    padding:.65rem 1.3rem;
+    border-radius:var(--radius-pill);
+    border:1px solid transparent;
+    background:var(--accent);
+    color:#f9fafb;
+    font-size:.86rem;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+    box-shadow:none;
+    transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+    font-family:inherit;
+    min-height:44px;
+  }
+  .btn:hover:not([disabled]){
+    transform:translateY(-1px);
+    background:var(--accent-hover);
+    text-decoration:none;
+    box-shadow:0 10px 25px rgba(37,99,235,.18);
+  }
+  .btn[disabled]{
+    opacity:.45;
+    cursor:not-allowed;
+  }
+
+  footer.site-footer{
+    margin-top:auto;
+    padding:1.6rem 1.5rem 1.8rem;
+    font-size:.85rem;
+    color:var(--text-soft);
+    border-top:1px solid rgba(148,163,184,.3);
+    background:rgba(248,250,252,.72);
+  }
+  .fine{font-size:.95rem;color:var(--text-soft)}
+  .footer-legal{
+    margin-top:.45rem;
+    display:flex;
+    justify-content:center;
+    gap:.45rem;
+    font-size:.82rem;
+    flex-wrap:wrap;
+  }
+  .footer-legal a{
+    color:var(--text-soft);
+    padding:.25rem .55rem;
+    border-radius:var(--radius-pill);
+    transition:background .16s,color .16s,transform .12s;
+  }
+  .footer-legal a:hover{
+    color:var(--accent);
+    background:rgba(148,163,184,.16);
+    text-decoration:none;
+    transform:translateY(-1px);
+  }
+
+  @media (max-width:760px){
+    .container{width:min(100% - 2rem,var(--max-w))}
+    .nav__list{gap:.25rem}
+    .nav__link{padding:.28rem .65rem}
+    .intro{padding:2rem 0 2.1rem}
+    .tool{padding:1.6rem 0 3rem}
+    .actions .btn{width:100%;max-width:320px}
+    .color-wrap{grid-template-columns:48px minmax(0,1fr)}
+  }
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Image Resizer</h1>
+      <p class="intro__subtitle">Resize images exactly how you want.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="card">
+        <div class="row">
+          <div class="col full">
+            <div class="file-input">
+              <button class="file-btn" id="fileBtn" type="button">Choose Image</button>
+              <input accept="image/*" id="file" type="file"/>
+            </div>
+            <div class="filename" id="filename">No file selected</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <label for="w">Width (px)</label>
+            <input id="w" min="1" placeholder="e.g. 820" type="number"/>
+          </div>
+          <div class="col">
+            <label for="h">Height (px)</label>
+            <input id="h" min="1" placeholder="e.g. 312" type="number"/>
+          </div>
+        </div>
+
+        <div class="row" id="rowFit">
+          <div class="col">
+            <label>Mode</label>
+            <div aria-label="Resize mode" class="seg" role="radiogroup">
+              <input checked id="m-fit" name="mode" type="radio" value="fit"/><label for="m-fit">Fit</label>
+              <input id="m-fill" name="mode" type="radio" value="fill"/><label for="m-fill">Fill</label>
+            </div>
+          </div>
+          <div class="col">
+            <label>Padding color</label>
+            <div class="color-wrap">
+              <div class="chip"><input id="bg" type="color" value="#000000"/></div>
+              <input id="bgHex" placeholder="#RRGGBB" type="text" value="#000000"/>
+            </div>
+          </div>
+          <div class="col">
+            <label for="format">Format</label>
+            <select id="format">
+              <option selected value="png">PNG</option>
+              <option value="jpg">JPG</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row" id="rowFill" style="display:none">
+          <div class="col">
+            <label>Mode</label>
+            <div aria-label="Resize mode" class="seg" role="radiogroup">
+              <input id="m-fit2" name="mode2" type="radio" value="fit"/><label for="m-fit2">Fit</label>
+              <input checked id="m-fill2" name="mode2" type="radio" value="fill"/><label for="m-fill2">Fill</label>
+            </div>
+          </div>
+          <div class="col">
+            <label for="align">Alignment (Fill)</label>
+            <select id="align">
+              <option value="center">Center</option>
+              <option value="top">Top</option>
+              <option value="bottom">Bottom</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+              <option value="top-left">Top-Left</option>
+              <option value="top-right">Top-Right</option>
+              <option value="bottom-left">Bottom-Left</option>
+              <option value="bottom-right">Bottom-Right</option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="format2">Format</label>
+            <select id="format2">
+              <option selected value="png">PNG</option>
+              <option value="jpg">JPG</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="canvas hidden" id="canvasWrap">
+          <canvas id="canvas"></canvas>
+          <canvas id="exportCanvas" style="display:none"></canvas>
+        </div>
+        <div class="filename hidden" id="dragHint">Fill mode: drag to move, scroll to zoom, or pinch on mobile.</div>
+
+        <div class="actions">
+          <button class="btn" disabled id="download" type="button">Download</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- RIYST_INLINE_SCRIPT_START -->
+<script>
+// Footer year
+    (function(){const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();})();
+
+    // Elements
+    const fileEl = document.getElementById('file');
+    const fileBtn = document.getElementById('fileBtn');
+    const filenameEl = document.getElementById('filename');
+    const wEl = document.getElementById('w');
+    const hEl = document.getElementById('h');
+
+    const rowFit = document.getElementById('rowFit');
+    const rowFill = document.getElementById('rowFill');
+    const fitRadio = document.getElementById('m-fit');
+    const fillRadio = document.getElementById('m-fill');
+    const fitRadio2 = document.getElementById('m-fit2');
+    const fillRadio2 = document.getElementById('m-fill2');
+
+    const bgEl = document.getElementById('bg');
+    const bgHexEl = document.getElementById('bgHex');
+    const formatEl = document.getElementById('format');
+    const formatEl2 = document.getElementById('format2');
+    const alignEl = document.getElementById('align');
+
+    const downloadBtn = document.getElementById('download');
+    const previewCanvas = document.getElementById('canvas');
+    const exportCanvas = document.getElementById('exportCanvas');
+    const previewCtx = previewCanvas.getContext('2d');
+    const exportCtx = exportCanvas.getContext('2d');
+    const canvasWrap = document.getElementById('canvasWrap');
+
+    let img = null;
+    let originalBase = 'image';
+    let mode = 'fit';
+    let customFillPosition = false;
+    let fillDx = 0;
+    let fillDy = 0;
+    let fillZoom = 1;
+    let fillBounds = null;
+    let fillDraw = null;
+    let dragActive = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragBaseX = 0;
+    let dragBaseY = 0;
+    let pinchActive = false;
+    let pinchStartDistance = 0;
+    let pinchStartZoom = 1;
+    let pinchStartDx = 0;
+    let pinchStartDy = 0;
+    let pinchCenter = null;
+    const minFillZoom = 0.35;
+    const maxFillZoom = 6;
+    const dragHint = document.getElementById('dragHint');
+
+    // File
+    fileBtn.addEventListener('click', ()=> fileEl.click());
+    fileEl.addEventListener('change', async ()=>{
+      const f = fileEl.files?.[0];
+      if(!f) return;
+      filenameEl.textContent = f.name;
+      originalBase = f.name.replace(/\.[^.]+$/,'') || 'image';
+      customFillPosition = false;
+      fillDx = 0;
+      fillDy = 0;
+      fillZoom = 1;
+      fillZoom = 1;
+      img = await readImage(f);
+      render();
+    });
+
+    function readImage(f){
+      return new Promise((resolve,reject)=>{
+        const r = new FileReader();
+        r.onload = e => { const im = new Image(); im.onload = ()=>resolve(im); im.onerror = ()=>reject(new Error('Load error')); im.src = e.target.result; };
+        r.onerror = ()=>reject(new Error('Read error'));
+        r.readAsDataURL(f);
+      });
+    }
+
+    function dimsOK(){
+      const tw = parseInt(wEl.value,10);
+      const th = parseInt(hEl.value,10);
+      return Number.isFinite(tw)&&tw>0 && Number.isFinite(th)&&th>0 ? [tw,th] : null;
+    }
+
+    function setMode(m){
+      mode = m;
+      customFillPosition = false;
+      fillDx = 0;
+      fillDy = 0;
+      fitRadio.checked = m==='fit'; fillRadio.checked = m==='fill';
+      fitRadio2.checked = m==='fit'; fillRadio2.checked = m==='fill';
+      rowFit.style.display = m==='fit' ? '' : 'none';
+      rowFill.style.display = m==='fill' ? '' : 'none';
+      render();
+    }
+    fitRadio.addEventListener('change', ()=>setMode('fit'));
+    fillRadio.addEventListener('change', ()=>setMode('fill'));
+    fitRadio2.addEventListener('change', ()=>setMode('fit'));
+    fillRadio2.addEventListener('change', ()=>setMode('fill'));
+
+    const normHex = v => { v=(v||'').trim(); if(!v.startsWith('#')) v='#'+v; return /^#([0-9a-fA-F]{6})$/.test(v)?v.toUpperCase():null; };
+    bgEl.addEventListener('input', ()=>{
+      bgHexEl.value = bgEl.value.toUpperCase();
+      render();
+    });
+    bgEl.addEventListener('change', ()=>{
+      bgHexEl.value = bgEl.value.toUpperCase();
+      bgEl.blur();
+      document.body.style.overflowY = 'auto';
+      render();
+    });
+    bgHexEl.addEventListener('input', ()=>{
+      const v=normHex(bgHexEl.value);
+      if(v) bgEl.value=v;
+      document.body.style.overflowY = 'auto';
+      render();
+    });
+
+    [wEl,hEl,formatEl,formatEl2].forEach(el=>{
+      el.addEventListener('input', render);
+      el.addEventListener('change', render);
+    });
+    alignEl.addEventListener('change', ()=>{
+      customFillPosition = false;
+      fillDx = 0;
+      fillDy = 0;
+      fillZoom = 1;
+      render();
+    });
+
+    
+    // Detect if current image contains any transparent pixels (sampling for performance)
+    function __hasAlpha(im){
+      try{
+        const sw = im.naturalWidth || im.width;
+        const sh = im.naturalHeight || im.height;
+        if(!sw || !sh) return false;
+        const maxSamples = 64000;
+        const scale = Math.min(1, Math.sqrt(maxSamples / (sw*sh)));
+        const cw = Math.max(1, Math.floor(sw * scale));
+        const ch = Math.max(1, Math.floor(sh * scale));
+        const c = document.createElement('canvas');
+        c.width = cw; c.height = ch;
+        const cctx = c.getContext('2d');
+        cctx.clearRect(0,0,cw,ch); // preserve alpha
+        cctx.drawImage(im, 0,0, sw,sh, 0,0, cw,ch);
+        const data = cctx.getImageData(0,0,cw,ch).data;
+        for(let i=3;i<data.length;i+=4){ if(data[i] < 255){ return true; } }
+      }catch(e){ /* cross-origin or other error; assume no alpha to avoid surprise */ }
+      return false;
+    }
+
+    function render(){
+      const d = dimsOK();
+      if(!img || !d){
+        canvasWrap.classList.add('hidden');
+        dragHint.classList.add('hidden');
+        previewCanvas.classList.remove('can-drag');
+        fillBounds = null;
+        fillDraw = null;
+        previewCtx.clearRect(0,0,previewCanvas.width,previewCanvas.height);
+        downloadBtn.disabled = true;
+        return;
+      }
+
+      canvasWrap.classList.remove('hidden');
+      dragHint.classList.toggle('hidden', mode !== 'fill');
+      previewCanvas.classList.toggle('can-drag', mode === 'fill');
+
+      const [tw,th] = d;
+
+      // Draw exact output
+      exportCanvas.width = tw; exportCanvas.height = th;
+      const sw = img.naturalWidth || img.width;
+      const sh = img.naturalHeight || img.height;
+
+      exportCtx.save();
+      exportCtx.imageSmoothingEnabled = true;
+      exportCtx.imageSmoothingQuality = 'high';
+
+      if(mode==='fit'){
+        const scale = Math.min(tw/sw, th/sh);
+        const dw = Math.round(sw*scale), dh = Math.round(sh*scale);
+        const dx = Math.floor((tw-dw)/2), dy = Math.floor((th-dh)/2);
+        const fmt = (mode==='fit'?formatEl.value:formatEl2.value);
+        const __imgHasAlpha = __hasAlpha(img);
+        if(!(fmt==='png' && __imgHasAlpha)){
+          exportCtx.fillStyle = bgEl.value;
+          exportCtx.fillRect(0,0,tw,th);
+        }else{
+          exportCtx.clearRect(0,0,tw,th); // keep full transparency when exporting transparent PNGs
+        }
+        exportCtx.drawImage(img,0,0,sw,sh,dx,dy,dw,dh);
+        fillBounds = null;
+        fillDraw = null;
+      }else{
+        const scale = Math.max(tw/sw, th/sh) * fillZoom;
+        const dw = Math.round(sw*scale), dh = Math.round(sh*scale);
+        let dx = Math.floor((tw-dw)/2), dy = Math.floor((th-dh)/2);
+        const a = alignEl.value;
+        if(a?.includes('left')) dx = 0;
+        if(a?.includes('right')) dx = tw - dw;
+        if(a?.includes('top')) dy = 0;
+        if(a?.includes('bottom')) dy = th - dh;
+
+        // Free-position drag bounds.
+        // This allows the image to be moved anywhere within the frame area,
+        // rather than only being locked to the crop edges.
+        const minX = -dw;
+        const maxX = tw;
+        const minY = -dh;
+        const maxY = th;
+
+        if(customFillPosition){
+          dx = fillDx;
+          dy = fillDy;
+        }
+
+        dx = Math.max(minX, Math.min(maxX, dx));
+        dy = Math.max(minY, Math.min(maxY, dy));
+        fillDx = dx;
+        fillDy = dy;
+        fillBounds = { minX, maxX, minY, maxY, tw, th };
+        fillDraw = { dx, dy, dw, dh, tw, th, scale };
+
+        exportCtx.clearRect(0,0,tw,th);
+        exportCtx.drawImage(img,dx,dy,dw,dh);
+      }
+      exportCtx.restore();
+
+      // HiDPI preview
+      const available = canvasWrap.clientWidth;
+      const cssW = Math.min(available, tw);
+      const scale = cssW / tw;
+      const dpr = window.devicePixelRatio || 1;
+
+      previewCanvas.style.width = cssW + 'px';
+      previewCanvas.style.height = Math.round(th * scale) + 'px';
+      previewCanvas.width = Math.round(cssW * dpr);
+      previewCanvas.height = Math.round(th * scale * dpr);
+
+      previewCtx.save();
+      previewCtx.imageSmoothingEnabled = true;
+      previewCtx.imageSmoothingQuality = 'high';
+      previewCtx.clearRect(0,0,previewCanvas.width,previewCanvas.height);
+      previewCtx.drawImage(exportCanvas, 0,0, tw,th, 0,0, previewCanvas.width, previewCanvas.height);
+      previewCtx.restore();
+
+      downloadBtn.disabled = false;
+    }
+
+
+    function previewScaleToOutput(){
+      const d = dimsOK();
+      if(!d) return null;
+      const [tw] = d;
+      const rect = previewCanvas.getBoundingClientRect();
+      if(!rect.width || !tw) return null;
+      return tw / rect.width;
+    }
+
+    function canDragFill(){
+      return mode === 'fill' && img && dimsOK() && fillBounds;
+    }
+
+    function clampFillPosition(){
+      if(!fillBounds) return;
+      fillDx = Math.max(fillBounds.minX, Math.min(fillBounds.maxX, fillDx));
+      fillDy = Math.max(fillBounds.minY, Math.min(fillBounds.maxY, fillDy));
+    }
+
+    function outputPointFromClient(clientX, clientY){
+      const d = dimsOK();
+      if(!d) return null;
+      const [tw, th] = d;
+      const rect = previewCanvas.getBoundingClientRect();
+      if(!rect.width || !rect.height) return null;
+      return {
+        x:(clientX - rect.left) * (tw / rect.width),
+        y:(clientY - rect.top) * (th / rect.height)
+      };
+    }
+
+    function setFillZoom(newZoom, anchor){
+      if(!canDragFill() || !fillDraw) return;
+      const oldZoom = fillZoom;
+      newZoom = Math.max(minFillZoom, Math.min(maxFillZoom, newZoom));
+      if(Math.abs(newZoom - oldZoom) < 0.001) return;
+
+      const factor = newZoom / oldZoom;
+      const point = anchor || { x: fillBounds.tw / 2, y: fillBounds.th / 2 };
+
+      fillDx = point.x - (point.x - fillDx) * factor;
+      fillDy = point.y - (point.y - fillDy) * factor;
+      fillZoom = newZoom;
+      customFillPosition = true;
+      render();
+      clampFillPosition();
+      render();
+    }
+
+    function distanceBetweenTouches(touches){
+      if(!touches || touches.length < 2) return 0;
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.hypot(dx, dy);
+    }
+
+    function centreBetweenTouches(touches){
+      if(!touches || touches.length < 2) return null;
+      return outputPointFromClient(
+        (touches[0].clientX + touches[1].clientX) / 2,
+        (touches[0].clientY + touches[1].clientY) / 2
+      );
+    }
+
+    previewCanvas.addEventListener('pointerdown', (e)=>{
+      if(!canDragFill()) return;
+      e.preventDefault();
+      dragActive = true;
+      customFillPosition = true;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      dragBaseX = fillDx;
+      dragBaseY = fillDy;
+      previewCanvas.setPointerCapture?.(e.pointerId);
+    });
+
+    previewCanvas.addEventListener('pointermove', (e)=>{
+      if(!dragActive || !canDragFill()) return;
+      e.preventDefault();
+      const factor = previewScaleToOutput();
+      if(!factor) return;
+      fillDx = Math.max(fillBounds.minX, Math.min(fillBounds.maxX, dragBaseX + (e.clientX - dragStartX) * factor));
+      fillDy = Math.max(fillBounds.minY, Math.min(fillBounds.maxY, dragBaseY + (e.clientY - dragStartY) * factor));
+      render();
+    });
+
+    function endDrag(e){
+      if(!dragActive) return;
+      dragActive = false;
+      try{ previewCanvas.releasePointerCapture?.(e.pointerId); }catch(_){}
+    }
+
+    previewCanvas.addEventListener('pointerup', endDrag);
+    previewCanvas.addEventListener('pointercancel', endDrag);
+    previewCanvas.addEventListener('pointerleave', endDrag);
+
+
+    previewCanvas.addEventListener('wheel', (e)=>{
+      if(!canDragFill()) return;
+      e.preventDefault();
+      const anchor = outputPointFromClient(e.clientX, e.clientY);
+      const factor = Math.exp(-e.deltaY * 0.0015);
+      setFillZoom(fillZoom * factor, anchor);
+    }, { passive:false });
+
+    previewCanvas.addEventListener('touchstart', (e)=>{
+      if(!canDragFill() || e.touches.length !== 2) return;
+      e.preventDefault();
+      pinchActive = true;
+      pinchStartDistance = distanceBetweenTouches(e.touches);
+      pinchStartZoom = fillZoom;
+      pinchStartDx = fillDx;
+      pinchStartDy = fillDy;
+      pinchCenter = centreBetweenTouches(e.touches);
+    }, { passive:false });
+
+    previewCanvas.addEventListener('touchmove', (e)=>{
+      if(!pinchActive || !canDragFill() || e.touches.length !== 2) return;
+      e.preventDefault();
+      const now = distanceBetweenTouches(e.touches);
+      if(!pinchStartDistance) return;
+
+      const newZoom = Math.max(minFillZoom, Math.min(maxFillZoom, pinchStartZoom * (now / pinchStartDistance)));
+      const factor = newZoom / pinchStartZoom;
+      const point = pinchCenter || { x: fillBounds.tw / 2, y: fillBounds.th / 2 };
+
+      fillDx = point.x - (point.x - pinchStartDx) * factor;
+      fillDy = point.y - (point.y - pinchStartDy) * factor;
+      fillZoom = newZoom;
+      customFillPosition = true;
+      render();
+      clampFillPosition();
+      render();
+    }, { passive:false });
+
+    previewCanvas.addEventListener('touchend', (e)=>{
+      if(e.touches && e.touches.length < 2) pinchActive = false;
+    }, { passive:true });
+
+    // Download
+    downloadBtn.addEventListener('click', ()=>{
+      const d = dimsOK(); if(!d) return;
+      const [tw,th] = d;
+      const fmt = (mode==='fit'?formatEl.value:formatEl2.value);
+      const name = `${originalBase}_resized_${tw}x${th}.${fmt}`;
+      const mime = (fmt==='png') ? 'image/png' : 'image/jpeg';
+      const quality = (fmt==='png') ? undefined : 0.92;
+
+      exportCanvas.toBlob(blob=>{
+        if(!blob){
+          const dataURL = exportCanvas.toDataURL(mime, quality);
+          triggerDownload(name, dataURL);
+          return;
+        }
+        const url = URL.createObjectURL(blob);
+        triggerDownload(name, url, true);
+      }, mime, quality);
+
+      function triggerDownload(filename, href, revoke=false){
+        const a = document.createElement('a');
+        a.download = filename; a.href = href; document.body.appendChild(a); a.click(); a.remove();
+        if(revoke) setTimeout(()=>URL.revokeObjectURL(href), 1000);
+      }
+    });
+
+    // Keep preview crisp on resize
+    window.addEventListener('resize', ()=>{ clearTimeout(window.__rt); window.__rt = setTimeout(render, 120); });
+
+    // Init
+    setMode('fit');
+    canvasWrap.classList.add('hidden');
+</script>
+<!-- RIYST_INLINE_SCRIPT_END -->
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

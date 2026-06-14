@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tools | Metadata Reader</title>
+<meta name="description" content="View EXIF, IPTC and XMP metadata locally in your browser. No uploads."/>
+<meta name="theme-color" content="#f5f5f7"/>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --bg-alt:#ffffff;
+    --text:#111827;
+    --text-soft:#4b5563;
+    --accent:#2563eb;
+    --accent-hover:#1d4ed8;
+    --accent-soft:rgba(37,99,235,.08);
+    --border-subtle:#e5e7eb;
+    --border-strong:#d1d5db;
+    --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+    --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+    --radius:20px;
+    --radius-pill:999px;
+    --max-w:980px;
+    --gap:14px;
+    --stack-gap:14px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%;overflow-x:hidden}
+  body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background:var(--bg);
+    color:var(--text);
+    font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  main{flex:1}
+  .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+  .skip-link{
+    position:absolute;
+    left:-999px;
+    top:.5rem;
+    padding:.45rem .75rem;
+    background:#111827;
+    color:#f9fafb;
+    z-index:100;
+    border-radius:var(--radius-pill);
+    font-size:.85rem;
+  }
+  .skip-link:focus{left:.5rem}
+
+  header.site-header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    border-bottom:1px solid rgba(148,163,184,.28);
+    backdrop-filter:blur(16px);
+    background:rgba(248,250,252,.95);
+  }
+  .mast{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:58px;
+    padding:.55rem 0;
+  }
+  .nav__list{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    list-style:none;
+    margin:0;
+    padding:0;
+    flex-wrap:wrap;
+    font-size:.86rem;
+  }
+  .nav__link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:.3rem .8rem;
+    border-radius:var(--radius-pill);
+    color:var(--text-soft);
+    border:1px solid transparent;
+    transition:background .16s,color .16s,transform .12s,border-color .16s;
+  }
+  .nav__link:hover,.nav__link:focus-visible{
+    background:rgba(148,163,184,.18);
+    color:var(--text);
+    transform:translateY(-1px);
+    text-decoration:none;
+    border-color:rgba(148,163,184,.26);
+  }
+  .nav__link--highlight{background:var(--accent-soft);color:var(--accent);border-color:rgba(37,99,235,.18)}
+
+  .intro{
+    text-align:center;
+    padding:2.6rem 0 2.4rem;
+  }
+  .intro__title{
+    font-size:clamp(2.1rem,3vw,2.6rem);
+    line-height:1.15;
+    margin:0 0 .8rem;
+    font-weight:750;
+    letter-spacing:-.03em;
+  }
+  .intro__subtitle{
+    max-width:650px;
+    margin:0 auto;
+    color:var(--text-soft);
+    font-size:.96rem;
+    font-weight:500;
+  }
+
+  .tool{padding:2.4rem 0 4rem}
+  .card{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--border-subtle);
+    border-radius:24px;
+    box-shadow:var(--shadow-soft);
+    padding:clamp(1.2rem,3vw,1.7rem);
+    max-width:980px;
+    margin:0 auto;
+    transition:box-shadow .16s,transform .16s,border-color .16s;
+  }
+  .card:hover{box-shadow:var(--shadow-lift);border-color:rgba(37,99,235,.18)}
+
+  .row{
+    display:flex;
+    justify-content:center;
+    gap:var(--gap);
+    flex-wrap:wrap;
+    margin-top:var(--gap);
+  }
+  .row:first-child{margin-top:0}
+  .col{
+    min-width:230px;
+    flex:1 1 250px;
+  }
+  .full,.col.full{
+    min-width:260px;
+    max-width:100%;
+    flex:1 1 100%;
+  }
+
+  label{
+    display:block;
+    margin:0 0 .35rem;
+    color:var(--text-soft);
+    font-size:.85rem;
+    font-weight:700;
+  }
+
+  .upload-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .drop-merge{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:.5rem;
+    width:100%;
+    min-height:158px;
+    padding:1.35rem;
+    border:2px dashed var(--border-strong);
+    border-radius:20px;
+    background:#f8fafc;
+    color:var(--text);
+    text-align:center;
+    cursor:pointer;
+    transition:border-color .16s,background .16s,box-shadow .16s,transform .14s;
+    font-size:1rem;
+    font-weight:750;
+  }
+  .drop-merge:hover,.drop-merge.dragover,.drop-merge:focus-within{
+    border-color:var(--accent);
+    background:#f4f8ff;
+    box-shadow:0 0 0 4px rgba(37,99,235,.08);
+    transform:translateY(-1px);
+  }
+  .drop-merge input[type="file"]{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    cursor:pointer;
+  }
+
+  .filename{
+    margin-top:.65rem;
+    text-align:center;
+    color:var(--text-soft);
+    font-size:.88rem;
+    font-weight:650;
+    overflow-wrap:anywhere;
+  }
+  .filename.error{
+    color:#b91c1c;
+    min-height:1.4rem;
+  }
+
+  #results{
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+    margin-top:1rem;
+  }
+  .result{
+    margin-top:0;
+    justify-content:stretch;
+  }
+  .box{
+    border:1px solid var(--border-subtle);
+    border-radius:22px;
+    background:#fff;
+    overflow:hidden;
+    box-shadow:0 10px 24px rgba(15,23,42,.07);
+  }
+  .head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:.8rem;
+    padding:.8rem 1rem;
+    border-bottom:1px solid var(--border-subtle);
+    background:#f8fafc;
+    color:var(--text);
+    font-size:.95rem;
+    font-weight:800;
+    overflow-wrap:anywhere;
+  }
+  .close{
+    width:32px;
+    height:32px;
+    min-width:32px;
+    border-radius:999px;
+    border:1px solid rgba(185,28,28,.18);
+    background:rgba(185,28,28,.08);
+    color:#b91c1c;
+    cursor:pointer;
+    font-size:1.1rem;
+    font-weight:800;
+    line-height:1;
+    transition:background .16s,transform .14s,border-color .16s;
+  }
+  .close:hover{
+    transform:translateY(-1px);
+    background:rgba(185,28,28,.14);
+    border-color:rgba(185,28,28,.28);
+  }
+  .panel{
+    padding:1rem;
+  }
+  .sub{
+    border:1px solid var(--border-subtle);
+    border-radius:18px;
+    background:#f8fafc;
+    padding:.9rem;
+    min-width:0;
+  }
+  .sub h4{
+    margin:0 0 .6rem;
+    font-size:.92rem;
+    line-height:1.2;
+    color:var(--text);
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:.8rem;
+  }
+  .quick{
+    display:grid;
+    gap:.35rem;
+    color:var(--text-soft);
+    font-size:.9rem;
+  }
+  .quick-item{
+    display:flex;
+    gap:.35rem;
+    flex-wrap:wrap;
+  }
+  .quick-label{
+    color:var(--text-soft);
+    font-weight:800;
+  }
+  .quick-value{
+    color:var(--text);
+    font-weight:650;
+  }
+  .imgwrap{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:220px;
+    border-radius:16px;
+    border:1px solid var(--border-subtle);
+    background:
+      linear-gradient(45deg, #eef2f7 25%, transparent 25%),
+      linear-gradient(-45deg, #eef2f7 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #eef2f7 75%),
+      linear-gradient(-45deg, transparent 75%, #eef2f7 75%);
+    background-size:22px 22px;
+    background-position:0 0,0 11px,11px -11px,-11px 0;
+    overflow:hidden;
+    padding:.75rem;
+  }
+  .imgwrap img{
+    display:block;
+    max-width:100%;
+    max-height:320px;
+    object-fit:contain;
+    border-radius:12px;
+    box-shadow:0 10px 24px rgba(15,23,42,.12);
+  }
+  .mapwrap{
+    min-height:260px;
+    height:320px;
+    width:100%;
+    border-radius:16px;
+    border:1px solid var(--border-subtle);
+    background:#eef2f7;
+    overflow:hidden;
+    color:var(--text-soft);
+    font-size:.9rem;
+    font-weight:650;
+    text-align:center;
+  }
+  .mapwrap a{
+    color:var(--accent);
+    font-weight:800;
+  }
+  .leaflet-container{
+    font:12px/1.4 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  pre.json{
+    margin:0;
+    max-height:360px;
+    overflow:auto;
+    border:1px solid var(--border-subtle);
+    border-radius:14px;
+    background:#111827;
+    color:#e5e7eb;
+    padding:.9rem;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    font-size:.82rem;
+    line-height:1.55;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+  }
+
+  .actions{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:.7rem;
+    flex-wrap:wrap;
+    margin-top:var(--stack-gap);
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.55rem;
+    padding:.65rem 1.3rem;
+    border-radius:var(--radius-pill);
+    border:1px solid transparent;
+    background:var(--accent);
+    color:#f9fafb;
+    font-size:.86rem;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+    box-shadow:none;
+    transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s;
+    font-family:inherit;
+    min-height:44px;
+  }
+  .btn:hover:not([disabled]){
+    transform:translateY(-1px);
+    background:var(--accent-hover);
+    text-decoration:none;
+    box-shadow:0 10px 25px rgba(37,99,235,.18);
+  }
+  .btn.small{
+    min-height:38px;
+    padding:.5rem 1rem;
+    font-size:.82rem;
+  }
+  .btn[disabled],.btn[aria-disabled="true"]{
+    opacity:.45;
+    cursor:not-allowed;
+    pointer-events:none;
+  }
+  .hidden{display:none!important}
+
+  footer.site-footer{
+    margin-top:auto;
+    padding:1.6rem 1.5rem 1.8rem;
+    font-size:.85rem;
+    color:var(--text-soft);
+    border-top:1px solid rgba(148,163,184,.3);
+    background:rgba(248,250,252,.72);
+  }
+  .fine{font-size:.95rem;color:var(--text-soft)}
+  .footer-legal{
+    margin-top:.45rem;
+    display:flex;
+    justify-content:center;
+    gap:.45rem;
+    font-size:.82rem;
+    flex-wrap:wrap;
+  }
+  .footer-legal a{
+    color:var(--text-soft);
+    padding:.25rem .55rem;
+    border-radius:var(--radius-pill);
+    transition:background .16s,color .16s,transform .12s;
+  }
+  .footer-legal a:hover{
+    color:var(--accent);
+    background:rgba(148,163,184,.16);
+    text-decoration:none;
+    transform:translateY(-1px);
+  }
+
+  @media (max-width:860px){
+    .grid{grid-template-columns:1fr}
+  }
+  @media (max-width:760px){
+    .container{width:min(100% - 2rem,var(--max-w))}
+    .nav__list{gap:.25rem}
+    .nav__link{padding:.28rem .65rem}
+    .intro{padding:2rem 0 2.1rem}
+    .tool{padding:1.6rem 0 3rem}
+    .actions .btn{width:100%;max-width:320px}
+    .head{align-items:flex-start}
+    .mapwrap{height:280px}
+  }
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Metadata Reader</h1>
+      <p class="intro__subtitle">View EXIF, IPTC and XMP locally in your browser. No uploads.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div aria-label="Image metadata reader" class="card" role="region">
+        <div class="row">
+          <div class="col full">
+            <div class="upload-row">
+              <label aria-label="File chooser" class="drop-merge" id="dropMerge">
+                <span>Click to choose image(s) or drop here</span>
+                <input accept="image/*,.heic,.heif,.tif,.tiff,.psd,.cr2,.nef,.arw,.raf,.dng,.rw2" id="file" multiple type="file"/>
+              </label>
+            </div>
+            <div class="filename" id="filename">No files selected</div>
+            <div aria-live="polite" class="filename error" id="error"></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col full">
+            <div aria-live="polite" id="results"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- RIYST_INLINE_SCRIPT_START -->
+<script>
+(function(){var y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();})();
+
+    function $(s,root){return (root||document).querySelector(s);}
+    function $all(s,root){return Array.prototype.slice.call((root||document).querySelectorAll(s));}
+
+    var drop = $('#dropMerge');
+    var fileInput = $('#file');
+    var fileNameEl = $('#filename');
+    var errorEl = $('#error');
+    var results = $('#results');
+
+    function setFilesLabel(files){
+      if(!files || !files.length){ fileNameEl.textContent = 'No files selected'; return; }
+      fileNameEl.textContent = files.length===1 ? (files[0].name||'1 file') : files.length+' files selected';
+    }
+    function setError(msg){ errorEl.textContent = msg||''; }
+
+    ['dragenter','dragover'].forEach(function(evt){
+      drop.addEventListener(evt, function(e){ e.preventDefault(); drop.classList.add('dragover'); });
+    });
+    ['dragleave','drop'].forEach(function(evt){
+      drop.addEventListener(evt, function(e){ e.preventDefault(); drop.classList.remove('dragover'); });
+    });
+    drop.addEventListener('drop', function(e){
+      var files = (e.dataTransfer && e.dataTransfer.files) ? Array.prototype.slice.call(e.dataTransfer.files) : [];
+      if(!files.length){ setError('No files dropped.'); return; }
+      setError('');
+      setFilesLabel(files);
+      addFiles(files);
+    });
+
+    ['change','input'].forEach(function(ev){
+      fileInput.addEventListener(ev, function(){
+        var files = fileInput.files ? Array.prototype.slice.call(fileInput.files) : [];
+        if(!files.length){ return; }
+        setError('');
+        setFilesLabel(files);
+        addFiles(files);
+        fileInput.value=''; // allow same file again
+      });
+    });
+
+    var items = new Map();
+
+    function prependSafe(parent, el){
+      if(parent.prepend) parent.prepend(el);
+      else parent.insertBefore(el, parent.firstChild);
+    }
+
+    function addFiles(files){
+      files.forEach(function(file){
+        var id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : ('id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2));
+        var row = document.createElement('div');
+        row.className = 'row result';
+        row.innerHTML = ''
+          + '<div class="full" style="flex-basis:100%"><div class="box">'
+          +   '<div class="head" data-head>Metadata'
+          +     '<button class="close" title="Close" aria-label="Close">×</button>'
+          +   '</div>'
+          +   '<div class="panel">'
+          +     '<div class="sub" data-summary>'
+          +       '<h4>Summary</h4>'
+          +       '<div class="quick" data-quick></div>'
+          +     '</div>'
+          +     '<div class="grid" style="margin-top:12px">'
+          +       '<div class="sub" data-img></div>'
+          +       '<div class="sub" data-map></div>'
+          +     '</div>'
+          +     '<div class="sub" style="margin-top:12px" data-raw>'
+          +       '<h4>Full metadata (JSON)</h4>'
+          +       '<pre class="json" aria-label="Metadata JSON"></pre>'
+          +       '<div class="actions">'
+          +         '<button class="btn small accent copy-json" disabled>Copy</button>'
+          +         '<a class="btn small accent dl-json" style="display:inline-flex" download target="_blank" rel="noopener" aria-disabled="true">Download JSON</a>'
+          +       '</div>'
+          +     '</div>'
+          +   '</div>'
+          + '</div></div>';
+        prependSafe(results, row);
+
+        var rec = { id:id, file:file, el:row, data:null };
+        items.set(id, rec);
+
+        // Title with filename
+        var headEl = row.querySelector('[data-head]');
+        if(headEl){ headEl.firstChild.nodeValue = 'Metadata for ' + (file.name || 'file'); }
+
+        // Close handler
+        row.querySelector('.close').addEventListener('click', function(){
+          items.delete(id);
+          row.remove();
+        });
+
+        // Copy handler
+        row.querySelector('.copy-json').addEventListener('click', function(){ copyJSON(rec); });
+
+        // Image preview
+        var imgBox = row.querySelector('[data-img]');
+        imgBox.innerHTML = '<h4>Preview</h4><div class="imgwrap"><img alt="Preview"></div>';
+        var imgEl = imgBox.querySelector('img');
+        var objURL = URL.createObjectURL(file);
+        imgEl.src = objURL;
+        imgEl.onload = function(){ URL.revokeObjectURL(objURL); };
+
+        readItem(rec);
+      });
+    }
+
+    async function copyJSON(rec){
+      if(!rec.data) return;
+      var btn = rec.el.querySelector('.copy-json');
+      var txt = '';
+      try{
+        txt = JSON.stringify(rec.data, null, 2);
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          await navigator.clipboard.writeText(txt);
+        } else {
+          var ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select();
+          try{ document.execCommand('copy'); }finally{ document.body.removeChild(ta); }
+        }
+        if(btn){
+          var old = btn.textContent;
+          btn.textContent='Copied';
+          setTimeout(function(){ btn.textContent=old; }, 1400);
+        }
+      }catch(e){
+        console.error('Copy failed', e);
+        if(btn){ btn.textContent='Copy'; }
+      }
+    }
+
+    function readItem(rec){
+      var pre = rec.el.querySelector('pre.json');
+      var quickEl = rec.el.querySelector('[data-quick]');
+      var dl = rec.el.querySelector('a.dl-json');
+      var copyBtn = rec.el.querySelector('.copy-json');
+      var headEl = rec.el.querySelector('[data-head]');
+      var mapBox = rec.el.querySelector('[data-map]');
+
+      return extractAll(rec.file).then(function(data){
+        rec.data = data;
+        pre.textContent = JSON.stringify(data, null, 2);
+
+        if(headEl){ headEl.firstChild.nodeValue = 'Metadata for ' + ((rec.file && rec.file.name) ? rec.file.name : 'file'); }
+
+        // Summary = quick glance lines only
+        quickEl.innerHTML = '';
+        var frag = buildSummaryNode(data);
+        if(frag){ quickEl.appendChild(frag); }
+
+        // Map
+        buildMap(mapBox, data.summary && data.summary.gps, rec.id);
+
+        // Enable copy & download when ready
+        if(copyBtn){ copyBtn.removeAttribute('disabled'); }
+        var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+        var url = URL.createObjectURL(blob);
+        dl.href = url;
+        dl.download = suggestJSONName((rec.file.name||'image'));
+        dl.removeAttribute('aria-disabled');
+        rec._dlUrl && URL.revokeObjectURL(rec._dlUrl);
+        rec._dlUrl = url;
+      }).catch(function(err){ console.error(err); });
+    }
+
+    function suggestJSONName(name){ var base = name.replace(/\.[^.]+$/, ''); return base + '.metadata.json'; }
+
+    // -------- Create DOM for quick glance lines --------
+    function buildSummaryNode(data){
+      var s = data.summary||{};
+      var device = [s.make||'', s.model||''].join(' ').trim();
+      var dt = normalizeDateTime(s.date);
+      var gps = (s.gps && isFinite(s.gps.lat) && isFinite(s.gps.lon)) ? (s.gps.lat.toFixed(5)+', '+s.gps.lon.toFixed(5)) : '';
+      var dimensions = (s.width && s.height) ? (s.width + ' × ' + s.height + ' px') : '';
+      var lens = s.lens || '';
+      var exposure = s.exposure || '';
+      var aperture = s.fnumber ? ('f/' + s.fnumber) : '';
+      var iso = s.iso ? ('ISO ' + s.iso) : '';
+      var focal = s.focalLength ? (s.focalLength + ' mm') : '';
+      var haveAny = device || dt.date || dt.time || gps || dimensions || lens || exposure || aperture || iso || focal;
+      var frag = document.createDocumentFragment();
+      if(!haveAny){ frag.appendChild(document.createTextNode('—')); return frag; }
+      function line(label, value){
+        if(!value) return;
+        var div = document.createElement('div');
+        div.className = 'quick-item';
+        var lab = document.createElement('span'); lab.className = 'quick-label'; lab.textContent = label + ': ';
+        var val = document.createElement('span'); val.className = 'quick-value'; val.textContent = value;
+        div.appendChild(lab); div.appendChild(val);
+        frag.appendChild(div);
+      }
+      line('Device', device);
+      line('Dimensions', dimensions);
+      line('Date', dt.date);
+      line('Time', dt.time);
+      line('Lens', lens);
+      line('Exposure', exposure);
+      line('Aperture', aperture);
+      line('ISO', iso);
+      line('Focal length', focal);
+      line('GPS', gps);
+      return frag;
+    }
+    function normalizeDateTime(input){
+      if(!input) return {date:'', time:''};
+      var str = String(input).trim();
+      str = str.replace('T',' ').replace(/Z$/,'');
+      str = str.replace(/([0-9]{2}:[0-9]{2}:[0-9]{2})\.[0-9]+.*/, '$1');
+      str = str.replace(/([0-9]{2}:[0-9]{2}:[0-9]{2})([\+\-].*)$/, '$1');
+      var parts = str.split(/\s+/);
+      var date = parts[0] || '';
+      var time = parts[1] || '';
+      if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date)){ date = date.replace(/-/g, ':'); }
+      return {date:date, time:time};
+    }
+
+    /* ----- Map builder (Leaflet) ----- */
+    function buildMap(container, gps, uniqueId){
+      container.innerHTML = '<h4>Location</h4>';
+      var wrap = document.createElement('div');
+      wrap.className = 'mapwrap';
+      container.appendChild(wrap);
+
+      if(!gps || !isFinite(gps.lat) || !isFinite(gps.lon)){
+        wrap.style.display='flex';
+        wrap.style.alignItems='center';
+        wrap.style.justifyContent='center';
+        wrap.textContent = 'No GPS data found';
+        return;
+      }
+
+      var lat = gps.lat;
+      var lon = gps.lon;
+      var coords = lat.toFixed(5) + ', ' + lon.toFixed(5);
+
+      function showCoordinateFallback(message){
+        wrap.style.display='flex';
+        wrap.style.alignItems='center';
+        wrap.style.justifyContent='center';
+        wrap.style.flexDirection='column';
+        wrap.style.gap='.4rem';
+        wrap.innerHTML = '';
+        var line = document.createElement('div');
+        line.textContent = message || ('GPS: ' + coords);
+        var link = document.createElement('a');
+        link.href = 'https://www.openstreetmap.org/?mlat=' + encodeURIComponent(lat) + '&mlon=' + encodeURIComponent(lon) + '#map=15/' + encodeURIComponent(lat) + '/' + encodeURIComponent(lon);
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = 'Open map';
+        wrap.appendChild(line);
+        wrap.appendChild(link);
+      }
+
+      if(!window.L || !L.map || !L.tileLayer || !L.marker){
+        showCoordinateFallback('GPS found: ' + coords);
+        return;
+      }
+
+      var id = 'map-' + (uniqueId || (Math.random().toString(36).slice(2)));
+      wrap.id = id;
+
+      try{
+        var map = L.map(id, { zoomControl: true }).setView([lat, lon], 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        var marker = L.marker([lat, lon]).addTo(map);
+        marker.bindPopup('GPS: ' + coords);
+        setTimeout(function(){ map.invalidateSize(); }, 50);
+      }catch(err){
+        console.error('Map failed', err);
+        showCoordinateFallback('GPS found: ' + coords);
+      }
+    }
+
+    /* ------------ Parsers ------------- */
+    function isJPEG(u8){ return u8 && u8.length>2 && u8[0]===0xFF && u8[1]===0xD8; }
+    function isPNG(u8){ return u8 && u8.length>4 && u8[0]===0x89 && u8[1]===0x50 && u8[2]===0x4E && u8[3]===0x47; }
+    function isWEBP(u8){ return u8 && u8.length>12 && u8[0]===0x52 && u8[1]===0x49 && u8[2]===0x46 && u8[3]===0x46 && u8[8]===0x57 && u8[9]===0x45 && u8[10]===0x42 && u8[11]===0x50; }
+
+    function extractAll(file){
+      var base = { file:{ name:file.name, type:file.type, size:file.size }, summary:{}, exif:null, iptc:null, xmp:null };
+      return file.arrayBuffer().then(function(buf){
+        var u8 = new Uint8Array(buf);
+        if('createImageBitmap' in window){
+          return Promise.resolve(createImageBitmap(file)).catch(function(){ return null; }).then(function(bmp){
+            if(bmp){ base.summary.width=bmp.width; base.summary.height=bmp.height; }
+            return {u8:u8};
+          });
+        }
+        return {u8:u8};
+      }).then(function(ctx){
+        var u8 = ctx.u8;
+        if(isJPEG(u8)){
+          var segs = scanJPEG(u8);
+          var exifSeg = segs.find(function(s){return s.type==='APP1' && s.kind==='exif';});
+          if(exifSeg){
+            var exif = parseEXIF(exifSeg.data);
+            if(exif) { base.exif = exif; fillSummaryFromEXIF(base.summary, exif); }
+          }
+          var xmpSeg = segs.find(function(s){return s.type==='APP1' && s.kind==='xmp';});
+          if(xmpSeg){ base.xmp = parseXMP(xmpSeg.data); if(base.xmp && base.xmp['xmp:CreateDate'] && !base.summary.date) base.summary.date = base.xmp['xmp:CreateDate']; }
+          var iptcSeg = segs.find(function(s){return s.type==='APP13' && s.kind==='iptc';});
+          if(iptcSeg){ base.iptc = parseIPTC(iptcSeg.data); }
+        } else if(isPNG(u8)){
+          var png = parsePNG(u8);
+          if(png.exif){ var exifP = parseEXIF(png.exif); if(exifP){ base.exif = exifP; fillSummaryFromEXIF(base.summary, exifP); } }
+          if(png.xmp){ base.xmp = parseXMP(png.xmp); }
+          if(png.text){ base.iptc = Object.assign({'PNGText': png.text}, base.iptc||{}); }
+        } else if(isWEBP(u8)){
+          var webp = parseWEBP(u8);
+          if(webp.exif){ var exifW = parseEXIF(webp.exif); if(exifW){ base.exif = exifW; fillSummaryFromEXIF(base.summary, exifW); } }
+          if(webp.xmp){ base.xmp = parseXMP(webp.xmp); }
+        } else {
+          base.summary.note = 'File format not currently supported for deep parsing. Try JPEG/PNG/WEBP.';
+        }
+        return base;
+      }).catch(function(err){ console.error(err); return base; });
+    }
+
+    function scanJPEG(u8){
+      var segs = [];
+      var off = 2;
+      while(off + 4 < u8.length && u8[off]===0xFF){
+        var marker = u8[off+1];
+        if(marker===0xDA) break; // SOS
+        var len = (u8[off+2]<<8) | u8[off+3];
+        var start = off+4, end = start + len - 2;
+        var view = u8.slice(start, end);
+        if(marker===0xE1){
+          var isExif = (view[0]===0x45 && view[1]===0x78 && view[2]===0x69 && view[3]===0x66 && view[4]===0 && view[5]===0);
+          if(isExif){ segs.push({type:'APP1', kind:'exif', data:view.slice(6)}); }
+          else {
+            var id = 'http://ns.adobe.com/xap/1.0/';
+            var head=''; try{ head=new TextDecoder().decode(view.slice(0,id.length)); }catch(_){}
+            if(head===id){ segs.push({type:'APP1', kind:'xmp', data:view.slice(id.length)}); }
+          }
+        } else if(marker===0xED){
+          var txt=''; try{ txt=new TextDecoder().decode(view.slice(0,13)); }catch(_){}
+          if(txt.indexOf('Photoshop 3.')===0){ segs.push({type:'APP13', kind:'iptc', data:view.slice(14)}); }
+        }
+        off = end;
+      }
+      return segs;
+    }
+
+    function parseEXIF(u8){
+      try{
+        var dv = new DataView(u8.buffer, u8.byteOffset, u8.byteLength);
+        var order = (dv.getUint16(0,false)===0x4949) ? 'LE' : 'BE';
+        var get16 = function(o){ return order==='LE'? dv.getUint16(o,true):dv.getUint16(o,false); };
+        var get32 = function(o){ return order==='LE'? dv.getUint32(o,true):dv.getUint32(o,false); };
+        if(get16(2)!==42) return null;
+        var ifd0 = get32(4);
+        var out = {}; var seen = {};
+        function readIFD(off, path){
+          if(!off || seen[off]) return; seen[off]=true;
+          var cnt = get16(off);
+          for(var i=0;i<cnt;i++){
+            var base = off + 2 + i*12;
+            var tag = get16(base);
+            var type = get16(base+2);
+            var count = get32(base+4);
+            var valField = base+8;
+            var need = count*typeSize(type);
+            var valPtr = (need > 4) ? get32(valField) : valField;
+            var value = readValue(type, count, valPtr);
+            assignTag(out, path, tag, value);
+            if(tag===0x8769){ readIFD(get32(valField), 'ExifIFD'); }
+            else if(tag===0x8825){ readIFD(get32(valField), 'GPS'); }
+          }
+          var next = get32(off + 2 + cnt*12);
+          if(next) readIFD(next, path);
+        }
+        function typeSize(t){ return (t===1||t===2||t===7)?1 : (t===3)?2 : (t===4||t===9)?4 : (t===5||t===10)?8 : 0; }
+        function readValue(type, count, ptr){
+          if(type===2){ var bytes=new Uint8Array(dv.buffer, dv.byteOffset+ptr, count); var s=''; try{ s=new TextDecoder().decode(bytes);}catch(_){s='';} return s.replace(/\u0000+$/,''); }
+          if(type===3){ var a=[]; for(var i=0;i<count;i++) a.push(get16(ptr+i*2)); return count===1?a[0]:a; }
+          if(type===4){ var a=[]; for(var i=0;i<count;i++) a.push(get32(ptr+i*4)); return count===1?a[0]:a; }
+          if(type===5){ var a=[]; for(var i=0;i<count;i++){ var n=get32(ptr+i*8), d=get32(ptr+i*8+4); a.push(d? (n/d):0); } return count===1?a[0]:a; }
+          if(type===10){ var a=[]; for(var i=0;i<count;i++){ var n=dv.getInt32(ptr+i*8, order==='LE'); var d=dv.getInt32(ptr+i*8+4, order==='LE'); a.push(d? (n/d):0);} return count===1?a[0]:a; }
+          if(type===1||type===7){ var b=new Uint8Array(dv.buffer, dv.byteOffset+ptr, count); var arr=[]; for(var i=0;i<b.length;i++) arr.push(b[i]); return arr; }
+          if(type===9){ var a=[]; for(var i=0;i<count;i++) a.push(dv.getInt32(ptr+i*4, order==='LE')); return count===1?a[0]:a; }
+          return null;
+        }
+        function assignTag(outObj, path, tag, value){
+          var tags = {
+            0x010F:'Make', 0x0110:'Model', 0x0132:'DateTime',
+            0x829A:'ExposureTime', 0x829D:'FNumber', 0x8827:'ISO',
+            0x9003:'DateTimeOriginal', 0x9004:'CreateDate', 0x920A:'FocalLength',
+            0xA434:'LensModel', 0x0112:'Orientation',
+            0x0000:'GPSVersionID', 0x0001:'GPSLatitudeRef', 0x0002:'GPSLatitude',
+            0x0003:'GPSLongitudeRef', 0x0004:'GPSLongitude', 0x0005:'GPSAltitudeRef',
+            0x0006:'GPSAltitude'
+          };
+          var name = tags[tag] || ('Tag_' + tag.toString(16));
+          if(path==='GPS' && name.indexOf('GPS')!==0) name = 'GPS'+name;
+          if(path){ outObj[path] = outObj[path] || {}; outObj[path][name] = value; }
+          else { outObj[name] = value; }
+        }
+        readIFD(ifd0, '');
+        var simplified = {
+          Make: out['Make'], Model: out['Model'],
+          LensModel: out['LensModel'],
+          DateTimeOriginal: out['ExifIFD'] ? out['ExifIFD']['DateTimeOriginal'] : out['DateTimeOriginal'],
+          CreateDate: out['ExifIFD'] ? out['ExifIFD']['CreateDate'] : out['CreateDate'],
+          FNumber: out['ExifIFD'] ? out['ExifIFD']['FNumber'] : out['FNumber'],
+          ExposureTime: out['ExifIFD'] ? out['ExifIFD']['ExposureTime'] : out['ExposureTime'],
+          ISO: out['ExifIFD'] ? out['ExifIFD']['ISO'] : out['ISO'],
+          FocalLength: out['ExifIFD'] ? out['ExifIFD']['FocalLength'] : out['FocalLength'],
+          GPS: out['GPS'] || null,
+          _raw: out
+        };
+        return simplified;
+      }catch(e){ console.error('EXIF parse failed', e); return null; }
+    }
+
+    function fillSummaryFromEXIF(summary, exif){
+      if(!exif) return;
+      if(exif.Make) summary.make = exif.Make;
+      if(exif.Model) summary.model = exif.Model;
+      if(exif.LensModel) summary.lens = exif.LensModel;
+      summary.date = exif.DateTimeOriginal || exif.CreateDate || summary.date || '';
+      if(exif.ExposureTime) summary.exposure = exif.ExposureTime + 's';
+      if(exif.FNumber) summary.fnumber = (typeof exif.FNumber === 'number') ? exif.FNumber.toFixed(1) : exif.FNumber;
+      if(exif.ISO) summary.iso = exif.ISO;
+      if(exif.FocalLength) summary.focalLength = Math.round(exif.FocalLength);
+      if(exif.GPS){
+        var lat = dmsToDec(exif.GPS.GPSLatitude, exif.GPS.GPSLatitudeRef);
+        var lon = dmsToDec(exif.GPS.GPSLongitude, exif.GPS.GPSLongitudeRef);
+        if(isFinite(lat) && isFinite(lon)) summary.gps = {lat:lat, lon:lon};
+      }
+    }
+    function dmsToDec(arr, ref){
+      if(!arr || !arr.length) return NaN;
+      var d=(arr[0]||0), m=(arr[1]||0), s=(arr[2]||0);
+      var val = d + (m/60) + (s/3600);
+      if(ref==='S' || ref==='W') val = -val;
+      return val;
+    }
+
+    function parseXMP(u8){
+      var s = ''; try{ s = new TextDecoder().decode(u8); }catch(_){ s=''; }
+      var start = s.indexOf('<x:xmpmeta'); var end = s.lastIndexOf('</x:xmpmeta>');
+      var xml = (start>=0 && end>start) ? s.slice(start, end+12) : s;
+      var out = { raw: xml };
+      try{
+        var doc = new DOMParser().parseFromString(xml, 'application/xml');
+        function get(q){ var n=doc.querySelector(q); return n? n.textContent: undefined; }
+        out['dc:title'] = get('dc\\:title rdf\\:Alt > rdf\\:li') || get('dc\\:title');
+        var subjects = doc.querySelectorAll('dc\\:subject rdf\\:Bag > rdf\\:li');
+        out['dc:subject'] = Array.prototype.map.call(subjects, function(n){ return n.textContent; });
+        out['xmp:CreateDate'] = get('xmp\\:CreateDate') || get('photoshop\\:DateCreated');
+      }catch(_){}
+      return out;
+    }
+
+    function parseIPTC(u8){
+      var off = 0;
+      var dv = new DataView(u8.buffer, u8.byteOffset, u8.byteLength);
+      var iptc = {};
+      while(off + 10 <= u8.length){
+        if(u8[off]!==0x38 || u8[off+1]!==0x42 || u8[off+2]!==0x49 || u8[off+3]!==0x4D) break;
+        var id = (u8[off+4]<<8) | u8[off+5];
+        off+=6;
+        var nameLen = u8[off]; off+=1;
+        off += nameLen;
+        if((1+nameLen)%2===1) off++;
+        var size = dv.getUint32(off); off+=4;
+        if(id===0x0404){
+          var data = u8.slice(off, off+size);
+          Object.assign(iptc, parseIPTCDatasets(data));
+        }
+        off += size;
+        if(size%2===1) off++;
+      }
+      return iptc;
+    }
+    function parseIPTCDatasets(u8){
+      var out = {};
+      var textDecoder = new TextDecoder();
+      var off = 0;
+      while(off + 5 <= u8.length){
+        if(u8[off]!==0x1C){ off++; continue; }
+        var rec = u8[off+1];
+        var ds = u8[off+2];
+        var size = (u8[off+3]<<8)|u8[off+4];
+        off+=5;
+        if(size===0x7FFF){ size = (u8[off]<<24)|(u8[off+1]<<16)|(u8[off+2]<<8)|u8[off+3]; off+=4; }
+        var val = u8.slice(off, off+size); off+=size;
+        var key = (rec===2? '2:' : rec+':') + ds;
+        var map = {
+          '2:5':'ObjectName', '2:120':'Caption', '2:25':'Keywords',
+          '2:55':'DateCreated', '2:80':'Byline', '2:85':'BylineTitle',
+          '2:90':'City', '2:95':'ProvinceState', '2:101':'CountryCode',
+          '2:116':'CopyrightNotice'
+        };
+        var name = map[key] || ('IPTC_'+key);
+        if(name==='Keywords'){
+          var s = textDecoder.decode(val);
+          out[name] = out[name] || [];
+          out[name].push(s);
+        } else {
+          var s2 = textDecoder.decode(val);
+          out[name] = s2;
+        }
+      }
+      return out;
+    }
+
+    function parsePNG(u8){
+      var off = 8;
+      var text = {};
+      var exif = null, xmp = null;
+      while(off + 8 <= u8.length){
+        var len = (u8[off]<<24)|(u8[off+1]<<16)|(u8[off+2]<<8)|(u8[off+3]);
+        var type = String.fromCharCode(u8[off+4],u8[off+5],u8[off+6],u8[off+7]);
+        var data = u8.slice(off+8, off+8+len);
+        if(type==='tEXt' || type==='iTXt'){
+          var txt = new TextDecoder().decode(data);
+          var idx = txt.indexOf('\0');
+          if(idx>0){ var k=txt.slice(0,idx); var v=txt.slice(idx+1); text[k]=v; }
+        } else if(type==='eXIf'){
+          exif = data;
+        } else {
+          var s = ''; try{ s = new TextDecoder().decode(data); }catch(_){}
+          if(s.indexOf('<x:xmpmeta')>=0) xmp = data;
+        }
+        off += 12 + len;
+      }
+      return { text:text, exif:exif, xmp:xmp };
+    }
+
+    function parseWEBP(u8){
+      var off = 12;
+      var exif=null, xmp=null;
+      while(off + 8 <= u8.length){
+        var id = String.fromCharCode(u8[off],u8[off+1],u8[off+2],u8[off+3]);
+        var size = u8[off+4] | (u8[off+5]<<8) | (u8[off+6]<<16) | (u8[off+7]<<24);
+        var data = u8.slice(off+8, off+8+size);
+        if(id==='EXIF') exif = data;
+        if(id==='XMP ') xmp = data;
+        off += 8 + size + (size%2);
+      }
+      return { exif:exif, xmp:xmp };
+    }
+
+    function escapeHTML(s){ return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]); }); }
+</script>
+<!-- RIYST_INLINE_SCRIPT_END -->
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>

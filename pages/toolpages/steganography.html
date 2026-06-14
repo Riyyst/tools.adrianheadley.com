@@ -1,0 +1,3413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L9N158WSSG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L9N158WSSG');
+</script>
+
+<meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Tools | Steganography Toolkit</title>
+    <meta name="description" content="Hide, reveal and remove hidden information from text, images, videos and files locally in your browser." />
+    
+    <link rel="canonical" href="https://www.adrianheadley.com/" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="author" content="Adrian Headley" />
+    <meta http-equiv="content-language" content="en-GB" />
+    
+    <link rel="alternate" href="https://www.adrianheadley.com/" hreflang="en-gb" />
+    <link rel="alternate" href="https://www.adrianheadley.com/" hreflang="en" />
+    <link rel="alternate" href="https://www.adrianheadley.com/" hreflang="x-default" />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Adrian Headley Portfolio" />
+    <meta property="og:title" content="Adrian Headley | Portfolio (UK) – IT & Network Support, Law Student" />
+    <meta property="og:description" content="Portfolio of Adrian Headley (UK, Suffolk). IT & Network Support, law student, and business-minded problem solver. Explore career highlights, projects, and AH Consultancy work." />
+    <meta property="og:url" content="https://www.adrianheadley.com/" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:image" content="https://www.adrianheadley.com/Assets/Media/Images/Profile/portait.PNG" />
+    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Adrian Headley | Portfolio (UK) – IT & Network Support, Law Student" />
+    <meta name="twitter:description" content="Portfolio of Adrian Headley (UK, Suffolk). IT & Network Support, law student, and business-minded problem solver. Explore career highlights, projects, and AH Consultancy work." />
+    <meta name="twitter:image" content="https://www.adrianheadley.com/Assets/Media/Images/Profile/portait.PNG" />
+    
+    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://www.adrianheadley.com/#website", "url": "https://www.adrianheadley.com/", "name": "Adrian Headley Portfolio", "inLanguage": "en-GB", "publisher": {"@id": "https://www.adrianheadley.com/#person"}}, {"@type": "Person", "@id": "https://www.adrianheadley.com/#person", "name": "Adrian Headley", "url": "https://www.adrianheadley.com/", "image": "https://www.adrianheadley.com/Assets/Media/Images/Profile/portait.PNG", "jobTitle": ["IT & Network Support", "Law student", "Business-minded problem solver"], "homeLocation": {"@type": "Place", "name": "Suffolk, England, United Kingdom"}, "sameAs": ["https://uk.linkedin.com/in/adrianheadley?trk=people-guest_people_search-card", "https://www.facebook.com/AdrianHeadley04/", "https://x.com/adrianheadleyhq"]}, {"@type": "WebPage", "@id": "https://www.adrianheadley.com/#webpage", "url": "https://www.adrianheadley.com/", "name": "Adrian Headley | Portfolio (UK) – IT & Network Support, Law Student", "isPartOf": {"@id": "https://www.adrianheadley.com/#website"}, "about": {"@id": "https://www.adrianheadley.com/#person"}, "inLanguage": "en-GB"}, {"@type": "BreadcrumbList", "@id": "https://www.adrianheadley.com/#breadcrumb", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.adrianheadley.com/"}, {"@type": "ListItem", "position": 2, "name": "Adrian Headley | Portfolio (UK) – IT & Network Support, Law Student", "item": "https://www.adrianheadley.com/"}]}]}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+:root{--bg:#f5f5f7;--bg-alt:#ffffff;--text:#111827;--text-soft:#4b5563;--accent:#2563eb;--accent-soft:rgba(37,99,235,.08);--border-subtle:#e5e7eb;--border-strong:#d1d5db;--radius-pill:999px}
+body.dark-theme{--bg:#020617;--bg-alt:#020617;--text:#e5e7eb;--text-soft:#9ca3af;--accent:#3b82f6;--accent-soft:rgba(59,130,246,.22);--accent-strong:#60a5fa;--pill-bg:#020617;--pill-border:#3b82f6;--border-subtle:#1f2937;--border-strong:#4b5563;}
+body.high-contrast{--bg:#000000;--bg-alt:#000000;--text:#ffffff;--text-soft:#e5e7eb;--accent:#38bdf8;--accent-soft:rgba(56,189,248,.35);--accent-strong:#eab308;--pill-bg:#000000;--pill-border:#eab308;--border-subtle:#ffffff;--border-strong:#ffffff;}
+body.text-large{font-size:18.5px}
+body.text-xlarge{font-size:21px}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;scroll-behavior:smooth}
+body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top,#e5edff 0,var(--bg) 34%,var(--bg) 100%);color:var(--text);line-height:1.6;font-size:16px}
+a{color:var(--accent);text-decoration:none}
+body.links-underlined a{text-decoration:underline}
+a:hover{text-decoration:underline}
+.skip-link{position:absolute;left:-999px;top:.5rem;padding:.4rem .7rem;background:#111827;color:#f9fafb;z-index:100;border-radius:4px;font-size:.85rem}
+.skip-link:focus{left:.5rem}
+body.reduce-motion *{animation:none!important;transition:none!important}
+.page-wrapper{min-height:100vh;display:flex;flex-direction:column}
+main{flex:1}
+.site-header{position:sticky;top:0;z-index:40;border-bottom:1px solid rgba(148,163,184,.28);backdrop-filter:blur(16px);background:rgba(248,250,252,.95)}
+body.dark-theme .site-header{background:rgba(15,23,42,.96)}
+.inner-header{max-width:980px;margin:0 auto;padding:.55rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.brand{display:inline-flex;align-items:center;gap:.65rem;text-decoration:none}
+.brand-mark{width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 30% 15%,#60a5fa,#2563eb);color:#f9fafb;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.brand-text{display:flex;flex-direction:column}
+.brand-name{font-weight:600;font-size:.98rem;letter-spacing:.02em}
+.brand-subtle{font-size:.78rem;color:var(--text-soft)}
+.nav{display:flex;align-items:center;gap:.55rem;font-size:.86rem}
+.nav-link{padding:.3rem .8rem;border-radius:var(--radius-pill);color:var(--text-soft);transition:background .16s,color .16s,transform .12s}
+.nav-link:hover,.nav-link:focus-visible{background:rgba(148,163,184,.18);color:var(--text);transform:translateY(-1px)}
+.header-actions{position:relative;margin-left:1.5rem}
+.a11y-button{border-radius:var(--radius-pill);border:1px solid var(--border-subtle);padding:.3rem .8rem;font-size:.78rem;background:transparent;color:var(--text-soft);cursor:pointer;transition:background .16s,border-color .16s}
+.a11y-button:hover{background:rgba(148,163,184,.16);border-color:var(--border-strong)}
+.a11y-panel{position:absolute;right:0;margin-top:.4rem;padding:.75rem .9rem;border-radius:12px;border:1px solid var(--border-subtle);background:var(--bg-alt);box-shadow:0 16px 40px rgba(15,23,42,.12);min-width:260px;font-size:.82rem;display:none}
+.a11y-panel.open{display:block}
+.a11y-group{margin-bottom:.6rem;display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+.a11y-label{font-weight:500;margin-right:.3rem;white-space:nowrap}
+.a11y-group-display{flex-wrap:nowrap}
+.a11y-chip{border-radius:var(--radius-pill);border:1px solid var(--border-subtle);padding:.2rem .55rem;background:transparent;cursor:pointer;font-size:.78rem;color:var(--text-soft);transition:background .16s,border-color .16s,color .16s,transform .12s}
+.a11y-chip.active{background:var(--accent);border-color:var(--accent);color:#f9fafb}
+.a11y-chip:hover{background:rgba(148,163,184,.16);transform:translateY(-1px)}
+.a11y-toggle{display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;color:var(--text-soft)}
+.hero{border-bottom:1px solid rgba(148,163,184,.24)}
+.hero-inner{max-width:980px;margin:0 auto;padding:2.6rem 1.5rem 3rem;display:grid;grid-template-columns:auto minmax(0,1fr);gap:1.8rem;align-items:center}
+.hero-avatar-wrap{display:flex;justify-content:flex-start}
+.hero-avatar-frame{width:160px;height:160px;border-radius:32px;background:radial-gradient(circle at 0 0,rgba(37,99,235,.25),transparent 60%);padding:6px;box-shadow:0 22px 40px rgba(15,23,42,.25);display:flex;align-items:center;justify-content:center}
+.hero-avatar-img{width:100%;height:100%;border-radius:26px;object-fit:cover;background:#111827}
+.eyebrow{text-transform:uppercase;letter-spacing:.22em;font-size:.72rem;color:var(--text-soft);margin-bottom:.4rem}
+.hero-title{font-size:clamp(2.1rem,3vw,2.6rem);line-height:1.15;margin:0 0 .8rem}
+.highlight{background:linear-gradient(120deg,#2563eb,#22c1c3);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-subtitle{font-size:.96rem;color:var(--text-soft);margin-bottom:1.3rem;max-width:32rem}
+.hero-actions{display:flex;flex-wrap:wrap;gap:.7rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:.65rem 1.3rem;border-radius:999px;border:1px solid transparent;font-size:.86rem;font-weight:500;cursor:pointer;text-decoration:none;transition:background .16s,color .16s,border-color .16s,transform .14s}
+.primary-btn{background:var(--accent);color:#f9fafb;box-shadow:none}
+.primary-btn:hover{transform:translateY(-1px);background:#1d4ed8}
+.ghost-btn{background:transparent;color:var(--text);border-color:rgba(148,163,184,.8);box-shadow:none}
+.ghost-btn:hover{background:rgba(148,163,184,.15)}
+.animate-hero{animation:heroIntro .9s ease-out forwards;transform-origin:top center;opacity:0}
+.bounce-on-load{animation:bounceIn 900ms ease-out 500ms both}
+@keyframes heroIntro{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes bounceIn{0%{transform:translateY(10px);opacity:0}60%{transform:translateY(-4px);opacity:1}100%{transform:translateY(0)}}
+.section{max-width:980px;margin:0 auto;padding:2.2rem 1.5rem 2.4rem}
+.section-header{margin-bottom:1.5rem}
+.section-header h1,.section-header h2{margin:0 0 .3rem;font-size:1.4rem}
+.section-header p{margin:0;font-size:.95rem;color:var(--text-soft)}
+.home-quick-links{margin:1.3rem 0 0;display:flex;flex-wrap:wrap;gap:.6rem}
+.chip-link{display:inline-flex;align-items:center;justify-content:center;padding:.4rem .9rem;border-radius:999px;border:1px solid rgba(148,163,184,.7);font-size:.82rem;color:var(--text-soft);background:rgba(255,255,255,.7);backdrop-filter:blur(6px);transition:background .16s,border-color .16s,transform .12s,box-shadow .12s}
+.chip-link:hover{background:var(--accent);border-color:var(--accent);color:#f9fafb;text-decoration:none;transform:translateY(-1px);box-shadow:0 12px 30px rgba(37,99,235,.35)}
+.chip-animated{animation:chipPulse 8s ease-in-out infinite alternate}
+@keyframes chipPulse{0%{box-shadow:0 0 0 rgba(37,99,235,0)}100%{box-shadow:0 0 28px rgba(37,99,235,.2)}}
+.business-card{background:var(--bg-alt);border-radius:18px;padding:1.8rem 1.8rem 1.4rem;border:1px solid rgba(148,163,184,.32);box-shadow:0 18px 45px rgba(15,23,42,.12);position:relative;overflow:hidden}
+.business-card:before{content:"";position:absolute;inset:-40%;background:radial-gradient(circle at 0 0,rgba(37,99,235,.25),transparent 55%),radial-gradient(circle at 100% 100%,rgba(56,189,248,.22),transparent 60%);opacity:.7;pointer-events:none}
+.business-card h2{margin-top:.4rem;margin-bottom:.4rem;position:relative}
+.business-card p,.business-card ul{position:relative}
+.business-card-centered{text-align:center}
+.business-logo{width:96px;height:auto;object-fit:contain;position:relative;margin:0 auto .3rem}
+.business-points{margin:.4rem 0 0;padding-left:1.1rem;font-size:.9rem;color:var(--text-soft);text-align:left;display:inline-block}
+.business-actions{margin-top:1rem;position:relative}
+.business-actions-centered{display:flex;justify-content:center}
+.timeline{position:relative;padding-left:1.25rem}
+.timeline:before{content:"";position:absolute;left:7px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,rgba(148,163,184,.9),transparent 80%)}
+.timeline-item{position:relative;margin-bottom:1.35rem;padding-left:2.25rem}
+.timeline-dot{position:absolute;left:0;top:.7rem;width:10px;height:10px;border-radius:50%;border:2px solid var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.timeline-content{font-size:.9rem;padding-bottom:.8rem;border-bottom:1px dashed rgba(148,163,184,.5);transition:transform .18s,box-shadow .18s;background:transparent;border-radius:8px}
+
+.timeline-role{font-weight:600;margin-bottom:.1rem}
+.timeline-meta{font-size:.78rem;color:var(--text-soft);margin-bottom:.35rem}
+.timeline-description{font-size:.88rem;color:var(--text-soft)}
+.timeline-tags{margin-top:.35rem;display:flex;flex-wrap:wrap;gap:.3rem}
+.tag{font-size:.74rem;padding:.12rem .55rem;border-radius:999px;border:1px solid rgba(148,163,184,.7)}
+.cv-cta-wrapper{margin-top:1.4rem;display:flex;justify-content:flex-start}
+.projects-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem}
+.project-card{background:var(--bg-alt);border-radius:16px;border:1px solid rgba(148,163,184,.3);padding:1rem 1rem 0.9rem;cursor:pointer;transition:transform .16s,box-shadow .16s,border-color .16s}
+.project-card:hover{transform:translateY(-4px);box-shadow:0 18px 45px rgba(15,23,42,.18);border-color:var(--accent-soft)}
+.project-header{display:flex;flex-direction:column;gap:.15rem}
+.project-title{font-weight:600}
+.project-meta{font-size:.8rem;color:var(--text-soft)}
+.project-summary{font-size:.88rem;color:var(--text-soft);margin-top:.35rem}
+.project-extra{margin-top:.7rem;border-top:1px solid rgba(148,163,184,.25);padding-top:.7rem;max-height:0;opacity:0;transform:translateY(4px);transition:max-height .3s ease,opacity .3s ease,transform .3s ease;overflow:hidden}
+.project-card.expanded .project-extra{max-height:520px;opacity:1;transform:translateY(0)}
+.project-gallery{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.6rem}
+.project-frame{border-radius:12px;border:1px solid rgba(148,163,184,.3);background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(56,189,248,.05));height:180px;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--text-soft);overflow:hidden}
+.project-frame img{max-width:100%;max-height:100%;display:block}
+.project-gallery-controls{display:flex;align-items:center;justify-content:space-between;font-size:.78rem;color:var(--text-soft)}
+.gallery-buttons{display:flex;gap:.4rem}
+.gallery-btn{border-radius:999px;border:1px solid var(--border-subtle);background:rgba(255,255,255,.9);padding:.2rem .6rem;font-size:.76rem;cursor:pointer;transition:background .14s,border-color .14s,transform .12s}
+.gallery-btn:hover{background:var(--accent);border-color:var(--accent);color:#f9fafb;transform:translateY(-1px)}
+.project-links{font-size:.8rem}
+.article-section{margin-top:2rem}
+.subsection-header h2{margin:0 0 .25rem;font-size:1.2rem}
+.subsection-header p{margin:0;font-size:.9rem;color:var(--text-soft)}
+.article-card-grid{--cards-per-view:3;--card-gap:1rem;margin-top:.9rem;display:flex;flex-wrap:nowrap;gap:var(--card-gap);overflow:hidden;scroll-behavior:smooth;scroll-snap-type:x mandatory;}
+.article-card{background:var(--bg-alt);border-radius:14px;border:1px solid var(--border-subtle);padding:1.1rem 1.1rem 1.05rem;cursor:pointer;display:flex;flex-direction:column;gap:.4rem;flex:0 0 calc((100% - (var(--cards-per-view) - 1)*var(--card-gap))/var(--cards-per-view));max-width:calc((100% - (var(--cards-per-view) - 1)*var(--card-gap))/var(--cards-per-view));box-shadow:0 10px 30px rgba(15,23,42,.06);transition:transform .16s,box-shadow .16s,border-color .16s;scroll-snap-align:start;}
+.article-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(15,23,42,.15);border-color:var(--accent-soft)}
+.article-card-header{display:flex;flex-direction:column;gap:.1rem}
+.article-title{margin:0;font-size:.96rem}
+.article-meta{font-size:.8rem;color:var(--text-soft)}
+.article-teaser{font-size:.86rem;color:var(--text-soft);margin-top:.25rem}
+.overlay-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center;z-index:60;opacity:0;pointer-events:none;transition:opacity .2s ease-out}
+.overlay-backdrop.open{opacity:1;pointer-events:auto}
+.overlay-panel{background:var(--bg-alt);max-width:960px;width:92%;max-height:86vh;border-radius:22px;border:1px solid rgba(148,163,184,.5);box-shadow:0 28px 80px rgba(0,0,0,.35);padding:1.4rem 1.6rem 1.2rem;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.overlay-body{overflow:auto;padding-right:.2rem;margin-top:.4rem}
+.overlay-header h2{margin:.1rem 0 .1rem;font-size:1.3rem}
+.overlay-header p{margin:0;font-size:.86rem;color:var(--text-soft)}
+.overlay-close{position:absolute;top:.6rem;right:.7rem;border-radius:999px;border:1px solid var(--border-subtle);background:rgba(0,0,0,0.02);width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer}
+.overlay-close:hover{background:rgba(148,163,184,.18)}
+.overlay-article-text{font-size:.9rem;color:var(--text-soft);margin-top:.7rem}
+.cv-form-grid{display:flex;flex-direction:column;gap:.8rem;font-size:.88rem;color:var(--text-soft)}
+.cv-form-row{display:flex;gap:.8rem;flex-wrap:wrap}
+.cv-form-field{flex:1;display:flex;flex-direction:column;gap:.25rem}
+.cv-form-field label{font-weight:500;font-size:.84rem}
+.cv-form-field input,.cv-form-field textarea{border-radius:10px;border:1px solid var(--border-subtle);padding:.5rem .65rem;font-family:inherit;font-size:.86rem;background:rgba(255,255,255,.95);color:var(--text);outline:none;transition:border-color .14s,box-shadow .14s,background .14s}
+.cv-form-field input:focus,.cv-form-field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft);background:#fff}
+.cv-form-field textarea{resize:vertical;min-height:90px}
+.cv-form-footer{margin-top:.6rem;display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
+.cv-form-footer small{font-size:.76rem;color:var(--text-soft)}
+.contact-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:1.6rem}
+.contact-column h2{margin-top:0;margin-bottom:.4rem;font-size:1rem}
+.contact-column p{font-size:.9rem;color:var(--text-soft)}
+.contact-layout-form{align-items:flex-start}
+.contact-form-card{background:var(--bg-alt);border-radius:18px;padding:1.5rem 1.6rem 1.4rem;border:1px solid rgba(148,163,184,.3);box-shadow:0 18px 45px rgba(15,23,42,.12);display:flex;flex-direction:column;gap:1rem;position:relative;overflow:hidden}
+.contact-form-card:before{content:"";position:absolute;inset:-40%;background:radial-gradient(circle at 0 0,rgba(37,99,235,.18),transparent 55%),radial-gradient(circle at 100% 100%,rgba(56,189,248,.16),transparent 60%);opacity:.6;pointer-events:none}
+.contact-form-card>*{position:relative}
+.contact-form-header h2{margin:0 0 .25rem;font-size:1.1rem}
+.contact-form-header p{margin:0;font-size:.88rem;color:var(--text-soft)}
+.form-row{display:flex;gap:.85rem;flex-wrap:wrap}
+.form-field{flex:1;display:flex;flex-direction:column;gap:.25rem;font-size:.86rem}
+.form-field label{font-weight:500}
+.form-field input,.form-field select,.form-field textarea{border-radius:10px;border:1px solid var(--border-subtle);padding:.55rem .7rem;font-family:inherit;font-size:.86rem;background:rgba(255,255,255,.9);color:var(--text);outline:none;transition:border-color .14s,box-shadow .14s,background .14s}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft);background:#fff}
+.form-field textarea{resize:vertical;min-height:140px}
+.form-footer{margin-top:.3rem;display:flex;align-items:center;justify-content:space-between;gap:.9rem;flex-wrap:wrap}
+.form-hint{font-size:.78rem;color:var(--text-soft)}
+.form-submit-btn{padding-inline:1.4rem}
+.site-footer{padding:1.6rem 1.5rem 1.8rem;font-size:.85rem;color:var(--text-soft);border-top:1px solid rgba(148,163,184,.3);}
+.footer-links{display:flex;align-items:center;gap:.45rem;font-size:.82rem}
+.footer-links a{color:var(--text-soft)}
+.footer-links a:hover{color:var(--accent)}
+.fade-in-on-scroll{opacity:0;transform:translateY(24px);transition:opacity .6s ease-out,transform .6s ease-out;transition-delay:var(--stagger-delay,0s)}
+.fade-in-on-scroll.visible{opacity:1;transform:translateY(0)}
+@media (max-width:920px){.hero-inner{grid-template-columns:minmax(0,1fr);gap:1.8rem}.projects-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.article-card-grid{--cards-per-view:3;--card-gap:1rem;margin-top:.9rem;display:flex;flex-wrap:nowrap;gap:var(--card-gap);overflow:hidden;scroll-behavior:smooth;scroll-snap-type:x mandatory;}}
+@media (max-width:760px){.inner-header{flex-wrap:wrap;justify-content:space-between;row-gap:.4rem}.nav{order:3;width:100%;justify-content:center;flex-wrap:wrap}.header-actions{order:2}.brand-subtle{display:none}.projects-grid{grid-template-columns:minmax(0,1fr)}.form-footer,.cv-form-footer{flex-direction:column;align-items:flex-start}}
+@media (max-width:480px){.inner-header{padding-inline:1rem}.section,.hero-inner{padding-inline:1rem}.contact-form-card{padding:1.3rem 1.2rem}.overlay-panel{padding:1.1rem 1.1rem}}
+
+/* Custom additions for centred home summary and project cards */
+
+.home-summary {
+    text-align: center;
+}
+.home-summary-inner {
+    max-width: 640px;
+    margin: 0 auto;
+}
+.home-summary-inner > p {
+    font-size: 0.95rem;
+    color: var(--text-soft);
+}
+.home-summary .home-quick-links {
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.projects-feature-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+}
+
+.projects-card {
+    text-align: center;
+}
+
+.projects-card-title {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.projects-card-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+    color: #f9fafb;
+}
+
+.projects-card-logo-riyst {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.projects-card-logo-churchfinder {
+    background: linear-gradient(135deg, #eab308, #f97316);
+}
+
+body.reduce-motion .animate-hero{opacity:1;}
+
+/* Dark theme background tweak to remove bright glare */
+
+body.dark-theme{--bg:#020617;--bg-alt:#020617;--text:#e5e7eb;--text-soft:#9ca3af;--accent:#3b82f6;--accent-soft:rgba(59,130,246,.22);--accent-strong:#60a5fa;--pill-bg:#020617;--pill-border:#3b82f6;--border-subtle:#1f2937;--border-strong:#4b5563;}
+
+/* Ensure colourblind mode in dark theme keeps the same dark background */
+body.dark-theme.cb-mode{
+    background:radial-gradient(circle at top,#020b3b 0,#020617 45%,#020617 100%);
+}
+
+/* Additional accessibility modes */
+
+body.cb-mode{
+    --accent:#0ea5e9;
+    --accent-soft:rgba(14,165,233,.25);
+}
+body.strong-focus *:focus-visible{
+    outline:3px solid var(--accent);
+    outline-offset:3px;
+}
+
+
+.a11y-group-color {
+    flex-wrap: nowrap;
+}
+.a11y-group-color .a11y-chip {
+    flex-shrink: 0;
+}
+
+
+/* Home hero: remove divider line under hero */
+.hero{
+    border-bottom:none;
+}
+
+/* Timeline spacing: make entries larger so they reveal as you scroll */
+.timeline{
+    margin-top:1.6rem;
+    padding-left:1.6rem;
+}
+.timeline-item{position:relative;margin-bottom:1.35rem;padding-left:2.25rem}
+.timeline-content{
+    font-size:0.95rem;
+    padding:1.05rem 1.05rem 1.1rem;
+}
+.timeline-item:hover .timeline-content{
+    transform:none;
+    box-shadow:none;
+}
+
+
+/* Layout tweak: keep brand + nav on the left, accessibility on far right */
+.inner-header{
+    justify-content:flex-start;
+}
+.header-actions{
+    margin-left:auto;
+}
+
+.footer-inner{max-width:980px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.site-footer .footer-main{margin:0;}
+.footer-social{display:flex;align-items:center;gap:.5rem;}
+.footer-social-link{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);text-decoration:none;font-size:.9rem;font-weight:600;line-height:1;background:transparent;}
+.footer-social-link span{display:inline-block;line-height:1;}
+.footer-social-link:hover{background:rgba(37,99,235,.03);}
+@media (max-width:640px){
+  .footer-inner{flex-direction:column;align-items:flex-start;}
+}
+
+.nav-link.is-current{background:rgba(37,99,235,.1);color:var(--accent);font-weight:600;}
+
+.article-card-grid::-webkit-scrollbar{display:none;}
+.article-card-grid{--cards-per-view:3;--card-gap:1rem;margin-top:.9rem;display:flex;flex-wrap:nowrap;gap:var(--card-gap);overflow:hidden;scroll-behavior:smooth;scroll-snap-type:x mandatory;}
+
+.article-carousel{margin-top:.9rem;position:relative;}
+.article-scroll-btn{position:absolute;top:50%;transform:translateY(-50%);border-radius:999px;border:1px solid var(--border-subtle);background:var(--bg-alt);width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--text-soft);cursor:pointer;transition:background .16s,border-color .16s,color .16s;}
+.article-scroll-prev{left:-2.4rem;}
+.article-scroll-next{right:-2.4rem;}
+.article-scroll-btn:hover{background:rgba(148,163,184,.16);border-color:var(--accent);color:var(--accent);}
+.article-scroll-btn:disabled{opacity:.4;cursor:default;}
+@media (max-width:640px){
+  .article-scroll-prev{left:-2.4rem;}
+  .article-scroll-next{right:-2.4rem;}
+}
+
+.footer-social-link svg{width:20px;height:20px;}
+
+body.dark-theme .footer-social-link,body.high-contrast .footer-social-link{border-color:var(--accent-strong);}
+
+.footer-social-link:hover{background:var(--accent-soft);border-color:var(--accent-strong);}
+
+.footer-social-link{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;border:1.5px solid var(--accent);background:transparent;}
+.footer-social-link svg{width:22px;height:22px;display:block;}
+
+.a11y-group{flex-wrap:wrap;}
+.a11y-group-color{flex-wrap:wrap;}
+.a11y-group-color .a11y-chip{max-width:100%;white-space:nowrap;}
+.a11y-panel{max-width:320px;}
+
+.chip-animated{animation:none;}
+
+.footer-social-link{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;border:1.5px solid var(--accent);background:transparent;}
+.footer-social-link img{width:22px;height:22px;display:block;object-fit:contain;}
+
+.brand-mark-image img{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  display:block;
+}
+
+.overlay-panel{max-height:90vh;}
+.overlay-body{overflow-y:auto;max-height:72vh;}
+
+/* Article card width override to keep cards compact */
+.article-card{
+  flex:0 0 320px;
+  max-width:320px;
+}
+@media (max-width: 768px){
+  .article-card{
+    flex:0 0 85%;
+    max-width:85%;
+  }
+}
+
+
+@media (min-width: 768px) {
+    .projects-feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+.projects-card-logo-roc {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+}
+
+
+@media (max-width: 640px){
+  .home-quick-links{
+    justify-content: center;
+  }
+  .chip-link{
+    flex: 0 1 calc(50% - 0.6rem);
+    justify-content: center;
+    text-align: center;
+    padding-inline: 0.6rem;
+  }
+}
+
+
+/* ================== Final overlay centering fix ================== */
+.overlay-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.62);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 60;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-out;
+}
+
+.overlay-backdrop.open{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overlay-panel{
+  background: var(--bg-alt);
+  box-shadow: 0 24px 60px rgba(15,23,42,0.45);
+  border-radius: 22px;
+  width: calc(100% - 2rem);
+  max-width: 640px;
+  max-height: calc(100vh - 3rem);
+  margin: 0;
+  padding: 1.4rem 1.4rem 1.1rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.overlay-body{
+  overflow-y: auto;
+  margin-top: 0.8rem;
+}
+
+@media (max-width: 640px){
+  .overlay-backdrop{
+    align-items: center;
+  }
+  .overlay-panel{
+    max-height: calc(100vh - 2rem);
+    width: calc(100% - 2.5rem);
+  }
+}
+
+@media (max-width: 640px){
+  .home-quick-links{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+    justify-items: center;
+  }
+  .chip-link{
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+  }
+}
+
+/* === Simplified overlay centering override === */
+.overlay-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.62);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 60;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-out;
+}
+.overlay-backdrop.open{
+  opacity: 1;
+  pointer-events: auto;
+}
+.overlay-panel{
+  background: var(--bg-alt);
+  box-shadow: 0 24px 60px rgba(15,23,42,0.45);
+  border-radius: 22px;
+  width: min(640px, 100% - 2rem);
+  max-height: calc(100vh - 3rem);
+  margin: 0;
+  padding: 1.4rem 1.4rem 1.1rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.overlay-body{
+  overflow-y: auto;
+  margin-top: 0.8rem;
+}
+
+
+
+
+/* Professional page: center the CV button across the full viewport line */
+.cv-cta-wrapper {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: 2rem 1.25rem 1rem;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Tools subdomain hero */
+.hero-inner-tools{grid-template-columns:1fr;gap:1.1rem;text-align:left}
+.tools-logo-wrap{display:flex;justify-content:flex-start}
+.tools-logo{width:min(520px,88vw);max-width:520px;height:auto;display:block}
+
+@media (max-width:720px){
+  .tools-logo-wrap{justify-content:center}
+  .hero-inner-tools{text-align:center}
+  .hero-actions{justify-content:center}
+}
+
+
+/* --- Navbar spacing tweak (subdomain) --- */
+@media (min-width: 900px){
+  .inner-header{gap: 2.75rem;}
+  .nav{margin-left: 1.25rem;}
+}
+
+
+
+/* --- v22 typography backport: make typing + hash output match UI font --- */
+#hashing-tool input,
+#hashing-tool textarea,
+#hashing-tool select,
+#hashing-tool .out{
+  }
+#hashing-tool .out{
+  letter-spacing: normal !important;
+}
+
+
+/* --- Patch: unify typing/result font with UI --- */
+#hashing-tool input,
+#hashing-tool textarea,
+#hashing-tool select,
+#hashing-tool .out{
+  font-family: inherit !important;
+}
+#hashing-tool textarea,
+#hashing-tool input,
+#hashing-tool select{
+  font-size: 13px;
+}
+#hashing-tool .out{
+  font-size: 12px;
+}
+
+</style>
+
+<style>
+/* --- Index centering overrides --- */
+#home .hero-inner-tools{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  min-height: calc(100vh - 140px);
+}
+#home .tools-logo-wrap{display:flex; justify-content:center; width:100%;}
+#home .hero-text{max-width: 820px; margin: 0 auto;}
+#home .hero-actions{display:flex; justify-content:center;}
+/* navbar spacing */
+@media (min-width: 900px){
+  .inner-header{gap: 44px;}
+  .nav{margin-left: 24px;}
+}
+</style>
+
+<style>
+
+:root{
+  --bg: #f4f7fb;
+  --panel: #ffffff;
+  --panelTint: #f6f9ff;
+  --border: #dbe4f0;
+  --text: #0b1220;
+  --muted: #5b6678;
+
+  --blue: #2563eb;
+  --blue2:#1d9bf0;
+  --pill: #e8f0ff;
+
+  --shadow: 0 18px 40px rgba(11,18,32,.10);
+  --shadow2: 0 10px 22px rgba(11,18,32,.08);
+
+  color-scheme: light;
+}
+
+*{box-sizing:border-box}
+
+html, body{min-height:100%;}
+body{min-height:100vh;
+
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  background:
+    radial-gradient(900px 420px at 30% 0%, rgba(37,99,235,.12), transparent 60%),
+    radial-gradient(820px 420px at 85% 20%, rgba(29,155,240,.10), transparent 60%),
+    var(--bg);
+  color: var(--text);
+}
+
+.wrap{max-width:1100px;margin:0 auto;padding:34px 22px}
+
+.grid{display:grid; grid-template-columns:1fr; gap:18px;}
+@media(min-width:980px){.grid{grid-template-columns:340px 1fr; align-items:start;}}
+
+.card{
+  background: linear-gradient(180deg, var(--panel) 0%, var(--panelTint) 100%);
+  border:1px solid var(--border);
+  border-radius:20px;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+  transform: translateZ(0);
+}
+
+.card .hd{
+  padding:14px 16px;
+  border-bottom:1px solid rgba(219,228,240,.9);
+}
+.card .hd h2{margin:0; font-size:13px; font-weight:700; letter-spacing:.2px; color:var(--text);}
+.card .bd{padding:16px;}
+
+.tabs{display:flex; gap:8px; flex-wrap:wrap;}
+.tabbtn{
+  cursor:pointer;
+  padding:9px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background: rgba(255,255,255,.9);
+  color: var(--muted);
+  font-size:12px;
+  transition: transform 140ms cubic-bezier(.2,1.1,.2,1), box-shadow 160ms ease, background 160ms ease, color 160ms ease;
+}
+.tabbtn:hover{
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: var(--shadow2);
+}
+.tabbtn:active{ transform: translateY(0px) scale(.98); }
+.tabbtn[aria-selected="true"]{
+  background: var(--pill);
+  border-color: rgba(37,99,235,.25);
+  color: var(--blue);
+}
+
+label{display:block; font-size:12px; color:var(--muted); margin:12px 0 6px;}
+
+input[type="text"], input[type="number"], textarea, select{
+  width:100%;
+  padding:11px 12px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background: rgba(255,255,255,.95);
+  color: var(--text);
+  font-size:13px;
+  outline:none;
+  transition: box-shadow 170ms ease, border-color 170ms ease, transform 130ms ease;
+}
+textarea{min-height:110px; resize:vertical;}
+input:focus, textarea:focus, select:focus{
+  border-color: rgba(37,99,235,.35);
+  box-shadow: 0 0 0 4px rgba(37,99,235,.14);
+}
+
+.btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; justify-content:center;}
+button{
+  cursor:pointer;
+  border-radius:999px;
+  padding:10px 14px;
+  border:1px solid rgba(37,99,235,.25);
+  background: var(--blue);
+  color:#fff;
+  font-size:12px;
+  box-shadow: 0 8px 18px rgba(11,18,32,.06);
+  transition: transform 140ms cubic-bezier(.2,1.1,.2,1), box-shadow 160ms ease, filter 160ms ease;
+}
+button:hover{
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: var(--shadow2);
+  filter: brightness(.97);
+}
+button:active{ transform: translateY(0px) scale(.98); filter: brightness(.94); }
+
+button.primary{
+  border:1px solid rgba(37,99,235,.25);
+  background: var(--blue);
+  color:#fff;
+}
+button.primary:hover{ filter: brightness(.97); }
+
+.out{
+  background: rgba(255,255,255,.95);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:12px;
+  font-size:12px;
+  overflow:auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  min-height:46px;
+}
+
+.kv{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:10px;}
+.badge{
+  font-size:11px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(37,99,235,.18);
+  background: rgba(37,99,235,.06);
+  color: var(--text);
+}
+.badge.ok{ border-color: rgba(29,155,240,.25); background: rgba(29,155,240,.06); }
+.badge.warn{ border-color: rgba(91,102,120,.25); background: rgba(91,102,120,.06); }
+.badge.bad{ border-color: rgba(239,68,68,.25); background: rgba(239,68,68,.06); }
+
+.tablewrap{overflow:auto; border-radius:16px; border:1px solid var(--border); background: rgba(255,255,255,.95);}
+table{width:100%; border-collapse:collapse; font-size:12px;}
+th, td{padding:10px; border-bottom:1px solid rgba(219,228,240,.9); vertical-align:top;}
+th{color:var(--muted); font-weight:700; text-align:left; background: rgba(244,247,251,.7); position:sticky; top:0;}
+tr:hover td{background: rgba(232,240,255,.45);}
+
+.right{display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;}
+
+.drop{
+  border:1px dashed rgba(37,99,235,.30);
+  background: rgba(232,240,255,.35);
+  border-radius:16px;
+  padding:14px;
+  text-align:center;
+  color: var(--muted);
+  transition: transform 160ms ease, background 160ms ease;
+}
+.drop:hover{ transform: translateY(-1px); background: rgba(232,240,255,.55); }
+
+.hr{height:1px;background:rgba(219,228,240,.9); margin:14px 0;}
+.small{font-size:11px; color:var(--muted);}
+
+.hidden-until{ display:none !important; }
+
+.drop{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+.drop input[type="file"]{
+  width:100%;
+  max-width:420px;
+}
+.drop-text{
+  font-size:12px;
+  color:var(--muted);
+}
+
+
+/* Center the file input (including "No file selected" text) inside drop zones */
+.drop input[type="file"]{
+  display:block;
+  margin: 0 auto;
+  text-align:center;
+}
+.drop input[type="file"]::-webkit-file-upload-button,
+.drop input[type="file"]::file-selector-button{
+  margin: 0 auto 8px auto;
+}
+
+
+/* Force native file input to be visually centered */
+.drop input[type="file"]{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin: 0 auto;
+  text-align:center;
+}
+.drop input[type="file"]::file-selector-button{
+  margin: 0 auto;
+  display:block;
+}
+
+
+/* Hide divider in multi-file mode until results exist */
+.panel[data-panel="files"] .hr{
+  display:none;
+}
+.panel[data-panel="files"].has-results .hr{
+  display:block;
+}
+
+
+</style>
+
+<style>
+.page-wrapper{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+#main-home{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+</style>
+
+
+<style>
+/* --- User requested layout changes (Mode panel sizing + vertical tabs + bigger tool) --- */
+
+/* Make the tool occupy more of the viewport width while keeping it responsive */
+#hashing-tool .wrap{
+  max-width: 1240px;           /* bigger than original 1100px */
+  width: min(1240px, 94vw);
+  padding: 44px 26px;          /* a bit roomier */
+}
+
+/* Desktop grid: keep two columns but allow equal-height cards */
+#hashing-tool .grid{
+  align-items: stretch !important; /* instead of start */
+}
+#hashing-tool .card{
+  height: 100%;
+}
+
+/* Keep columns readable: slightly wider left panel without wasting space */
+@media (min-width:980px){
+  #hashing-tool .grid{
+    grid-template-columns: 420px 1fr; /* larger Mode panel */
+  }
+}
+
+/* Vertical Mode buttons (Text/File/Files/Compare/Disk) */
+#hashing-tool .tabs{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+#hashing-tool .tabbtn{
+  width:100%;
+  justify-content:center;
+  text-align:center;
+}
+
+/* Optional: slightly tighter divider spacing since tabs are vertical */
+#hashing-tool .hr{
+  margin: 16px 0;
+}
+</style>
+
+
+<style>
+/* Files mode: hide the empty table container (prevents the thin divider line) */
+#hashing-tool .panel[data-panel="files"] .tablewrap{ display:none; }
+#hashing-tool .panel[data-panel="files"].has-results .tablewrap{ display:block; }
+</style>
+
+
+<style>
+
+/* Custom file UI so filename sits under the button */
+#hashing-tool .native-file{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  cursor:pointer;
+}
+#hashing-tool .drop{
+  position:relative;
+}
+#hashing-tool .file-ui{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  pointer-events:none; /* clicks go to the hidden input via the drop container */
+}
+#hashing-tool .file-choose{
+  pointer-events:auto;
+  cursor:pointer;
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:6px;
+  border:1px solid rgba(0,0,0,.35);
+  background:#fff;
+  font-size:13px;
+}
+#hashing-tool .file-name{
+  font-size:13px;
+  color: var(--muted);
+  text-align:center;
+}
+</style>
+
+
+<style>
+/* Match "No file chosen" styling to drop hint text */
+#hashing-tool .file-name{
+  font-size:12px !important;
+  color: var(--muted) !important;
+}
+
+/* Make the custom chooser button consistent everywhere */
+#hashing-tool .file-choose{
+  font-size:12px !important;
+  padding:6px 10px !important;
+}
+
+/* Prevent native file input UI from showing (keeps text from sitting left) */
+#hashing-tool .drop input[type="file"].native-file{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  cursor:pointer;
+}
+</style>
+
+
+<style>
+/* --- Requested: remove stats/meta badges everywhere --- */
+#hashing-tool #textMeta,
+#hashing-tool #fileMeta,
+#hashing-tool #filesMeta,
+#hashing-tool #cmpMeta,
+#hashing-tool #diskMeta{
+  display:none !important;
+}
+
+/* Disk summary text is essentially stats; hide it (table remains) */
+#hashing-tool #diskResultLabel,
+#hashing-tool #diskOut{
+  display:none !important;
+}
+
+/* --- Requested: make multi-file table more condensed --- */
+#hashing-tool table{ font-size:11px !important; }
+#hashing-tool th, #hashing-tool td{
+  padding:6px 8px !important;
+}
+#hashing-tool .tablewrap{
+  border-radius:14px !important;
+}
+#hashing-tool #filesTable th{ min-width:0 !important; }
+#hashing-tool #filesTable th:nth-child(1){ width:34% !important; }
+#hashing-tool #filesTable th:nth-child(2){ width:14% !important; }
+#hashing-tool #filesTable th:nth-child(3){ width:42% !important; }
+#hashing-tool #filesTable th:nth-child(4){ width:10% !important; }
+#hashing-tool #filesTable td:nth-child(1){ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:1px; }
+#hashing-tool #filesTable td:nth-child(3){ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:1px; }
+#hashing-tool #filesTable .right button{ padding:7px 10px !important; font-size:11px !important; }
+</style>
+
+
+<style>
+/* --- Steganography tool: mirror hashing tool sizing + vertical mode panel --- */
+#stego-tool .wrap{ max-width:1240px; width:min(1240px,94vw); padding:44px 26px; }
+#stego-tool .grid{ align-items:stretch !important; }
+#stego-tool .card{ height:100%; }
+@media (min-width:980px){
+  #stego-tool .grid{ grid-template-columns:420px 1fr; }
+}
+#stego-tool .tabs{ display:flex; flex-direction:column; gap:10px; }
+#stego-tool .tabbtn{ width:100%; justify-content:center; text-align:center; }
+
+/* Custom file UI (same pattern as template) */
+#stego-tool .native-file{ position:absolute; inset:0; opacity:0; cursor:pointer; }
+#stego-tool .drop{ position:relative; }
+#stego-tool .file-ui{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:6px; pointer-events:none;
+}
+#stego-tool .file-choose{
+  pointer-events:auto; cursor:pointer; display:inline-block;
+  padding:6px 10px; border-radius:6px;
+  border:1px solid rgba(0,0,0,.35); background:#fff; font-size:12px;
+}
+#stego-tool .file-name{ font-size:12px; color:var(--muted); text-align:center; }
+#stego-tool textarea.out{ background:rgba(255,255,255,.95); }
+
+#stego-tool textarea, #stego-tool .out{ font-family: inherit !important; font-size: inherit !important; }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+
+<style id="riyst-v27-final-overrides">
+:root{
+  --riyst-bg:#f5f5f7;
+  --riyst-text:#111827;
+  --riyst-soft:#4b5563;
+  --riyst-blue:#2563eb;
+  --riyst-border:#e5e7eb;
+}
+html,body{margin:0;min-height:100%;background:var(--riyst-bg);color:var(--riyst-text)}
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.page-wrapper{min-height:100vh;display:flex;flex-direction:column}
+main{flex:1}
+.container{width:min(980px,100% - 3rem);margin-inline:auto}
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  border-bottom:1px solid rgba(148,163,184,.28);
+  background:rgba(248,250,252,.95);
+  backdrop-filter:blur(16px);
+}
+.mast{display:flex;align-items:center;justify-content:center;min-height:58px;padding:.55rem 0}
+.nav__list{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.55rem;
+  flex-wrap:wrap;
+  list-style:none;
+  margin:0;
+  padding:0;
+  font-size:.86rem;
+}
+.nav__link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:.3rem .8rem;
+  border:1px solid transparent;
+  border-radius:999px;
+  color:var(--riyst-soft);
+  text-decoration:none;
+  transition:background .16s,color .16s,transform .12s,border-color .16s;
+}
+.nav__link:hover,.nav__link:focus-visible{
+  border-color:rgba(148,163,184,.26);
+  background:rgba(148,163,184,.18);
+  color:var(--riyst-text);
+  text-decoration:none;
+  transform:translateY(-1px);
+}
+.nav__link--highlight{
+  border-color:rgba(37,99,235,.18);
+  background:rgba(37,99,235,.08);
+  color:var(--riyst-blue);
+}
+.tool-intro{text-align:center;padding:2.6rem 0 0}
+.tool-intro h1{
+  margin:0 0 .8rem;
+  color:var(--riyst-text);
+  font-size:clamp(2.1rem,3vw,2.6rem);
+  line-height:1.15;
+  letter-spacing:-.03em;
+  font-weight:750;
+}
+.tool-intro p{
+  max-width:680px;
+  margin:0 auto;
+  color:var(--riyst-soft);
+  font-size:.96rem;
+  font-weight:500;
+}
+#stego-tool .wrap{max-width:980px;padding:2.4rem 1.5rem 4rem}
+#stego-tool .card{
+  background:#fff;
+  border-color:var(--riyst-border);
+  box-shadow:0 12px 30px rgba(15,23,42,.08);
+}
+#stego-tool .card:hover{
+  border-color:rgba(37,99,235,.18);
+  box-shadow:0 18px 36px rgba(15,23,42,.12);
+}
+.site-footer{
+  margin-top:auto;
+  padding:1.6rem 1.5rem 1.8rem;
+  border-top:1px solid rgba(148,163,184,.3);
+  background:rgba(248,250,252,.72);
+  color:var(--riyst-soft);
+  font-size:.85rem;
+}
+.footer-clean{text-align:center}
+.footer-clean p{margin:0}
+.footer-legal{
+  display:flex;
+  justify-content:center;
+  gap:.45rem;
+  flex-wrap:wrap;
+  margin-top:.45rem;
+  font-size:.82rem;
+}
+.footer-legal a{
+  padding:.25rem .55rem;
+  border-radius:999px;
+  color:var(--riyst-soft);
+  text-decoration:none;
+  transition:background .16s,color .16s,transform .12s;
+}
+.footer-legal a:hover{
+  background:rgba(148,163,184,.16);
+  color:var(--riyst-blue);
+  text-decoration:none;
+  transform:translateY(-1px);
+}
+@media(max-width:760px){
+  .container{width:min(100% - 2rem,980px)}
+  .nav__list{gap:.25rem}
+  .nav__link{padding:.28rem .65rem}
+  .tool-intro{padding:2rem 0 0}
+  #stego-tool .wrap{padding:1.6rem 1rem 3rem}
+}
+</style>
+
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css">
+</head>
+<body data-in-pages="true">
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <div class="page-wrapper">
+        <header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link">Home</a>
+      <a href="../tools.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+                <main id="main">
+<section class="tool-intro">
+  <div class="container">
+    <h1>Steganography Toolkit</h1>
+    <p>Hide, reveal or remove hidden information from text, images, videos and files locally in your browser.</p>
+  </div>
+</section>
+
+
+
+<section id="stego-tool">
+  <div class="wrap">
+    <div class="grid">
+      <!-- LEFT: MODE -->
+      <section class="card">
+        <div class="hd"><h2>Mode</h2></div>
+        <div class="bd">
+          <div class="tabs" role="tablist" aria-label="Modes">
+            <button class="tabbtn active" role="tab" data-tab="text" aria-selected="true">Text</button>
+            <button class="tabbtn" role="tab" data-tab="image" aria-selected="false">Image</button>
+            <button class="tabbtn" role="tab" data-tab="video" aria-selected="false">Video</button>
+            <button class="tabbtn" role="tab" data-tab="file"  aria-selected="false">File</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: WORKSPACE -->
+      <section class="card">
+        <div class="hd"><h2 id="panelTitle">Text steganography</h2></div>
+        <div class="bd">
+
+          <div class="btnrow" style="margin-top:0;">
+            <button id="actHide" class="primary">Hide a message</button>
+            <button id="actReveal" class="primary">Reveal hidden message</button>
+            <button id="actStrip" class="primary">Remove hidden data</button>
+          </div>
+
+          <div class="hr"></div>
+
+          <!-- HIDE -->
+          <div class="panel" data-panel="hide" style="display:none;">
+            <div id="hideCarrierBlock">
+              <label for="hideCarrier">Carrier</label>
+              <div class="drop">
+                <input id="hideCarrier" type="file" class="native-file" />
+                <div class="file-ui">
+                  <label class="file-choose" for="hideCarrier">Click here or drop</label>
+                  <div class="file-name" id="hideCarrierName">No file chosen</div>
+                </div>
+                <div class="drop-text" id="hideCarrierHelp">Choose a carrier file.</div>
+              </div>
+            </div>
+
+            <!-- TEXT MODE: plaintext + secret -->
+            <div id="textHideFields" style="display:none;">
+              <label for="textPlain">Plaintext</label>
+              <textarea id="textPlain" placeholder="Type your visible text…"></textarea>
+
+              <label for="textSecret">Hidden message</label>
+              <textarea id="textSecret" placeholder="Type the hidden message…"></textarea>
+            </div>
+
+            <!-- NON-TEXT: secret only -->
+            <div id="fileHideFields" style="display:none;">
+              <label for="hideMessage">Message to hide</label>
+              <textarea id="hideMessage" placeholder="Type your hidden message…" disabled></textarea>
+            </div>
+            <div class="btnrow">
+              <button id="doHide" class="primary" disabled>Hide message</button>
+            </div>
+
+            <!-- OUTPUTS -->
+            <div id="outTextWrap" class="hidden-until">
+              <div class="hr"></div>
+              <label>Output</label>
+              <textarea id="outText" class="out" readonly style="min-height:170px;"></textarea>
+              <div class="btnrow">
+                <button id="copyOutText" class="primary">Copy</button>
+                <button id="downloadOutText" class="primary">Download</button>
+              </div>
+            </div>
+
+            <div id="outImageWrap" class="hidden-until">
+              <div class="hr"></div>
+              <label>Preview</label>
+              <div style="display:flex;justify-content:center;">
+                <img id="outImage" alt="Output preview" style="max-width:100%;border-radius:10px;border:1px solid rgba(0,0,0,.12);" />
+              </div>
+              <div class="small" style="margin-top:16px;font-size:1.1rem;font-weight:600;text-align:center;">Output ready</div>
+              <div class="btnrow">
+                <button id="downloadOutFile" class="primary">Download</button>
+              </div>
+            </div>
+
+            <div id="outFileWrap" class="hidden-until">
+              <div class="hr"></div>
+              <div id="outFileNote" class="small" style="margin-top:16px;font-size:1.1rem;font-weight:600;text-align:center;">Output ready</div>
+              <div class="btnrow">
+                <button id="downloadOutFile2" class="primary">Download</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- REVEAL -->
+          <div class="panel" data-panel="reveal" style="display:none;">
+            <!-- TEXT mode reveal: paste -->
+            <div id="textRevealBlock" style="display:none;">
+              <label for="textStegoIn">Carrier text</label>
+              <textarea id="textStegoIn" placeholder="Paste the carrier text here…"></textarea>
+            </div>
+
+            <!-- others: upload -->
+            <div id="revealCarrierBlock">
+              <label for="revealCarrier">Carrier</label>
+              <div class="drop">
+                <input id="revealCarrier" type="file" class="native-file" />
+                <div class="file-ui">
+                  <label class="file-choose" for="revealCarrier">Click here or drop</label>
+                  <div class="file-name" id="revealCarrierName">No file chosen</div>
+                </div>
+                <div class="drop-text" id="revealCarrierHelp">Choose the file you want to check.</div>
+              </div>
+            </div>
+
+            <div class="btnrow">
+              <button id="doReveal" class="primary" disabled>Reveal message</button>
+            </div>
+
+            <div id="revealOutWrap" class="hidden-until">
+              <div class="hr"></div>
+              <label>Hidden message</label>
+              <textarea id="revealOut" class="out" readonly style="min-height:170px;"></textarea>
+              <div class="btnrow">
+                <button id="copyRevealOut" class="primary">Copy</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STRIP -->
+          <div class="panel" data-panel="strip" style="display:none;">
+            <!-- TEXT strip: paste -->
+            <div id="textStripBlock" style="display:none;">
+              <label for="textStripIn">Carrier text</label>
+              <textarea id="textStripIn" placeholder="Paste the carrier text here…"></textarea>
+            </div>
+
+            <!-- others: upload -->
+            <div id="stripCarrierBlock">
+              <label for="stripCarrier">Carrier</label>
+              <div class="drop">
+                <input id="stripCarrier" type="file" class="native-file" />
+                <div class="file-ui">
+                  <label class="file-choose" for="stripCarrier">Click here or drop</label>
+                  <div class="file-name" id="stripCarrierName">No file chosen</div>
+                </div>
+                <div class="drop-text" id="stripCarrierHelp">Choose a file to remove hidden data.</div>
+              </div>
+            </div>
+
+            <div class="btnrow">
+              <button id="doStrip" class="primary" disabled>Remove hidden data</button>
+            </div>
+
+            <div id="stripOutTextWrap" class="hidden-until">
+              <div class="hr"></div>
+              <label>Output</label>
+              <textarea id="stripOutText" class="out" readonly style="min-height:170px;"></textarea>
+              <div class="btnrow">
+                <button id="copyStripOut" class="primary">Copy</button>
+                <button id="downloadStripText" class="primary">Download</button>
+              </div>
+            </div>
+
+            <div id="stripOutFileWrap" class="hidden-until">
+              <div class="hr"></div>
+              <div id="stripFileNote" class="small" style="margin-top:16px;font-size:1.1rem;font-weight:600;text-align:center;">Output ready</div>
+              <div class="btnrow">
+                <button id="downloadStripFile" class="primary">Download</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+
+      </main>
+
+        
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+    </div>
+
+    
+        <div class="overlay-backdrop" id="modal-backdrop" hidden>
+            <div class="overlay-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+                <button type="button" class="overlay-close" id="modal-close" aria-label="Close dialog">×</button>
+                <div id="modal-content"></div>
+            </div>
+        </div>
+    
+
+    <script>
+const careerTimeline=[
+  {role:"IT Officer",period:"2025 – Present",description:"Broader responsibility for software, networking, and security infrastructure. Focused on delivering dependable, secure systems that support efficient, high-quality patient care, and leading response to incidents and upgrades.",tags:["IT leadership","Infrastructure","Security"]},
+  {role:"IT and Network Support",period:"2024 – 2025",description:"Maintained and developed IT software and networking infrastructure after progressing from business administration. Provided second-line support and helped shape improvements in reliability and workflows.",tags:["Support","Networking","Operations"]},
+  {role:"IT and Communications Support",period:"2022 – 2024",description:"Alongside business administration work, took on responsibility for IT and communications. Helped enhance technological infrastructure, supported staff day to day, and contributed to communication and change projects.",tags:["IT & comms","Change","Support"]},
+  {role:"Bachelor of Laws (LLB)",period:"2023 – Present",description:"Studying for an Honours LLB alongside professional work, building a deeper understanding of legal frameworks, governance, and how the law interacts with organisations and technology.",tags:["Law","Education"]}
+];
+
+const projects=[
+  {id:"portfolio",title:"Portfolio website",type:"Personal",tech:["HTML","CSS","JavaScript"],summary:"This site – a static portfolio bringing together professional experience, projects, and writing.",details:"A lightweight, fully static portfolio designed to be accessible and easy to maintain. Built without frameworks so it can be hosted anywhere, with a focus on clean layout, motion, and strong accessibility options.",images:["https://via.placeholder.com/900x520?text=Portfolio+Home","https://via.placeholder.com/900x520?text=Projects+Page"],link:""},
+  {id:"discord-bot",title:"Discord bot experiments",type:"Code / Hobby",tech:["Python","discord.py"],summary:"Custom moderation and fun commands, including music playback, reaction-based roles, and interactive features.",details:"An ongoing sandbox for experimenting with asynchronous Python, APIs, and user interaction design. Includes moderation tools, music features, and playful commands to keep servers organised but fun.",images:["https://via.placeholder.com/900x520?text=Discord+Bot+Commands","https://via.placeholder.com/900x520?text=Music+System+Flow"],link:""},
+  {id:"ops-dashboard",title:"Operations dashboard (concept)",type:"Concept",tech:["Python","APIs"],summary:"An internal concept for tracking IT incidents, bottlenecks, and resolutions to support decision making.",details:"Prototype designs for a simple operations dashboard: aggregating tickets, service health, and response times into one place so leaders can see patterns and prioritise improvements.",images:["https://via.placeholder.com/900x520?text=Dashboard+Concept","https://via.placeholder.com/900x520?text=Incident+Timeline"],link:""}
+];
+
+const articleCategories={
+  law:[],
+  political:[
+    {
+      slug:"autumn-budget-2025",
+      title:"The 2025 Autumn Budget – Working Adults Are Left Paying for Everything (Again!)",
+      outlet:"Personal writing",
+      date:"2025",
+      teaser:"A critical look at the 2025 Autumn Budget and how it loads the cost of everything onto working adults.",
+      body:"The 2025 Autumn Budget \u2013 Working Adults Are Left Paying for Everything (Again!)\nRachel Reeves\u2019 Autumn Budget makes one thing unmistakably clear. Working adults have become the country\u2019s financial shock absorbers. Whenever the government mismanages money, overspends, or discovers yet another \u201cunexpected\u201d fiscal hole, the solution is always the same, to squeeze the people who actually work for every penny they have. Despite promising earlier this year that there would be \u201cno major tax rises\u201d, Reeves has delivered another round of stealth taxation that falls overwhelmingly on ordinary earners.\n\nThe scrapping of the two-child benefit cap has been sold as a progressive policy, but in reality it simply rewards people regardless of whether they contribute anything to the system. Support should be available for families facing genuine hardship, not for those who choose to have children and expect taxpayers to fund them. Working people, already taxed at every turn, are being asked once again to finance choices that should be personal responsibilities.\n\nThe freeze on income tax thresholds is a quieter but even more punishing blow. Inflation continues to push prices higher, yet wages barely keep up to match. Recent ONS data shows nominal pay rising around 5 per cent, while real income has increased by less than 1 per cent. That tiny gain is quickly swallowed by the threshold freeze, meaning millions are dragged into higher tax bands without being any better off. Workers are effectively taking home less money despite receiving pay rises. A stealth tax in everything but name.\n\nOther measures in the Budget follow the same pattern. Reeves\u2019 new mansion tax sounds fair until you consider that property value alone doesn\u2019t reflect someone\u2019s wealth or income. Many inherited or rural homes will be caught in the net, and landlords will inevitably pass new charges onto tenants, worsening the rental crisis.\n\nTaxing savings and dividends is no better. After paying income tax, National Insurance, VAT, council tax, fuel duty and everything else, whatever people manage to save should be theirs. By taxing savings, the government is penalising those who live responsibly and plan for the future. At this rate, Reeves might resurrect the old English window tax if she thought she could get away with it.\n\nThe pension reforms are equally short-sighted, targeting long-serving professionals who rely on salary sacrifice to build their retirement pots. Charging National Insurance on money people never actually receive as a salary is absurd. It hurts teachers, nurses, police and engineers far more than the genuinely wealthy, who have the means to shelter their income elsewhere.\n\nEven the new electric vehicle mileage tax follows the same logic. Punish responsible behaviour. People who switched to EVs, whether to save money or reduce emissions will now pay around 6p per mile for the privilege of driving. That, combined with the new EV road tax could mean the average driver pays hundreds extra each year. All of this is being introduced without any clear plan for enforcement. Will the government use MOT readings? Will cars be tracked? No one seems to know.\n\nThe Budget\u2019s sin taxes are equally hypocritical. Increasing duties on alcohol and gambling doesn\u2019t change behaviour, it simply gives the government another revenue stream while pretending to act in the public interest. These taxes hit ordinary people far more than they affect addiction or harm, which they so claim to be helping with.\n\nReeves insists that public services need the extra funding that these taxes provide, and she\u2019s not wrong. But the real issue isn\u2019t just the scale of funding but how that funding is used. The NHS spent over \u00a33.5 billion on agency staff last year and continues to suffer from chronic inefficiency, excessive administration and a lack of investment in preventative care. Without reform, throwing more money at the system will only produce the same failing results.\n\nPerhaps the most telling part of this Budget is the size of the fiscal black hole. Earlier this year, Reeves had around \u00a310 billion of headroom. Since then, weaker growth, higher borrowing costs and abandoned welfare reforms have widened the gap to between \u00a312 billion and \u00a320 billion. Despite raising enormous amounts of tax, \u00a326 billion this time on top of \u00a340 billion last year, the underlying problem is simply being masked rather than solved.\n\nThe overall message of this Budget is unmistakable. If you work, you pay. If you save, you pay. If you drive, you pay. If you prepare for retirement, you pay. Meanwhile, those who do not work, and in many cases, have no intention of working, continue to receive increased support. This isn\u2019t fairness. It\u2019s a slow erosion of the social contract, and working adults are once again being asked to bankroll a system that takes more from them every year while giving less in return."
+    }
+  ],
+  it:[
+    {title:"Example IT / operations note",outlet:"Internal notes",date:"2023",teaser:"An internal-style write-up on reliability, workflows, or systems."},
+    {title:"Network changes log",outlet:"Internal notes",date:"2022",teaser:"Summary of notable infrastructure changes and lessons learned."},
+    {title:"Service improvements idea dump",outlet:"Drafts",date:"2022",teaser:"Rough ideas for automations, dashboards, and better incident response."},
+    {title:"Tooling experiments",outlet:"Lab notes",date:"2021",teaser:"Short notes on small tooling tests and scripting experiments."}
+  ]
+};
+
+function renderTimeline(container,items){
+  if(!container)return;
+  container.innerHTML=items.map((item,index)=>`
+    <article class="timeline-item fade-in-on-scroll" style="--stagger-delay:${index*70}ms">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-role">${item.role}</div>
+        <div class="timeline-meta">
+          ${item.period||""}
+        </div>
+        <div class="timeline-description">${item.description||""}</div>
+        ${item.tags&&item.tags.length?`<div class="timeline-tags">${item.tags.map(tag=>`<span class="tag">${tag}</span>`).join("")}</div>`:""}
+      </div>
+    </article>
+  `).join("");
+}
+
+function renderProjects(container,items){
+  if(!container)return;
+  container.innerHTML=items.map((project,index)=>{
+    const tech=project.tech?project.tech.join(", "):"";
+    return `
+      <article class="project-card fade-in-on-scroll" data-project-index="${index}" style="--stagger-delay:${index*70}ms">
+        <div class="project-header">
+          <div class="project-title">${project.title}</div>
+          <div class="project-meta">${project.type||""}${tech?" · "+tech:""}</div>
+        </div>
+        <div class="project-summary">${project.summary||""}</div>
+        <div class="project-extra">
+          <div class="project-gallery" data-gallery-index="0">
+            <div class="project-frame">
+              ${project.images&&project.images.length?`<img src="${project.images[0]}" alt="Preview image for ${project.title}">`:"No previews yet – add images later."}
+            </div>
+            <div class="project-gallery-controls">
+              <span class="gallery-label">Preview <span class="gallery-current">1</span> of <span class="gallery-total">${project.images?project.images.length:1}</span></span>
+              <div class="gallery-buttons">
+                <button type="button" class="gallery-btn" data-gallery-prev>Prev</button>
+                <button type="button" class="gallery-btn" data-gallery-next>Next</button>
+              </div>
+            </div>
+          </div>
+          <p class="project-detail-text">${project.details||""}</p>
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  container.querySelectorAll(".project-card").forEach(card=>{
+    card.addEventListener("click",e=>{
+      if(e.target.closest(".gallery-btn"))return;
+      card.classList.toggle("expanded");
+    });
+  });
+
+  container.querySelectorAll(".project-card").forEach(card=>{
+    const index=parseInt(card.dataset.projectIndex,10);
+    const project=items[index];
+    const gallery=card.querySelector(".project-gallery");
+    if(!gallery||!project.images||!project.images.length)return;
+    const frame=gallery.querySelector(".project-frame img");
+    const currentSpan=gallery.querySelector(".gallery-current");
+    const totalSpan=gallery.querySelector(".gallery-total");
+    let current=0;
+    totalSpan.textContent=project.images.length.toString();
+
+    function update(){
+      if(frame){frame.src=project.images[current];}
+      if(currentSpan)currentSpan.textContent=(current+1).toString();
+    }
+
+    gallery.querySelectorAll("[data-gallery-prev]").forEach(btn=>{
+      btn.addEventListener("click",e=>{
+        e.stopPropagation();
+        current=(current-1+project.images.length)%project.images.length;
+        update();
+      });
+    });
+    gallery.querySelectorAll("[data-gallery-next]").forEach(btn=>{
+      btn.addEventListener("click",e=>{
+        e.stopPropagation();
+        current=(current+1)%project.images.length;
+        update();
+      });
+    });
+  });
+}
+
+function renderArticlesByCategory(openArticleModal){
+  const sections=document.querySelectorAll(".article-card-grid[data-article-category]");
+  sections.forEach(section=>{
+    const key=section.dataset.articleCategory;
+    const items=articleCategories[key]||[];
+    section.innerHTML=items.map((article,index)=>`
+      <article class="article-card fade-in-on-scroll" data-article-category="${key}" data-article-index="${index}" style="--stagger-delay:${index*70}ms">
+        <div class="article-card-header">
+          <h3 class="article-title">${article.title}</h3>
+          <div class="article-meta">${article.outlet||""}${article.date?" · "+article.date:""}</div>
+        </div>
+        <div class="article-teaser">${article.teaser||""}</div>
+      </article>
+    `).join("");
+
+    const cards=Array.from(section.querySelectorAll(".article-card"));
+
+    const idealCardWidth=320;
+    let perView=Math.max(1,Math.floor(section.clientWidth/idealCardWidth));
+    perView=Math.min(perView,cards.length||1);
+    section.style.setProperty("--cards-per-view",perView);
+
+    cards.forEach(card=>{
+      card.addEventListener("click",()=>{
+        const cat=card.dataset.articleCategory;
+        const idx=parseInt(card.dataset.articleIndex,10);
+        const data=(articleCategories[cat]||[])[idx];
+        if(data)openArticleModal(data);
+      });
+    });
+
+    const carousel=section.closest(".article-carousel");
+    if(!carousel)return;
+    const prevBtn=carousel.querySelector(".article-scroll-prev");
+    const nextBtn=carousel.querySelector(".article-scroll-next");
+    if(!prevBtn||!nextBtn||cards.length<=perView){
+      if(prevBtn)prevBtn.disabled=true;
+      if(nextBtn)nextBtn.disabled=true;
+      return;
+    }
+
+    let currentPage=0;
+    const maxPage=Math.max(0,Math.ceil(cards.length/perView)-1);
+
+    const scrollToPage=page=>{
+      if(page<0||page>maxPage)return;
+      const firstIndex=page*perView;
+      const target=cards[firstIndex];
+      if(!target)return;
+      const offset=target.offsetLeft-section.offsetLeft;
+      section.scrollTo({left:offset,behavior:"smooth"});
+    };
+
+    prevBtn.addEventListener("click",()=>{
+      if(currentPage<=0)return;
+      currentPage-=1;
+      scrollToPage(currentPage);
+    });
+
+    nextBtn.addEventListener("click",()=>{
+      if(currentPage>=maxPage)return;
+      currentPage+=1;
+      scrollToPage(currentPage);
+    });
+  });
+}let lastFocusedElement=null;
+function getModalElements(){
+  return {backdrop:document.getElementById("modal-backdrop"),content:document.getElementById("modal-content"),closeBtn:document.getElementById("modal-close")};
+}
+function openModal(buildContent){
+  const {backdrop,content,closeBtn}=getModalElements();
+  if(!backdrop||!content||!closeBtn)return;
+  lastFocusedElement=document.activeElement;
+  content.innerHTML=buildContent();
+  backdrop.hidden=false;
+  document.body.style.overflow="hidden";
+  requestAnimationFrame(()=>backdrop.classList.add("open"));
+  closeBtn.onclick=closeModal;
+  backdrop.addEventListener("click",onBackdropClick);
+  document.addEventListener("keydown",onEsc);
+}
+function closeModal(){
+  const {backdrop,content}=getModalElements();
+  if(!backdrop)return;
+  backdrop.classList.remove("open");
+  const handler=()=>{
+    backdrop.hidden=true;
+    backdrop.removeEventListener("transitionend",handler);
+    if(content)content.innerHTML="";
+    document.body.style.overflow="";
+  };
+  backdrop.addEventListener("transitionend",handler);
+  document.removeEventListener("keydown",onEsc);
+  backdrop.removeEventListener("click",onBackdropClick);
+  if(lastFocusedElement&&typeof lastFocusedElement.focus==="function"){lastFocusedElement.focus();}
+}
+function onEsc(e){if(e.key==="Escape")closeModal();}
+function onBackdropClick(e){
+  const panel=e.target.closest(".overlay-panel");
+  if(!panel)closeModal();
+}
+
+function openArticleModal(article, options = {}){
+  if(!article)return;
+
+  const rawText = article.body || article.teaser || "";
+  const paragraphs = rawText
+    .split(/\n\s*\n/)
+    .map(p => p.trim())
+    .filter(Boolean);
+
+  const bodyHtml = paragraphs
+    .map(p => `<p class="overlay-text">${p}</p>`)
+    .join("");
+
+  if (!options.skipUrlUpdate && article.slug) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("article", article.slug);
+    history.pushState({ articleSlug: article.slug }, "", url);
+  }
+
+  openModal(()=>`
+      <div class="overlay-header">
+        <h2 id="modal-title">${article.title}</h2>
+        <p>${article.outlet||""}${article.date?" · "+article.date:""}</p>
+      </div>
+      <div class="overlay-body">
+        <div class="overlay-article-text">
+          ${bodyHtml}
+        </div>
+      </div>
+  `);
+}
+
+function getCvPdfPath(){
+  const inPages=document.body.getAttribute("data-in-pages")==="true";
+  return (inPages?"../":"") + "Assets/Documents/CV-Website-Version.pdf";
+}
+function openCvModal(){
+  openModal(()=>`
+    <div class="overlay-header">
+      <h2 id="modal-title">Some quick questions</h2>
+      <p>Before you view my full CV, please share a few details.</p>
+    </div>
+    <div class="overlay-body">
+      <form class="cv-form-grid" id="cv-form">
+        <div class="cv-form-row">
+          <div class="cv-form-field">
+            <label for="cv-name">Name</label>
+            <input id="cv-name" name="name" type="text" required>
+          </div>
+          <div class="cv-form-field">
+            <label for="cv-company">Organisation / company</label>
+            <input id="cv-company" name="company" type="text">
+          </div>
+        </div>
+        <div class="cv-form-field">
+          <label for="cv-role">Role / position</label>
+          <input id="cv-role" name="role" type="text">
+        </div>
+        <div class="cv-form-field">
+          <label for="cv-reason">Brief reason for viewing my CV</label>
+          <textarea id="cv-reason" name="reason" rows="3" placeholder="For example: recruitment, collaboration, curiosity, or future opportunities."></textarea>
+        </div>
+        <div class="cv-form-footer">
+          <small>I’ll use this information only to understand who is interested in my background.</small>
+          <button type="submit" class="btn primary-btn">Continue to CV</button>
+        </div>
+      </form>
+    </div>
+  `);
+  const form=document.getElementById("cv-form");
+  if(form){
+    form.addEventListener("submit",async e=>{
+      e.preventDefault();
+      const formData=new FormData(form);
+      try{
+        await fetch("https://formspree.io/f/manznbjr",{method:"POST",body:formData,headers:{"Accept":"application/json"}});
+      }catch(err){
+        console.error("Error sending CV form",err);
+      }
+      window.open(getCvPdfPath(),"_blank");
+      closeModal();
+    });
+  }
+}
+
+const THEME_KEY="ah-theme",TEXT_SIZE_KEY="ah-text-size",MOTION_KEY="ah-motion",CONTRAST_KEY="ah-contrast",LINKS_KEY="ah-links",COLOR_KEY="ah-color-mode",FOCUS_KEY="ah-focus";
+/* === Accessibility preferences persistence (localStorage + cookie for subdomains) === */
+function ahSetCookie(name,value,days){
+  try{
+    const expires = days ? "; expires=" + new Date(Date.now()+days*864e5).toUTCString() : "";
+    const domain = location.hostname.endsWith("adrianheadley.com") ? "; domain=.adrianheadley.com" : "";
+    const secure = location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = encodeURIComponent(name)+"="+encodeURIComponent(value)+expires+"; path=/"+domain+"; SameSite=Lax"+secure;
+  }catch(e){}
+}
+function ahGetCookie(name){
+  try{
+    const key = encodeURIComponent(name)+"=";
+    const parts = document.cookie ? document.cookie.split("; ") : [];
+    for(const part of parts){
+      if(part.indexOf(key)===0) return decodeURIComponent(part.substring(key.length));
+    }
+  }catch(e){}
+  return null;
+}
+function ahGetPref(key){
+  const fromCookie = ahGetCookie(key);
+  if(fromCookie!==null && fromCookie!=="") return fromCookie;
+  try{ return localStorage.getItem(key); }catch(e){ return null; }
+}
+function ahSetPref(key,value){
+  try{ localStorage.setItem(key,value); }catch(e){}
+  ahSetCookie(key,value,3650);
+}
+/* === End persistence helpers === */
+
+function applyTheme(theme){if(theme==="dark"){document.body.classList.add("dark-theme");}else{document.body.classList.remove("dark-theme");}document.querySelectorAll("[data-theme]").forEach(btn=>btn.classList.toggle("active",btn.dataset.theme===theme));}
+function initTheme(){const saved=ahGetPref(THEME_KEY);if(saved==="light"||saved==="dark"){applyTheme(saved);}else{applyTheme("light");}}
+function setTheme(theme){applyTheme(theme);ahSetPref(THEME_KEY,theme);}
+function applyTextSize(size){
+  const root=document.documentElement;
+  const base=16;
+  let scale=1;
+  if(size==="large"){scale=1.125;}
+  else if(size==="xlarge"){scale=1.25;}
+  root.style.fontSize=(base*scale)+"px";
+
+  document.body.classList.remove("text-large","text-xlarge");
+  if(size==="large")document.body.classList.add("text-large");
+  if(size==="xlarge")document.body.classList.add("text-xlarge");
+
+  document.querySelectorAll("[data-text-size]").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.textSize===size);
+  });
+}
+function initTextSize(){const saved=ahGetPref(TEXT_SIZE_KEY)||"normal";applyTextSize(saved);}
+function setTextSize(size){applyTextSize(size);ahSetPref(TEXT_SIZE_KEY,size);}
+function applyMotion(reduce){document.body.classList.toggle("reduce-motion",reduce);const toggle=document.getElementById("motion-toggle");if(toggle)toggle.checked=reduce;}
+function initMotion(){const saved=ahGetPref(MOTION_KEY);applyMotion(saved==="reduce");}
+function setMotion(reduce){applyMotion(reduce);ahSetPref(MOTION_KEY,reduce?"reduce":"normal");}
+function applyContrast(mode){document.body.classList.toggle("high-contrast",mode==="high");document.querySelectorAll("[data-contrast]").forEach(btn=>btn.classList.toggle("active",btn.dataset.contrast===mode));}
+function initContrast(){const saved=ahGetPref(CONTRAST_KEY)||"normal";applyContrast(saved);}
+function setContrast(mode){applyContrast(mode);ahSetPref(CONTRAST_KEY,mode);}
+function applyLinkStyle(underline){document.body.classList.toggle("links-underlined",underline);const toggle=document.getElementById("underline-toggle");if(toggle)toggle.checked=underline;}
+function initLinkStyle(){const saved=ahGetPref(LINKS_KEY);applyLinkStyle(saved==="underline");}
+function setLinkStyle(underline){applyLinkStyle(underline);ahSetPref(LINKS_KEY,underline?"underline":"normal");}
+
+function applyColorMode(mode){
+  document.body.classList.toggle("cb-mode",mode==="cb");
+  document.querySelectorAll("[data-color-mode]").forEach(btn=>btn.classList.toggle("active",btn.dataset.colorMode===mode));
+}
+function initColorMode(){
+  const saved=ahGetPref(COLOR_KEY)||"normal";
+  applyColorMode(saved);
+}
+function setColorMode(mode){
+  applyColorMode(mode);
+  ahSetPref(COLOR_KEY,mode);
+}
+function applyFocusMode(strong){
+  document.body.classList.toggle("strong-focus",strong);
+  const toggle=document.getElementById("focus-toggle");
+  if(toggle)toggle.checked=strong;
+}
+function initFocusMode(){
+  const saved=ahGetPref(FOCUS_KEY);
+  applyFocusMode(saved==="strong");
+}
+function setFocusMode(strong){
+  applyFocusMode(strong);
+  ahSetPref(FOCUS_KEY,strong?"strong":"normal");
+}
+function initScrollAnimations(){const elements=document.querySelectorAll(".fade-in-on-scroll");if(!("IntersectionObserver"in window)){elements.forEach(el=>el.classList.add("visible"));return;}const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("visible");observer.unobserve(entry.target);}})},{threshold:0.18});elements.forEach(el=>observer.observe(el));}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  initTheme();initTextSize();initContrast();initMotion();initLinkStyle();initColorMode();initFocusMode();
+  const a11yButton=document.getElementById("a11y-button");
+  const a11yPanel=document.getElementById("a11y-panel");
+  if(a11yButton&&a11yPanel){
+    a11yButton.addEventListener("click",()=>{
+      const isOpen=a11yPanel.classList.toggle("open");
+      a11yButton.setAttribute("aria-expanded",isOpen?"true":"false");
+    });
+    document.addEventListener("click",e=>{
+      if(!a11yPanel.contains(e.target)&&!a11yButton.contains(e.target)){
+        if(a11yPanel.classList.contains("open")){
+          a11yPanel.classList.remove("open");
+          a11yButton.setAttribute("aria-expanded","false");
+        }
+      }
+    });
+    document.querySelectorAll("[data-theme]").forEach(btn=>btn.addEventListener("click",()=>setTheme(btn.dataset.theme)));
+    document.querySelectorAll("[data-text-size]").forEach(btn=>btn.addEventListener("click",()=>setTextSize(btn.dataset.textSize)));
+    document.querySelectorAll("[data-contrast]").forEach(btn=>btn.addEventListener("click",()=>setContrast(btn.dataset.contrast)));
+    document.querySelectorAll("[data-color-mode]").forEach(btn=>btn.addEventListener("click",()=>setColorMode(btn.dataset.colorMode)));
+    const underlineToggle=document.getElementById("underline-toggle");
+    if(underlineToggle){underlineToggle.addEventListener("change",e=>setLinkStyle(e.target.checked));}
+    const motionToggle=document.getElementById("motion-toggle");
+    if(motionToggle){motionToggle.addEventListener("change",e=>setMotion(e.target.checked));}
+    const focusToggle=document.getElementById("focus-toggle");
+    if(focusToggle){focusToggle.addEventListener("change",e=>setFocusMode(e.target.checked));}
+  }
+  renderTimeline(document.getElementById("career-timeline"),careerTimeline);
+  renderProjects(document.getElementById("projects-grid"),projects);
+  renderArticlesByCategory(openArticleModal);
+  document.querySelectorAll(".cv-modal-trigger").forEach(btn=>btn.addEventListener("click",()=>openCvModal()));
+  initScrollAnimations();
+  const yearSpan=document.getElementById("footer-year");if(yearSpan)yearSpan.textContent=new Date().getFullYear().toString();
+});
+
+function findArticleBySlug(slug){
+  if(!slug)return null;
+  for(const list of Object.values(articleCategories)){
+    const found=list.find(a=>a.slug===slug);
+    if(found)return found;
+  }
+  return null;
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  const params=new URLSearchParams(window.location.search);
+  const slug=params.get("article");
+  if(slug){
+    const article=findArticleBySlug(slug);
+    if(article){
+      openArticleModal(article,{ skipUrlUpdate:true });
+    }
+  }
+});
+
+/* Contact form: build Formspree email subject as "<Topic> - <Subject>" */
+(function(){
+  const form = document.querySelector("form.contact-form-card");
+  if(!form) return;
+
+  const topic = form.querySelector("#topic");
+  const subject = form.querySelector("#subject");
+  const hiddenSubject = form.querySelector("#_subject");
+
+  form.addEventListener("submit", function(){
+    if(!hiddenSubject) return;
+
+    const topicText = topic && topic.options && topic.selectedIndex >= 0
+      ? (topic.options[topic.selectedIndex].text || "").trim()
+      : "";
+
+    const subjectText = subject ? (subject.value || "").trim() : "";
+
+    const combined = [topicText, subjectText].filter(Boolean).join(" - ");
+    hiddenSubject.value = combined || "Website enquiry";
+  });
+})();
+
+
+</script>
+<script>
+
+const $ = (sel, el=document) => el.querySelector(sel);
+const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
+
+function promiseTimeout(p, ms, msg){
+  let t;
+  const timeout = new Promise((_, reject)=>{
+    t = setTimeout(()=>reject(new Error(msg || ("Timed out after " + ms + "ms"))), ms);
+  });
+  return Promise.race([p.finally(()=>clearTimeout(t)), timeout]);
+}
+
+function showEls(ids){
+  ids.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.classList.remove("hidden-until");
+  });
+}
+function hideEls(ids, clear=false){
+  ids.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){
+      el.classList.add("hidden-until");
+      if(clear){
+        if(el.tagName === "DIV") el.textContent = "";
+        if(el.tagName === "TABLE"){
+          const tb = el.querySelector("tbody");
+          if(tb) tb.innerHTML = "";
+        }
+      }
+      if(clear && el.classList.contains("kv")) el.innerHTML = "";
+    }
+  });
+}
+
+/* ------- Tabs ------- */
+let currentTab = "text";
+function setTab(tab){
+  currentTab = tab;
+  $$(".tabbtn").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
+  $$(".panel").forEach(p => p.hidden = p.dataset.panel !== tab);
+  const titles = {text:"Text hashing", file:"File hashing", files:"Multi-file hashing", compare:"Compare", disk:"Disk (folder-as-disk)"};
+  $("#panelTitle").textContent = titles[tab] || "Hashing";
+}
+$$(".tabbtn").forEach(b => b.addEventListener("click", () => setTab(b.dataset.tab)));
+
+/* ------- Helpers ------- */
+function humanBytes(n){
+  const u = ["B","KB","MB","GB","TB"];
+  let i=0, x=n;
+  while(x>=1024 && i<u.length-1){ x/=1024; i++; }
+  return `${x.toFixed(i?2:0)} ${u[i]}`;
+}
+function toHexLower(buf){
+  const bytes = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+  let s = "";
+  for (let i=0; i<bytes.length; i++) s += bytes[i].toString(16).padStart(2,"0");
+  return s.toLowerCase();
+}
+async function copyText(txt){
+  try{ await navigator.clipboard.writeText(txt); toast("Copied ✅"); }
+  catch{
+    const ta = document.createElement("textarea");
+    ta.value = txt; document.body.appendChild(ta);
+    ta.select(); document.execCommand("copy");
+    ta.remove(); toast("Copied ✅");
+  }
+}
+function downloadText(filename, text, mime="text/plain"){
+  const blob = new Blob([text], {type:mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+function nowISO(){ return new Date().toISOString(); }
+let toastTimer=null;
+function toast(msg){
+  let t = $("#__toast");
+  if(!t){
+    t = document.createElement("div");
+    t.id="__toast";
+    t.style.cssText="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.14);color:#fff;padding:10px 12px;border-radius:12px;z-index:9999;font-size:12px;box-shadow:0 10px 25px rgba(0,0,0,.35);";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.display="block";
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.style.display="none", 1400);
+}
+function badge(text, kind="warn"){
+  const s = document.createElement("span");
+  s.className = "badge " + (kind || "warn");
+  s.textContent = text;
+  return s;
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
+
+/* ------- Optional CDNs (auto-loaded when selected) ------- */
+const CDN = {
+  md5: "https://cdnjs.cloudflare.com/ajax/libs/js-md5/0.8.3/md5.min.js",
+  sha3: "https://cdnjs.cloudflare.com/ajax/libs/js-sha3/0.9.3/sha3.min.js",
+  blakejs: "https://cdn.jsdelivr.net/npm/blakejs@1.2.1/blake2b.js",
+  xxhash: "https://cdn.jsdelivr.net/npm/xxhashjs@0.2.2/build/xxhash.min.js"
+};
+function loadScript(src, timeoutMs=7000){
+  return new Promise((resolve,reject)=>{
+    const s = document.createElement("script");
+    s.src = src;
+    let done = false;
+    const timer = setTimeout(()=>{
+      if(done) return;
+      done = true;
+      try{ s.remove(); }catch{}
+      reject(new Error("Timed out loading: " + src));
+    }, timeoutMs);
+
+    s.onload = ()=>{
+      if(done) return;
+      done = true;
+      clearTimeout(timer);
+      resolve(true);
+    };
+    s.onerror = ()=>{
+      if(done) return;
+      done = true;
+      clearTimeout(timer);
+      reject(new Error("Failed to load: " + src));
+    };
+    document.head.appendChild(s);
+  });
+}
+async function ensureLibForAlg(alg){
+  // Only load what we need, when we need it.
+  if(alg==="MD5" && !window.md5) await loadScript(CDN.md5);
+  if((alg==="SHA3-256" || alg==="SHA3-512") && !(window.sha3_256 && window.sha3_512)) await loadScript(CDN.sha3);
+  if((alg==="BLAKE2B-256" || alg==="BLAKE2B-512") && !window.blake2b) await loadScript(CDN.blakejs);
+  if(alg==="XXH64" && !(window.XXH && window.XXH.h64)) await loadScript(CDN.xxhash);
+}
+
+/* ------- Core hashing ------- */
+function textToBytes(txt, enc){
+  if(enc === "utf-16le"){
+    const buf = new ArrayBuffer(txt.length * 2);
+    const view = new Uint16Array(buf);
+    for(let i=0;i<txt.length;i++) view[i] = txt.charCodeAt(i);
+    return new Uint8Array(buf); // practical LE in browsers
+  }
+  return new TextEncoder().encode(txt);
+}
+async function webcryptoDigest(alg, bytes){
+  if(!globalThis.crypto || !crypto.subtle || !crypto.subtle.digest){
+    throw new Error("WebCrypto unavailable (use HTTPS/localhost)");
+  }
+  const buf = await promiseTimeout(crypto.subtle.digest(alg, bytes), 8000, "Digest timed out");
+  return new Uint8Array(buf);
+}
+
+function sha1Bytes(bytes){
+  // bytes: Uint8Array -> Uint8Array(20)
+  const K = [0x5A827999,0x6ED9EBA1,0x8F1BBCDC,0xCA62C1D6];
+  const ml = bytes.length * 8;
+
+  // pad
+  const withOne = new Uint8Array(bytes.length + 1);
+  withOne.set(bytes);
+  withOne[bytes.length] = 0x80;
+
+  let padLen = (64 - ((withOne.length + 8) % 64)) % 64;
+  const padded = new Uint8Array(withOne.length + padLen + 8);
+  padded.set(withOne);
+
+  // length big-endian
+  const dv = new DataView(padded.buffer);
+  const lenPos = padded.length - 8;
+  dv.setUint32(lenPos, Math.floor(ml / 0x100000000), false);
+  dv.setUint32(lenPos + 4, ml >>> 0, false);
+
+  let h0=0x67452301, h1=0xEFCDAB89, h2=0x98BADCFE, h3=0x10325476, h4=0xC3D2E1F0;
+
+  const w = new Uint32Array(80);
+
+  for(let i=0;i<padded.length;i+=64){
+    for(let t=0;t<16;t++){
+      w[t] = dv.getUint32(i + t*4, false);
+    }
+    for(let t=16;t<80;t++){
+      const x = w[t-3]^w[t-8]^w[t-14]^w[t-16];
+      w[t] = ((x<<1) | (x>>>31)) >>> 0;
+    }
+
+    let a=h0,b=h1,c=h2,d=h3,e=h4;
+    for(let t=0;t<80;t++){
+      let f, k;
+      if(t<20){ f = (b & c) | ((~b) & d); k=K[0]; }
+      else if(t<40){ f = b ^ c ^ d; k=K[1]; }
+      else if(t<60){ f = (b & c) | (b & d) | (c & d); k=K[2]; }
+      else { f = b ^ c ^ d; k=K[3]; }
+      const temp = (((a<<5)|(a>>>27)) + f + e + k + w[t]) >>> 0;
+      e=d; d=c; c=((b<<30)|(b>>>2))>>>0; b=a; a=temp;
+    }
+    h0=(h0+a)>>>0; h1=(h1+b)>>>0; h2=(h2+c)>>>0; h3=(h3+d)>>>0; h4=(h4+e)>>>0;
+  }
+
+  const out = new Uint8Array(20);
+  const outdv = new DataView(out.buffer);
+  outdv.setUint32(0,h0,false);
+  outdv.setUint32(4,h1,false);
+  outdv.setUint32(8,h2,false);
+  outdv.setUint32(12,h3,false);
+  outdv.setUint32(16,h4,false);
+  return out;
+}
+
+async function webcryptoHmac(alg, keyStr, bytes){
+  const keyBytes = new TextEncoder().encode(keyStr);
+  const key = await crypto.subtle.importKey("raw", keyBytes, {name:"HMAC", hash:{name:alg}}, false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", key, bytes);
+  return new Uint8Array(sig);
+}
+function hexToBytes(hex){
+  const clean = hex.replace(/[^0-9a-fA-F]/g, "");
+  const out = new Uint8Array(Math.ceil(clean.length/2));
+  for(let i=0;i<out.length;i++) out[i] = parseInt(clean.substr(i*2,2),16);
+  return out;
+}
+async function hashBytes(bytes){
+  const alg = $("#algo").value;
+  if(["MD5","SHA3-256","SHA3-512","BLAKE2B-256","BLAKE2B-512","XXH64"].includes(alg)){
+    await ensureLibForAlg(alg);
+  }
+
+  let outBytes;
+
+  const hmacKey = "";
+  if(alg === "SHA-1" || alg === "SHA-256" || alg === "SHA-512"){
+    if(hmacKey){
+      outBytes = await webcryptoHmac(alg, hmacKey, bytes);
+    }else{
+      try{
+        outBytes = await webcryptoDigest(alg, bytes);
+      }catch(e){
+        // Fallback for SHA-1 to avoid hanging/unavailable WebCrypto contexts
+        if(alg === "SHA-1"){
+          outBytes = sha1Bytes(bytes);
+        }else{
+          throw e;
+        }
+      }
+    }
+  } else if(alg === "MD5"){
+    const hex = window.md5(Array.from(bytes));
+    outBytes = hexToBytes(hex);
+  } else if(alg === "SHA3-256"){
+    const hex = window.sha3_256.update(bytes).hex();
+    outBytes = hexToBytes(hex);
+  } else if(alg === "SHA3-512"){
+    const hex = window.sha3_512.update(bytes).hex();
+    outBytes = hexToBytes(hex);
+  } else if(alg === "BLAKE2B-256"){
+    outBytes = window.blake2b(bytes, null, 32);
+  } else if(alg === "BLAKE2B-512"){
+    outBytes = window.blake2b(bytes, null, 64);
+  } else if(alg === "XXH64"){
+    const seed = 0x0;
+    const h = window.XXH.h64(seed).update(bytes).digest().toString(16).padStart(16,"0");
+    outBytes = hexToBytes(h);
+  } else {
+    throw new Error("Unknown algorithm: " + alg);
+  }
+
+  return { alg, bytes: outBytes, text: toHexLower(outBytes) };
+}
+async function hashFileToHex(file){
+  const maxWarn = 800 * 1024 * 1024;
+  if(file.size > maxWarn) toast("Large file: may be slow / memory heavy");
+  const buf = await file.arrayBuffer();
+  return await hashBytes(new Uint8Array(buf));
+}
+
+if (document.getElementById("hashText")) {
+/* ------- TEXT ------- */
+let lastResults = [];
+$("#hashText").addEventListener("click", async ()=>{
+  try{
+    const txt = $("#textInput").value;
+    const enc = "utf-8";
+    const bytes = textToBytes(txt, enc);
+    const t0 = performance.now();
+    const r = await hashBytes(bytes);
+    const t1 = performance.now();
+
+    $("#textOut").textContent = r.text;
+    showEls(["textResultLabel","textOut","textMeta"]);
+    $("#textMeta").innerHTML = "";
+    $("#textMeta").appendChild(badge(r.alg, "ok"));
+    $("#textMeta").appendChild(badge(`${bytes.length} bytes`, "warn"));
+    $("#textMeta").appendChild(badge(`${(t1-t0).toFixed(1)} ms`, "warn"));
+
+    lastResults = [{type:"text", name:"(text input)", size: bytes.length, alg:r.alg, hash:r.text, when: nowISO()}];
+    const copyBtn = $("#copyTextIn");
+    if(copyBtn && copyBtn.style.display === "none") copyBtn.style.display = "";
+
+  }catch(e){
+    $("#textOut").textContent = "Error: " + (e?.message || e);
+    toast("Hash failed");
+  }
+});
+$("#copyTextIn").addEventListener("click", ()=>copyText($("#textInput").value));
+
+/* ------- FILE ------- */
+$("#hashFile").addEventListener("click", async ()=>{
+  const f = $("#oneFile").files && $("#oneFile").files[0];
+  if(!f){ toast("Choose a file first"); return; }
+  await hashOneFile(f);
+});
+async function hashOneFile(f){
+  try{
+    const t0 = performance.now();
+    const r = await hashFileToHex(f);
+    const t1 = performance.now();
+
+    $("#fileOut").textContent = r.text;
+    showEls(["fileResultLabel","fileOut","fileMeta"]);
+    $("#fileMeta").innerHTML = "";
+    $("#fileMeta").appendChild(badge(f.name, "ok"));
+    $("#fileMeta").appendChild(badge(humanBytes(f.size), "warn"));
+    $("#fileMeta").appendChild(badge(r.alg, "ok"));
+    $("#fileMeta").appendChild(badge(`${(t1-t0).toFixed(1)} ms`, "warn"));
+    lastResults = [{type:"file", name:f.name, path:f.name, size:f.size, alg:r.alg, hash:r.text, when: nowISO()}];
+    const ch = $("#copyFileHash");
+    if(ch) ch.style.display = "";
+  }catch(e){
+    $("#fileOut").textContent = "Error: " + (e?.message || e);
+    toast("Hash failed");
+  }
+}
+$("#copyFileHash").addEventListener("click", ()=>copyText($("#fileOut").textContent.trim()));
+
+/* Drag/drop */
+function toFileList(files){
+  const dt = new DataTransfer();
+  files.forEach(f=>dt.items.add(f));
+  return dt.files;
+}
+function wireDrop(el, onFiles){
+  el.addEventListener("dragover", (e)=>{ e.preventDefault(); el.style.borderColor="rgba(127,211,255,.75)"; });
+  el.addEventListener("dragleave", ()=>{ el.style.borderColor="rgba(127,211,255,.35)"; });
+  el.addEventListener("drop", (e)=>{
+    e.preventDefault();
+    el.style.borderColor="rgba(127,211,255,.35)";
+    const files = Array.from(e.dataTransfer.files || []);
+    if(files.length) onFiles(files);
+  });
+}
+wireDrop($("#dropOne"), (files)=>{
+  $("#oneFile").files = toFileList(files.slice(0,1));
+  toast("File selected");
+});
+wireDrop($("#dropMany"), (files)=>{
+  $("#manyFiles").files = toFileList(files);
+  toast(`${files.length} files selected`);
+});
+
+// Compare drag/drop helpers
+wireDrop($("#dropCmpA"), (files)=>{
+  $("#cmpA").files = toFileList(files.slice(0,1));
+  toast("Selected A");
+});
+wireDrop($("#dropCmpB"), (files)=>{
+  $("#cmpB").files = toFileList(files.slice(0,1));
+  toast("Selected B");
+});
+wireDrop($("#dropDirA"), (files)=>{
+  $("#dirA").files = toFileList(files);
+  toast("Folder A selected");
+});
+wireDrop($("#dropDirB"), (files)=>{
+  $("#dirB").files = toFileList(files);
+  toast("Folder B selected");
+});
+
+// Compare type toggle (files vs folders)
+(function(){
+  const sel = $("#cmpType");
+  const fb = $("#cmpFilesBox");
+  const db = $("#cmpFoldersBox");
+  const reset = ()=>{
+    hideEls(["cmpResultLabel","cmpOut","cmpMeta","diffWrap"], true);
+    const ed = $("#exportDiff"); if(ed) ed.style.display="none";
+  };
+  if(sel){
+    sel.addEventListener("change", ()=>{
+      if(sel.value === "folders"){
+        if(fb) fb.style.display="none";
+        if(db) db.style.display="";
+      }else{
+        if(db) db.style.display="none";
+        if(fb) fb.style.display="";
+      }
+      reset();
+    });
+  }
+})();
+
+
+/* ------- FILES ------- */
+$("#hashFiles").addEventListener("click", async ()=>{
+  const files = Array.from($("#manyFiles").files || []);
+  if(!files.length){ toast("Select files first"); return; }
+  await hashMany(files);
+});
+async function hashMany(files){
+  showEls(["filesTable","filesMeta"]); const tbody = $("#filesTable tbody");
+  const fp = document.querySelector('.panel[data-panel="files"]'); if(fp) fp.classList.add("has-results");
+  tbody.innerHTML = "";
+  const results = [];
+  const t0 = performance.now();
+
+  for(const f of files){
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${escapeHtml(f.name)}</td><td>${humanBytes(f.size)}</td><td class="hashcell">…</td><td class="right"></td>`;
+    tbody.appendChild(tr);
+    try{
+      const r = await hashFileToHex(f);
+      tr.querySelector(".hashcell").textContent = r.text;
+      const btn = document.createElement("button");
+      btn.textContent = "Copy";
+      btn.addEventListener("click", ()=>copyText(r.text));
+      tr.querySelector(".right").appendChild(btn);
+      results.push({type:"file", name:f.name, path:f.name, size:f.size, alg:r.alg, hash:r.text, when: nowISO()});
+    }catch(e){
+      tr.querySelector(".hashcell").textContent = "Error";
+      results.push({type:"file", name:f.name, path:f.name, size:f.size, alg:$("#algo").value, hash:null, error:String(e), when: nowISO()});
+    }
+  }
+  const t1 = performance.now();
+  $("#filesMeta").innerHTML = "";
+  $("#filesMeta").appendChild(badge(`${files.length} files`, "ok"));
+  $("#filesMeta").appendChild(badge($("#algo").value, "ok"));
+  $("#filesMeta").appendChild(badge(`${(t1-t0).toFixed(1)} ms`, "warn"));
+
+  lastResults = results;
+  const ct = $("#copyTable");
+  const em = $("#exportManifest");
+  if(ct) ct.style.display = "";
+  if(em) em.style.display = "";
+}
+
+$("#copyTable").addEventListener("click", ()=>{
+  const rows = [];
+  $$("#filesTable tbody tr").forEach(tr=>{
+    const tds = tr.querySelectorAll("td");
+    rows.push([tds[0]?.textContent||"", tds[1]?.textContent||"", tds[2]?.textContent||""].join("\t"));
+  });
+  copyText(rows.join("\n"));
+});
+$("#exportManifest").addEventListener("click", ()=>{
+  if(!lastResults.length){ toast("No results to export"); return; }
+  const alg = $("#algo").value;
+  const lines = [];
+  lines.push(`; Manifest generated ${nowISO()}`);
+  lines.push(`; Algorithm: ${alg}`);
+  lines.push(`; Format: <hash> <space> <path>`);
+  for(const r of lastResults){ if(r.hash) lines.push(`${r.hash} ${r.path}`); }
+  downloadText(`manifest_${alg.replace(/[^A-Za-z0-9-]/g,"_")}.txt`, lines.join("\n"), "text/plain");
+});
+
+/* ------- COMPARE ------- */
+let lastDiff = null;
+$("#compareFiles").addEventListener("click", async ()=>{
+  const a = $("#cmpA").files && $("#cmpA").files[0];
+  const b = $("#cmpB").files && $("#cmpB").files[0];
+  if(!a || !b){ toast("Select File A and File B"); return; }
+  showEls(["cmpResultLabel","cmpOut","cmpMeta"]); hideEls(["diffWrap"], true); $("#cmpOut").textContent = "Working…";
+  $("#diffTable tbody").innerHTML = "";
+  try{
+    const ra = await hashFileToHex(a);
+    const rb = await hashFileToHex(b);
+    const same = ra.text === rb.text;
+
+    showEls(["cmpResultLabel","cmpOut","cmpMeta"]); hideEls(["diffWrap"], true); $("#cmpOut").textContent =
+      `File A: ${a.name}\n${ra.alg}: ${ra.text}\n\nFile B: ${b.name}\n${rb.alg}: ${rb.text}\n\nResult: ${same ? "MATCH" : "DIFFERENT"}`;
+
+    $("#cmpMeta").innerHTML = "";
+    $("#cmpMeta").appendChild(badge(ra.alg, "ok"));
+    $("#cmpMeta").appendChild(badge(same ? "MATCH" : "DIFFERENT", same ? "ok":"bad"));
+
+    lastDiff = {type:"fileCompare", alg: ra.alg, a:{name:a.name,size:a.size,hash:ra.text}, b:{name:b.name,size:b.size,hash:rb.text}, same, when: nowISO()};
+    const ed = $("#exportDiff");
+    if(ed) ed.style.display = "";
+  }catch(e){
+    showEls(["cmpResultLabel","cmpOut","cmpMeta"]); hideEls(["diffWrap"], true); $("#cmpOut").textContent = "Error: " + (e?.message || e);
+    toast("Compare failed");
+  }
+});
+
+async function hashDirectoryFiles(fileList){
+  const out = {};
+  for(const f of fileList){
+    const rel = f.webkitRelativePath || f.name;
+    try{
+      const r = await hashFileToHex(f);
+      out[rel] = {hash:r.text, size:f.size};
+    }catch(e){
+      out[rel] = {hash:null, size:f.size, error:String(e)};
+    }
+  }
+  return out;
+}
+function renderDiffTable(diffs){
+  const tbody = $("#diffTable tbody");
+  tbody.innerHTML = "";
+  for(const d of diffs){
+    const tr = document.createElement("tr");
+    const cls = d.status === "different" ? "bad" : (d.status === "only-in-A" || d.status === "only-in-B") ? "warn" : "warn";
+    tr.innerHTML = `
+      <td>${escapeHtml(d.path)}</td>
+      <td><span class="badge ${cls}">${escapeHtml(d.status)}</span></td>
+      <td>${escapeHtml(d.a || "")}</td>
+      <td>${escapeHtml(d.b || "")}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+
+$("#compareFolders").addEventListener("click", async ()=>{
+  const filesA = Array.from($("#dirA").files || []);
+  const filesB = Array.from($("#dirB").files || []);
+  if(!filesA.length || !filesB.length){ toast("Select Folder A and Folder B"); return; }
+
+  showEls(["cmpResultLabel","cmpOut","cmpMeta"]); hideEls(["diffWrap"], true); $("#cmpOut").textContent = "Working… (hashing can take time)";
+  $("#diffTable tbody").innerHTML = "";
+  try{
+    const mapA = await hashDirectoryFiles(filesA);
+    const mapB = await hashDirectoryFiles(filesB);
+
+    const allPaths = new Set([...Object.keys(mapA), ...Object.keys(mapB)]);
+    const diffs = [];
+    for(const p of Array.from(allPaths).sort()){
+      const a = mapA[p] || null;
+      const b = mapB[p] || null;
+      let status = "same";
+      if(a && !b) status = "only-in-A";
+      else if(!a && b) status = "only-in-B";
+      else if((a.hash || "") !== (b.hash || "")) status = "different";
+      if(status !== "same"){
+        diffs.push({path:p, status, a:a?a.hash:null, b:b?b.hash:null});
+      }
+    }
+
+    const sameCount = allPaths.size - diffs.length;
+    showEls(["cmpResultLabel","cmpOut","cmpMeta"]); hideEls(["diffWrap"], true); $("#cmpOut").textContent =
+      `Folder compare (${$("#algo").value})\n` +
+      `A files: ${Object.keys(mapA).length}\n` +
+      `B files: ${Object.keys(mapB).length}\n` +
+      `Total unique paths: ${allPaths.size}\n` +
+      `Same: ${sameCount}\n` +
+      `Differences: ${diffs.length}\n\n` +
+      (diffs.length ? "See table below." : "No differences");
+
+    $("#cmpMeta").innerHTML = "";
+    $("#cmpMeta").appendChild(badge($("#algo").value, "ok"));
+    $("#cmpMeta").appendChild(badge(diffs.length ? "DIFFERENCES" : "MATCH", diffs.length ? "bad":"ok"));
+
+    renderDiffTable(diffs);
+
+    showEls(["diffWrap"]);
+
+    lastDiff = {type:"folderCompare", alg: $("#algo").value, when: nowISO(), stats:{
+      aCount:Object.keys(mapA).length, bCount:Object.keys(mapB).length, total: allPaths.size, same:sameCount, diffs: diffs.length
+    }, diffs};
+    const ed = $("#exportDiff");
+    if(ed) ed.style.display = "";
+  }catch(e){
+    showEls(["cmpResultLabel","cmpOut","cmpMeta"]); hideEls(["diffWrap"], true); $("#cmpOut").textContent = "Error: " + (e?.message || e);
+    toast("Compare failed");
+  }
+});
+
+$("#exportDiff").addEventListener("click", ()=>{
+  if(!lastDiff){ toast("No compare results yet"); return; }
+  downloadText(`compare_${lastDiff.type}_${lastDiff.alg.replace(/[^A-Za-z0-9-]/g,"_")}.json`, JSON.stringify(lastDiff, null, 2), "application/json");
+});
+
+/* ------- Button visibility guards ------- */
+(function(){
+  const ct = $("#copyTable");
+  const em = $("#exportManifest");
+  const mf = $("#manyFiles");
+  if(mf){
+    mf.addEventListener("change", ()=>{
+      if(ct) ct.style.display = "none";
+      if(em) em.style.display = "none";
+      hideEls(["filesTable","filesMeta"], true);
+      const fp = document.querySelector('.panel[data-panel="files"]'); if(fp) fp.classList.remove("has-results");
+    });
+  }
+})(); 
+
+
+(function(){
+  const drm = $("#exportDiskManifest");
+  const dr = $("#diskRoot");
+  if(dr){
+    dr.addEventListener("change", ()=>{
+      if(drm) drm.style.display = "none";
+      hideEls(["diskResultLabel","diskOut","diskTable","diskMeta"], true);
+    });
+  }
+})();
+
+
+(function(){
+  const ed = $("#exportDiff");
+  const a = $("#dirA");
+  const b = $("#dirB");
+  const fa = $("#cmpA");
+  const fb = $("#cmpB");
+  const hide = ()=>{ if(ed) ed.style.display = "none"; };
+  if(a) a.addEventListener("change", hide);
+  if(b) b.addEventListener("change", hide);
+  if(fa) fa.addEventListener("change", hide);
+  if(fb) fb.addEventListener("change", hide);
+})();
+
+
+(function(){
+  const ch = $("#copyFileHash");
+  const of = $("#oneFile");
+  if(of){
+    of.addEventListener("change", ()=>{
+      if(ch) ch.style.display = "none";
+      hideEls(["fileResultLabel","fileOut","fileMeta"], true);
+    });
+  }
+})();
+
+
+(function(){
+  const ti = $("#textInput");
+  if(ti){
+    ti.addEventListener("input", ()=>{
+      hideEls(["textResultLabel","textOut","textMeta"], true);
+      const cb = $("#copyTextIn");
+      if(cb) cb.style.display = "none";
+    });
+  }
+})();
+
+/* ------- Init ------- */
+setTab("text");
+$("#textInput").addEventListener("keydown", (e)=>{
+  if((e.ctrlKey || e.metaKey) && e.key === "Enter") $("#hashText").click();
+});
+
+}
+</script>
+
+
+<script>
+(function(){
+  function getActiveTab(){
+    const btn = document.querySelector('.tabbtn[aria-selected="true"]');
+    return btn ? btn.dataset.tab : "text";
+  }
+
+  function lockCardsToMaxHeight(){
+    const leftCard = document.querySelector('#hashing-tool .grid > .card:nth-child(1)');
+    const rightCard = document.querySelector('#hashing-tool .grid > .card:nth-child(2)');
+    if(!leftCard || !rightCard || typeof window.setTab !== 'function') return;
+
+    const tabs = ["text","file","files","compare","disk"];
+    const active = getActiveTab();
+
+    // reset
+    leftCard.style.minHeight = "";
+    rightCard.style.minHeight = "";
+
+    let maxH = 0;
+
+    // Measure each mode by temporarily switching panels
+    tabs.forEach(t=>{
+      window.setTab(t);
+      const h = rightCard.offsetHeight;
+      if(h > maxH) maxH = h;
+    });
+
+    // Restore the user's active tab
+    window.setTab(active);
+
+    // Lock both cards to the max height (Compare is typically the max)
+    if(maxH > 0){
+      leftCard.style.minHeight = maxH + "px";
+      rightCard.style.minHeight = maxH + "px";
+    }
+  }
+
+  function run(){
+    // allow layout to settle first
+    requestAnimationFrame(()=>requestAnimationFrame(lockCardsToMaxHeight));
+  }
+
+  window.addEventListener('load', run);
+  window.addEventListener('resize', run);
+})();
+</script>
+
+
+
+<script>
+(function(){
+  function setName(inputId, labelId, emptyText, kind){
+    const inp = document.getElementById(inputId);
+    const lab = document.getElementById(labelId);
+    if(!inp || !lab) return;
+
+    const files = inp.files ? Array.from(inp.files) : [];
+    if(!files.length){
+      lab.textContent = emptyText;
+      return;
+    }
+
+    if(kind === "folder"){
+      const first = files[0];
+      const rel = first.webkitRelativePath || first.name || "";
+      const top = rel.split("/")[0] || rel;
+      lab.textContent = top ? (top + " (folder)") : (files.length + " items");
+      return;
+    }
+
+    if(kind === "multi"){
+      lab.textContent = files.length === 1 ? (files[0].name || "1 file") : (files.length + " files selected");
+      return;
+    }
+
+    lab.textContent = files[0].name || (files.length + " file(s)");
+  }
+
+  function bind(inputId, labelId, emptyText, kind){
+    const inp = document.getElementById(inputId);
+    if(!inp) return;
+    inp.addEventListener("change", ()=>setName(inputId,labelId,emptyText,kind));
+    // set initial
+    setName(inputId,labelId,emptyText,kind);
+  }
+
+  // File inputs
+  bind("oneFile","oneFileName","No file chosen","single");
+  bind("manyFiles","manyFilesName","No files chosen","multi");
+  bind("cmpA","cmpAName","No file chosen","single");
+  bind("cmpB","cmpBName","No file chosen","single");
+
+  // Folder inputs
+  bind("dirA","dirAName","No folder chosen","folder");
+  bind("dirB","dirBName","No folder chosen","folder");
+  bind("diskRoot","diskRootName","No folder chosen","folder");
+
+  // After drag-drop into drop zones, update labels (wireDrop sets .files programmatically)
+  const dropIds = [
+    ["dropOne","oneFile","oneFileName","No file chosen","single"],
+    ["dropMany","manyFiles","manyFilesName","No files chosen","multi"],
+    ["dropCmpA","cmpA","cmpAName","No file chosen","single"],
+    ["dropCmpB","cmpB","cmpBName","No file chosen","single"],
+    ["dropDirA","dirA","dirAName","No folder chosen","folder"],
+    ["dropDirB","dirB","dirBName","No folder chosen","folder"],
+    ["dropDiskRoot","diskRoot","diskRootName","No folder chosen","folder"]
+  ];
+  dropIds.forEach(([dropId,inputId,labelId,empty,kind])=>{
+    const d = document.getElementById(dropId);
+    if(!d) return;
+    d.addEventListener("drop", ()=>setTimeout(()=>setName(inputId,labelId,empty,kind), 0));
+  });
+
+  // Disk mode: keep empty table hidden until results exist
+  const diskRoot = document.getElementById("diskRoot");
+  if(diskRoot){
+    diskRoot.addEventListener("change", ()=>{ if(diskPanel) diskPanel.classList.remove("has-results"); });
+  }
+  const hashDiskBtn = document.getElementById("hashDisk");
+  if(hashDiskBtn){
+    hashDiskBtn.addEventListener("click", ()=>{ if(diskPanel) diskPanel.classList.add("has-results"); });
+  }
+})();
+</script>
+
+
+<script>
+(function(){
+  // Strip emojis from toast messages (e.g., "Copied ✅" -> "Copied")
+  if(typeof window.toast === "function"){
+    const _toast = window.toast;
+    window.toast = function(msg){
+      try{
+        msg = String(msg).replace(/[✅✔️☑️]/g, "").replace(/\s{2,}/g, " ").trim();
+      }catch(e){}
+      return _toast(msg);
+    };
+  }
+
+  // Add a timeout to dynamic CDN loads so compare/file hashing can't get stuck on "Working…"
+  if(typeof window.loadScript === "function"){
+    const _loadScript = window.loadScript;
+    window.loadScript = function(src){
+      return Promise.race([
+        _loadScript(src),
+        new Promise((_, reject)=>setTimeout(()=>reject(new Error("Timed out loading library: " + src)), 8000))
+      ]);
+    };
+  }
+})();
+</script>
+
+
+<script>
+/* --- Patch: Compare (files + folders) robust hashing like V22 --- */
+(function(){
+  const btnFiles = document.getElementById("compareFiles");
+  const btnFolders = document.getElementById("compareFolders");
+  const algoSel = document.getElementById("algo");
+  const out = document.getElementById("cmpOut");
+  const label = document.getElementById("cmpResultLabel");
+  const meta = document.getElementById("cmpMeta");
+
+  if(!btnFiles || !out || !label || !meta) return;
+
+  const show = (id)=>{ const el=document.getElementById(id); if(el) el.classList.remove("hidden-until"); };
+  const hide = (id)=>{ const el=document.getElementById(id); if(el) el.classList.add("hidden-until"); };
+
+  function toHex(u8){
+    return Array.from(u8).map(b=>b.toString(16).padStart(2,"0")).join("");
+  }
+
+  async function safeDigestBytes(alg, bytes){
+    // Limit to WebCrypto algs to prevent hangs caused by optional library loads.
+    const useAlg = ["SHA-1","SHA-256","SHA-512"].includes(alg) ? alg : "SHA-256";
+    try{
+      if(!globalThis.crypto || !crypto.subtle || !crypto.subtle.digest){
+        throw new Error("WebCrypto unavailable (use HTTPS/localhost)");
+      }
+      const buf = await promiseTimeout(crypto.subtle.digest(useAlg, bytes), 12000, "Digest timed out");
+      return {alg: useAlg, bytes: new Uint8Array(buf)};
+    }catch(e){
+      // Fallback: SHA-1 pure JS if available
+      if(useAlg === "SHA-1" && typeof sha1Bytes === "function"){
+        return {alg: "SHA-1", bytes: sha1Bytes(new Uint8Array(bytes))};
+      }
+      throw e;
+    }
+  }
+
+  async function hashFileWebCrypto(file, requestedAlg){
+    const alg = ["SHA-1","SHA-256","SHA-512"].includes(requestedAlg) ? requestedAlg : "SHA-256";
+    const buf = await file.arrayBuffer();
+    const r = await safeDigestBytes(alg, buf);
+    return {alg: r.alg, text: toHex(r.bytes)};
+  }
+
+  function normalizeAlgSelection(){
+    const requested = (algoSel && algoSel.value) || "SHA-256";
+    if(!["SHA-1","SHA-256","SHA-512"].includes(requested)){
+      if(algoSel) algoSel.value = "SHA-256";
+      return "SHA-256";
+    }
+    return requested;
+  }
+
+  // FILE vs FILE
+  btnFiles.addEventListener("click", function(e){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    (async ()=>{
+      const a = document.getElementById("cmpA")?.files?.[0];
+      const b = document.getElementById("cmpB")?.files?.[0];
+      if(!a || !b){ toast("Select Item A and Item B"); return; }
+
+      const alg = normalizeAlgSelection();
+
+      show("cmpResultLabel"); show("cmpOut"); show("cmpMeta"); hide("diffWrap");
+      out.textContent = "Working…";
+      const tbody = document.querySelector("#diffTable tbody"); if(tbody) tbody.innerHTML = "";
+
+      try{
+        const ra = await hashFileWebCrypto(a, alg);
+        const rb = await hashFileWebCrypto(b, alg);
+        const same = ra.text === rb.text;
+
+        out.textContent =
+          `Item A: ${a.name}\n${ra.alg}: ${ra.text}\n\nItem B: ${b.name}\n${rb.alg}: ${rb.text}\n\nResult: ${same ? "MATCH" : "DIFFERENT"}`;
+
+        meta.innerHTML = "";
+        meta.appendChild(badge(ra.alg, "ok"));
+        meta.appendChild(badge(same ? "MATCH" : "DIFFERENT", same ? "ok":"bad"));
+
+        // keep existing exportDiff logic if present
+        try{
+          lastDiff = {type:"fileCompare", alg: ra.alg, a:{name:a.name,size:a.size,hash:ra.text}, b:{name:b.name,size:b.size,hash:rb.text}, same, when: nowISO()};
+          const ed = document.getElementById("exportDiff");
+          if(ed) ed.style.display = "";
+        }catch(_){}
+      }catch(err){
+        out.textContent = "Error: " + (err?.message || err);
+        meta.innerHTML = "";
+        toast("Compare failed");
+      }
+    })();
+  }, true);
+
+  // FOLDER vs FOLDER (or multi-file lists)
+  if(btnFolders){
+    btnFolders.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      (async ()=>{
+        const filesA = Array.from(document.getElementById("dirA")?.files || []);
+        const filesB = Array.from(document.getElementById("dirB")?.files || []);
+        if(!filesA.length || !filesB.length){ toast("Select Item A and Item B"); return; }
+
+        const alg = normalizeAlgSelection();
+
+        show("cmpResultLabel"); show("cmpOut"); show("cmpMeta"); show("diffWrap");
+        out.textContent = "Working…";
+        const tbody = document.querySelector("#diffTable tbody"); if(tbody) tbody.innerHTML = "";
+
+        const mapA = {};
+        const mapB = {};
+
+        async function hashList(list, map){
+          for(const f of list){
+            const rel = f.webkitRelativePath || f.name;
+            try{
+              const r = await hashFileWebCrypto(f, alg);
+              map[rel] = {hash:r.text, size:f.size};
+            }catch(ex){
+              map[rel] = {hash:null, size:f.size, error:String(ex?.message || ex)};
+            }
+          }
+        }
+
+        try{
+          await hashList(filesA, mapA);
+          await hashList(filesB, mapB);
+
+          // build diffs
+          const all = new Set([...Object.keys(mapA), ...Object.keys(mapB)]);
+          const diffs = [];
+          for(const p of Array.from(all).sort()){
+            const a = mapA[p], b = mapB[p];
+            if(a && !b){
+              diffs.push({path:p, status:"only-in-A", a:a.hash || "", b:""});
+            }else if(!a && b){
+              diffs.push({path:p, status:"only-in-B", a:"", b:b.hash || ""});
+            }else{
+              const ah = a.hash, bh = b.hash;
+              if(ah && bh && ah === bh){
+                // omit "same" rows like QuickHash; keep only differences/missing
+                continue;
+              }
+              diffs.push({path:p, status:(ah && bh) ? "different" : "error", a:ah || "", b:bh || ""});
+            }
+          }
+
+          if(!diffs.length){
+            out.textContent = `Result: MATCH (all ${Object.keys(mapA).length} items)`;
+            meta.innerHTML = "";
+            meta.appendChild(badge(alg, "ok"));
+            meta.appendChild(badge("MATCH", "ok"));
+            hide("diffWrap");
+          }else{
+            out.textContent = `Result: DIFFERENT (${diffs.length} differences)`;
+            meta.innerHTML = "";
+            meta.appendChild(badge(alg, "ok"));
+            meta.appendChild(badge("DIFFERENT", "bad"));
+            if(typeof renderDiffTable === "function") renderDiffTable(diffs);
+          }
+
+          try{
+            lastDiff = {type:"folderCompare", alg, diffs, when: nowISO()};
+            const ed = document.getElementById("exportDiff");
+            if(ed) ed.style.display = "";
+          }catch(_){}
+        }catch(err){
+          out.textContent = "Error: " + (err?.message || err);
+          meta.innerHTML = "";
+          toast("Compare failed");
+        }
+      })();
+    }, true);
+  }
+})();
+</script>
+
+
+
+<script>
+/* ===== Steganography Toolkit =====
+   Uses:
+   - Text: zero-width encoding appended to plaintext
+   - Image: LSB embedding (PNG output)
+   - Video/File: EOF append marker (best-effort)
+   NOTE: Client-side only.
+*/
+const $s = (sel)=>document.querySelector(sel);
+const te = new TextEncoder();
+const td = new TextDecoder();
+
+/* ---- Toast / copyText come from the site template; fallbacks if missing ---- */
+function _toast(msg){
+  if(typeof toast === "function") toast(msg);
+  else alert(msg);
+}
+async function _copyText(txt){
+  if(typeof copyText === "function") return copyText(txt);
+  try{ await navigator.clipboard.writeText(txt); _toast("Copied ✅"); }
+  catch{ _toast("Copy failed"); }
+}
+function downloadBlob(filename, blob){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1200);
+}
+
+/* ---------- Binary EOF append ---------- */
+const MARKER = te.encode("::STEGO::V1::");
+function u32(n){
+  const b = new Uint8Array(4);
+  b[0]=(n>>>24)&255; b[1]=(n>>>16)&255; b[2]=(n>>>8)&255; b[3]=n&255;
+  return b;
+}
+function u32read(b,o){
+  return ((b[o]<<24)>>>0) | (b[o+1]<<16) | (b[o+2]<<8) | (b[o+3]);
+}
+function concatBytes(...parts){
+  let total=0; for(const p of parts) total+=p.length;
+  const out=new Uint8Array(total); let off=0;
+  for(const p of parts){ out.set(p,off); off+=p.length; }
+  return out;
+}
+function findMarkerFromEnd(bytes){
+  for(let i=bytes.length-MARKER.length;i>=0;i--){
+    let ok=true;
+    for(let j=0;j<MARKER.length;j++){ if(bytes[i+j]!==MARKER[j]){ ok=false; break; } }
+    if(ok) return i;
+  }
+  return -1;
+}
+async function eofHide(file, msg){
+  const payload = te.encode(msg);
+  const len = u32(payload.length);
+  const orig = new Uint8Array(await file.arrayBuffer());
+  return concatBytes(orig, MARKER, len, payload);
+}
+async function eofReveal(file){
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const idx = findMarkerFromEnd(bytes);
+  if(idx < 0) return {found:false, message:"", clean:null};
+  const lenOff = idx + MARKER.length;
+  if(lenOff + 4 > bytes.length) return {found:false, message:"", clean:null};
+  const len = u32read(bytes, lenOff);
+  const msgOff = lenOff + 4;
+  if(msgOff + len > bytes.length) return {found:false, message:"", clean:null};
+  const payload = bytes.slice(msgOff, msgOff + len);
+  return {found:true, message: td.decode(payload), clean: bytes.slice(0, idx)};
+}
+
+/* ---------- Zero-width text ---------- */
+const ZW0 = "\u200B"; // 0
+const ZW1 = "\u200C"; // 1
+function zwEncode(secret){
+  const data = te.encode(secret);
+  let bits = "";
+  // 32-bit length then bytes
+  for(let i=31;i>=0;i--) bits += ((data.length>>i)&1) ? "1":"0";
+  for(const byte of data){
+    for(let i=7;i>=0;i--) bits += ((byte>>i)&1) ? "1":"0";
+  }
+  let out = "";
+  for(const b of bits) out += (b==="1" ? ZW1 : ZW0);
+  return out;
+}
+function zwDecodeFromEnd(text){
+  const run = (text.match(/[\u200B\u200C]+$/) || [""])[0];
+  if(!run) return {found:false, message:"", clean:text};
+  const bits = Array.from(run).map(c=>c===ZW1?"1":"0").join("");
+  if(bits.length < 32) return {found:false, message:"", clean:text};
+  let len=0;
+  for(let i=0;i<32;i++) len = (len<<1) | (bits[i]==="1"?1:0);
+  const need = 32 + len*8;
+  if(len<=0 || need > bits.length) return {found:false, message:"", clean:text};
+  const out = new Uint8Array(len);
+  let k=32;
+  for(let i=0;i<len;i++){
+    let v=0;
+    for(let j=0;j<8;j++) v = (v<<1) | (bits[k++]==="1"?1:0);
+    out[i]=v;
+  }
+  return {found:true, message: td.decode(out), clean: text.slice(0, text.length - run.length)};
+}
+
+/* ---------- Image LSB ---------- */
+function lsbWrite(imgData, msg){
+  const data = imgData.data;
+  const payload = te.encode(msg);
+  const len = payload.length;
+  const totalBits = 32 + len*8;
+  const capacity = Math.floor((data.length/4)*3);
+  if(totalBits > capacity) throw new Error("Message too large for this image.");
+  const bits=[];
+  for(let i=31;i>=0;i--) bits.push((len>>i)&1);
+  for(const byte of payload) for(let i=7;i>=0;i--) bits.push((byte>>i)&1);
+  let bi=0;
+  for(let p=0;p<data.length && bi<bits.length;p+=4){
+    for(let c=0;c<3 && bi<bits.length;c++){
+      const idx=p+c;
+      data[idx]=(data[idx]&0xFE)|bits[bi++];
+    }
+  }
+}
+function lsbRead(imgData){
+  const data = imgData.data;
+  const bits=[];
+  for(let p=0;p<data.length;p+=4){
+    bits.push(data[p]&1, data[p+1]&1, data[p+2]&1);
+  }
+  if(bits.length < 32) return {found:false, message:""};
+  let len=0;
+  for(let i=0;i<32;i++) len=(len<<1)|bits[i];
+  const needed = 32 + len*8;
+  if(len<=0 || needed>bits.length) return {found:false, message:""};
+  const out=new Uint8Array(len);
+  let k=32;
+  for(let i=0;i<len;i++){
+    let v=0;
+    for(let j=0;j<8;j++) v=(v<<1)|bits[k++];
+    out[i]=v;
+  }
+  return {found:true, message: td.decode(out)};
+}
+async function imageToCanvas(file){
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.decoding = "async";
+  img.src = url;
+  await img.decode();
+
+  const c = document.createElement("canvas");
+  c.width = img.naturalWidth;
+  c.height = img.naturalHeight;
+
+  // IMPORTANT: disable alpha + force opaque background to avoid LSB corruption
+  const ctx = c.getContext("2d", {willReadFrequently:true, alpha:false});
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0,0,c.width,c.height);
+  ctx.drawImage(img,0,0);
+
+  URL.revokeObjectURL(url);
+  return {canvas:c, ctx};
+}
+async function imageHide(file, msg){
+  const {canvas, ctx} = await imageToCanvas(file);
+  const id = ctx.getImageData(0,0,canvas.width,canvas.height);
+  lsbWrite(id, msg);
+  ctx.putImageData(id,0,0);
+  const blob = await new Promise(res=>canvas.toBlob(res,"image/png"));
+  return blob;
+}
+async function imageReveal(file){
+  const {canvas, ctx} = await imageToCanvas(file);
+  const id = ctx.getImageData(0,0,canvas.width,canvas.height);
+  return lsbRead(id);
+}
+async function imageStripBestEffort(file){
+  const {canvas, ctx} = await imageToCanvas(file);
+  const id = ctx.getImageData(0,0,canvas.width,canvas.height);
+  const data = id.data;
+  // clear first 32 bits (length) -> makes message "not found"
+  let cleared=0;
+  for(let p=0;p<data.length && cleared<32;p+=4){
+    for(let c=0;c<3 && cleared<32;c++){
+      data[p+c] = (data[p+c] & 0xFE);
+      cleared++;
+    }
+  }
+  ctx.putImageData(id,0,0);
+  const blob = await new Promise(res=>canvas.toBlob(res,"image/png"));
+  return blob;
+}
+
+/* ---------- Clipboard copy helpers ---------- */
+async function copyImageBlob(blob){
+  try{
+    if(navigator.clipboard && window.ClipboardItem){
+      await navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})]);
+      _toast("Copied ✅");
+      return;
+    }
+  }catch(e){}
+  // fallback: copy data URL as text
+  const dataUrl = await new Promise((res)=>{
+    const fr = new FileReader();
+    fr.onload = ()=>res(fr.result);
+    fr.readAsDataURL(blob);
+  });
+  await _copyText(String(dataUrl));
+  _toast("Copied as data URL ✅");
+}
+async function copyBlobAsBase64(blob){
+  const dataUrl = await new Promise((res)=>{
+    const fr = new FileReader();
+    fr.onload = ()=>res(fr.result);
+    fr.readAsDataURL(blob);
+  });
+  await _copyText(String(dataUrl));
+  _toast("Copied ✅");
+}
+
+/* ---------- UI ---------- */
+const modeBtns = [...document.querySelectorAll('#stego-tool .tabbtn')];
+let mode = "text";
+let action = null;
+
+let outBlob = null;
+let outName = null;
+
+function setMode(newMode){
+  mode = newMode;
+  modeBtns.forEach(b=>{
+    const sel = b.dataset.tab === mode;
+    b.classList.toggle("active", sel);
+    b.setAttribute("aria-selected", sel ? "true":"false");
+  });
+  $s("#panelTitle").textContent = mode.charAt(0).toUpperCase()+mode.slice(1)+" steganography";
+
+  // Copy button only for Text mode
+  const cr = $s("#copyRevealOut");
+  if(cr) cr.style.display = (mode==="text") ? "inline-flex" : "none";
+
+  // mode-specific hints and field visibility
+  const isText = (mode==="text");
+  $s("#hideCarrierBlock").style.display = isText ? "none":"block";
+  $s("#textHideFields").style.display = isText ? "block":"none";
+  $s("#fileHideFields").style.display = isText ? "none":"block";
+
+  $s("#textRevealBlock").style.display = isText ? "block":"none";
+  $s("#revealCarrierBlock").style.display = isText ? "none":"block";
+
+  $s("#textStripBlock").style.display = isText ? "block":"none";
+  $s("#stripCarrierBlock").style.display = isText ? "none":"block";
+
+  // update carrier help
+  const hideHelp = $s("#hideCarrierHelp");
+  if(hideHelp){
+    if(mode==="image") hideHelp.textContent = "Choose an image carrier. Output will be PNG.";
+    else if(mode==="video") hideHelp.textContent = "Choose a video carrier.";
+    else if(mode==="file") hideHelp.textContent = "Choose a file carrier (PDF/DOCX/XLSX/etc).";
+    else hideHelp.textContent = "Choose a carrier file.";
+  }
+
+  // reset action and panels
+  setAction(null);
+}
+
+function setAction(newAction){
+  action = newAction;
+  $s("#actHide").classList.toggle("active", action==="hide");
+  $s("#actReveal").classList.toggle("active", action==="reveal");
+  $s("#actStrip").classList.toggle("active", action==="strip");
+
+  document.querySelectorAll('#stego-tool .panel').forEach(p=>p.style.display="none");
+  if(action){
+    const p = document.querySelector(`#stego-tool .panel[data-panel="${action}"]`);
+    if(p) p.style.display="block";
+  }
+
+  // reset outputs
+  outBlob = null; outName = null;
+  hideEl("#outTextWrap", true);
+  hideEl("#outImageWrap", true);
+  hideEl("#outFileWrap", true);
+  hideEl("#revealOutWrap", true);
+  hideEl("#stripOutTextWrap", true);
+  hideEl("#stripOutFileWrap", true);
+
+  // reset inputs and buttons
+  $s("#hideCarrier").value="";
+  $s("#hideCarrierName").textContent="No file chosen";
+  $s("#hideMessage").value=""; $s("#hideMessage").disabled=true;
+  $s("#textPlain").value=""; $s("#textSecret").value="";
+  $s("#doHide").disabled=true;
+
+  $s("#revealCarrier").value=""; $s("#revealCarrierName").textContent="No file chosen";
+  $s("#textStegoIn").value="";
+  $s("#doReveal").disabled=true;
+  $s("#revealOut").value="";
+
+  $s("#stripCarrier").value=""; $s("#stripCarrierName").textContent="No file chosen";
+  $s("#textStripIn").value="";
+  $s("#doStrip").disabled=true;
+  $s("#stripOutText").value="";
+}
+
+function hideEl(sel, hide){
+  const el = $s(sel);
+  if(!el) return;
+  el.classList.toggle("hidden-until", !!hide);
+}
+
+function selectedFile(id){
+  const el = $s(id);
+  return el && el.files && el.files[0] ? el.files[0] : null;
+}
+function updateFileName(inputSel, nameSel){
+  const f = selectedFile(inputSel);
+  $s(nameSel).textContent = f ? f.name : "No file chosen";
+}
+
+/* Enable logic */
+function refreshHideReady(){
+  if(action !== "hide") return;
+  if(mode==="text"){
+    const ok = $s("#textPlain").value.trim().length>0 && $s("#textSecret").value.trim().length>0;
+    $s("#doHide").disabled = !ok;
+    return;
+  }
+  const f = selectedFile("#hideCarrier");
+  const hasMsg = $s("#hideMessage").value.trim().length>0;
+  $s("#hideMessage").disabled = !f;
+  $s("#doHide").disabled = !(f && hasMsg);
+}
+function refreshRevealReady(){
+  if(action !== "reveal") return;
+  if(mode==="text"){
+    $s("#doReveal").disabled = !($s("#textStegoIn").value.trim().length>0);
+    return;
+  }
+  $s("#doReveal").disabled = !selectedFile("#revealCarrier");
+}
+function refreshStripReady(){
+  if(action !== "strip") return;
+  if(mode==="text"){
+    $s("#doStrip").disabled = !($s("#textStripIn").value.trim().length>0);
+    return;
+  }
+  $s("#doStrip").disabled = !selectedFile("#stripCarrier");
+}
+
+/* Wire up */
+modeBtns.forEach(b=>b.addEventListener("click", ()=>setMode(b.dataset.tab)));
+
+$s("#actHide").addEventListener("click", ()=>{ setAction("hide"); refreshHideReady(); });
+$s("#actReveal").addEventListener("click", ()=>{ setAction("reveal"); refreshRevealReady(); });
+$s("#actStrip").addEventListener("click", ()=>{ setAction("strip"); refreshStripReady(); });
+
+$s("#hideCarrier").addEventListener("change", ()=>{ updateFileName("#hideCarrier","#hideCarrierName"); refreshHideReady(); });
+$s("#revealCarrier").addEventListener("change", ()=>{ updateFileName("#revealCarrier","#revealCarrierName"); refreshRevealReady(); hideEl("#revealOutWrap", true); });
+$s("#stripCarrier").addEventListener("change", ()=>{ updateFileName("#stripCarrier","#stripCarrierName"); refreshStripReady(); });
+
+$s("#hideMessage").addEventListener("input", refreshHideReady);
+$s("#textPlain").addEventListener("input", refreshHideReady);
+$s("#textSecret").addEventListener("input", refreshHideReady);
+$s("#textStegoIn").addEventListener("input", refreshRevealReady);
+$s("#textStripIn").addEventListener("input", refreshStripReady);
+
+/* Actions: Hide */
+$s("#doHide").addEventListener("click", async ()=>{
+  try{
+    if(mode==="text"){
+      const plain = $s("#textPlain").value;
+      const secret = $s("#textSecret").value;
+      const stego = plain + "\n" + zwEncode(secret);
+      $s("#outText").value = stego;
+      hideEl("#outTextWrap", false);
+      outBlob = new Blob([stego], {type:"text/plain;charset=utf-8"});
+      outName = "text";
+      _toast("Done ✅");
+      return;
+    }
+
+    const f = selectedFile("#hideCarrier");
+    const msg = $s("#hideMessage").value;
+
+    if(mode==="image"){
+      const blob = await imageHide(f, msg);
+      outBlob = blob;
+      outName = f.name.replace(/\.[^.]+$/, ".png");
+      $s("#outImage").src = URL.createObjectURL(blob);
+      hideEl("#outImageWrap", false);
+
+      // Self-test: immediately try to decode what we just embedded
+      try{
+        const testFile = new File([blob], outName, {type:"image/png"});
+        const chk = await imageReveal(testFile);
+        if(!chk.found){
+          _toast("Warning: embedded image could not be verified. Make sure you download PNG and re-upload it.");
+        } else {
+          _toast("Done ✅");
+        }
+      }catch(e){
+        _toast("Done ✅");
+      }
+      return;
+    }
+
+    // video/file -> EOF append
+    const outBytes = await eofHide(f, msg);
+    outBlob = new Blob([outBytes], {type:"application/octet-stream"});
+    const ext = (f.name.match(/\.[^.]+$/)||[""])[0];
+    outName = f.name;
+    $s("#outFileNote").textContent = "Output ready";
+    hideEl("#outFileWrap", false);
+    _toast("Done ✅");
+  }catch(e){
+    _toast(String(e.message||e));
+  }
+});
+
+/* Output buttons (hide) */
+$s("#copyOutText").addEventListener("click", async ()=>{ await _copyText($s("#outText").value); });
+$s("#downloadOutText").addEventListener("click", ()=>{
+  if(!outBlob) return;
+  downloadBlob(outName || "output.txt", outBlob);
+});
+
+$s("#downloadOutFile").addEventListener("click", ()=>{
+  if(!outBlob) return;
+  downloadBlob(outName || "output.bin", outBlob);
+});
+$s("#downloadOutFile2").addEventListener("click", ()=>{
+  if(!outBlob) return;
+  downloadBlob(outName || "output.bin", outBlob);
+});
+
+/* Reveal */
+$s("#doReveal").addEventListener("click", async ()=>{
+  try{
+    let msg = "";
+    if(mode==="text"){
+      const input = $s("#textStegoIn").value;
+      const res = zwDecodeFromEnd(input);
+      msg = res.found ? res.message : "No hidden message found.";
+    }else if(mode==="image"){
+      const f = selectedFile("#revealCarrier");
+      const res = await imageReveal(f);
+      if(res.found){
+        msg = res.message;
+      } else {
+        const r2 = await eofReveal(f);
+        msg = r2.found ? r2.message : "No hidden message found.";
+      }
+    }else{
+      const f = selectedFile("#revealCarrier");
+      const res = await eofReveal(f);
+      msg = res.found ? res.message : "No hidden message found.";
+    }
+    $s("#revealOut").value = msg;
+    hideEl("#revealOutWrap", false);
+    _toast("Done ✅");
+  }catch(e){
+    $s("#revealOut").value = "Error: " + String(e.message||e);
+    hideEl("#revealOutWrap", false);
+  }
+});
+$s("#copyRevealOut").addEventListener("click", async ()=>{ await _copyText($s("#revealOut").value); });
+
+/* Strip */
+$s("#doStrip").addEventListener("click", async ()=>{
+  try{
+    if(mode==="text"){
+      const input = $s("#textStripIn").value;
+      const res = zwDecodeFromEnd(input);
+      const clean = res.clean;
+      $s("#stripOutText").value = clean;
+      hideEl("#stripOutTextWrap", false);
+      outBlob = new Blob([clean], {type:"text/plain;charset=utf-8"});
+      outName = "text";
+      _toast("Done ✅");
+      return;
+    }
+
+    const f = selectedFile("#stripCarrier");
+
+    if(mode==="image"){
+      // If the file has EOF-appended stego, remove it exactly (keeps original file type/name)
+      const r2 = await eofReveal(f);
+      if(r2.found && r2.clean){
+        outBlob = new Blob([r2.clean], {type:"application/octet-stream"});
+        outName = f.name;
+        
+        hideEl("#stripOutFileWrap", false);
+        _toast("Done ✅");
+        return;
+      }
+      // Otherwise, best-effort LSB clear and output PNG
+      const blob = await imageStripBestEffort(f);
+      outBlob = blob;
+      outName = f.name.replace(/\.[^.]+$/, ".png");
+      
+      hideEl("#stripOutFileWrap", false);
+      _toast("Done ✅");
+      return;
+    }
+
+    // video/file EOF strip
+    const res = await eofReveal(f);
+    const cleanBytes = res.found && res.clean ? res.clean : new Uint8Array(await f.arrayBuffer());
+    outBlob = new Blob([cleanBytes], {type:"application/octet-stream"});
+    const ext = (f.name.match(/\.[^.]+$/)||[""])[0];
+    outName = f.name;
+    $s("#stripFileNote").textContent = res.found ? "Removed hidden data ("+outName+")." : "No hidden data found ("+outName+").";
+    hideEl("#stripOutFileWrap", false);
+    _toast("Done ✅");
+  }catch(e){
+    _toast(String(e.message||e));
+  }
+});
+
+$s("#copyStripOut").addEventListener("click", async ()=>{ await _copyText($s("#stripOutText").value); });
+$s("#downloadStripText").addEventListener("click", ()=>{ if(outBlob) downloadBlob(outName || "output.txt", outBlob); });
+
+$s("#downloadStripFile").addEventListener("click", ()=>{ if(outBlob) downloadBlob(outName || "output.bin", outBlob); });
+
+/* Init */
+setMode("text");
+</script>
+
+
+<script>
+(function(){
+  const year=document.getElementById("year");
+  if(year) year.textContent=new Date().getFullYear();
+})();
+</script>
+
+<script src="../../Assets/site-shell.js"></script>
+</body>
+</html>
