@@ -1,0 +1,55 @@
+name: Build Teleprompter Desktop
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "desktop/teleprompter/**"
+      - ".github/workflows/build-teleprompter-desktop.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: desktop/teleprompter
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Windows installer
+        run: npm run dist
+
+      - name: Move release tag
+        shell: pwsh
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -f teleprompter-desktop
+          git push origin teleprompter-desktop --force
+
+      - name: Publish installer
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: teleprompter-desktop
+          name: Teleprompter Desktop
+          body: |
+            Windows teleprompter with click-through overlay, automatic application arrangement, presentation controls, camera and recording.
+          files: desktop/teleprompter/dist/Teleprompter-Setup.exe
+          overwrite_files: true

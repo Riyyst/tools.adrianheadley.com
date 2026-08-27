@@ -29,7 +29,30 @@
     if (input) input.checked = enabled;
   };
 
+  const addTeleprompterTile = () => {
+    if (!document.querySelector('#cat-featured')) return;
+    if (document.querySelector('a[href="toolpages/teleprompter.html"]')) return;
+
+    const grid = document.querySelector('#cat-featured + .grid.tiles, #cat-featured ~ .grid.tiles');
+    if (!grid) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'tile-wrap';
+    wrapper.innerHTML = `
+      <a class="tile" href="toolpages/teleprompter.html" title="Teleprompter">
+        <div aria-hidden="true" class="tile__media">🎙️</div>
+        <div class="tile__body">
+          <h4 class="tile__title">Teleprompter</h4>
+          <p class="tile__desc">Read on camera, share presentations, record locally, or use the Windows desktop overlay.</p>
+        </div>
+        <span class="sr-only">Open Teleprompter</span>
+      </a>`;
+    grid.appendChild(wrapper);
+  };
+
   document.addEventListener('DOMContentLoaded', () => {
+    addTeleprompterTile();
+
     const button = document.getElementById('a11y-button');
     const panel = document.getElementById('a11y-panel');
     if (!button || !panel) return;
