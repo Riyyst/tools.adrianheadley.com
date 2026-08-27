@@ -1,0 +1,32 @@
+{
+  "name": "adrian-headley-teleprompter",
+  "version": "1.0.0",
+  "description": "Windows teleprompter with transparent overlay, recording, click-through control and automatic window arrangement.",
+  "main": "main.js",
+  "author": "Adrian Headley",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^38.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.adrianheadley.teleprompter",
+    "productName": "Teleprompter",
+    "asar": true,
+    "files": ["main.js", "preload.js", "index.html"],
+    "win": {
+      "target": [{"target": "nsis", "arch": ["x64"]}]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "Teleprompter-Setup.exe",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
