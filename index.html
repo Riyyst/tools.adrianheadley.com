@@ -1,88 +1,374 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
-    
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-L9N158WSSG"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-L9N158WSSG');
-</script>
-
-<meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <title>Home | Tools</title>
-    <meta name="description" content="Portfolio of Adrian Headley (UK, Suffolk). IT & Network Support, law student, and business-minded problem solver. Explore career highlights, projects, and AH Consultancy work." />
-    
-    <link rel="canonical" href="https://www.adrianheadley.com/" />
-    <meta name="robots" content="index,follow,max-image-preview:large" />
-    <meta name="author" content="Adrian Headley" />
-    <meta http-equiv="content-language" content="en-GB" />
-    
-    <link rel="alternate" href="https://www.adrianheadley.com/" hreflang="en-gb" />
-    <link rel="alternate" href="https://www.adrianheadley.com/" hreflang="en" />
-    <link rel="alternate" href="https://www.adrianheadley.com/" hreflang="x-default" />
-    
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Adrian Headley Portfolio" />
-    <meta property="og:title" content="Adrian Headley | Portfolio (UK) – IT & Network Support, Law Student" />
-    <meta property="og:description" content="Portfolio of Adrian Headley (UK, Suffolk). IT & Network Support, law student, and business-minded problem solver. Explore career highlights, projects, and AH Consultancy work." />
-    <meta property="og:url" content="https://www.adrianheadley.com/" />
-    <meta property="og:locale" content="en_GB" />
-    <meta property="og:image" content="https://www.adrianheadley.com/Assets/Media/Images/Profile/portait.PNG" />
-    
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Adrian Headley | Portfolio (UK) – IT & Network Support, Law Student" />
-    <meta name="twitter:description" content="Portfolio of Adrian Headley (UK, Suffolk). IT & Network Support, law student, and business-minded problem solver. Explore career highlights, projects, and AH Consultancy work." />
-    <meta name="twitter:image" content="https://www.adrianheadley.com/Assets/Media/Images/Profile/portait.PNG" />
-    
-    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://www.adrianheadley.com/#website", "url": "https://www.adrianheadley.com/", "name": "Adrian Headley Portfolio", "inLanguage": "en-GB", "publisher": {"@id": "https://www.adrianheadley.com/#person"}}, {"@type": "Person", "@id": "https://www.adrianheadley.com/#person", "name": "Adrian Headley", "url": "https://www.adrianheadley.com/", "image": "https://www.adrianheadley.com/Assets/Media/Images/Profile/portait.PNG", "jobTitle": ["IT & Network Support", "Law student", "Business-minded problem solver"], "homeLocation": {"@type": "Place", "name": "Suffolk, England, United Kingdom"}, "sameAs": ["https://uk.linkedin.com/in/adrianheadley?trk=people-guest_people_search-card", "https://www.facebook.com/AdrianHeadley04/", "https://x.com/adrianheadleyhq"]}, {"@type": "WebPage", "@id": "https://www.adrianheadley.com/#webpage", "url": "https://www.adrianheadley.com/", "name": "Adrian Headley | Portfolio (UK) – IT & Network Support, Law Student", "isPartOf": {"@id": "https://www.adrianheadley.com/#website"}, "about": {"@id": "https://www.adrianheadley.com/#person"}, "inLanguage": "en-GB"}, {"@type": "BreadcrumbList", "@id": "https://www.adrianheadley.com/#breadcrumb", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.adrianheadley.com/"}, {"@type": "ListItem", "position": 2, "name": "Adrian Headley | Portfolio (UK) – IT & Network Support, Law Student", "item": "https://www.adrianheadley.com/"}]}]}</script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="Assets/style.css" />
-
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Tools | Tools</title>
+<meta name="description" content="Browse privacy-first tools and utilities for text, security, media, files and everyday tasks."/>
+<meta name="theme-color" content="#f5f5f7"/>
 <style>
-/* --- Index centering overrides --- */
-#home .hero-inner-tools{
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  justify-content:center !important;
-  text-align:center !important;
-  min-height: calc(100vh - 140px);
+
+:root{
+  --bg:#f5f5f7;
+  --card:#ffffff;
+  --text:#111827;
+  --muted:#4b5563;
+  --accent:#2563eb;
+  --accent-hover:#1d4ed8;
+  --accent-soft:rgba(37,99,235,.08);
+  --border:#e5e7eb;
+  --border-strong:#d1d5db;
+  --shadow:0 12px 30px rgba(15,23,42,.08);
+  --max:1180px;
 }
-#home .tools-logo-wrap{display:flex; justify-content:center; width:100%;}
-#home .hero-text{max-width: 820px; margin: 0 auto;}
-#home .hero-actions{display:flex; justify-content:center;}
-/* navbar spacing */
-@media (min-width: 900px){
-  .inner-header{gap: 44px;}
-  .nav{margin-left: 24px;}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0;min-height:100%;overflow-x:hidden}
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+  color:var(--text);
+  font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:none}
+main{flex:1}
+.container{width:min(var(--max),100% - 3rem);margin-inline:auto}
+.sr-only{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+  border:0!important;
+}
+[hidden]{display:none!important}
+
+.skip-link{
+  position:absolute;
+  left:-999px;
+  top:.5rem;
+  z-index:100;
+  padding:.45rem .75rem;
+  border-radius:999px;
+  background:#111827;
+  color:#fff;
+}
+.skip-link:focus{left:.5rem}
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:60;
+  border-bottom:1px solid rgba(148,163,184,.28);
+  background:rgba(248,250,252,.98);
+}
+.mast{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:58px;
+  padding:.55rem 0;
+}
+.nav-list{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.55rem;
+  flex-wrap:wrap;
+  list-style:none;
+  margin:0;
+  padding:0;
+  font-size:.86rem;
+}
+.nav-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:.3rem .8rem;
+  border:1px solid transparent;
+  border-radius:999px;
+  color:var(--muted);
+  transition:background .16s,color .16s,transform .12s,border-color .16s;
+}
+.nav-link:hover,.nav-link:focus-visible{
+  border-color:rgba(148,163,184,.26);
+  background:rgba(148,163,184,.18);
+  color:var(--text);
+  transform:translateY(-1px);
+}
+.nav-link.active{
+  border-color:rgba(37,99,235,.18);
+  background:var(--accent-soft);
+  color:var(--accent);
+}
+
+.intro{
+  padding:2.6rem 0 2.4rem;
+  text-align:center;
+}
+.intro h1{
+  margin:0 0 .8rem;
+  color:var(--text);
+  font-size:clamp(2.1rem,3vw,2.6rem);
+  line-height:1.15;
+  letter-spacing:-.03em;
+  font-weight:750;
+}
+.intro p{
+  max-width:690px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:.96rem;
+  font-weight:500;
+}
+
+.section#tools{padding:2.4rem 0 4rem}
+.section#tools>.container{padding:0}
+
+.section__head{
+  margin:0 0 1.3rem;
+  padding:0;
+  border:0;
+  background:transparent;
+}
+.section__head h2{
+  margin:0 0 .7rem;
+  text-align:center;
+  color:var(--text);
+  font-size:.9rem;
+  font-weight:800;
+}
+
+.catnav{
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  gap:.55rem;
+  flex-wrap:wrap;
+}
+.chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:36px;
+  padding:.45rem .85rem;
+  border:1px solid var(--border-strong);
+  border-radius:999px;
+  background:#fff;
+  color:var(--text);
+  font-size:.78rem;
+  font-weight:720;
+  line-height:1.2;
+  text-align:center;
+  transition:background .16s,color .16s,border-color .16s,transform .12s;
+}
+.chip:hover,.chip:focus-visible{
+  border-color:rgba(37,99,235,.35);
+  background:var(--accent-soft);
+  color:var(--accent);
+  transform:translateY(-1px);
+  outline:none;
+}
+
+.search{margin:1rem 0 0}
+.search__input{
+  width:100%;
+  min-height:48px;
+  padding:.75rem 1rem;
+  border:1px solid var(--border-strong);
+  border-radius:15px;
+  outline:none;
+  background:#fff;
+  color:var(--text);
+  transition:border-color .16s,box-shadow .16s;
+}
+.search__input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+.stack{
+  margin-top:2rem;
+  scroll-margin-top:90px;
+}
+.stack:first-of-type{margin-top:0}
+.stack>h3{
+  margin:0 0 .7rem;
+  padding-bottom:.42rem;
+  border-bottom:1px solid var(--border);
+  color:var(--text);
+  font-size:1.42rem;
+  line-height:1.25;
+  letter-spacing:-.02em;
+}
+.grid.tiles{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-auto-rows:1fr;
+  gap:.85rem;
+}
+.tile-wrap{
+  min-width:0;
+  height:100%;
+  content-visibility:auto;
+  contain-intrinsic-size:auto 154px;
+  contain:layout paint style;
+}
+.tile{
+  display:grid;
+  grid-template-columns:44px minmax(0,1fr);
+  gap:.7rem;
+  align-items:center;
+  min-height:154px;
+  height:100%;
+  padding:.95rem;
+  border:1px solid var(--border);
+  border-radius:18px;
+  background:#fff;
+  color:var(--text);
+  box-shadow:none;
+  transition:none;
+}
+.tile:hover,.tile:focus-visible{
+  border-color:rgba(37,99,235,.45);
+  background:#fbfdff;
+  outline:none;
+}
+.tile__media{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:44px;
+  border:1px solid rgba(37,99,235,.14);
+  border-radius:13px;
+  background:var(--accent-soft);
+  font-size:1.25rem;
+}
+.tile__body{min-width:0}
+.tile__title{
+  margin:0;
+  color:var(--text);
+  font-size:.94rem;
+  line-height:1.3;
+  font-weight:800;
+  overflow-wrap:anywhere;
+}
+.tile__desc{
+  margin:.32rem 0 0;
+  color:var(--muted);
+  font-size:.77rem;
+  line-height:1.42;
+  overflow-wrap:anywhere;
+}
+
+.back-to-top{
+  position:fixed;
+  right:1.1rem;
+  bottom:1.1rem;
+  z-index:50;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:.55rem .8rem;
+  border:1px solid rgba(37,99,235,.22);
+  border-radius:999px;
+  background:#fff;
+  color:var(--accent);
+  font-size:.78rem;
+  font-weight:750;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(8px);
+  transition:opacity .16s,transform .16s,background .16s;
+}
+.back-to-top.show{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateY(0);
+}
+.back-to-top:hover{background:var(--accent-soft)}
+
+.site-footer{
+  margin-top:auto;
+  padding:1.6rem 1.5rem 1.8rem;
+  border-top:1px solid rgba(148,163,184,.3);
+  background:rgba(248,250,252,.72);
+  color:var(--muted);
+  font-size:.85rem;
+}
+.footer-inner{text-align:center}
+.footer-inner p{margin:0}
+.footer-links{
+  display:flex;
+  justify-content:center;
+  gap:.45rem;
+  flex-wrap:wrap;
+  margin-top:.45rem;
+  font-size:.82rem;
+}
+.footer-links a{
+  padding:.25rem .55rem;
+  border-radius:999px;
+  color:var(--muted);
+  transition:background .16s,color .16s,transform .12s;
+}
+.footer-links a:hover{
+  background:rgba(148,163,184,.16);
+  color:var(--accent);
+  transform:translateY(-1px);
+}
+
+@media(max-width:980px){
+  .grid.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .container{width:min(100% - 2rem,var(--max))}
+  .nav-list{gap:.25rem}
+  .nav-link{padding:.28rem .65rem}
+  .intro{padding:2rem 0 2.1rem}
+  .section#tools{padding:1.6rem 0 3rem}
+  .grid.tiles{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    scroll-behavior:auto!important;
+    transition:none!important;
+  }
+}
+
+
+.tools-page-logo{
+  display:block;
+  width:min(230px,62vw);
+  height:auto;
+  margin:0 auto .75rem;
 }
 </style>
 
-
 <link rel="icon" href="Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="Assets/site-shell.css">
+<link rel="stylesheet" href="Assets/site-shell.css?v=mk58">
 </head>
-<body data-in-pages="false">
-    <a class="skip-link" href="#main-home">Skip to main content</a>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
 
-    <div class="page-wrapper">
-        <header class="tools-global-header" id="top">
+<header class="tools-global-header" id="top">
   <div class="tools-global-header-inner">
     <a href="https://www.adrianheadley.com/" class="tools-global-brand">
       <span class="tools-global-brand-mark"><img src="Assets/ah-icon.png" alt="Tools logo"></span>
       <span class="tools-global-brand-name">Go to portfolio</span>
     </a>
     <nav class="tools-global-nav" aria-label="Main navigation">
-      <a href="index.html" class="tools-global-nav-link is-current">Home</a>
-      <a href="pages/tools.html" class="tools-global-nav-link">Tools</a>
-      <a href="pages/toolpages/powerful-sites.html" class="tools-global-nav-link">Powerful Websites</a>
+      <a href="index.html" class="tools-global-nav-link is-current">Tools</a>
       <a href="pages/about.html" class="tools-global-nav-link">About</a>
     </nav>
     <div class="tools-global-header-actions">
@@ -98,28 +384,324 @@
   </div>
 </header>
 
-                <main id="main-home">
-            <section class="hero animate-hero" id="home">
-                <div class="hero-inner hero-inner-tools">
-                    <div class="tools-logo-wrap fade-in-on-scroll">
-                        <img src="Assets/Media/Images/tools-logo.png" alt="Tools" class="tools-logo bounce-on-load" />
-                    </div>
+<main id="main">
+  <a aria-label="Go to the top" class="back-to-top" href="#" id="backToTop" title="Go to the top">Top</a>
 
-                    <div class="hero-text">
-<p class="hero-subtitle">
-                            I’ve put together a collection of tools that I use on a daily basis, both in my professional work and hobbies, along with additional tools that I believe are essential or just worth having.
-                            <br><br>
-                            Click the button below to go to the tools page and explore the full list!
-                        </p>
-                        <div class="hero-actions">
-                            <a href="pages/tools.html" class="btn primary-btn bounce-on-load">Get started</a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
+  <section class="intro">
+    <div class="container">
+      <img src="Assets/Media/Images/tools-logo.png" alt="Tools" class="tools-page-logo">
+      <p>Find the right tool in seconds. Simple, privacy-first utilities and resources.</p>
+    </div>
+  </section>
 
-        
+  <section aria-labelledby="tools-title" class="section" id="tools">
+<div class="container">
+<div class="section__head plain-controls">
+<h2 id="tools-title">Search tools by category</h2>
+<nav aria-label="Tool categories" class="catnav">
+<a class="chip" href="#cat-featured">Featured</a>
+<a class="chip" href="#cat-text">Text</a>
+<a class="chip" href="#cat-sec-priv">Security &amp; Privacy</a>
+<a class="chip" href="#cat-media">Media &amp; Converters</a>
+<a class="chip" href="#cat-utilities">Utilities</a>
+</nav>
+<!-- Live Search (injected) -->
+<div aria-label="Filter tools" class="search" role="search">
+<label class="sr-only" for="toolSearch">Search tools</label>
+<input autocomplete="off" class="search__input" id="toolSearch" inputmode="search" placeholder="Type to filter tools… (e.g. p, pd, image)" spellcheck="false" type="search"/>
+<div aria-atomic="true" aria-live="polite" class="sr-only" id="searchHint"></div>
+</div>
+</div>
+<!-- Featured -->
+<section aria-labelledby="cat-featured" class="stack">
+<h3 id="cat-featured">Featured</h3>
+<div class="grid tiles">
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/powerful-sites.html" title="Powerful websites you should know">
+<div aria-hidden="true" class="tile__media">🧰</div>
+<div class="tile__body">
+<h4 class="tile__title">Powerful websites you should know</h4>
+<p class="tile__desc">A curated list of the web’s hidden power tools.</p>
+</div>
+
+<span class="sr-only">Open Powerful websites you should know</span>
+</a></div>
+</div>
+</section>
+<!-- Text -->
+<section aria-labelledby="cat-text" class="stack">
+<h3 id="cat-text">Text</h3>
+<div class="grid tiles">
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/ascii-art.html" title="ASCII art generator">
+<div aria-hidden="true" class="tile__media">🎨</div>
+<div class="tile__body">
+<h4 class="tile__title">ASCII art generator</h4>
+<p class="tile__desc">Turn images and text into ASCII masterpieces.</p>
+</div>
+
+<span class="sr-only">Open ASCII art generator</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/find-and-replace.html" title="Find &amp; replace">
+<div aria-hidden="true" class="tile__media">🧭</div>
+<div class="tile__body">
+<h4 class="tile__title">Find &amp; replace</h4>
+<p class="tile__desc">Find and replace text without the hassle.</p>
+</div>
+
+<span class="sr-only">Open Find and replace</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/text-case-converter.html" title="Text case converter">
+<div aria-hidden="true" class="tile__media">🔤</div>
+<div class="tile__body">
+<h4 class="tile__title">Text case converter</h4>
+<p class="tile__desc">Upper, lower, title, sentence — instantly.</p>
+</div>
+
+<span class="sr-only">Open Text case converter</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/text-difference-checker.html" title="Text difference checker">
+<div aria-hidden="true" class="tile__media">🔀</div>
+<div class="tile__body"><h4 class="tile__title">Text difference checker</h4><p class="tile__desc">Compare two texts and highlight changes clearly.</p></div>
+
+<span class="sr-only">Open Text difference checker</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/word-character-counter.html" title="Word and character counter">
+<div aria-hidden="true" class="tile__media">🔢</div>
+<div class="tile__body">
+<h4 class="tile__title">Word and character counter</h4>
+<p class="tile__desc">Paste text; get counts, stats, and readability.</p>
+</div>
+
+<span class="sr-only">Open Word and character counter</span>
+</a></div>
+</div>
+</section>
+<!-- Security & Privacy -->
+<section aria-labelledby="cat-sec-priv" class="stack">
+<h3 id="cat-sec-priv">Security &amp; Privacy</h3>
+<div class="grid tiles">
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/hashing.html" title="Hashing"><div aria-hidden="true" class="tile__media">🔎</div><div class="tile__body"><h4 class="tile__title">Hashing</h4><p class="tile__desc">Generate and compare hashes (MD5, SHA-1, SHA-256, etc.).</p></div><span class="sr-only">Open Hashing</span></a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/metadata-remover.html" title="Metadata remover">
+<div aria-hidden="true" class="tile__media">🧼</div>
+<div class="tile__body">
+<h4 class="tile__title">Metadata remover</h4>
+<p class="tile__desc">Strip EXIF and other tags to protect privacy.</p>
+</div>
+
+<span class="sr-only">Open Metadata remover</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/password-wallet.html" title="Password generator &amp; wallet">
+<div aria-hidden="true" class="tile__media">🔐</div>
+<div class="tile__body"><h4 class="tile__title">Password generator &amp; wallet</h4><p class="tile__desc">Create strong passwords and store them locally, securely.</p></div>
+
+<span class="sr-only">Open Password generator &amp; wallet</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/steganography.html" title="Steganography"><div aria-hidden="true" class="tile__media">🕵️</div><div class="tile__body"><h4 class="tile__title">Steganography</h4><p class="tile__desc">Hide or extract messages inside images.</p></div><span class="sr-only">Open Steganography</span></a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/temp-email.html" title="Temp email">
+<div aria-hidden="true" class="tile__media">📮</div>
+<div class="tile__body">
+<h4 class="tile__title">Temp email</h4>
+<p class="tile__desc">Disposable inboxes for safe sign-ups.</p>
+</div>
+
+<span class="sr-only">Open Temp email</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/encrypt-decrypt.html" title="Text encrypter / decrypter">
+<div aria-hidden="true" class="tile__media">🔐</div>
+<div class="tile__body">
+<h4 class="tile__title">Text encrypter / decrypter</h4>
+<p class="tile__desc">Hash or encrypt text; verify and decode safely.</p>
+</div>
+
+<span class="sr-only">Open Text encrypter / decrypter</span>
+</a></div></div>
+</section>
+<!-- Media & Converters -->
+<section aria-labelledby="cat-media" class="stack">
+<h3 id="cat-media">Media &amp; Converters</h3>
+<div class="grid tiles">
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/barcode-generator.html" title="Barcode generator">
+<div aria-hidden="true" class="tile__media">🧾</div>
+<div class="tile__body"><h4 class="tile__title">Barcode generator</h4><p class="tile__desc">Create barcodes (EAN, UPC, Code128, etc.) instantly.</p></div>
+
+<span class="sr-only">Open Barcode generator</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/file-converter.html" title="File converter">
+<div aria-hidden="true" class="tile__media">🔁</div>
+<div class="tile__body">
+<h4 class="tile__title">File converter</h4>
+<p class="tile__desc">Swap formats with no-nonsense controls.</p>
+</div>
+
+<span class="sr-only">Open File converter</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/colour-picker.html" title="Image colour picker">
+<div aria-hidden="true" class="tile__media">🎯</div>
+<div class="tile__body">
+<h4 class="tile__title">Image colour picker</h4>
+<p class="tile__desc">Sample, convert, and copy colour codes quickly.</p>
+</div>
+
+<span class="sr-only">Open Image colour picker</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/image-compressor.html" title="Image compressor">
+<div aria-hidden="true" class="tile__media">🗜️</div>
+<div class="tile__body"><h4 class="tile__title">Image compressor</h4><p class="tile__desc">Compress images to smaller sizes with quality control.</p></div>
+
+<span class="sr-only">Open Image compressor</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/image-resizer.html" title="Image resizer">
+<div aria-hidden="true" class="tile__media">🖼️</div>
+<div class="tile__body">
+<h4 class="tile__title">Image resizer</h4>
+<p class="tile__desc">Resize and compress without losing clarity.</p>
+</div>
+
+<span class="sr-only">Open Image resizer</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/vectorise-image.html" title="Image vectoriser">
+<div aria-hidden="true" class="tile__media">🪒</div>
+<div class="tile__body">
+<h4 class="tile__title">Image vectoriser</h4>
+<p class="tile__desc">Transform pixels into precision—vectorise with ease.</p>
+</div>
+
+<span class="sr-only">Open Image vectoriser</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/merge-pdfs.html" title="Merge PDFs">
+<div aria-hidden="true" class="tile__media">📎</div>
+<div class="tile__body"><h4 class="tile__title">Merge PDFs</h4><p class="tile__desc">Combine multiple PDFs into one, securely in your browser.</p></div>
+
+<span class="sr-only">Open Merge PDFs</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/ocr-reader.html" title="OCR reader">
+<div aria-hidden="true" class="tile__media">📷</div>
+<div class="tile__body"><h4 class="tile__title">OCR reader</h4><p class="tile__desc">Extract text from images and PDFs, right in your browser.</p></div>
+
+<span class="sr-only">Open OCR reader</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/pdf-separator.html" title="PDF separator">
+<div aria-hidden="true" class="tile__media">✂️</div>
+<div class="tile__body"><h4 class="tile__title">PDF separator</h4><p class="tile__desc">Split a PDF into individual pages or ranges.</p></div>
+
+<span class="sr-only">Open PDF separator</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/qr-code-generator.html" title="QR code generator">
+<div aria-hidden="true" class="tile__media">▩</div>
+<div class="tile__body">
+<h4 class="tile__title">QR code generator</h4>
+<p class="tile__desc">Create crisp codes with custom sizing.</p>
+</div>
+
+<span class="sr-only">Open QR code generator</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/video-editor.html" title="Video editor, timeline, trim, cut, split, transitions, images, music, audio, overlays and local export">
+<div aria-hidden="true" class="tile__media">🎬</div>
+<div class="tile__body">
+<h4 class="tile__title">Video editor</h4>
+<p class="tile__desc">Private multi-track editing with snapping, text, audio, transitions, project files and local video export.</p>
+</div>
+
+<span class="sr-only">Open Video editor</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/yt-converter.html" title="YouTube to MP3/MP4 converter">
+<div aria-hidden="true" class="tile__media">▶︎</div>
+<div class="tile__body">
+<h4 class="tile__title">YouTube to MP3/MP4 converter</h4>
+<p class="tile__desc">Save media for offline access.</p>
+</div>
+
+<span class="sr-only">Open YouTube to MP3/MP4 converter</span>
+</a></div>
+</div>
+</section>
+<!-- Utilities -->
+<section aria-labelledby="cat-utilities" class="stack">
+<h3 id="cat-utilities">Utilities</h3>
+<div class="grid tiles">
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/date-difference.html" title="Date difference calculator">
+<div aria-hidden="true" class="tile__media">📅</div>
+<div class="tile__body"><h4 class="tile__title">Date difference calculator</h4><p class="tile__desc">Calculate days, weeks, or months between dates.</p></div>
+
+<span class="sr-only">Open Date difference calculator</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/fake-information-generator.html" title="Fake infomation generator">
+<div aria-hidden="true" class="tile__media">🧪</div>
+<div class="tile__body">
+<h4 class="tile__title">Fake information generator</h4>
+<p class="tile__desc">Produce placeholder data and samples quickly.</p>
+</div>
+
+<span class="sr-only">Open Info generator</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/js-blocker.html" title="JavaScript blocker">
+<div aria-hidden="true" class="tile__media">🧱</div>
+<div class="tile__body">
+<h4 class="tile__title">JavaScript blocker</h4>
+<p class="tile__desc">Test pages with scripts disabled in one click.</p>
+</div>
+
+<span class="sr-only">Open JavaScript blocker</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/metadata-reader.html" title="Metadata reade">
+<div aria-hidden="true" class="tile__media">🗂️</div>
+<div class="tile__body">
+<h4 class="tile__title">Metadata reader</h4>
+<p class="tile__desc">Peek inside files without uploading anywhere.</p>
+</div>
+
+<span class="sr-only">Open Metadata reader</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/random-spinner.html" title="Random picker / spinner">
+<div aria-hidden="true" class="tile__media">🎲</div>
+<div class="tile__body"><h4 class="tile__title">Random picker / spinner</h4><p class="tile__desc">Pick a random choice or spin a wheel.</p></div>
+
+<span class="sr-only">Open Random picker / spinner</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/teleprompter.html" title="Teleprompter, autocue, camera, presentation overlay, screen sharing, recording and pop out">
+<div aria-hidden="true" class="tile__media">🎙️</div>
+<div class="tile__body">
+<h4 class="tile__title">Teleprompter</h4>
+<p class="tile__desc">Camera-ready autocue with presentation overlay, screen sharing, recording and a pop-out presenter window.</p>
+</div>
+
+<span class="sr-only">Open Teleprompter</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/time-zone-converter.html" title="Time zone converter">
+<div aria-hidden="true" class="tile__media">🕰️</div>
+<div class="tile__body"><h4 class="tile__title">Time zone converter</h4><p class="tile__desc">Find the best meeting time across time zones.</p></div>
+
+<span class="sr-only">Open Time zone converter</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/typing-speed-test.html" title="Typing speed test">
+<div aria-hidden="true" class="tile__media">⌨️</div>
+<div class="tile__body"><h4 class="tile__title">Typing speed test</h4><p class="tile__desc">Test your WPM with a clean, distraction-free UI.</p></div>
+
+<span class="sr-only">Open Typing speed test</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/unit-converter.html" title="Unit converter">
+<div aria-hidden="true" class="tile__media">📏</div>
+<div class="tile__body"><h4 class="tile__title">Unit converter</h4><p class="tile__desc">Convert length, weight, temperature, and more.</p></div>
+
+<span class="sr-only">Open Unit converter</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/url-lengthener.html" title="URL lengthener">
+<div aria-hidden="true" class="tile__media">🔗</div>
+<div class="tile__body"><h4 class="tile__title">URL lengthener</h4><p class="tile__desc">Expand shortened links to reveal the final destination.</p></div>
+
+<span class="sr-only">Open URL lengthener</span>
+</a></div>
+<div class="tile-wrap"><a class="tile" href="pages/toolpages/url-shortener.html" title="URL shortener">
+<div aria-hidden="true" class="tile__media">🔗</div>
+<div class="tile__body"><h4 class="tile__title">URL shortener</h4><p class="tile__desc">Shorten long links for easy sharing.</p></div>
+
+<span class="sr-only">Open URL shortener</span>
+</a></div>
+</div>
+</section>
+</div>
+</section>
+</main>
+
 <footer class="tools-global-footer">
   <div class="tools-global-footer-inner">
     <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
@@ -130,18 +712,113 @@
     </nav>
   </div>
 </footer>
-    </div>
 
-    
-        <div class="overlay-backdrop" id="modal-backdrop" hidden>
-            <div class="overlay-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-                <button type="button" class="overlay-close" id="modal-close" aria-label="Close dialog">×</button>
-                <div id="modal-content"></div>
-            </div>
-        </div>
-    
+<script>
 
-    <script src="Assets/script.js"></script>
-<script src="Assets/site-shell.js"></script>
+(function(){
+  'use strict';
+
+  const container=document.querySelector('#tools .container');
+  if(!container) return;
+
+  const search=document.getElementById('toolSearch');
+  const searchHint=document.getElementById('searchHint');
+  const backToTop=document.getElementById('backToTop');
+  const year=document.getElementById('year');
+
+  if(year) year.textContent=new Date().getFullYear();
+
+  const records=Array.from(container.querySelectorAll('.tile')).map(tile=>{
+    const wrapper=tile.closest('.tile-wrap');
+    return {
+      wrapper,
+      section:tile.closest('.stack'),
+      text:[
+        tile.querySelector('.tile__title')?.textContent||'',
+        tile.querySelector('.tile__desc')?.textContent||'',
+        tile.getAttribute('title')||''
+      ].join(' ').toLowerCase(),
+      visible:true
+    };
+  });
+
+  const sections=Array.from(container.querySelectorAll('.stack'));
+  let searchTimer=0;
+  let scheduled=false;
+
+  function applySearch(){
+    scheduled=false;
+    const query=(search?.value||'').trim().toLowerCase();
+    let shown=0;
+
+    records.forEach(record=>{
+      const visible=!query||record.text.includes(query);
+
+      if(record.visible!==visible){
+        record.visible=visible;
+        record.wrapper.hidden=!visible;
+      }
+
+      if(visible) shown+=1;
+    });
+
+    sections.forEach(section=>{
+      const visible=Boolean(section.querySelector('.tile-wrap:not([hidden])'));
+      if(section.hidden===visible){
+        section.hidden=!visible;
+      }
+    });
+
+    if(searchHint){
+      searchHint.textContent=shown===1
+        ? '1 tool shown'
+        : `${shown} tools shown`;
+    }
+  }
+
+  function scheduleSearch(){
+    if(scheduled) return;
+    scheduled=true;
+    requestAnimationFrame(applySearch);
+  }
+
+  search?.addEventListener('input',()=>{
+    clearTimeout(searchTimer);
+    searchTimer=setTimeout(scheduleSearch,75);
+  });
+
+  document.addEventListener('click',event=>{
+    const anchor=event.target.closest('a[href^="#"]');
+    if(!anchor) return;
+
+    const targetId=anchor.getAttribute('href').slice(1);
+    if(!targetId) return;
+
+    const target=document.getElementById(targetId);
+    if(!target) return;
+
+    event.preventDefault();
+    target.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+
+  let scrollScheduled=false;
+
+  function updateBackToTop(){
+    scrollScheduled=false;
+    backToTop?.classList.toggle('show',window.scrollY>650);
+  }
+
+  window.addEventListener('scroll',()=>{
+    if(scrollScheduled) return;
+    scrollScheduled=true;
+    requestAnimationFrame(updateBackToTop);
+  },{passive:true});
+
+  updateBackToTop();
+  applySearch();
+})();
+
+</script>
+<script src="Assets/site-shell.js?v=mk58"></script>
 </body>
 </html>

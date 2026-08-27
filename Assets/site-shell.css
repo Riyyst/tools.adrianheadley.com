@@ -336,3 +336,17 @@ body.strong-focus *:focus-visible {
 }
 
 .tools-global-brand-name { white-space: nowrap; }
+
+
+/* Mk57 navigation safety: Powerful Websites is no longer a header item. */
+.tools-global-nav a[href*="powerful-sites"],
+.tools-global-nav a[href*="powerful_sites"]{
+  display:none !important;
+}
+
+
+/* Mk58 navigation safety: only Tools and About remain in the site navbar. */
+.tools-global-nav a[href*="powerful-sites"],
+.tools-global-nav a[href*="powerful_sites"]{
+  display:none !important;
+}

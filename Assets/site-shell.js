@@ -29,7 +29,25 @@
     if (input) input.checked = enabled;
   };
 
+
+  const cleanGlobalNavigation = () => {
+    document.querySelectorAll('.tools-global-nav a').forEach((link) => {
+      const label = (link.textContent || '').trim().toLowerCase();
+      const href = (link.getAttribute('href') || '').toLowerCase();
+      if (
+        label === 'home' ||
+        label === 'powerful websites' ||
+        href.includes('home.html') ||
+        href.includes('powerful-sites') ||
+        href.includes('powerful_sites')
+      ) {
+        link.remove();
+      }
+    });
+  };
+
   document.addEventListener('DOMContentLoaded', () => {
+    cleanGlobalNavigation();
     const button = document.getElementById('a11y-button');
     const panel = document.getElementById('a11y-panel');
     if (!button || !panel) return;
