@@ -3,9 +3,28 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Tools | Time Zone Converter</title>
-<meta name="description" content="Convert a date and time between common time zones entirely in your browser."/>
 <meta name="theme-color" content="#f5f5f7"/>
+<title>Time Zone Converter | Adrian Headley Tools</title>
+<meta name="description" content="Convert a date and time between common time zones directly in your browser and share the configured conversion."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/time-zone-converter.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Time Zone Converter | Adrian Headley Tools"/>
+<meta property="og:description" content="Convert a date and time between common time zones directly in your browser and share the configured conversion."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/time-zone-converter.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta property="og:image:width" content="2048"/>
+<meta property="og:image:height" content="1365"/>
+<meta property="og:image:alt" content="Adrian Headley Tools"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Time Zone Converter | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Convert a date and time between common time zones directly in your browser and share the configured conversion."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/time-zone-converter.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/time-zone-converter.html","name":"Time Zone Converter","description":"Convert a date and time between common time zones directly in your browser and share the configured conversion.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/time-zone-converter.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/time-zone-converter.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/time-zone-converter.html#app","name":"Time Zone Converter","url":"https://tools.adrianheadley.com/pages/toolpages/time-zone-converter.html","description":"Convert a date and time between common time zones directly in your browser and share the configured conversion.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Choose the source date, time and time zone.","Choose the destination time zone.","Review the converted time or copy a setup link."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/time-zone-converter.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Time Zone Converter","item":"https://tools.adrianheadley.com/pages/toolpages/time-zone-converter.html"}]}]}</script>
 <style>
 :root{
   --bg:#f5f5f7;
@@ -297,7 +316,7 @@ select{
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk58">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -381,12 +400,26 @@ select{
         </div>
 
         <div class="actions">
+          <button class="btn" id="shareSetup" type="button">Copy setup link</button>
           <button class="btn" id="reset" type="button">Clear</button>
         </div>
 
       </div>
     </div>
   </section>
+
+<section class="seo-tool-info" aria-labelledby="seo-about-time-zone-converter" data-seo-info>
+  <div class="seo-tool-info__inner">
+    <h2 class="seo-tool-info__heading" id="seo-about-time-zone-converter">About this tool</h2>
+    <div class="seo-tool-info__grid">
+      <article class="seo-tool-info__card"><h3>What it does</h3><p>Convert a date and time from one time zone into another.</p></article>
+      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Choose the source date, time and time zone.</li><li>Choose the destination time zone.</li><li>Review the converted time or copy a setup link.</li></ol></article>
+      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>Time-zone conversion runs in your browser. The dates and times you enter are not intentionally uploaded by the tool.</p></article>
+    </div>
+    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="date-difference.html" title="Date Difference Calculator">Date Difference Calculator</a><a href="route-planner.html" title="Route Planner">Route Planner</a><a href="unit-converter.html" title="Unit Converter">Unit Converter</a></div></nav>
+  </div>
+</section>
+
 </main>
 
 <footer class="tools-global-footer">
@@ -411,6 +444,7 @@ select{
     var toDate   = $('#toDate');
     var toTime   = $('#toTime');
     var btnReset = $('#reset');
+    var shareSetup = $('#shareSetup');
 
     /* --- Simplified, common time zones (ascending from -08:00 to +12:00) --- */
     var ZONES = [
@@ -506,11 +540,62 @@ select{
       toTime.value = H + ':' + M + ':' + S;
     }
 
+
+    async function copySetupUrl(url,button){
+      try{
+        await navigator.clipboard.writeText(url);
+      }catch{
+        var area=document.createElement('textarea');
+        area.value=url;
+        area.setAttribute('readonly','');
+        area.style.position='fixed';
+        area.style.opacity='0';
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand('copy');
+        area.remove();
+      }
+
+      var old=button.textContent;
+      button.textContent='Copied';
+      setTimeout(function(){ button.textContent=old; },1100);
+    }
+
+    function zoneSetupUrl(){
+      var url=new URL(location.href);
+      url.search='';
+
+      if(fromDate.value)url.searchParams.set('date',fromDate.value);
+      if(fromTime.value)url.searchParams.set('time',fromTime.value);
+      if(fromZone.value!=='__placeholder__')url.searchParams.set('from',fromZone.value);
+      if(toZone.value!=='__placeholder__')url.searchParams.set('to',toZone.value);
+
+      return url.href;
+    }
+
+    function restoreZoneSetup(){
+      var params=new URLSearchParams(location.search);
+      if(!params.size)return;
+
+      var date=params.get('date');
+      var time=params.get('time');
+      var from=params.get('from');
+      var to=params.get('to');
+
+      if(date!==null)fromDate.value=date;
+      if(time!==null)fromTime.value=time;
+      if(from!==null&&Array.from(fromZone.options).some(function(o){return o.value===from;}))fromZone.value=from;
+      if(to!==null&&Array.from(toZone.options).some(function(o){return o.value===to;}))toZone.value=to;
+
+      convert();
+    }
+
     function setBlank(){
       buildZoneSelect(fromZone);
       buildZoneSelect(toZone);
       fromDate.value = ''; fromTime.value = '';
       toDate.value = ''; toTime.value = '';
+      if(location.search)history.replaceState(null,'',location.pathname+location.hash);
     }
 
     ['change','input'].forEach(function(ev){
@@ -522,13 +607,18 @@ select{
 
     var btnReset = document.getElementById('reset');
     if(btnReset) btnReset.addEventListener('click', setBlank);
+    if(shareSetup) shareSetup.addEventListener('click', function(){
+      copySetupUrl(zoneSetupUrl(),shareSetup);
+    });
 
-    setBlank();
+    buildZoneSelect(fromZone);
+    buildZoneSelect(toZone);
+    restoreZoneSetup();
   })();
 
 const yearEl=document.getElementById('year');
 if(yearEl) yearEl.textContent=new Date().getFullYear();
 </script>
-<script src="../../Assets/site-shell.js?v=mk58"></script>
+<script src="../../Assets/site-shell.js?v=mk75"></script>
 </body>
 </html>

@@ -3,11 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tools | Video Editor</title>
-<meta name="description" content="A private browser video editor with multi-track editing, text, audio waveforms, transitions, snapping, undo, project files and local video export.">
 <meta name="theme-color" content="#f5f5f7">
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk58">
+<title>Private Browser Video Editor | Adrian Headley Tools</title>
+<meta name="description" content="Edit video, images, text, captions and audio on a multi-track browser timeline, then export locally in supported video formats."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/video-editor.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Private Browser Video Editor | Adrian Headley Tools"/>
+<meta property="og:description" content="Edit video, images, text, captions and audio on a multi-track browser timeline, then export locally in supported video formats."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/video-editor.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta property="og:image:width" content="2048"/>
+<meta property="og:image:height" content="1365"/>
+<meta property="og:image:alt" content="Adrian Headley Tools"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Private Browser Video Editor | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Edit video, images, text, captions and audio on a multi-track browser timeline, then export locally in supported video formats."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/video-editor.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/video-editor.html","name":"Video Editor","description":"Edit video, images, text, captions and audio on a multi-track browser timeline, then export locally in supported video formats.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/video-editor.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/video-editor.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/video-editor.html#app","name":"Video Editor","url":"https://tools.adrianheadley.com/pages/toolpages/video-editor.html","description":"Edit video, images, text, captions and audio on a multi-track browser timeline, then export locally in supported video formats.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Add video, images and audio to the media library and place them on the timeline.","Trim, split and arrange clips, then add text, captions, backgrounds, transitions or audio adjustments.","Preview the project, save it if needed and export in a supported video format."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/video-editor.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Video Editor","item":"https://tools.adrianheadley.com/pages/toolpages/video-editor.html"}]}]}</script>
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
 <style>
 :root{
   --bg:#f5f5f7;--card:#fff;--text:#111827;--muted:#4b5563;--accent:#2563eb;--accent-hover:#1d4ed8;
@@ -544,6 +563,19 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{
   <button type="button" id="contextDelete" role="menuitem">Delete</button>
 </div>
 </div></section>
+
+<section class="seo-tool-info" aria-labelledby="seo-about-video-editor" data-seo-info>
+  <div class="seo-tool-info__inner">
+    <h2 class="seo-tool-info__heading" id="seo-about-video-editor">About this tool</h2>
+    <div class="seo-tool-info__grid">
+      <article class="seo-tool-info__card"><h3>What it does</h3><p>Edit video, images, text and audio on a multi-track timeline directly in your browser.</p></article>
+      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Add video, images and audio to the media library and place them on the timeline.</li><li>Trim, split and arrange clips, then add text, captions, backgrounds, transitions or audio adjustments.</li><li>Preview the project, save it if needed and export in a supported video format.</li></ol></article>
+      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>Media editing and export are designed to happen in your browser, so project media does not need to be uploaded to a remote editor.</p></article>
+    </div>
+    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="teleprompter.html" title="Teleprompter">Teleprompter</a><a href="file-converter.html" title="File Converter">File Converter</a><a href="file-compressor.html" title="File Compressor">File Compressor</a></div></nav>
+  </div>
+</section>
+
 </main>
 
 <div class="modal-backdrop" id="exportModal" role="dialog" aria-modal="true" aria-labelledby="exportTitle"><div class="modal"><div class="modal-head"><div><h2 id="exportTitle">Export video</h2><p>Choose an output preset or set your own resolution, frame rate and quality.</p></div><button class="icon-btn" id="closeExport" type="button">×</button></div><div class="modal-body"><div class="preset-grid" id="presetGrid"><button class="preset active" data-preset="youtube"><strong>YouTube / Landscape</strong><span>1920 × 1080 · 30fps</span></button><button class="preset" data-preset="vertical"><strong>TikTok / Reels</strong><span>1080 × 1920 · 30fps</span></button><button class="preset" data-preset="square"><strong>Square social</strong><span>1080 × 1080 · 30fps</span></button><button class="preset" data-preset="small"><strong>Smaller file</strong><span>1280 × 720 · 30fps</span></button></div><div class="field-row"><div class="field"><label>File name</label><input id="exportName" type="text" value="video-edit"></div><div class="field"><label>Format</label><select id="exportFormat"><option value="auto">Auto</option><option value="mp4">MP4</option><option value="mov">MOV</option><option value="webm">WebM</option></select></div></div><div class="format-help" id="exportFormatHelp">Choose the container format for the exported video.</div><div class="field-row"><div class="field"><label>Width</label><input id="exportWidth" type="number" min="320" max="3840" value="1920"></div><div class="field"><label>Height</label><input id="exportHeight" type="number" min="240" max="3840" value="1080"></div></div><div class="field-row"><div class="field"><label>Frame rate</label><select id="exportFps"><option>24</option><option selected>30</option><option>60</option></select></div><div class="field"><label>Quality</label><select id="exportQuality"><option value="3500000">Smaller</option><option value="6500000" selected>Balanced</option><option value="10000000">High</option><option value="16000000">Maximum</option></select></div></div><div class="privacy-row"><span>Everything is rendered locally in this browser.</span><span id="exportEstimate">Estimated timeline: 0s</span></div></div><div class="modal-foot"><button class="btn secondary" id="exportCancelModal" type="button">Cancel</button><button class="btn" id="exportStart" type="button">Export video</button></div></div></div>
@@ -2813,5 +2845,5 @@ document.addEventListener('click',e=>{
 bindDrop();bindLanes();bindControls();bindProjectRename();bindCopyPaste();bindStageTextSelection();bindStageTextEditor();bindTextSelectionBox();bindTransform();bindA11y();setCanvasSize(false);renderAll();requestAnimationFrame(loop);restoreAutosave();window.addEventListener('beforeunload',()=>{pauseAllMedia();for(const a of state.assets)try{URL.revokeObjectURL(a.url)}catch(e){}try{state.audioCtx?.close?.();state.analysisCtx?.close?.()}catch(e){}});
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk58"></script>
+<script src="../../Assets/site-shell.js?v=mk75"></script>
 </body></html>

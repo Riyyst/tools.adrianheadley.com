@@ -3,10 +3,29 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Tools | Date Difference</title>
-<meta content="Calculate the exact time difference between two dates or moments." name="description"/>
 <meta content="#f5f5f7" name="theme-color"/>
 
+<title>Date Difference Calculator | Adrian Headley Tools</title>
+<meta name="description" content="Calculate the exact difference between two dates and times, including days, hours, minutes and seconds, directly in your browser."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/date-difference.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Date Difference Calculator | Adrian Headley Tools"/>
+<meta property="og:description" content="Calculate the exact difference between two dates and times, including days, hours, minutes and seconds, directly in your browser."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/date-difference.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta property="og:image:width" content="2048"/>
+<meta property="og:image:height" content="1365"/>
+<meta property="og:image:alt" content="Adrian Headley Tools"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Date Difference Calculator | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Calculate the exact difference between two dates and times, including days, hours, minutes and seconds, directly in your browser."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/date-difference.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/date-difference.html","name":"Date Difference Calculator","description":"Calculate the exact difference between two dates and times, including days, hours, minutes and seconds, directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/date-difference.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/date-difference.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/date-difference.html#app","name":"Date Difference Calculator","url":"https://tools.adrianheadley.com/pages/toolpages/date-difference.html","description":"Calculate the exact difference between two dates and times, including days, hours, minutes and seconds, directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Enter the starting date and time.","Enter the ending date and time.","Calculate and review the difference in the available time units."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/date-difference.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Date Difference Calculator","item":"https://tools.adrianheadley.com/pages/toolpages/date-difference.html"}]}]}</script>
 <style>
     :root{
       --bg:#f5f5f7;
@@ -305,7 +324,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk58">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -358,6 +377,7 @@
 
             <div class="actions">
               <button class="btn primary" id="calcDiff" type="button">Calculate</button>
+              <button class="btn small" id="shareSetup" type="button">Copy setup link</button>
               <button class="btn small" id="resetDiff" type="button">Reset</button>
             </div>
           </div>
@@ -378,6 +398,19 @@
       </div>
     </div>
   </section>
+
+<section class="seo-tool-info" aria-labelledby="seo-about-date-difference" data-seo-info>
+  <div class="seo-tool-info__inner">
+    <h2 class="seo-tool-info__heading" id="seo-about-date-difference">About this tool</h2>
+    <div class="seo-tool-info__grid">
+      <article class="seo-tool-info__card"><h3>What it does</h3><p>Calculate the exact amount of time between two dates or moments.</p></article>
+      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Enter the starting date and time.</li><li>Enter the ending date and time.</li><li>Calculate and review the difference in the available time units.</li></ol></article>
+      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>The calculation runs entirely in your browser. Dates and times are not sent to a server.</p></article>
+    </div>
+    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="time-zone-converter.html" title="Time Zone Converter">Time Zone Converter</a><a href="unit-converter.html" title="Unit Converter">Unit Converter</a><a href="route-planner.html" title="Route Planner">Route Planner</a></div></nav>
+  </div>
+</section>
+
 </main>
 
 <footer class="tools-global-footer">
@@ -394,6 +427,46 @@
 <!-- RIYST_INLINE_SCRIPT_START -->
 <script>
 const $ = sel => document.querySelector(sel);
+
+const copySetupUrl = async (url,button) => {
+  try{
+    await navigator.clipboard.writeText(url);
+  }catch{
+    const area=document.createElement('textarea');
+    area.value=url;
+    area.setAttribute('readonly','');
+    area.style.position='fixed';
+    area.style.opacity='0';
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand('copy');
+    area.remove();
+  }
+
+  const old=button.textContent;
+  button.textContent='Copied';
+  setTimeout(()=>button.textContent=old,1100);
+};
+
+const dateSetupUrl = () => {
+  const url=new URL(location.href);
+  url.search='';
+  if($('#diffStart').value)url.searchParams.set('start',$('#diffStart').value);
+  if($('#diffEnd').value)url.searchParams.set('end',$('#diffEnd').value);
+  return url.href;
+};
+
+const restoreDateSetup = () => {
+  const params=new URLSearchParams(location.search);
+  const start=params.get('start');
+  const end=params.get('end');
+
+  if(start!==null)$('#diffStart').value=start;
+  if(end!==null)$('#diffEnd').value=end;
+  if(start&&end)calcDifference();
+};
+
+
 const fromDatetimeLocalValue = (val) => {
   if(!val) return null;
   const [date, time] = val.split('T');
@@ -452,14 +525,17 @@ function calcDifference(){
 }
 
 $('#calcDiff').addEventListener('click', calcDifference);
+$('#shareSetup').addEventListener('click', ()=>copySetupUrl(dateSetupUrl(),$('#shareSetup')));
 $('#resetDiff').addEventListener('click', ()=>{
   $('#diffStart').value = ''; $('#diffEnd').value = '';
   $('#elapsedLabel').textContent = 'Elapsed/To go:';
   ['elapsedText','sTotal','mTotal','hTotal','dTotal'].forEach(id=>{ $('#'+id).textContent='—'; });
+  if(location.search)history.replaceState(null,'',location.pathname+location.hash);
 });
+restoreDateSetup();
 document.querySelector('#yearNow').textContent = new Date().getFullYear();
 </script>
 <!-- RIYST_INLINE_SCRIPT_END -->
-<script src="../../Assets/site-shell.js?v=mk58"></script>
+<script src="../../Assets/site-shell.js?v=mk75"></script>
 </body>
 </html>

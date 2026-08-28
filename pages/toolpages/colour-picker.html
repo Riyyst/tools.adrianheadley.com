@@ -3,10 +3,29 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Tools | Image Colour Picker</title>
-<meta content="Upload an image or pick any colour on your screen, then copy the HEX or RGB value." name="description"/>
 <meta content="#f5f5f7" name="theme-color"/>
 
+<title>Image &amp; Screen Colour Picker | Adrian Headley Tools</title>
+<meta name="description" content="Pick colours from an uploaded image or directly from your screen where supported, then copy HEX or RGB values."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/colour-picker.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Image &amp; Screen Colour Picker | Adrian Headley Tools"/>
+<meta property="og:description" content="Pick colours from an uploaded image or directly from your screen where supported, then copy HEX or RGB values."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/colour-picker.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta property="og:image:width" content="2048"/>
+<meta property="og:image:height" content="1365"/>
+<meta property="og:image:alt" content="Adrian Headley Tools"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Image &amp; Screen Colour Picker | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Pick colours from an uploaded image or directly from your screen where supported, then copy HEX or RGB values."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html","name":"Image Colour Picker","description":"Pick colours from an uploaded image or directly from your screen where supported, then copy HEX or RGB values.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#app","name":"Image Colour Picker","url":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html","description":"Pick colours from an uploaded image or directly from your screen where supported, then copy HEX or RGB values.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Choose image upload or screen colour picking.","Select the colour you want to inspect.","Copy the HEX or RGB value."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Image Colour Picker","item":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html"}]}]}</script>
 <style>
     :root{
       --bg:#f5f5f7;
@@ -395,7 +414,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk58">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -479,6 +498,19 @@
       </div>
     </div>
   </section>
+
+<section class="seo-tool-info" aria-labelledby="seo-about-colour-picker" data-seo-info>
+  <div class="seo-tool-info__inner">
+    <h2 class="seo-tool-info__heading" id="seo-about-colour-picker">About this tool</h2>
+    <div class="seo-tool-info__grid">
+      <article class="seo-tool-info__card"><h3>What it does</h3><p>Inspect colours from an uploaded image or use the browser&#x27;s screen eyedropper where that feature is supported.</p></article>
+      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Choose image upload or screen colour picking.</li><li>Select the colour you want to inspect.</li><li>Copy the HEX or RGB value.</li></ol></article>
+      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>Uploaded images are handled in your browser. Screen picking uses the browser&#x27;s native eyedropper permission where available.</p></article>
+    </div>
+    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="image-resizer.html" title="Image Resizer">Image Resizer</a><a href="qr-code-generator.html" title="QR Code Generator">QR Code Generator</a><a href="metadata-reader.html" title="Metadata Reader">Metadata Reader</a></div></nav>
+  </div>
+</section>
+
 </main>
 
 <footer class="tools-global-footer">
@@ -622,6 +654,6 @@ const canvas=document.getElementById("canvas"), ctx=canvas.getContext("2d",{will
     function hexToRgb(h){h=h.replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");return{r:parseInt(h.substr(0,2),16),g:parseInt(h.substr(2,2),16),b:parseInt(h.substr(4,2),16)};}
 </script>
 <!-- RIYST_INLINE_SCRIPT_END -->
-<script src="../../Assets/site-shell.js?v=mk58"></script>
+<script src="../../Assets/site-shell.js?v=mk75"></script>
 </body>
 </html>

@@ -3,9 +3,28 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Tools | Temporary Email</title>
-<meta name="description" content="Generate a receive-only temporary email address and read incoming messages securely in your browser."/>
 <meta name="theme-color" content="#f5f5f7"/>
+<title>Temporary Disposable Email Inbox | Adrian Headley Tools</title>
+<meta name="description" content="Generate a disposable receive-only email address and read incoming messages without using your main inbox."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/temp-email.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Temporary Disposable Email Inbox | Adrian Headley Tools"/>
+<meta property="og:description" content="Generate a disposable receive-only email address and read incoming messages without using your main inbox."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/temp-email.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta property="og:image:width" content="2048"/>
+<meta property="og:image:height" content="1365"/>
+<meta property="og:image:alt" content="Adrian Headley Tools"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Temporary Disposable Email Inbox | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Generate a disposable receive-only email address and read incoming messages without using your main inbox."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html","name":"Temporary Email","description":"Generate a disposable receive-only email address and read incoming messages without using your main inbox.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#app","name":"Temporary Email","url":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html","description":"Generate a disposable receive-only email address and read incoming messages without using your main inbox.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Generate a temporary email address.","Copy the address and use it where needed.","Refresh the temporary inbox and open messages that arrive during the session."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Temporary Email","item":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html"}]}]}</script>
 <style>
 :root{
   --bg:#f5f5f7;
@@ -389,7 +408,7 @@ main{flex:1}
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk58">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -469,6 +488,19 @@ main{flex:1}
       </div>
     </div>
   </section>
+
+<section class="seo-tool-info" aria-labelledby="seo-about-temp-email" data-seo-info>
+  <div class="seo-tool-info__inner">
+    <h2 class="seo-tool-info__heading" id="seo-about-temp-email">About this tool</h2>
+    <div class="seo-tool-info__grid">
+      <article class="seo-tool-info__card"><h3>What it does</h3><p>Create a temporary receive-only email address for short-term sign-ups or testing.</p></article>
+      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Generate a temporary email address.</li><li>Copy the address and use it where needed.</li><li>Refresh the temporary inbox and open messages that arrive during the session.</li></ol></article>
+      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>Temporary addresses and messages use the mail.tm service, so email data is handled by that external service rather than remaining only in your browser.</p></article>
+    </div>
+    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="fake-information-generator.html" title="Fake Information Generator">Fake Information Generator</a><a href="encrypt-decrypt.html" title="Text Encrypter / Decrypter">Text Encrypter / Decrypter</a><a href="hashing.html" title="Hashing Tool">Hashing Tool</a></div></nav>
+  </div>
+</section>
+
 </main>
 
 <footer class="tools-global-footer">
@@ -793,7 +825,7 @@ main{flex:1}
       renderList();
     }catch(error){
       if(manual){
-        setStatus(error.message||'Could not refresh the inbox.',true);
+        setStatus(error.message||'Could not refresh the inbox. Check your connection and try again.',true);
       }
       console.warn(error);
     }finally{
@@ -839,8 +871,8 @@ main{flex:1}
     }catch(error){
       preview.innerHTML='';
       showPlaceholder(true);
-      placeholder.textContent='Could not open this message.';
-      setStatus(error.message||'Could not open this message.',true);
+      placeholder.textContent='Could not open that message. Try refreshing the inbox.';
+      setStatus(error.message||'Could not open that message. Try refreshing the inbox.',true);
     }
   }
 
@@ -901,6 +933,6 @@ main{flex:1}
   });
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk58"></script>
+<script src="../../Assets/site-shell.js?v=mk75"></script>
 </body>
 </html>

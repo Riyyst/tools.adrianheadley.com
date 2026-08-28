@@ -3,10 +3,29 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Tools | Barcode Generator</title>
-<meta content="Generate a simple Code 39 barcode instantly. Export as PNG, SVG, or PDF." name="description"/>
 <meta content="#f5f5f7" name="theme-color"/>
 
+<title>Free Code 39 Barcode Generator | Adrian Headley Tools</title>
+<meta name="description" content="Generate a Code 39 barcode with optional name, location and item labels, then download it as PNG, SVG or PDF."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Free Code 39 Barcode Generator | Adrian Headley Tools"/>
+<meta property="og:description" content="Generate a Code 39 barcode with optional name, location and item labels, then download it as PNG, SVG or PDF."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta property="og:image:width" content="2048"/>
+<meta property="og:image:height" content="1365"/>
+<meta property="og:image:alt" content="Adrian Headley Tools"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Free Code 39 Barcode Generator | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Generate a Code 39 barcode with optional name, location and item labels, then download it as PNG, SVG or PDF."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html","name":"Barcode Generator","description":"Generate a Code 39 barcode with optional name, location and item labels, then download it as PNG, SVG or PDF.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#app","name":"Barcode Generator","url":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html","description":"Generate a Code 39 barcode with optional name, location and item labels, then download it as PNG, SVG or PDF.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Optionally add a name, location or item label.","Select Generate barcode to create the barcode and numeric value.","Choose PNG, SVG or PDF and download the result, or copy a setup link."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Barcode Generator","item":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html"}]}]}</script>
 <style>
     :root{
       --bg:#f5f5f7;
@@ -299,7 +318,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk58">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -363,7 +382,8 @@
               <option value="svg">SVG</option>
               <option value="pdf">PDF</option>
             </select>
-            <button class="btn" id="btnDownload" type="button">Download</button>
+            <button class="btn" disabled id="btnDownload" type="button">Download</button>
+            <button class="btn" id="btnShareSetup" type="button">Copy setup link</button>
           </div>
 
           <p id="hint"></p>
@@ -371,6 +391,19 @@
       </div>
     </div>
   </section>
+
+<section class="seo-tool-info" aria-labelledby="seo-about-barcode-generator" data-seo-info>
+  <div class="seo-tool-info__inner">
+    <h2 class="seo-tool-info__heading" id="seo-about-barcode-generator">About this tool</h2>
+    <div class="seo-tool-info__grid">
+      <article class="seo-tool-info__card"><h3>What it does</h3><p>Create a simple Code 39 barcode with a generated numeric value and optional descriptive labels.</p></article>
+      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Optionally add a name, location or item label.</li><li>Select Generate barcode to create the barcode and numeric value.</li><li>Choose PNG, SVG or PDF and download the result, or copy a setup link.</li></ol></article>
+      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>Barcode generation is performed locally in your browser and does not require your labels to be uploaded.</p></article>
+    </div>
+    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="qr-code-generator.html" title="QR Code Generator">QR Code Generator</a><a href="fake-information-generator.html" title="Fake Information Generator">Fake Information Generator</a><a href="file-converter.html" title="File Converter">File Converter</a></div></nav>
+  </div>
+</section>
+
 </main>
 
 <footer class="tools-global-footer">
@@ -389,10 +422,65 @@
 <script>
 (function(){const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();})();
 
+
+function encodeSharedState(value){
+  const bytes=new TextEncoder().encode(JSON.stringify(value));
+  let binary='';
+  bytes.forEach(byte=>binary+=String.fromCharCode(byte));
+  return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function decodeSharedState(){
+  const match=location.hash.match(/(?:^#|&)s=([^&]+)/);
+  if(!match)return null;
+  try{
+    let encoded=match[1].replace(/-/g,'+').replace(/_/g,'/');
+    while(encoded.length%4)encoded+='=';
+    const binary=atob(encoded);
+    const bytes=Uint8Array.from(binary,ch=>ch.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }catch{return null;}
+}
+function makeSharedStateUrl(state){
+  const url=new URL(location.href);
+  url.hash='s='+encodeSharedState(state);
+  return url.href;
+}
+async function copySharedStateUrl(url,button){
+  try{
+    if(navigator.clipboard?.writeText){
+      await navigator.clipboard.writeText(url);
+    }else{
+      const area=document.createElement('textarea');
+      area.value=url;
+      area.setAttribute('readonly','');
+      area.style.position='fixed';
+      area.style.opacity='0';
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+    }
+    const old=button.textContent;
+    button.textContent='Copied';
+    setTimeout(()=>button.textContent=old,1100);
+  }catch{
+    const old=button.textContent;
+    button.textContent='Copy failed';
+    setTimeout(()=>button.textContent=old,1300);
+  }
+}
+function clearSharedStateHash(){
+  if(location.hash.startsWith('#s=')){
+    history.replaceState(null,'',location.pathname+location.search);
+  }
+}
+
+
     const mount = document.getElementById('mount');
     const fmt = document.getElementById('fmt');
     const btnGenerate = document.getElementById('btnGenerate');
     const btnDownload = document.getElementById('btnDownload');
+    const btnShareSetup = document.getElementById('btnShareSetup');
     const hint = document.getElementById('hint');
     const previewWrapper = document.getElementById('previewWrapper');
     const downloads = document.getElementById('downloads');
@@ -534,6 +622,7 @@
       previewWrapper.setAttribute("aria-hidden","false");
       downloads.style.display = "flex";
       downloads.style.marginTop = "var(--stack-gap)";
+      btnDownload.disabled = false;
     }
 
     function svgToPngBlob(svgEl, outW, outH){
@@ -624,6 +713,23 @@
       }, 250);
     }
 
+
+    function barcodeSetupState(){
+      return {v:1,name:nameField.value,location:locField.value,item:itemField.value,format:fmt.value,barcode:lastValue||''};
+    }
+    function restoreBarcodeSetup(){
+      const shared=decodeSharedState();
+      if(!shared||shared.v!==1)return;
+      if(typeof shared.name==='string')nameField.value=shared.name;
+      if(typeof shared.location==='string')locField.value=shared.location;
+      if(typeof shared.item==='string')itemField.value=shared.item;
+      if(shared.format&&Array.from(fmt.options).some(option=>option.value===shared.format))fmt.value=shared.format;
+      if(typeof shared.barcode==='string'&&shared.barcode)renderCode39(shared.barcode);
+    }
+    btnShareSetup.addEventListener('click',()=>{
+      copySharedStateUrl(makeSharedStateUrl(barcodeSetupState()),btnShareSetup);
+    });
+
     btnGenerate.addEventListener('click', ()=>{
       const v = generateValue(12);
       renderCode39(v);
@@ -656,9 +762,11 @@
         download('barcode.pdf', pdfBlob);
       }
     });
+
+    restoreBarcodeSetup();
 </script>
 
 <!-- RIYST_INLINE_SCRIPT_END -->
-<script src="../../Assets/site-shell.js?v=mk58"></script>
+<script src="../../Assets/site-shell.js?v=mk75"></script>
 </body>
 </html>

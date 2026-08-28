@@ -3,10 +3,29 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Tools | PDF Separator</title>
-<meta name="description" content="Split one PDF into separate page PDFs directly in your browser."/>
 <meta name="theme-color" content="#f5f5f7"/>
 
+<title>Split &amp; Separate PDF Pages | Adrian Headley Tools</title>
+<meta name="description" content="Split a PDF into individual pages or selected page ranges directly in your browser, with ZIP download support."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Split &amp; Separate PDF Pages | Adrian Headley Tools"/>
+<meta property="og:description" content="Split a PDF into individual pages or selected page ranges directly in your browser, with ZIP download support."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta property="og:image:width" content="2048"/>
+<meta property="og:image:height" content="1365"/>
+<meta property="og:image:alt" content="Adrian Headley Tools"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Split &amp; Separate PDF Pages | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Split a PDF into individual pages or selected page ranges directly in your browser, with ZIP download support."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","name":"PDF Separator","description":"Split a PDF into individual pages or selected page ranges directly in your browser, with ZIP download support.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app","name":"PDF Separator","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","description":"Split a PDF into individual pages or selected page ranges directly in your browser, with ZIP download support.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Choose the PDF you want to split.","Select all pages or enter the page numbers and ranges you need.","Split the PDF and download individual files or the combined ZIP where available."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"PDF Separator","item":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"}]}]}</script>
 <style>
   :root{
     --bg:#f5f5f7;
@@ -397,7 +416,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk58">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -443,7 +462,7 @@
               <input accept=".pdf,application/pdf" id="file" type="file"/>
               <span id="dropText">Click to choose a PDF or drag and drop here</span>
             </label>
-            <div class="filename" id="fileName">No file selected</div>
+            <div class="filename" id="fileName">Choose a PDF to begin.</div>
             <div aria-live="polite" class="details hidden" id="pdfInfo"></div>
 
             <div class="controls hidden" id="pagesBlock">
@@ -485,6 +504,19 @@
       </div>
     </div>
   </section>
+
+<section class="seo-tool-info" aria-labelledby="seo-about-pdf-separator" data-seo-info>
+  <div class="seo-tool-info__inner">
+    <h2 class="seo-tool-info__heading" id="seo-about-pdf-separator">About this tool</h2>
+    <div class="seo-tool-info__grid">
+      <article class="seo-tool-info__card"><h3>What it does</h3><p>Separate a PDF into individual page files or selected page ranges.</p></article>
+      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Choose the PDF you want to split.</li><li>Select all pages or enter the page numbers and ranges you need.</li><li>Split the PDF and download individual files or the combined ZIP where available.</li></ol></article>
+      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>PDF splitting is performed in your browser. Supporting PDF and ZIP libraries may be loaded from public CDNs.</p></article>
+    </div>
+    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="merge-pdfs.html" title="Merge PDFs">Merge PDFs</a><a href="file-compressor.html" title="File Compressor">File Compressor</a><a href="ocr-reader.html" title="OCR Reader">OCR Reader</a></div></nav>
+  </div>
+</section>
+
 </main>
 
 <footer class="tools-global-footer">
@@ -560,7 +592,7 @@
       totalPages = 0;
       sourceBytes = null;
       fileInput.value = '';
-      fileNameEl.textContent = 'No file selected';
+      fileNameEl.textContent = 'Choose a PDF to begin.';
       pdfInfoEl.innerHTML = '';
       hide(pdfInfoEl);
       pagesInput.value = '';
@@ -647,7 +679,7 @@
     if(f && (/pdf$/i.test(f.type) || /\.pdf$/i.test(f.name))){
       pickFile(f);
     }else{
-      errEl.textContent = 'Please select a PDF.';
+      errEl.textContent = 'Choose a PDF.';
     }
   });
 
@@ -738,7 +770,7 @@
     errEl.textContent = '';
 
     if(!file || !sourceBytes){
-      errEl.textContent = 'Please select a PDF first.';
+      errEl.textContent = 'Choose a PDF first.';
       return;
     }
 
@@ -749,7 +781,7 @@
       await splitPages(pages);
     }catch(err){
       console.error(err);
-      errEl.textContent = err && err.message ? err.message : 'Split failed.';
+      errEl.textContent = err && err.message ? err.message : 'Could not split that PDF. Try another PDF file.';
       setStatus('');
     }finally{
       runBtn.removeAttribute('disabled');
@@ -766,6 +798,6 @@
   resetUI(true);
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk58"></script>
+<script src="../../Assets/site-shell.js?v=mk75"></script>
 </body>
 </html>

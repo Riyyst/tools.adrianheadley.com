@@ -3,9 +3,28 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Tools | Word &amp; Character Counter</title>
-<meta name="description" content="Count words, characters, lines, sentences and paragraphs, estimate reading and speaking time, and clean or download your text."/>
 <meta name="theme-color" content="#f5f5f7"/>
+<title>Word &amp; Character Counter | Adrian Headley Tools</title>
+<meta name="description" content="Count words, characters, lines, sentences and paragraphs with live reading and speaking-time estimates as you type."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/word-character-counter.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Word &amp; Character Counter | Adrian Headley Tools"/>
+<meta property="og:description" content="Count words, characters, lines, sentences and paragraphs with live reading and speaking-time estimates as you type."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/word-character-counter.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta property="og:image:width" content="2048"/>
+<meta property="og:image:height" content="1365"/>
+<meta property="og:image:alt" content="Adrian Headley Tools"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Word &amp; Character Counter | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Count words, characters, lines, sentences and paragraphs with live reading and speaking-time estimates as you type."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/word-character-counter.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/word-character-counter.html","name":"Word & Character Counter","description":"Count words, characters, lines, sentences and paragraphs with live reading and speaking-time estimates as you type.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/word-character-counter.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/word-character-counter.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/word-character-counter.html#app","name":"Word & Character Counter","url":"https://tools.adrianheadley.com/pages/toolpages/word-character-counter.html","description":"Count words, characters, lines, sentences and paragraphs with live reading and speaking-time estimates as you type.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Paste, type or import your text.","Review the live word, character, sentence, paragraph and timing statistics.","Edit or clean the text, then copy or download it where needed."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/word-character-counter.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Word & Character Counter","item":"https://tools.adrianheadley.com/pages/toolpages/word-character-counter.html"}]}]}</script>
 <style>
 :root{
   --bg:#f5f5f7;
@@ -377,7 +396,7 @@ select:focus{
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk58">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -462,6 +481,19 @@ select:focus{
       </div>
     </div>
   </section>
+
+<section class="seo-tool-info" aria-labelledby="seo-about-word-character-counter" data-seo-info>
+  <div class="seo-tool-info__inner">
+    <h2 class="seo-tool-info__heading" id="seo-about-word-character-counter">About this tool</h2>
+    <div class="seo-tool-info__grid">
+      <article class="seo-tool-info__card"><h3>What it does</h3><p>Count words, characters, lines, sentences, paragraphs and writing-time estimates as you type.</p></article>
+      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Paste, type or import your text.</li><li>Review the live word, character, sentence, paragraph and timing statistics.</li><li>Edit or clean the text, then copy or download it where needed.</li></ol></article>
+      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>Counting and text cleanup are performed in your browser. Imported supported documents are processed locally by the page.</p></article>
+    </div>
+    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="text-case-converter.html" title="Text Case Converter">Text Case Converter</a><a href="find-and-replace.html" title="Find &amp; Replace">Find &amp; Replace</a><a href="typing-speed-test.html" title="Typing Speed Test">Typing Speed Test</a></div></nav>
+  </div>
+</section>
+
 </main>
 
 <footer class="tools-global-footer">
@@ -619,12 +651,12 @@ btnCopy.addEventListener('click', async ()=>{
           source.value = '';
           fileMeta.textContent = 'Legacy .doc detected — please save as .docx and upload again.';
         } else {
-          alert('Unsupported document. Please choose a .txt, .docx, or .pdf file.');
+          alert('This document type is not supported. Choose a .txt, .docx, or .pdf file.');
           return;
         }
       }catch(e){
         console.error(e);
-        alert('Could not read this file. Try .txt or .docx.');
+        alert('Could not read that file. Try a .txt or .docx file.');
         return;
       }
 
@@ -809,6 +841,6 @@ dropZone.addEventListener('dragover',()=>dropZone.classList.add('dragging'));
 dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('dragging'));
 dropZone.addEventListener('drop',()=>dropZone.classList.remove('dragging'));
 </script>
-<script src="../../Assets/site-shell.js?v=mk58"></script>
+<script src="../../Assets/site-shell.js?v=mk75"></script>
 </body>
 </html>

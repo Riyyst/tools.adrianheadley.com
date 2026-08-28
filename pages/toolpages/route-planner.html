@@ -3,10 +3,29 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Tools | Route Planner</title>
-<meta name="description" content="Plan and optimise multi-stop driving routes using OpenStreetMap and OSRM."/>
 <meta name="theme-color" content="#f5f5f7"/>
 
+<title>Multi-Stop Route Planner &amp; Optimiser | Adrian Headley Tools</title>
+<meta name="description" content="Plan and optimise a multi-stop driving route using postcodes, full addresses or coordinates, with map and Google Maps hand-off."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/route-planner.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Multi-Stop Route Planner &amp; Optimiser | Adrian Headley Tools"/>
+<meta property="og:description" content="Plan and optimise a multi-stop driving route using postcodes, full addresses or coordinates, with map and Google Maps hand-off."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/route-planner.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta property="og:image:width" content="2048"/>
+<meta property="og:image:height" content="1365"/>
+<meta property="og:image:alt" content="Adrian Headley Tools"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Multi-Stop Route Planner &amp; Optimiser | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Plan and optimise a multi-stop driving route using postcodes, full addresses or coordinates, with map and Google Maps hand-off."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/route-planner.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/route-planner.html","name":"Route Planner","description":"Plan and optimise a multi-stop driving route using postcodes, full addresses or coordinates, with map and Google Maps hand-off.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/route-planner.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/route-planner.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/route-planner.html#app","name":"Route Planner","url":"https://tools.adrianheadley.com/pages/toolpages/route-planner.html","description":"Plan and optimise a multi-stop driving route using postcodes, full addresses or coordinates, with map and Google Maps hand-off.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Enter the starting point, stops and optional final destination.","Choose whether to return to the start where applicable, then plan the route.","Review the optimised itinerary and map, copy it, open it in Google Maps or share the setup."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/route-planner.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Route Planner","item":"https://tools.adrianheadley.com/pages/toolpages/route-planner.html"}]}]}</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
@@ -438,7 +457,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk58">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -514,6 +533,7 @@
             <div class="section actions">
               <button class="btn primary" disabled id="btn-optimise" type="button">Plan My Route</button>
               <button class="btn secondary" disabled id="btn-copy" type="button">Copy Itinerary</button>
+              <button class="btn secondary" id="btn-share-setup" type="button">Copy setup link</button>
               <a class="btn secondary" id="btn-google" aria-disabled="true" target="_blank" rel="noopener">Open in Google Maps</a>
               <button class="btn ghost" id="btn-clear" type="button">Clear All</button>
             </div>
@@ -541,6 +561,19 @@
       </div>
     </div>
   </section>
+
+<section class="seo-tool-info" aria-labelledby="seo-about-route-planner" data-seo-info>
+  <div class="seo-tool-info__inner">
+    <h2 class="seo-tool-info__heading" id="seo-about-route-planner">About this tool</h2>
+    <div class="seo-tool-info__grid">
+      <article class="seo-tool-info__card"><h3>What it does</h3><p>Plan and optimise a driving route containing multiple stops using postcodes, full addresses or coordinates.</p></article>
+      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Enter the starting point, stops and optional final destination.</li><li>Choose whether to return to the start where applicable, then plan the route.</li><li>Review the optimised itinerary and map, copy it, open it in Google Maps or share the setup.</li></ol></article>
+      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>Routing requires online geocoding, mapping and routing services. Entered locations are sent to those services to calculate and display the route.</p></article>
+    </div>
+    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="time-zone-converter.html" title="Time Zone Converter">Time Zone Converter</a><a href="date-difference.html" title="Date Difference Calculator">Date Difference Calculator</a><a href="unit-converter.html" title="Unit Converter">Unit Converter</a></div></nav>
+  </div>
+</section>
+
 </main>
 
 <footer class="tools-global-footer">
@@ -558,6 +591,59 @@
 
 <!-- RIYST_INLINE_SCRIPT_START -->
 <script>
+
+function encodeSharedState(value){
+  const bytes=new TextEncoder().encode(JSON.stringify(value));
+  let binary='';
+  bytes.forEach(byte=>binary+=String.fromCharCode(byte));
+  return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function decodeSharedState(){
+  const match=location.hash.match(/(?:^#|&)s=([^&]+)/);
+  if(!match)return null;
+  try{
+    let encoded=match[1].replace(/-/g,'+').replace(/_/g,'/');
+    while(encoded.length%4)encoded+='=';
+    const binary=atob(encoded);
+    const bytes=Uint8Array.from(binary,ch=>ch.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }catch{return null;}
+}
+function makeSharedStateUrl(state){
+  const url=new URL(location.href);
+  url.hash='s='+encodeSharedState(state);
+  return url.href;
+}
+async function copySharedStateUrl(url,button){
+  try{
+    if(navigator.clipboard?.writeText){
+      await navigator.clipboard.writeText(url);
+    }else{
+      const area=document.createElement('textarea');
+      area.value=url;
+      area.setAttribute('readonly','');
+      area.style.position='fixed';
+      area.style.opacity='0';
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+    }
+    const old=button.textContent;
+    button.textContent='Copied';
+    setTimeout(()=>button.textContent=old,1100);
+  }catch{
+    const old=button.textContent;
+    button.textContent='Copy failed';
+    setTimeout(()=>button.textContent=old,1300);
+  }
+}
+function clearSharedStateHash(){
+  if(location.hash.startsWith('#s=')){
+    history.replaceState(null,'',location.pathname+location.search);
+  }
+}
+
 const NOMINATIM = "https://nominatim.openstreetmap.org";
     const OSRM = "https://router.project-osrm.org";
     const LANG_HEADER = { "Accept-Language": "en-GB" };
@@ -903,6 +989,63 @@ const NOMINATIM = "https://nominatim.openstreetmap.org";
       clearPreview(); renderRoute(osrm.data,u,{finalFixed,roundtrip}); hide(document.getElementById('feedback')); btn.disabled=false; btn.textContent=old;
     }
 
+
+    function locationValues(container){
+      if(!container)return [];
+      return Array.from(container.querySelectorAll('input'))
+        .filter(input=>!['button','checkbox','radio','file'].includes(input.type))
+        .map(input=>input.value);
+    }
+    function setLocationValues(container,values){
+      if(!container||!Array.isArray(values))return;
+      const inputs=Array.from(container.querySelectorAll('input'))
+        .filter(input=>!['button','checkbox','radio','file'].includes(input.type));
+      inputs.forEach((input,index)=>{
+        input.value=values[index]??'';
+        input.dispatchEvent(new Event('input',{bubbles:true}));
+      });
+    }
+    function routeSetupState(){
+      return {
+        v:1,
+        mode:currentMode,
+        start:locationValues(getStartEl()),
+        stops:Array.from(document.querySelectorAll('#stops .loc-postcode, #stops .loc-address')).map(locationValues),
+        final:locationValues(getFinalEl()),
+        roundtrip:document.getElementById('roundtrip').checked
+      };
+    }
+    function restoreRouteSetup(){
+      const state=decodeSharedState();
+      if(!state||state.v!==1)return;
+      const mode=state.mode==='address'?'address':'postcode';
+      if(mode!==currentMode){
+        currentMode=mode;
+        modeButtons.postcode.setAttribute('aria-pressed',mode==='postcode');
+        modeButtons.address.setAttribute('aria-pressed',mode==='address');
+        buildAll();
+      }
+      setLocationValues(getStartEl(),state.start);
+      document.getElementById('stops').innerHTML='';
+      if(Array.isArray(state.stops)){
+        state.stops.forEach(values=>{
+          addStopRow();
+          const rows=document.querySelectorAll('#stops .loc-postcode, #stops .loc-address');
+          setLocationValues(rows[rows.length-1],values);
+        });
+      }
+      setLocationValues(getFinalEl(),state.final);
+      document.getElementById('roundtrip').checked=state.roundtrip!==false;
+      document.getElementById('roundtrip-wrap').style.display=isContainerFilled(getFinalEl())?'none':'';
+      evaluateOptimise();
+      syncMapHeight();
+      setTimeout(()=>map.invalidateSize(),50);
+    }
+    function copyRouteSetup(){
+      const button=document.getElementById('btn-share-setup');
+      copySharedStateUrl(makeSharedStateUrl(routeSetupState()),button);
+    }
+
     function clearAll(){
       buildAll();
       clearMap();
@@ -918,6 +1061,7 @@ const NOMINATIM = "https://nominatim.openstreetmap.org";
       hide(document.getElementById('dedup'));
       document.getElementById('roundtrip').checked=true;
       document.getElementById('roundtrip-wrap').style.display="";
+      clearSharedStateHash();
       syncMapHeight();
       setTimeout(()=>map.invalidateSize(),50);
     }
@@ -931,6 +1075,7 @@ const NOMINATIM = "https://nominatim.openstreetmap.org";
       document.getElementById('btn-add-stop').addEventListener('click',addStopRow);
       document.getElementById('btn-optimise').addEventListener('click',doOptimise);
       document.getElementById('btn-clear').addEventListener('click',clearAll);
+      document.getElementById('btn-share-setup').addEventListener('click',copyRouteSetup);
       document.getElementById('btn-copy').addEventListener('click',async()=>{const t=document.getElementById('btn-copy').dataset.clipText||'';try{await navigator.clipboard.writeText(t);const b=document.getElementById('btn-copy');const old=b.textContent; b.textContent="Copied!"; setTimeout(()=>b.textContent=old,1200)}catch{show(document.getElementById('errors'),"Could not copy to clipboard. Please copy manually.")}});
       const obs=new MutationObserver(()=>{const any=isContainerFilled(getFinalEl());document.getElementById('roundtrip-wrap').style.display=any?"none":""}); obs.observe(document.getElementById('final-group'),{childList:true,subtree:true});
       window.addEventListener('resize',()=>{syncMapHeight(); setTimeout(()=>map.invalidateSize(),50)});
@@ -949,9 +1094,10 @@ const NOMINATIM = "https://nominatim.openstreetmap.org";
     }
 
     setupUI();
+    restoreRouteSetup();
     document.getElementById('year').textContent=new Date().getFullYear();
 </script>
 <!-- RIYST_INLINE_SCRIPT_END -->
-<script src="../../Assets/site-shell.js?v=mk58"></script>
+<script src="../../Assets/site-shell.js?v=mk75"></script>
 </body>
 </html>

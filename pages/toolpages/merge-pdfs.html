@@ -3,10 +3,29 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Tools | Merge PDFs</title>
-<meta name="description" content="Merge multiple PDF files directly in your browser. Page order follows upload order."/>
 <meta name="theme-color" content="#f5f5f7"/>
 
+<title>Merge PDF Files in Your Browser | Adrian Headley Tools</title>
+<meta name="description" content="Combine multiple PDF files into one PDF in the order you choose, processed directly in your browser."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/merge-pdfs.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Merge PDF Files in Your Browser | Adrian Headley Tools"/>
+<meta property="og:description" content="Combine multiple PDF files into one PDF in the order you choose, processed directly in your browser."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/merge-pdfs.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta property="og:image:width" content="2048"/>
+<meta property="og:image:height" content="1365"/>
+<meta property="og:image:alt" content="Adrian Headley Tools"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Merge PDF Files in Your Browser | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Combine multiple PDF files into one PDF in the order you choose, processed directly in your browser."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/merge-pdfs.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/merge-pdfs.html","name":"Merge PDFs","description":"Combine multiple PDF files into one PDF in the order you choose, processed directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/merge-pdfs.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/merge-pdfs.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/merge-pdfs.html#app","name":"Merge PDFs","url":"https://tools.adrianheadley.com/pages/toolpages/merge-pdfs.html","description":"Combine multiple PDF files into one PDF in the order you choose, processed directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Add at least two PDF files.","Arrange the PDFs in the order you want.","Merge them and download the combined PDF."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/merge-pdfs.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Merge PDFs","item":"https://tools.adrianheadley.com/pages/toolpages/merge-pdfs.html"}]}]}</script>
 <style>
   :root{
     --bg:#f5f5f7;
@@ -357,7 +376,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk58">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -403,7 +422,7 @@
               <input accept=".pdf,application/pdf" id="files" multiple type="file"/>
               <span id="dropText">Click to choose PDFs or drag and drop here</span>
             </label>
-            <div class="filename" id="fileSummary">No files selected</div>
+            <div class="filename" id="fileSummary">Choose at least two PDF files to begin.</div>
             <div aria-live="polite" class="filelist hidden" id="fileList"></div>
             <div class="progress" id="status"></div>
           </div>
@@ -419,6 +438,19 @@
       </div>
     </div>
   </section>
+
+<section class="seo-tool-info" aria-labelledby="seo-about-merge-pdfs" data-seo-info>
+  <div class="seo-tool-info__inner">
+    <h2 class="seo-tool-info__heading" id="seo-about-merge-pdfs">About this tool</h2>
+    <div class="seo-tool-info__grid">
+      <article class="seo-tool-info__card"><h3>What it does</h3><p>Combine multiple PDF files into a single document in your chosen order.</p></article>
+      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Add at least two PDF files.</li><li>Arrange the PDFs in the order you want.</li><li>Merge them and download the combined PDF.</li></ol></article>
+      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>PDF merging is performed in your browser. A supporting PDF library may be loaded from a public CDN.</p></article>
+    </div>
+    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="pdf-separator.html" title="PDF Separator">PDF Separator</a><a href="file-compressor.html" title="File Compressor">File Compressor</a><a href="file-converter.html" title="File Converter">File Converter</a></div></nav>
+  </div>
+</section>
+
 </main>
 
 <footer class="tools-global-footer">
@@ -472,12 +504,12 @@
   function resetUI(full=true){
     setStatus(""); errEl.textContent="";
     hide(dlBtn); hide(clearBtn); dlBtn.setAttribute("disabled",""); dlBtn.removeAttribute("href");
-    if(full){ files = []; fileInput.value=""; fileSummary.textContent="No files selected"; fileListEl.innerHTML=""; hide(fileListEl); }
+    if(full){ files = []; fileInput.value=""; fileSummary.textContent="Choose at least two PDF files to begin."; fileListEl.innerHTML=""; hide(fileListEl); }
     updateRunVisibility();
   }
 
   function summarizeFiles(){
-    if(!files.length){ fileSummary.textContent = "No files selected"; hide(fileListEl); updateRunVisibility(); return; }
+    if(!files.length){ fileSummary.textContent = "Choose at least two PDF files to begin."; hide(fileListEl); updateRunVisibility(); return; }
     fileSummary.textContent = files.length + " file(s) selected";
     const ol = document.createElement("ol");
     files.forEach((f, idx)=>{
@@ -523,7 +555,7 @@
     setStatus("");
     const picked = Array.from(e.target.files || []).filter(f=>/pdf$/i.test(f.type) || /\.pdf$/i.test(f.name));
     if(picked.length){ files = picked; summarizeFiles(); }
-    else{ errEl.textContent = "Please select at least 2 PDF files."; }
+    else{ errEl.textContent = "Choose at least two PDF files."; }
   });
 
   clearBtn.addEventListener("click", ()=> resetUI(true));
@@ -557,7 +589,7 @@
 
   runBtn.addEventListener("click", async ()=>{
     errEl.textContent = "";
-    if(files.length < 2){ errEl.textContent = "Please select at least 2 PDFs to merge."; return; }
+    if(files.length < 2){ errEl.textContent = "Choose at least two PDF files to merge."; return; }
     runBtn.setAttribute("disabled","");
     hide(dlBtn); hide(clearBtn); setStatus("Starting…");
 
@@ -591,6 +623,6 @@
   if(y) y.textContent=new Date().getFullYear();
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk58"></script>
+<script src="../../Assets/site-shell.js?v=mk75"></script>
 </body>
 </html>

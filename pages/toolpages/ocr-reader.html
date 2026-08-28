@@ -3,10 +3,29 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Tools | OCR Reader</title>
-<meta name="description" content="Convert PDFs and images into searchable PDFs using browser-based OCR."/>
 <meta name="theme-color" content="#f5f5f7"/>
 
+<title>OCR Image &amp; PDF Text Reader | Adrian Headley Tools</title>
+<meta name="description" content="Extract text from images or PDFs with browser-based OCR and create searchable output where supported."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/ocr-reader.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="OCR Image &amp; PDF Text Reader | Adrian Headley Tools"/>
+<meta property="og:description" content="Extract text from images or PDFs with browser-based OCR and create searchable output where supported."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/ocr-reader.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta property="og:image:width" content="2048"/>
+<meta property="og:image:height" content="1365"/>
+<meta property="og:image:alt" content="Adrian Headley Tools"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="OCR Image &amp; PDF Text Reader | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Extract text from images or PDFs with browser-based OCR and create searchable output where supported."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/ocr-reader.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/ocr-reader.html","name":"OCR Reader","description":"Extract text from images or PDFs with browser-based OCR and create searchable output where supported.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/ocr-reader.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/ocr-reader.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/ocr-reader.html#app","name":"OCR Reader","url":"https://tools.adrianheadley.com/pages/toolpages/ocr-reader.html","description":"Extract text from images or PDFs with browser-based OCR and create searchable output where supported.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Choose an image or PDF containing text.","Run OCR and wait for recognition to finish.","Review or copy the extracted text and download searchable output where available."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/ocr-reader.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"OCR Reader","item":"https://tools.adrianheadley.com/pages/toolpages/ocr-reader.html"}]}]}</script>
 <style>
   :root{
     --bg:#f5f5f7;
@@ -323,7 +342,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk58">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -369,7 +388,7 @@
               <input accept=".pdf,image/*,.tif,.tiff" id="file" type="file"/>
               <span id="dropText">Click to choose a file or drag and drop here</span>
             </label>
-            <div class="filename" id="fileName">No file selected</div>
+            <div class="filename" id="fileName">Choose an image or PDF to begin.</div>
             <div class="progress hidden" id="status"></div>
             <div aria-hidden="true" class="meter hidden"><span id="bar"></span></div>
           </div>
@@ -385,6 +404,19 @@
       </div>
     </div>
   </section>
+
+<section class="seo-tool-info" aria-labelledby="seo-about-ocr-reader" data-seo-info>
+  <div class="seo-tool-info__inner">
+    <h2 class="seo-tool-info__heading" id="seo-about-ocr-reader">About this tool</h2>
+    <div class="seo-tool-info__grid">
+      <article class="seo-tool-info__card"><h3>What it does</h3><p>Use optical character recognition to extract readable text from images or PDF pages.</p></article>
+      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Choose an image or PDF containing text.</li><li>Run OCR and wait for recognition to finish.</li><li>Review or copy the extracted text and download searchable output where available.</li></ol></article>
+      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>OCR processing runs in your browser, while OCR models, workers and PDF libraries may be downloaded from public CDN or model hosts.</p></article>
+    </div>
+    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="pdf-separator.html" title="PDF Separator">PDF Separator</a><a href="file-converter.html" title="File Converter">File Converter</a><a href="word-character-counter.html" title="Word &amp; Character Counter">Word &amp; Character Counter</a></div></nav>
+  </div>
+</section>
+
 </main>
 
 <footer class="tools-global-footer">
@@ -438,7 +470,7 @@ if (window.pdfjsLib) { window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://
   function resetUI(full=true){
     statusEl.textContent=""; bar.style.width="0%"; errEl.textContent="";
     hide(statusEl); hide(meterWrap); hide(dlBtn); hide(clearBtn);
-    dlBtn.setAttribute("disabled",""); dlBtn.removeAttribute("href"); if(full){ fileInput.value=""; srcFile=null; fileName.textContent="No file selected"; runBtn.setAttribute("disabled",""); }
+    dlBtn.setAttribute("disabled",""); dlBtn.removeAttribute("href"); if(full){ fileInput.value=""; srcFile=null; fileName.textContent="Choose an image or PDF to begin."; runBtn.setAttribute("disabled",""); }
   }
 
   // Turbo pipeline (ENG only, skip if already searchable)
@@ -579,7 +611,7 @@ if (window.pdfjsLib) { window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://
       dlBtn.href = url; dlBtn.download = outName; dlBtn.removeAttribute("disabled");
       setProgress(100, "All done — Ready for download"); show(dlBtn); show(clearBtn);
     }else{
-      throw new Error("OCR failed to produce output.");
+      throw new Error("No readable text was produced. Try a clearer image or another file.");
     }
   }
 
@@ -588,7 +620,7 @@ if (window.pdfjsLib) { window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://
   fileInput.addEventListener("change", (e)=>{
     resetUI(false);
     srcFile = e.target.files && e.target.files[0] ? e.target.files[0] : null;
-    fileName.textContent = srcFile ? srcFile.name : "No file selected";
+    fileName.textContent = srcFile ? srcFile.name : "Choose an image or PDF to begin.";
     enableGenerate();
   });
   dropZone.addEventListener("dragover", e=>{ e.preventDefault(); dropZone.classList.add("dragover"); });
@@ -621,6 +653,6 @@ if (window.pdfjsLib) { window.pdfjsLib.GlobalWorkerOptions.workerSrc = "https://
   if(y) y.textContent=new Date().getFullYear();
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk58"></script>
+<script src="../../Assets/site-shell.js?v=mk75"></script>
 </body>
 </html>

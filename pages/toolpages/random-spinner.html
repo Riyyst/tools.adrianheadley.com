@@ -3,10 +3,29 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Tools | Random Spinner</title>
-<meta name="description" content="Add weighted options and spin a colourful random choice wheel locally in your browser."/>
 <meta name="theme-color" content="#f5f5f7"/>
 
+<title>Random Picker &amp; Weighted Spinner | Adrian Headley Tools</title>
+<meta name="description" content="Build a random spinner from your own choices, assign weights, save or load lists, and share the configured wheel."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/random-spinner.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Random Picker &amp; Weighted Spinner | Adrian Headley Tools"/>
+<meta property="og:description" content="Build a random spinner from your own choices, assign weights, save or load lists, and share the configured wheel."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/random-spinner.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta property="og:image:width" content="2048"/>
+<meta property="og:image:height" content="1365"/>
+<meta property="og:image:alt" content="Adrian Headley Tools"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Random Picker &amp; Weighted Spinner | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Build a random spinner from your own choices, assign weights, save or load lists, and share the configured wheel."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/random-spinner.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/random-spinner.html","name":"Random Picker / Spinner","description":"Build a random spinner from your own choices, assign weights, save or load lists, and share the configured wheel.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/random-spinner.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/random-spinner.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/random-spinner.html#app","name":"Random Picker / Spinner","url":"https://tools.adrianheadley.com/pages/toolpages/random-spinner.html","description":"Build a random spinner from your own choices, assign weights, save or load lists, and share the configured wheel.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Add the choices you want on the wheel.","Adjust weights if some choices should be more or less likely.","Spin to select a result, or save, load or share the configured list."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/random-spinner.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Random Picker / Spinner","item":"https://tools.adrianheadley.com/pages/toolpages/random-spinner.html"}]}]}</script>
 <style>
   :root{
     --bg:#f5f5f7;
@@ -442,7 +461,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk58">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -497,6 +516,7 @@
             <div class="actions">
               <button class="btn secondary" id="saveBtn" type="button">Save List</button>
               <button class="btn secondary" id="loadBtn" type="button">Load List</button>
+              <button class="btn secondary" id="shareSetupBtn" type="button">Copy setup link</button>
               <input id="loadFile" type="file" accept=".json,application/json" hidden/>
             </div>
 
@@ -516,6 +536,19 @@
       </div>
     </div>
   </section>
+
+<section class="seo-tool-info" aria-labelledby="seo-about-random-spinner" data-seo-info>
+  <div class="seo-tool-info__inner">
+    <h2 class="seo-tool-info__heading" id="seo-about-random-spinner">About this tool</h2>
+    <div class="seo-tool-info__grid">
+      <article class="seo-tool-info__card"><h3>What it does</h3><p>Choose a random result from your own list using a weighted spinning wheel.</p></article>
+      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Add the choices you want on the wheel.</li><li>Adjust weights if some choices should be more or less likely.</li><li>Spin to select a result, or save, load or share the configured list.</li></ol></article>
+      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>Spinner choices and weights are handled in your browser. Setup links contain the list you choose to share.</p></article>
+    </div>
+    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="fake-information-generator.html" title="Fake Information Generator">Fake Information Generator</a><a href="date-difference.html" title="Date Difference Calculator">Date Difference Calculator</a><a href="unit-converter.html" title="Unit Converter">Unit Converter</a></div></nav>
+  </div>
+</section>
+
 </main>
 
 <footer class="tools-global-footer">
@@ -533,6 +566,60 @@
 (function(){
   'use strict';
 
+
+function encodeSharedState(value){
+  const bytes=new TextEncoder().encode(JSON.stringify(value));
+  let binary='';
+  bytes.forEach(byte=>binary+=String.fromCharCode(byte));
+  return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function decodeSharedState(){
+  const match=location.hash.match(/(?:^#|&)s=([^&]+)/);
+  if(!match)return null;
+  try{
+    let encoded=match[1].replace(/-/g,'+').replace(/_/g,'/');
+    while(encoded.length%4)encoded+='=';
+    const binary=atob(encoded);
+    const bytes=Uint8Array.from(binary,ch=>ch.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }catch{return null;}
+}
+function makeSharedStateUrl(state){
+  const url=new URL(location.href);
+  url.hash='s='+encodeSharedState(state);
+  return url.href;
+}
+async function copySharedStateUrl(url,button){
+  try{
+    if(navigator.clipboard?.writeText){
+      await navigator.clipboard.writeText(url);
+    }else{
+      const area=document.createElement('textarea');
+      area.value=url;
+      area.setAttribute('readonly','');
+      area.style.position='fixed';
+      area.style.opacity='0';
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+    }
+    const old=button.textContent;
+    button.textContent='Copied';
+    setTimeout(()=>button.textContent=old,1100);
+  }catch{
+    const old=button.textContent;
+    button.textContent='Copy failed';
+    setTimeout(()=>button.textContent=old,1300);
+  }
+}
+function clearSharedStateHash(){
+  if(location.hash.startsWith('#s=')){
+    history.replaceState(null,'',location.pathname+location.search);
+  }
+}
+
+
   const itemsEl = document.getElementById('items');
   const wheelCanvas = document.getElementById('wheel');
   const ctx = wheelCanvas.getContext('2d');
@@ -543,6 +630,7 @@
   const saveBtn = document.getElementById('saveBtn');
   const loadBtn = document.getElementById('loadBtn');
   const loadFile = document.getElementById('loadFile');
+  const shareSetupBtn = document.getElementById('shareSetupBtn');
   const confettiBox = document.getElementById('confetti');
   const wheelWinner = document.getElementById('wheelWinner');
   const statusEl = document.getElementById('status');
@@ -554,6 +642,26 @@
   let rotation = 0;
   let spinning = false;
   let hideWinnerTimer = null;
+
+
+  function spinnerSetupState(){
+    return {v:1,items:items.map(item=>({
+      text:String(item.text||'').trim(),
+      weight:Math.max(1,Math.floor(Number(item.weight)||1))
+    })).filter(item=>item.text)};
+  }
+  function restoreSpinnerSetup(){
+    const state=decodeSharedState();
+    if(!state||state.v!==1||!Array.isArray(state.items))return;
+    items=state.items
+      .filter(entry=>entry&&String(entry.text||'').trim())
+      .map(entry=>({
+        id:uid(),
+        text:String(entry.text).trim(),
+        weight:Math.max(1,Math.floor(Number(entry.weight)||1)),
+        color:'#7aa2ff'
+      }));
+  }
 
   function uid(){
     return (window.crypto && crypto.randomUUID)
@@ -926,6 +1034,7 @@
       clearTimeout(hideWinnerTimer);
       hideWinnerTimer=null;
     }
+    clearSharedStateHash();
     setStatus('List cleared.');
   });
 
@@ -981,19 +1090,24 @@
       drawWheel();
       setStatus('');
     }catch(_){
-      setStatus('Could not load that list file.');
+      setStatus('Could not load that list. Choose a valid spinner JSON file.');
     }finally{
       loadFile.value='';
     }
   });
 
+  shareSetupBtn.addEventListener('click',()=>{
+    copySharedStateUrl(makeSharedStateUrl(spinnerSetupState()),shareSetupBtn);
+  });
+
   spinBtn.addEventListener('click',spin);
 
+  restoreSpinnerSetup();
   ensureColors();
   renderItems();
   drawWheel();
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk58"></script>
+<script src="../../Assets/site-shell.js?v=mk75"></script>
 </body>
 </html>

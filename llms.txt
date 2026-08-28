@@ -1,0 +1,48 @@
+# Adrian Headley Tools
+
+> Free browser-based utilities for text, files, PDFs, images, security, media, conversions and everyday tasks.
+
+Canonical site: https://tools.adrianheadley.com/
+Language: English (UK)
+
+## Core pages
+- [Tools](https://tools.adrianheadley.com/): Browse all tools.
+- [About](https://tools.adrianheadley.com/pages/about.html): How the site and browser tools work.
+- [Privacy](https://tools.adrianheadley.com/pages/privacy.html): Privacy and processing information.
+- [Terms](https://tools.adrianheadley.com/pages/terms.html): Terms of use.
+
+## Tools
+- [ASCII Art Generator](https://tools.adrianheadley.com/pages/toolpages/ascii-art.html): Turn text or an image into ASCII-style artwork directly in your browser, with controls for font, size and image detail.
+- [Barcode Generator](https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html): Create a simple Code 39 barcode with a generated numeric value and optional descriptive labels.
+- [Date Difference Calculator](https://tools.adrianheadley.com/pages/toolpages/date-difference.html): Calculate the exact amount of time between two dates or moments.
+- [Fake Information Generator](https://tools.adrianheadley.com/pages/toolpages/fake-information-generator.html): Generate realistic-looking but fictional placeholder identity information for testing, demos and mock-ups.
+- [File Compressor](https://tools.adrianheadley.com/pages/toolpages/file-compressor.html): Reduce the size of supported files using browser-based compression controls.
+- [File Converter](https://tools.adrianheadley.com/pages/toolpages/file-converter.html): Convert supported files between common formats using browser-based conversion tools.
+- [Find & Replace](https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html): Search through text and replace matching words, phrases or characters quickly.
+- [Hashing Tool](https://tools.adrianheadley.com/pages/toolpages/hashing.html): Create cryptographic hashes for text or files and compare content using several SHA algorithms.
+- [Image Colour Picker](https://tools.adrianheadley.com/pages/toolpages/colour-picker.html): Inspect colours from an uploaded image or use the browser's screen eyedropper where that feature is supported.
+- [Image Resizer](https://tools.adrianheadley.com/pages/toolpages/image-resizer.html): Resize an image to new dimensions while controlling how it fits or fills the target area.
+- [Merge PDFs](https://tools.adrianheadley.com/pages/toolpages/merge-pdfs.html): Combine multiple PDF files into a single document in your chosen order.
+- [Metadata Reader](https://tools.adrianheadley.com/pages/toolpages/metadata-reader.html): Inspect available EXIF, IPTC and XMP metadata from supported files without sending the file to a remote metadata service.
+- [Metadata Remover & Editor](https://tools.adrianheadley.com/pages/toolpages/metadata-remover.html): Remove, replace or add supported metadata fields such as GPS, device information and software details.
+- [OCR Reader](https://tools.adrianheadley.com/pages/toolpages/ocr-reader.html): Use optical character recognition to extract readable text from images or PDF pages.
+- [PDF Separator](https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html): Separate a PDF into individual page files or selected page ranges.
+- [Powerful Websites](https://tools.adrianheadley.com/pages/toolpages/powerful-sites.html): Browse a curated collection of useful websites, online tools and resources across a wide range of categories.
+- [QR Code Generator](https://tools.adrianheadley.com/pages/toolpages/qr-code-generator.html): Create a custom QR code for a link or other text with configurable colours, shapes and an optional embedded logo.
+- [Random Picker / Spinner](https://tools.adrianheadley.com/pages/toolpages/random-spinner.html): Choose a random result from your own list using a weighted spinning wheel.
+- [Route Planner](https://tools.adrianheadley.com/pages/toolpages/route-planner.html): Plan and optimise a driving route containing multiple stops using postcodes, full addresses or coordinates.
+- [Steganography Toolkit](https://tools.adrianheadley.com/pages/toolpages/steganography.html): Hide, reveal or remove concealed information in supported text, image, video and file formats.
+- [Teleprompter](https://tools.adrianheadley.com/pages/toolpages/teleprompter.html): Display scrolling script text over a camera or shared-screen preview for presenting and recording.
+- [Temporary Email](https://tools.adrianheadley.com/pages/toolpages/temp-email.html): Create a temporary receive-only email address for short-term sign-ups or testing.
+- [Text Case Converter](https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html): Change text between common letter-case formats instantly.
+- [Text Difference Checker](https://tools.adrianheadley.com/pages/toolpages/text-difference.html): Compare two pieces of text and highlight what has been added, removed or changed.
+- [Text Encrypter / Decrypter](https://tools.adrianheadley.com/pages/toolpages/encrypt-decrypt.html): Encrypt and decrypt text locally using AES-GCM browser cryptography.
+- [Time Zone Converter](https://tools.adrianheadley.com/pages/toolpages/time-zone-converter.html): Convert a date and time from one time zone into another.
+- [Typing Speed Test](https://tools.adrianheadley.com/pages/toolpages/typing-speed-test.html): Measure typing speed and accuracy using generated passages and live per-character feedback.
+- [Unit Converter](https://tools.adrianheadley.com/pages/toolpages/unit-converter.html): Convert a value between compatible measurement units.
+- [URL Lengthener](https://tools.adrianheadley.com/pages/toolpages/url-lengthener.html): Create a deliberately longer version of a URL for novelty or testing.
+- [URL Shortener](https://tools.adrianheadley.com/pages/toolpages/url-shortener.html): Create a shorter version of a long web address using an online shortening service.
+- [Video Editor](https://tools.adrianheadley.com/pages/toolpages/video-editor.html): Edit video, images, text and audio on a multi-track timeline directly in your browser.
+- [Word & Character Counter](https://tools.adrianheadley.com/pages/toolpages/word-character-counter.html): Count words, characters, lines, sentences, paragraphs and writing-time estimates as you type.
+
+This file is a supplementary machine-readable index. The canonical HTML pages and sitemap are the primary source of site content.
