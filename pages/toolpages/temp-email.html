@@ -210,6 +210,19 @@ main{flex:1}
   font-size:.95rem;
   font-weight:800;
 }
+.address-copy-feedback{
+  min-height:1rem;
+  margin:0 0 .3rem;
+  color:var(--accent);
+  font-size:.72rem;
+  font-weight:800;
+  text-align:center;
+  opacity:0;
+  transition:opacity .16s ease;
+}
+.address-copy-feedback.show{
+  opacity:1;
+}
 .address-box{
   display:flex;
   align-items:center;
@@ -222,8 +235,21 @@ main{flex:1}
   font-size:.88rem;
   font-weight:700;
   overflow-wrap:anywhere;
+  cursor:pointer;
+  transition:border-color .16s,background .16s;
 }
-.address-box.loading{color:var(--muted)}
+.address-box:hover:not(.loading){
+  border-color:rgba(37,99,235,.42);
+  background:#f8fbff;
+}
+.address-box:focus-visible{
+  outline:3px solid rgba(37,99,235,.22);
+  outline-offset:2px;
+}
+.address-box.loading{
+  color:var(--muted);
+  cursor:default;
+}
 .inbox-actions{
   display:flex;
   justify-content:center;
@@ -408,7 +434,7 @@ main{flex:1}
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk83">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk85">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -454,7 +480,8 @@ main{flex:1}
         <div class="dashboard hide" id="dashboard">
           <section class="panel" aria-label="Temporary inbox">
             <h2 class="panel-title">Address</h2>
-            <div class="address-box" id="addressBox">
+            <div class="address-copy-feedback" id="addressCopyFeedback" aria-live="polite">Copied</div>
+            <div class="address-box" id="addressBox" tabindex="0" role="button" aria-label="Copy temporary email address" title="Click to copy">
               <span id="address">—</span>
             </div>
 
@@ -505,7 +532,7 @@ main{flex:1}
 (function(){
   'use strict';
 
-  const API='https://api.mail.tm';
+  const API='https://api.mail.gw';
   const POLL_MS=3000;
   const REQUEST_TIMEOUT_MS=15000;
 
@@ -513,6 +540,7 @@ main{flex:1}
   const dashboard=document.getElementById('dashboard');
   const addressBox=document.getElementById('addressBox');
   const addressEl=document.getElementById('address');
+  const addressCopyFeedback=document.getElementById('addressCopyFeedback');
   const refreshBtn=document.getElementById('refreshBtn');
   const messageList=document.getElementById('messageList');
   const statusEl=document.getElementById('status');
@@ -593,6 +621,47 @@ main{flex:1}
     }
     button.disabled=busy;
     button.textContent=busy?busyText:button.dataset.originalText;
+  }
+
+  let copyFeedbackTimer=null;
+
+  function showAddressCopied(){
+    addressCopyFeedback.textContent='Copied';
+    addressCopyFeedback.classList.add('show');
+
+    if(copyFeedbackTimer){
+      clearTimeout(copyFeedbackTimer);
+    }
+
+    copyFeedbackTimer=setTimeout(()=>{
+      addressCopyFeedback.classList.remove('show');
+    },1200);
+  }
+
+  async function copyAddress(){
+    const value=String(state.address||'').trim();
+    if(!value || addressBox.classList.contains('loading')) return;
+
+    try{
+      if(navigator.clipboard && window.isSecureContext){
+        await navigator.clipboard.writeText(value);
+      }else{
+        const textarea=document.createElement('textarea');
+        textarea.value=value;
+        textarea.setAttribute('readonly','');
+        textarea.style.position='fixed';
+        textarea.style.opacity='0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const copied=document.execCommand('copy');
+        textarea.remove();
+        if(!copied) throw new Error('Copy failed');
+      }
+
+      showAddressCopied();
+    }catch(error){
+      setStatus('Could not copy the address. Select it and copy it manually.',true);
+    }
   }
 
   function clearPolling(){
@@ -690,14 +759,13 @@ main{flex:1}
     try{
       return await fetch(url,{
         ...options,
-        mode:'cors',
         signal:controller.signal
       });
     }catch(error){
       if(error && error.name==='AbortError'){
         throw new Error('The temporary email service took too long to respond. Please try again.');
       }
-      throw new Error('Could not reach the temporary email service. Check your connection and try again.');
+      throw new Error('The temporary email service could not be reached. Please try again in a moment.');
     }finally{
       clearTimeout(timer);
     }
@@ -718,7 +786,7 @@ main{flex:1}
 
   async function fetchDomains(){
     const response=await apiFetch(`${API}/domains?page=1`,{
-      headers:{Accept:'application/ld+json, application/json'},
+      headers:{Accept:'application/ld+json'},
       cache:'no-store'
     });
 
@@ -764,8 +832,7 @@ main{flex:1}
         const accountResponse=await apiFetch(`${API}/accounts`,{
           method:'POST',
           headers:{
-            'Content-Type':'application/json',
-            Accept:'application/ld+json, application/json'
+            'Content-Type':'application/json'
           },
           body:JSON.stringify({address,password})
         });
@@ -789,8 +856,7 @@ main{flex:1}
         const tokenResponse=await apiFetch(`${API}/token`,{
           method:'POST',
           headers:{
-            'Content-Type':'application/json',
-            Accept:'application/json'
+            'Content-Type':'application/json'
           },
           body:JSON.stringify({address,password})
         });
@@ -959,6 +1025,7 @@ main{flex:1}
     state.selectedId=null;
 
     dashboard.classList.remove('hide');
+    addressCopyFeedback.classList.remove('show');
     addressBox.classList.add('loading');
     addressEl.innerHTML='<span class="spinner"></span>Generating address…';
     refreshBtn.disabled=true;
@@ -987,6 +1054,14 @@ main{flex:1}
     }
   });
 
+  addressBox.addEventListener('click',copyAddress);
+  addressBox.addEventListener('keydown',event=>{
+    if(event.key==='Enter' || event.key===' '){
+      event.preventDefault();
+      copyAddress();
+    }
+  });
+
   refreshBtn.addEventListener('click',()=>refreshInbox(true));
 
   document.addEventListener('visibilitychange',()=>{
@@ -1008,6 +1083,6 @@ main{flex:1}
   });
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk83"></script>
+<script src="../../Assets/site-shell.js?v=mk85"></script>
 </body>
 </html>
