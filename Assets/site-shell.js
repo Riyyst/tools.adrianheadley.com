@@ -328,7 +328,7 @@
 
     const headingText = heading.textContent.trim();
 
-    const host = heading.closest('.intro') || heading.parentElement || document.querySelector('main');
+    const host = heading.closest('.intro, .tool-intro') || heading.parentElement || document.querySelector('main');
     if (host) host.classList.add('tools-help-host');
 
     const corner = document.createElement('div');
@@ -492,13 +492,6 @@
       buttons: ['compressBtn'],
       message: 'Choose a file to begin.',
       ready: () => inputHasValue(document.getElementById('fileInput'))
-    }],
-    'file-converter.html': [{
-      watch: ['fileInput', 'toType'],
-      buttons: ['convertBtn'],
-      message: 'Choose a file and an output format to begin.',
-      ready: () => inputHasValue(document.getElementById('fileInput')) &&
-                   inputHasValue(document.getElementById('toType'))
     }],
     'find-and-replace.html': [{
       watch: ['source', 'find'],

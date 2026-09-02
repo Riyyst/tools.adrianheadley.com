@@ -25,7 +25,7 @@
 <meta name="twitter:title" content="Browser File Compressor | Adrian Headley Tools"/>
 <meta name="twitter:description" content="Compress supported images, PDFs, documents and text files in your browser, with quality, size and target-size controls."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html","name":"File Compressor","description":"Compress supported images, PDFs, documents and text files in your browser, with quality, size and target-size controls.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html#app","name":"File Compressor","url":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html","description":"Compress supported images, PDFs, documents and text files in your browser, with quality, size and target-size controls.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Choose or drag in the file you want to compress.","Select the available compression method, quality or target-size options.","Compress the file, review the saving and download the result."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"File Compressor","item":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html","name":"File Compressor","description":"Compress supported images, PDFs, documents and text files in your browser, with quality, size and target-size controls.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html#breadcrumb"},"dateModified":"2026-09-02","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html#app","name":"File Compressor","url":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html","description":"Compress supported images, PDFs, documents and text files in your browser, with quality, size and target-size controls.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Choose or drag in the file you want to compress.","Select the available compression method, quality or target-size options.","Compress the file, review the saving and download the result."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"File Compressor","item":"https://tools.adrianheadley.com/pages/toolpages/file-compressor.html"}]}]}</script>
 <style>
   :root{
     --bg:#f5f5f7;
@@ -321,21 +321,49 @@
     background:rgba(148,163,184,.15);
     box-shadow:none;
   }
-
-  .progress{
-    margin-top:1rem;
-    border-radius:999px;
-    height:11px;
-    background:#e5e7eb;
+#status.progress-status{
+    --progress-fill:0%;
+    position:relative;
     overflow:hidden;
+    min-height:3.25rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:.65rem .8rem;
+    border:1px solid #bfdbfe;
+    border-radius:12px;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(37,99,235,.20) 0 var(--progress-fill),
+        #f8fafc var(--progress-fill) 100%
+      ) !important;
+    color:#334155 !important;
+    transition:background .18s,border-color .18s;
   }
-  .progress span{
-    display:block;
-    width:0%;
-    height:100%;
-    background:var(--accent);
-    transition:width .2s;
+  #status.progress-status.ok,
+  #status.progress-status[data-tools-state="success"]{
+    color:#047857 !important;
   }
+  #status.progress-status.err,
+  #status.progress-status[data-tools-state="error"]{
+    color:#b91c1c !important;
+  }
+  #status.progress-status.is-complete,
+  #status.progress-status.is-complete.ok,
+  #status.progress-status.is-complete.err,
+  #status.progress-status.is-complete[data-tools-state="success"],
+  #status.progress-status.is-complete[data-tools-state="error"],
+  #status.progress-status.is-complete[data-tools-state="warning"],
+  #status.progress-status.is-complete[data-tools-state="info"]{
+    background:#2563eb !important;
+    border-color:#2563eb !important;
+    color:#fff !important;
+  }
+  #status.progress-status:empty{
+    display:none !important;
+  }
+  
   .status{
     margin-top:.8rem;
     text-align:center;
@@ -399,7 +427,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk83">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -497,8 +525,6 @@
             <a class="btn hidden" download href="#" id="downloadBtn">Download</a>
             <button class="btn secondary" id="clearBtn" type="button">Clear</button>
           </div>
-
-          <div class="progress hidden" id="progress"><span id="bar"></span></div>
           <div class="status" id="status"></div>
 
           <div class="result hidden" id="resultPanel">
@@ -510,19 +536,6 @@
       </div>
     </div>
   </section>
-
-<section class="seo-tool-info" aria-labelledby="seo-about-file-compressor" data-seo-info>
-  <div class="seo-tool-info__inner">
-    <h2 class="seo-tool-info__heading" id="seo-about-file-compressor">About this tool</h2>
-    <div class="seo-tool-info__grid">
-      <article class="seo-tool-info__card"><h3>What it does</h3><p>Reduce the size of supported files using browser-based compression controls.</p></article>
-      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Choose or drag in the file you want to compress.</li><li>Select the available compression method, quality or target-size options.</li><li>Compress the file, review the saving and download the result.</li></ol></article>
-      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>Files are processed in your browser. Supporting libraries may be loaded from public CDNs, but the tool is designed to perform file processing locally.</p></article>
-    </div>
-    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="file-converter.html" title="File Converter">File Converter</a><a href="image-resizer.html" title="Image Resizer">Image Resizer</a><a href="merge-pdfs.html" title="Merge PDFs">Merge PDFs</a></div></nav>
-  </div>
-</section>
-
 </main>
 
 <footer class="tools-global-footer">
@@ -566,8 +579,6 @@
   const compressBtn = $('#compressBtn');
   const downloadBtn = $('#downloadBtn');
   const clearBtn = $('#clearBtn');
-  const progress = $('#progress');
-  const bar = $('#bar');
   const status = $('#status');
   const resultPanel = $('#resultPanel');
   const newSize = $('#newSize');
@@ -615,7 +626,7 @@
     ],
     pdf: [
       {value:'pdf-target', label:'Compress PDF to target size'},
-      {value:'pdf-raster-balanced', label:'Compress PDF strongly'},
+      {value:'pdf-raster-balanced', label:'Compress PDF as much as possible'},
       {value:'pdf-optimise', label:'Optimise PDF structure only'},
       {value:'pdf-zip', label:'ZIP PDF'},
       ...(CAN_GZIP ? [{value:'pdf-gzip', label:'Gzip PDF (.pdf.gz)'}] : [])
@@ -684,22 +695,49 @@
     return labels[kind] || 'General file';
   }
 
+  let progressValue = 0;
+  let progressActive = false;
+
+  function applyProgressAppearance(){
+    if(progressActive){
+      status.classList.add('progress-status');
+      status.classList.toggle('is-complete', progressValue >= 100);
+      status.style.setProperty('--progress-fill', progressValue + '%');
+      status.setAttribute('role', 'progressbar');
+      status.setAttribute('aria-valuemin', '0');
+      status.setAttribute('aria-valuemax', '100');
+      status.setAttribute('aria-valuenow', String(Math.round(progressValue)));
+    }else{
+      status.classList.remove('progress-status', 'is-complete');
+      status.style.removeProperty('--progress-fill');
+      status.removeAttribute('role');
+      status.removeAttribute('aria-valuemin');
+      status.removeAttribute('aria-valuemax');
+      status.removeAttribute('aria-valuenow');
+    }
+  }
+
   function setStatus(message, type){
     status.textContent = message || '';
-    status.className = 'status' + (type ? ' ' + type : '');
+    status.className = 'status' + (type ? ' ' + type : '') + (progressActive ? ' progress-status' : '');
+    applyProgressAppearance();
   }
 
   function setProgress(percent){
-    progress.classList.remove('hidden');
-    bar.style.width = Math.max(0, Math.min(100, percent)) + '%';
+    const next = Math.max(0, Math.min(100, Number(percent) || 0));
+    progressValue = Math.max(progressValue, next);
+    progressActive = true;
+    applyProgressAppearance();
   }
 
   function hideProgress(){
-    progress.classList.add('hidden');
-    bar.style.width = '0%';
+    progressValue = 0;
+    progressActive = false;
+    applyProgressAppearance();
   }
 
   function targetBytes(){
+    if(currentKind === 'pdf' && method.value !== 'pdf-target') return null;
     const n = Number(targetSize.value);
     if(!n || n <= 0) return null;
     return Math.round(n * (targetUnit.value === 'MB' ? 1024 * 1024 : 1024));
@@ -721,9 +759,10 @@
     const m = method.value;
     const showQuality = /jpg|webp|avif|auto|pdf-target|pdf-raster/.test(m);
     const showMaxWidth = currentKind === 'image' || currentKind === 'heic' || currentKind === 'pdf';
+    const showTarget = currentKind === 'pdf' ? m === 'pdf-target' : true;
     qualityField.classList.toggle('hidden', !showQuality);
     maxWidthField.classList.toggle('hidden', !showMaxWidth);
-    targetField.classList.remove('hidden');
+    targetField.classList.toggle('hidden', !showTarget);
   }
 
   function resetResult(){
@@ -774,7 +813,7 @@
     fileCategory.textContent = kindLabel(currentKind, currentExt);
 
     updateMethodOptions();
-    setStatus('Ready to compress.', 'ok');
+    setStatus('', '');
   }
 
   function downloadBlob(blob, filename, label){
@@ -796,14 +835,20 @@
     outputType.textContent = label || filename.split('.').pop().toUpperCase();
 
     const target = targetBytes();
-    let message = saved >= 0 ? 'Compressed and ready to download.' : 'Processed, but the result is larger than the original.';
+    let message;
+    if(method.value === 'pdf-raster-balanced' && blob.size >= currentFile.size){
+      message = 'This PDF is already as small as this browser method could make it. Original size retained.';
+    }else{
+      message = saved >= 0 ? 'Compressed and ready to download.' : 'Processed, but the result is larger than the original.';
+    }
     if(target){
       message = blob.size <= target
         ? 'Target reached. Ready to download.'
-        : 'Compressed as much as this browser method could, but it is still above the target. Try a smaller page render width or lower quality.';
+        : 'Compressed as much as this browser method could, and could not be reduced below the target. Try a smaller page render width or lower quality.';
     }
     setStatus(message, saved >= 0 ? 'ok' : 'err');
     setProgress(100);
+    requestAnimationFrame(()=>setProgress(100));
   }
 
   function readText(file){
@@ -1047,38 +1092,18 @@
     const qualityStart = Math.max(0.2, Number(quality.value || 72) / 100);
     const chosenWidth = Number(maxWidth.value || 0);
 
-    const attempts = targetMode === 'target' && target
-      ? [
-          {width:chosenWidth || 1920, q:qualityStart},
-          {width:chosenWidth || 1600, q:Math.min(qualityStart, .72)},
-          {width:chosenWidth || 1400, q:.62},
-          {width:chosenWidth || 1200, q:.52},
-          {width:chosenWidth || 1000, q:.44},
-          {width:chosenWidth || 850, q:.36},
-          {width:chosenWidth || 700, q:.28},
-          {width:chosenWidth || 560, q:.22}
-        ]
-      : [
-          {width:chosenWidth || 1400, q:Math.min(qualityStart, .68)}
-        ];
-
-    let best = null;
-    let bestUnder = null;
-
-    for(let a = 0; a < attempts.length; a++){
-      const attempt = attempts[a];
-      setStatus(`Compressing PDF attempt ${a + 1}/${attempts.length}...`);
-      setProgress(5 + (a / attempts.length) * 90);
-
+    async function buildAt(width, q, progressBase=0, progressSpan=1){
       const pdf = new jspdf.jsPDF({unit:'pt', compress:true});
       let added = false;
 
       for(let pageNo = 1; pageNo <= srcPdf.numPages; pageNo++){
         setStatus(`Rendering page ${pageNo} of ${srcPdf.numPages}...`);
+        const pageProgress = (pageNo - 1) / Math.max(srcPdf.numPages, 1);
+        setProgress(progressBase + pageProgress * progressSpan);
 
         const page = await srcPdf.getPage(pageNo);
         const baseViewport = page.getViewport({scale:1});
-        const scale = Math.min(3, Math.max(0.25, attempt.width / baseViewport.width));
+        const scale = Math.min(4, Math.max(0.2, width / baseViewport.width));
         const viewport = page.getViewport({scale});
 
         const canvas = document.createElement('canvas');
@@ -1101,27 +1126,162 @@
           added = true;
         }
 
-        const img = canvas.toDataURL('image/jpeg', attempt.q);
+        const img = canvas.toDataURL('image/jpeg', q);
         pdf.addImage(img, 'JPEG', 0, 0, pageW, pageH, undefined, 'FAST');
 
         canvas.width = 1;
         canvas.height = 1;
       }
 
-      const blob = pdf.output('blob');
+      return pdf.output('blob');
+    }
 
-      if(!best || blob.size < best.size) best = blob;
-      if(target && blob.size <= target){
-        bestUnder = blob;
+    if(targetMode !== 'target' || !target){
+      setStatus('Compressing PDF as much as possible...');
+      setProgress(6);
+
+      // Include the original as a safety fallback. Some already-efficient
+      // PDFs become larger when rasterised, so this mode must never inflate it.
+      let smallest = file;
+
+      const baseWidth = chosenWidth || 1400;
+      const candidates = chosenWidth
+        ? [
+            {width:baseWidth, q:Math.min(qualityStart, .68)},
+            {width:baseWidth, q:.48},
+            {width:baseWidth, q:.32},
+            {width:baseWidth, q:.20}
+          ]
+        : [
+            {width:1400, q:Math.min(qualityStart, .68)},
+            {width:1100, q:.52},
+            {width:850, q:.40},
+            {width:650, q:.30},
+            {width:480, q:.22},
+            {width:360, q:.16}
+          ];
+
+      for(let i = 0; i < candidates.length; i++){
+        const candidate = candidates[i];
+        setStatus(`Compressing PDF... ${i + 1}/${candidates.length}`);
+
+        const blob = await buildAt(
+          candidate.width,
+          candidate.q,
+          8 + (i / candidates.length) * 82,
+          Math.max(2, 72 / candidates.length)
+        );
+
+        if(blob && blob.size < smallest.size){
+          smallest = blob;
+        }
+      }
+
+      setProgress(96);
+
+      return {
+        blob:smallest,
+        name:`${baseName(file.name)} - compressed.pdf`,
+        label:'PDF'
+      };
+    }
+
+    // Target mode aims for the closest possible size without exceeding the
+    // user's requested target. It does not stop at the first small-enough file.
+    const widths = chosenWidth
+      ? [chosenWidth]
+      : [2800, 2400, 2200, 2000, 1800, 1600, 1400, 1200, 1000, 850, 700, 560, 480, 400, 320, 240];
+
+    let closestUnder = null;
+    const tolerance = Math.max(512, Math.round(target * 0.01));
+    let attemptCounter = 0;
+    const estimatedAttempts = Math.max(1, widths.length * 9);
+
+    for(const width of widths){
+      const minQ = 0.06;
+      const maxQ = 0.98;
+
+      attemptCounter++;
+      setStatus(`Aiming for ${formatSize(target)}...`);
+      const minBlob = await buildAt(
+        width,
+        minQ,
+        5 + (attemptCounter / estimatedAttempts) * 80,
+        Math.max(1, 70 / estimatedAttempts)
+      );
+
+      if(minBlob.size > target){
+        continue;
+      }
+
+      if(!closestUnder || minBlob.size > closestUnder.size){
+        closestUnder = minBlob;
+      }
+
+      attemptCounter++;
+      const maxBlob = await buildAt(
+        width,
+        maxQ,
+        5 + (attemptCounter / estimatedAttempts) * 80,
+        Math.max(1, 70 / estimatedAttempts)
+      );
+
+      if(maxBlob.size <= target){
+        if(!closestUnder || maxBlob.size > closestUnder.size){
+          closestUnder = maxBlob;
+        }
+        if(target - maxBlob.size <= tolerance) break;
+
+        // At this width, maximum JPEG quality still fits. Because width
+        // candidates are descending, this is the best-quality useful result.
+        break;
+      }
+
+      let lo = minQ;
+      let hi = maxQ;
+
+      // Binary search the JPEG quality to approach the target from below.
+      for(let i = 0; i < 7; i++){
+        const q = (lo + hi) / 2;
+        attemptCounter++;
+        setStatus(`Aiming for ${formatSize(target)}...`);
+
+        const blob = await buildAt(
+          width,
+          q,
+          5 + (attemptCounter / estimatedAttempts) * 80,
+          Math.max(1, 70 / estimatedAttempts)
+        );
+
+        if(blob.size <= target){
+          if(!closestUnder || blob.size > closestUnder.size){
+            closestUnder = blob;
+          }
+          lo = q;
+
+          if(target - blob.size <= tolerance){
+            break;
+          }
+        }else{
+          hi = q;
+        }
+      }
+
+      // If this width produced a result very close to target, do not reduce
+      // resolution further just to make the file smaller.
+      if(closestUnder && target - closestUnder.size <= Math.max(tolerance, target * .025)){
         break;
       }
     }
 
-    const blob = bestUnder || best;
-    if(!blob) throw new Error('PDF compression failed.');
+    if(!closestUnder){
+      throw new Error('This PDF could not be reduced to the selected target size. Choose a larger target or use “Compress PDF as much as possible”.');
+    }
+
+    setProgress(96);
 
     return {
-      blob,
+      blob:closestUnder,
       name:`${baseName(file.name)} - compressed.pdf`,
       label:'PDF'
     };
@@ -1319,6 +1479,9 @@
       }else if(m === 'gzip-file' || m === 'pdf-gzip' || m === 'svg-gzip'){
         result = await gzipFile(currentFile);
       }else if(m === 'pdf-target'){
+        if(!targetBytes()){
+          throw new Error('Enter a target size before compressing the PDF.');
+        }
         result = await renderPdfToCompressedPdf(currentFile, 'target');
       }else if(m === 'pdf-raster-balanced'){
         result = await renderPdfToCompressedPdf(currentFile, 'balanced');
@@ -1341,7 +1504,7 @@
       }
 
       const target = targetBytes();
-      if(target && result.blob.size > target && currentKind !== 'image' && currentKind !== 'heic'){
+      if(target && result.blob.size > target && currentKind !== 'image' && currentKind !== 'heic' && method.value !== 'pdf-target'){
         setStatus('Trying extra compression to reach target...');
         try{
           if(CAN_GZIP){
@@ -1404,6 +1567,6 @@
   if(y) y.textContent = new Date().getFullYear();
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk75"></script>
+<script src="../../Assets/site-shell.js?v=mk83"></script>
 </body>
 </html>

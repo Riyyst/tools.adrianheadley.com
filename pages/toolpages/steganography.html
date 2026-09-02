@@ -42,7 +42,7 @@
 <meta name="twitter:title" content="Steganography Toolkit | Adrian Headley Tools"/>
 <meta name="twitter:description" content="Hide, reveal or remove concealed information in supported text, image, video and file formats directly in your browser."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/steganography.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/steganography.html","name":"Steganography Toolkit","description":"Hide, reveal or remove concealed information in supported text, image, video and file formats directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/steganography.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/steganography.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/steganography.html#app","name":"Steganography Toolkit","url":"https://tools.adrianheadley.com/pages/toolpages/steganography.html","description":"Hide, reveal or remove concealed information in supported text, image, video and file formats directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Choose Hide, Reveal or Remove hidden data.","Select the supported text or file content and enter the information required by that mode.","Run the operation, then copy or download the result."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/steganography.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Steganography Toolkit","item":"https://tools.adrianheadley.com/pages/toolpages/steganography.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/steganography.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/steganography.html","name":"Steganography Toolkit","description":"Hide, reveal or remove concealed information in supported text, image, video and file formats directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/steganography.html#breadcrumb"},"dateModified":"2026-09-02","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/steganography.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/steganography.html#app","name":"Steganography Toolkit","url":"https://tools.adrianheadley.com/pages/toolpages/steganography.html","description":"Hide, reveal or remove concealed information in supported text, image, video and file formats directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Choose Hide, Reveal or Remove hidden data.","Select the supported text or file content and enter the information required by that mode.","Run the operation, then copy or download the result."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/steganography.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Steganography Toolkit","item":"https://tools.adrianheadley.com/pages/toolpages/steganography.html"}]}]}</script>
 <style>
 :root{--bg:#f5f5f7;--bg-alt:#ffffff;--text:#111827;--text-soft:#4b5563;--accent:#2563eb;--accent-soft:rgba(37,99,235,.08);--border-subtle:#e5e7eb;--border-strong:#d1d5db;--radius-pill:999px}
 body.dark-theme{--bg:#020617;--bg-alt:#020617;--text:#e5e7eb;--text-soft:#9ca3af;--accent:#3b82f6;--accent-soft:rgba(59,130,246,.22);--accent-strong:#60a5fa;--pill-bg:#020617;--pill-border:#3b82f6;--border-subtle:#1f2937;--border-strong:#4b5563;}
@@ -572,6 +572,7 @@ body.dark-theme .footer-social-link,body.high-contrast .footer-social-link{borde
   font-size: 12px;
 }
 
+
 </style>
 
 <style>
@@ -990,8 +991,8 @@ tr:hover td{background: rgba(232,240,255,.45);}
 @media (min-width:980px){
   #stego-tool .grid{ grid-template-columns:420px 1fr; }
 }
-#stego-tool .tabs{ display:flex; flex-direction:column; gap:10px; }
-#stego-tool .tabbtn{ width:100%; justify-content:center; text-align:center; }
+#stego-tool .tabs{ display:flex; flex-direction:column; align-items:center; gap:10px; }
+#stego-tool .tabbtn{ width:180px; max-width:100%; justify-content:center; text-align:center; }
 
 /* Custom file UI (same pattern as template) */
 #stego-tool .native-file{ position:absolute; inset:0; opacity:0; cursor:pointer; }
@@ -1009,6 +1010,44 @@ tr:hover td{background: rgba(232,240,255,.45);}
 #stego-tool textarea.out{ background:rgba(255,255,255,.95); }
 
 #stego-tool textarea, #stego-tool .out{ font-family: inherit !important; font-size: inherit !important; }
+
+
+/* Mk80: mode buttons mirror the right-side action button sizing and font. */
+#stego-tool .tabbtn{
+  cursor:pointer;
+  border-radius:999px;
+  padding:10px 14px;
+  border:1px solid rgba(37,99,235,.25);
+  background:var(--blue);
+  color:#fff;
+  font-size:12px;
+  font-weight:400;
+  line-height:normal;
+  box-shadow:0 8px 18px rgba(11,18,32,.06);
+  transition:transform 140ms cubic-bezier(.2,1.1,.2,1),box-shadow 160ms ease,filter 160ms ease;
+}
+#stego-tool .tabbtn:hover{
+  transform:translateY(-1px) scale(1.02);
+  box-shadow:var(--shadow2);
+  filter:brightness(.97);
+}
+#stego-tool .tabbtn:active{
+  transform:translateY(0) scale(.98);
+  filter:brightness(.94);
+}
+#stego-tool .tabbtn[aria-selected="true"]{
+  background:var(--blue);
+  border-color:rgba(37,99,235,.55);
+  color:#fff;
+  box-shadow:0 0 0 3px rgba(37,99,235,.13);
+}
+#stego-tool .workspace-actions{
+  flex-wrap:nowrap;
+}
+#stego-tool .workspace-actions button{
+  white-space:nowrap;
+}
+
 </style>
 
 
@@ -1145,7 +1184,7 @@ main{flex:1}
 
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk83">
 </head>
 <body data-in-pages="true">
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -1205,7 +1244,7 @@ main{flex:1}
         <div class="hd"><h2 id="panelTitle">Text steganography</h2></div>
         <div class="bd">
 
-          <div class="btnrow" style="margin-top:0;">
+          <div class="btnrow workspace-actions" style="margin-top:0;">
             <button id="actHide" class="primary">Hide a message</button>
             <button id="actReveal" class="primary">Reveal hidden message</button>
             <button id="actStrip" class="primary">Remove hidden data</button>
@@ -1361,21 +1400,6 @@ main{flex:1}
     </div>
   </div>
 </section>
-
-
-      
-<section class="seo-tool-info" aria-labelledby="seo-about-steganography" data-seo-info>
-  <div class="seo-tool-info__inner">
-    <h2 class="seo-tool-info__heading" id="seo-about-steganography">About this tool</h2>
-    <div class="seo-tool-info__grid">
-      <article class="seo-tool-info__card"><h3>What it does</h3><p>Hide, reveal or remove concealed information in supported text, image, video and file formats.</p></article>
-      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Choose Hide, Reveal or Remove hidden data.</li><li>Select the supported text or file content and enter the information required by that mode.</li><li>Run the operation, then copy or download the result.</li></ol></article>
-      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>Core steganography operations are designed to run locally in your browser. External libraries may be loaded where required.</p></article>
-    </div>
-    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="encrypt-decrypt.html" title="Text Encrypter / Decrypter">Text Encrypter / Decrypter</a><a href="hashing.html" title="Hashing Tool">Hashing Tool</a><a href="metadata-remover.html" title="Metadata Remover &amp; Editor">Metadata Remover &amp; Editor</a></div></nav>
-  </div>
-</section>
-
 </main>
 
         
@@ -3420,6 +3444,6 @@ setMode("text");
 })();
 </script>
 
-<script src="../../Assets/site-shell.js?v=mk75"></script>
+<script src="../../Assets/site-shell.js?v=mk83"></script>
 </body>
 </html>

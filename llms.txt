@@ -17,7 +17,7 @@ Language: English (UK)
 - [Date Difference Calculator](https://tools.adrianheadley.com/pages/toolpages/date-difference.html): Calculate the exact amount of time between two dates or moments.
 - [Fake Information Generator](https://tools.adrianheadley.com/pages/toolpages/fake-information-generator.html): Generate realistic-looking but fictional placeholder identity information for testing, demos and mock-ups.
 - [File Compressor](https://tools.adrianheadley.com/pages/toolpages/file-compressor.html): Reduce the size of supported files using browser-based compression controls.
-- [File Converter](https://tools.adrianheadley.com/pages/toolpages/file-converter.html): Convert supported files between common formats using browser-based conversion tools.
+- [File Converter](https://tools.adrianheadley.com/pages/toolpages/file-converter.html): Convert one or multiple supported files between common formats; multiple outputs download together as a ZIP.
 - [Find & Replace](https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html): Search through text and replace matching words, phrases or characters quickly.
 - [Hashing Tool](https://tools.adrianheadley.com/pages/toolpages/hashing.html): Create cryptographic hashes for text or files and compare content using several SHA algorithms.
 - [Image Colour Picker](https://tools.adrianheadley.com/pages/toolpages/colour-picker.html): Inspect colours from an uploaded image or use the browser's screen eyedropper where that feature is supported.

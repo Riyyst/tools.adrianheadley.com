@@ -24,7 +24,7 @@
 <meta name="twitter:title" content="Temporary Disposable Email Inbox | Adrian Headley Tools"/>
 <meta name="twitter:description" content="Generate a disposable receive-only email address and read incoming messages without using your main inbox."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html","name":"Temporary Email","description":"Generate a disposable receive-only email address and read incoming messages without using your main inbox.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#app","name":"Temporary Email","url":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html","description":"Generate a disposable receive-only email address and read incoming messages without using your main inbox.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Generate a temporary email address.","Copy the address and use it where needed.","Refresh the temporary inbox and open messages that arrive during the session."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Temporary Email","item":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html","name":"Temporary Email","description":"Generate a disposable receive-only email address and read incoming messages without using your main inbox.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#breadcrumb"},"dateModified":"2026-09-02","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#app","name":"Temporary Email","url":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html","description":"Generate a disposable receive-only email address and read incoming messages without using your main inbox.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Generate a temporary email address.","Copy the address and use it where needed.","Refresh the temporary inbox and open messages that arrive during the session."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Temporary Email","item":"https://tools.adrianheadley.com/pages/toolpages/temp-email.html"}]}]}</script>
 <style>
 :root{
   --bg:#f5f5f7;
@@ -408,7 +408,7 @@ main{flex:1}
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk83">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -488,19 +488,6 @@ main{flex:1}
       </div>
     </div>
   </section>
-
-<section class="seo-tool-info" aria-labelledby="seo-about-temp-email" data-seo-info>
-  <div class="seo-tool-info__inner">
-    <h2 class="seo-tool-info__heading" id="seo-about-temp-email">About this tool</h2>
-    <div class="seo-tool-info__grid">
-      <article class="seo-tool-info__card"><h3>What it does</h3><p>Create a temporary receive-only email address for short-term sign-ups or testing.</p></article>
-      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Generate a temporary email address.</li><li>Copy the address and use it where needed.</li><li>Refresh the temporary inbox and open messages that arrive during the session.</li></ol></article>
-      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>Temporary addresses and messages use the mail.tm service, so email data is handled by that external service rather than remaining only in your browser.</p></article>
-    </div>
-    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="fake-information-generator.html" title="Fake Information Generator">Fake Information Generator</a><a href="encrypt-decrypt.html" title="Text Encrypter / Decrypter">Text Encrypter / Decrypter</a><a href="hashing.html" title="Hashing Tool">Hashing Tool</a></div></nav>
-  </div>
-</section>
-
 </main>
 
 <footer class="tools-global-footer">
@@ -520,6 +507,7 @@ main{flex:1}
 
   const API='https://api.mail.tm';
   const POLL_MS=3000;
+  const REQUEST_TIMEOUT_MS=15000;
 
   const generateBtn=document.getElementById('generateBtn');
   const dashboard=document.getElementById('dashboard');
@@ -695,68 +683,155 @@ main{flex:1}
       });
   }
 
-  async function chooseDomain(){
-    const response=await fetch(`${API}/domains`,{
-      headers:{Accept:'application/ld+json'},
+  async function apiFetch(url, options={}){
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);
+
+    try{
+      return await fetch(url,{
+        ...options,
+        mode:'cors',
+        signal:controller.signal
+      });
+    }catch(error){
+      if(error && error.name==='AbortError'){
+        throw new Error('The temporary email service took too long to respond. Please try again.');
+      }
+      throw new Error('Could not reach the temporary email service. Check your connection and try again.');
+    }finally{
+      clearTimeout(timer);
+    }
+  }
+
+  async function apiErrorMessage(response, fallback){
+    try{
+      const data=await response.clone().json();
+      const detail=data?.detail || data?.message || data?.['hydra:description'];
+      if(detail) return String(detail);
+      const violations=Array.isArray(data?.violations) ? data.violations : [];
+      if(violations.length){
+        return violations.map(item=>item?.message).filter(Boolean).join(' ');
+      }
+    }catch(_){}
+    return fallback;
+  }
+
+  async function fetchDomains(){
+    const response=await apiFetch(`${API}/domains?page=1`,{
+      headers:{Accept:'application/ld+json, application/json'},
       cache:'no-store'
     });
 
     if(!response.ok){
-      throw new Error(`Domain request failed (${response.status})`);
+      throw new Error(await apiErrorMessage(response,`Domain request failed (${response.status})`));
     }
 
     const data=await response.json();
-    const domains=data['hydra:member']||[];
+    const raw=Array.isArray(data)
+      ? data
+      : (data['hydra:member'] || data.member || data.domains || []);
+
+    const usable=raw.filter(item=>
+      item &&
+      item.domain &&
+      item.isActive !== false &&
+      item.isPrivate !== true
+    );
+
+    const fallback=raw.filter(item=>item && item.domain && item.isActive !== false);
+    const domains=(usable.length ? usable : fallback).map(item=>item.domain);
 
     if(!domains.length){
       throw new Error('No temporary email domains are currently available.');
     }
 
-    return domains[Math.floor(Math.random()*domains.length)].domain;
+    return [...new Set(domains)];
   }
 
   async function createMailbox(){
-    const domain=await chooseDomain();
-    const address=`u${randomString(10)}@${domain}`;
-    const password=randomString(18);
+    const domains=await fetchDomains();
+    let lastError=null;
 
-    const accountResponse=await fetch(`${API}/accounts`,{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        Accept:'application/ld+json'
-      },
-      body:JSON.stringify({address,password})
-    });
+    // A domain can become unavailable between the domain request and account
+    // creation, or a randomly generated address can occasionally collide.
+    // Retry a few fresh combinations before giving up.
+    for(let attempt=0;attempt<6;attempt++){
+      const domain=domains[attempt % domains.length];
+      const address=`u${randomString(12)}@${domain}`;
+      const password=`T${randomString(22)}!7`;
 
-    if(!accountResponse.ok && accountResponse.status!==201){
-      throw new Error(`Account creation failed (${accountResponse.status})`);
+      try{
+        const accountResponse=await apiFetch(`${API}/accounts`,{
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json',
+            Accept:'application/ld+json, application/json'
+          },
+          body:JSON.stringify({address,password})
+        });
+
+        if(!accountResponse.ok){
+          const message=await apiErrorMessage(
+            accountResponse,
+            `Account creation failed (${accountResponse.status})`
+          );
+
+          // 409/422 can be caused by an address collision or a domain that
+          // became unusable. Try a new address/domain automatically.
+          if(accountResponse.status===409 || accountResponse.status===422){
+            lastError=new Error(message);
+            continue;
+          }
+
+          throw new Error(message);
+        }
+
+        const tokenResponse=await apiFetch(`${API}/token`,{
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json',
+            Accept:'application/json'
+          },
+          body:JSON.stringify({address,password})
+        });
+
+        let tokenData={};
+        try{
+          tokenData=await tokenResponse.json();
+        }catch(_){}
+
+        if(!tokenResponse.ok || !tokenData.token){
+          const message=await apiErrorMessage(
+            tokenResponse,
+            `Could not access the generated inbox (${tokenResponse.status})`
+          );
+          lastError=new Error(message);
+
+          if(tokenResponse.status===401 || tokenResponse.status===422){
+            continue;
+          }
+
+          throw lastError;
+        }
+
+        state.token=tokenData.token;
+        state.address=address;
+        return address;
+      }catch(error){
+        lastError=error;
+        if(/could not reach|took too long/i.test(error?.message||'')){
+          throw error;
+        }
+      }
     }
 
-    const tokenResponse=await fetch(`${API}/token`,{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        Accept:'application/json'
-      },
-      body:JSON.stringify({address,password})
-    });
-
-    const tokenData=await tokenResponse.json();
-
-    if(!tokenResponse.ok||!tokenData.token){
-      throw new Error('Could not access the generated inbox.');
-    }
-
-    state.token=tokenData.token;
-    state.address=address;
-    return address;
+    throw lastError || new Error('Could not generate a temporary inbox. Please try again.');
   }
 
   async function fetchMessageList(){
     if(!state.token) return [];
 
-    const response=await fetch(`${API}/messages`,{
+    const response=await apiFetch(`${API}/messages`,{
       headers:{
         Authorization:`Bearer ${state.token}`,
         Accept:'application/ld+json'
@@ -779,7 +854,7 @@ main{flex:1}
   }
 
   async function fetchFullMessage(id){
-    const response=await fetch(`${API}/messages/${id}`,{
+    const response=await apiFetch(`${API}/messages/${id}`,{
       headers:{
         Authorization:`Bearer ${state.token}`,
         Accept:'application/ld+json'
@@ -906,7 +981,7 @@ main{flex:1}
     }catch(error){
       addressEl.textContent='—';
       addressBox.classList.remove('loading');
-      setStatus(error.message||'Could not generate a temporary inbox.',true);
+      setStatus(error.message||'Could not generate a temporary inbox. Please try again.',true);
     }finally{
       setBusy(generateBtn,false);
     }
@@ -933,6 +1008,6 @@ main{flex:1}
   });
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk75"></script>
+<script src="../../Assets/site-shell.js?v=mk83"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f5f5f7"/>
 
 <title>Browser File Converter | Adrian Headley Tools</title>
-<meta name="description" content="Convert common images, PDF, text, JSON, CSV, Markdown, HTML, SVG and supported Word content directly in your browser."/>
+<meta name="description" content="Convert one or multiple images, PDFs, text, JSON, CSV, Markdown, HTML, SVG and supported Word files directly in your browser."/>
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
 <meta name="author" content="Adrian Headley"/>
 <meta name="application-name" content="Adrian Headley Tools"/>
@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Adrian Headley Tools"/>
 <meta property="og:locale" content="en_GB"/>
 <meta property="og:title" content="Browser File Converter | Adrian Headley Tools"/>
-<meta property="og:description" content="Convert common images, PDF, text, JSON, CSV, Markdown, HTML, SVG and supported Word content directly in your browser."/>
+<meta property="og:description" content="Convert one or multiple images, PDFs, text, JSON, CSV, Markdown, HTML, SVG and supported Word files directly in your browser."/>
 <meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/file-converter.html"/>
 <meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
 <meta property="og:image:width" content="2048"/>
@@ -23,9 +23,9 @@
 <meta property="og:image:alt" content="Adrian Headley Tools"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="Browser File Converter | Adrian Headley Tools"/>
-<meta name="twitter:description" content="Convert common images, PDF, text, JSON, CSV, Markdown, HTML, SVG and supported Word content directly in your browser."/>
+<meta name="twitter:description" content="Convert one or multiple images, PDFs, text, JSON, CSV, Markdown, HTML, SVG and supported Word files directly in your browser."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html","name":"File Converter","description":"Convert common images, PDF, text, JSON, CSV, Markdown, HTML, SVG and supported Word content directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html#app","name":"File Converter","url":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html","description":"Convert common images, PDF, text, JSON, CSV, Markdown, HTML, SVG and supported Word content directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Choose the file you want to convert.","Select the output format and any available quality or scale options.","Run the conversion and download the converted file."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"File Converter","item":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html","name":"File Converter","description":"Convert one or multiple images, PDFs, text, JSON, CSV, Markdown, HTML, SVG and supported Word files directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html#breadcrumb"},"dateModified":"2026-09-02","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html#app","name":"File Converter","url":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html","description":"Convert one or multiple images, PDFs, text, JSON, CSV, Markdown, HTML, SVG and supported Word files directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Choose or drag in one or multiple files.","Select a compatible output format.","Convert and download the result; multiple files are packaged into a ZIP."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"File Converter","item":"https://tools.adrianheadley.com/pages/toolpages/file-converter.html"}]}]}</script>
 <style>
   :root{
     --bg:#f5f5f7;
@@ -184,6 +184,48 @@
   .drop-title{font-size:1rem;color:var(--text);font-weight:750}
   .drop-subtitle{font-size:.88rem;color:var(--text-soft);max-width:560px}
 
+
+  .converter-grid--simple{
+    grid-template-columns:minmax(0,520px);
+    justify-content:center;
+  }
+  .selected-files{
+    display:grid;
+    gap:.45rem;
+  }
+  .selected-file{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:.7rem;
+    align-items:center;
+    padding:.68rem .8rem;
+    border:1px solid var(--border-subtle);
+    border-radius:14px;
+    background:#fff;
+  }
+  .selected-file__name{
+    min-width:0;
+    color:var(--text);
+    font-size:.88rem;
+    font-weight:720;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .selected-file__meta{
+    color:var(--text-soft);
+    font-size:.74rem;
+    font-weight:650;
+    white-space:nowrap;
+  }
+  .selected-files__summary{
+    margin:0 0 .2rem;
+    color:var(--text-soft);
+    font-size:.8rem;
+    font-weight:700;
+    text-align:center;
+  }
+
   .converter-grid{
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
@@ -306,6 +348,49 @@
     font-size:.9rem;
     overflow-wrap:anywhere;
   }
+#status.progress-status{
+    --progress-fill:0%;
+    position:relative;
+    overflow:hidden;
+    min-height:3.25rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:.65rem .8rem;
+    border:1px solid #bfdbfe;
+    border-radius:12px;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(37,99,235,.20) 0 var(--progress-fill),
+        #f8fafc var(--progress-fill) 100%
+      ) !important;
+    color:#334155 !important;
+    transition:background .18s,border-color .18s;
+  }
+  #status.progress-status.ok,
+  #status.progress-status[data-tools-state="success"]{
+    color:#047857 !important;
+  }
+  #status.progress-status.err,
+  #status.progress-status[data-tools-state="error"]{
+    color:#b91c1c !important;
+  }
+  #status.progress-status.is-complete,
+  #status.progress-status.is-complete.ok,
+  #status.progress-status.is-complete.err,
+  #status.progress-status.is-complete[data-tools-state="success"],
+  #status.progress-status.is-complete[data-tools-state="error"],
+  #status.progress-status.is-complete[data-tools-state="warning"],
+  #status.progress-status.is-complete[data-tools-state="info"]{
+    background:#2563eb !important;
+    border-color:#2563eb !important;
+    color:#fff !important;
+  }
+  #status.progress-status:empty{
+    display:none !important;
+  }
+  
   .status{
     margin-top:.8rem;
     text-align:center;
@@ -391,7 +476,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk75">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk83">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -431,74 +516,32 @@
     <div class="container">
       <div class="card" role="region" aria-label="File converter">
         <label class="drop-zone" id="dropZone">
-          <input id="fileInput" type="file" accept=".png,.jpg,.jpeg,.webp,.bmp,.gif,.svg,.avif,.heic,.heif,.txt,.md,.csv,.tsv,.json,.html,.htm,.xml,.pdf,.docx,.webm,.mp4,.mov,.m4v,.ogg,.ogv,.mp3,.wav,.m4a,.aac,.flac,image/png,image/jpeg,image/webp,image/bmp,image/gif,image/svg+xml,image/avif,image/heic,image/heif,text/plain,text/markdown,text/csv,text/tab-separated-values,application/json,text/html,application/xml,text/xml,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,video/webm,video/mp4,video/quicktime,video/ogg,audio/mpeg,audio/wav,audio/ogg,audio/mp4,audio/aac,audio/flac"/>
-          <span class="drop-title">Choose file or drag and drop it here</span>
-          
+          <input id="fileInput" type="file" multiple accept=".png,.jpg,.jpeg,.webp,.bmp,.gif,.svg,.avif,.heic,.heif,.txt,.md,.csv,.tsv,.json,.html,.htm,.xml,.pdf,.docx,.webm,.mp4,.mov,.m4v,.ogg,.ogv,.mp3,.wav,.m4a,.aac,.flac,image/png,image/jpeg,image/webp,image/bmp,image/gif,image/svg+xml,image/avif,image/heic,image/heif,text/plain,text/markdown,text/csv,text/tab-separated-values,application/json,text/html,application/xml,text/xml,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,video/webm,video/mp4,video/quicktime,video/ogg,audio/mpeg,audio/wav,audio/ogg,audio/mp4,audio/aac,audio/flac"/>
+          <span class="drop-title">Choose file(s) or drag and drop</span>
+          <span class="drop-subtitle">Add one file or several files. Multiple converted files are downloaded together as a ZIP.</span>
         </label>
 
         <div class="panel hidden" id="filePanel">
-          <div class="file-meta">
-            <div class="kv"><span>File name</span><b id="fileName">—</b></div>
-            <div class="kv"><span>File type</span><b id="fileType">—</b></div>
-            <div class="kv"><span>File size</span><b id="fileSize">—</b></div>
-            <div class="kv"><span>Detected category</span><b id="fileCategory">—</b></div>
-          </div>
+          <div class="selected-files" id="selectedFiles" aria-live="polite"></div>
 
-          <div class="converter-grid">
-            <div class="field">
-              <label for="fromType">From</label>
-              <select id="fromType" aria-label="Source file type" disabled>
-                <option>Auto detect</option>
-              </select>
-            </div>
+          <div class="converter-grid converter-grid--simple">
             <div class="field">
               <label for="toType">Convert to</label>
-              <select id="toType" aria-label="Target file type"></select>
-            </div>
-            <div class="field hidden" id="qualityField">
-              <label for="quality">Image quality</label>
-              <select id="quality" aria-label="Image quality">
-                <option value="0.72">Small file</option>
-                <option value="0.86" selected>Balanced</option>
-                <option value="0.95">High quality</option>
-              </select>
-            </div>
-            <div class="field hidden" id="scaleField">
-              <label for="pdfScale">PDF image scale</label>
-              <select id="pdfScale" aria-label="PDF image scale">
-                <option value="1">Standard</option>
-                <option value="1.5" selected>Sharp</option>
-                <option value="2">Very sharp</option>
+              <select id="toType" aria-label="Target file type">
+                <option value="">Select output format</option>
               </select>
             </div>
           </div>
 
           <div class="actions">
-            <button class="btn" id="convertBtn" type="button">Convert</button>
+            <button class="btn" id="convertBtn" type="button" disabled>Convert &amp; Download</button>
             <button class="btn secondary" id="clearBtn" type="button">Clear</button>
           </div>
-
-          <div class="status" id="status"></div>
-          <div class="preview-box hidden" id="previewBox"></div>
+          <div class="status" id="status" aria-live="polite"></div>
         </div>
-
-        
       </div>
     </div>
   </section>
-
-<section class="seo-tool-info" aria-labelledby="seo-about-file-converter" data-seo-info>
-  <div class="seo-tool-info__inner">
-    <h2 class="seo-tool-info__heading" id="seo-about-file-converter">About this tool</h2>
-    <div class="seo-tool-info__grid">
-      <article class="seo-tool-info__card"><h3>What it does</h3><p>Convert supported files between common formats using browser-based conversion tools.</p></article>
-      <article class="seo-tool-info__card"><h3>How to use it</h3><ol><li>Choose the file you want to convert.</li><li>Select the output format and any available quality or scale options.</li><li>Run the conversion and download the converted file.</li></ol></article>
-      <article class="seo-tool-info__card"><h3>Privacy and processing</h3><p>Files are processed in your browser. Conversion libraries may be loaded from public CDNs, but the file itself is handled locally by the tool.</p></article>
-    </div>
-    <nav class="seo-related" aria-label="Related tools"><h3>Related tools</h3><div class="seo-related__links"><a href="file-compressor.html" title="File Compressor">File Compressor</a><a href="image-resizer.html" title="Image Resizer">Image Resizer</a><a href="pdf-separator.html" title="PDF Separator">PDF Separator</a></div></nav>
-  </div>
-</section>
-
 </main>
 
 <footer class="tools-global-footer">
@@ -526,24 +569,23 @@
   const fileInput = $('#fileInput');
   const dropZone = $('#dropZone');
   const filePanel = $('#filePanel');
-  const fileName = $('#fileName');
-  const fileType = $('#fileType');
-  const fileSize = $('#fileSize');
-  const fileCategory = $('#fileCategory');
-  const fromType = $('#fromType');
+  const selectedFilesEl = $('#selectedFiles');
   const toType = $('#toType');
   const convertBtn = $('#convertBtn');
   const clearBtn = $('#clearBtn');
   const status = $('#status');
-  const previewBox = $('#previewBox');
-  const qualityField = $('#qualityField');
-  const quality = $('#quality');
-  const scaleField = $('#scaleField');
-  const pdfScale = $('#pdfScale');
 
+  // Keep the established balanced defaults without making users click through
+  // extra quality controls for a straightforward conversion.
+  const quality = {value:'0.86'};
+  const pdfScale = {value:'1.5'};
+
+  let selectedFiles = [];
   let currentFile = null;
   let currentKind = null;
   let currentExt = null;
+  let batchZip = null;
+  let batchNames = new Set();
 
   function supportsCanvasMime(mime){
     const canvas = document.createElement('canvas');
@@ -658,9 +700,45 @@
     ]
   };
 
+  let progressValue = 0;
+  let progressActive = false;
+
+  function applyProgressAppearance(){
+    if(progressActive){
+      status.classList.add('progress-status');
+      status.classList.toggle('is-complete', progressValue >= 100);
+      status.style.setProperty('--progress-fill', progressValue + '%');
+      status.setAttribute('role', 'progressbar');
+      status.setAttribute('aria-valuemin', '0');
+      status.setAttribute('aria-valuemax', '100');
+      status.setAttribute('aria-valuenow', String(Math.round(progressValue)));
+    }else{
+      status.classList.remove('progress-status', 'is-complete');
+      status.style.removeProperty('--progress-fill');
+      status.removeAttribute('role');
+      status.removeAttribute('aria-valuemin');
+      status.removeAttribute('aria-valuemax');
+      status.removeAttribute('aria-valuenow');
+    }
+  }
+
   function setStatus(message, type){
     status.textContent = message || '';
-    status.className = 'status' + (type ? ' ' + type : '');
+    status.className = 'status' + (type ? ' ' + type : '') + (progressActive ? ' progress-status' : '');
+    applyProgressAppearance();
+  }
+
+  function setProgress(percent){
+    const next = Math.max(0, Math.min(100, Number(percent) || 0));
+    progressValue = Math.max(progressValue, next);
+    progressActive = true;
+    applyProgressAppearance();
+  }
+
+  function hideProgress(){
+    progressValue = 0;
+    progressActive = false;
+    applyProgressAppearance();
   }
 
   function formatSize(bytes){
@@ -740,90 +818,138 @@
     return (targets[kind] || []).filter(item => !item.needs || item.needs());
   }
 
-  function setTargets(kind, ext){
-    let list = availableTargets(kind);
+  function targetsForFile(file){
+    const kind = detectKind(file);
+    return availableTargets(kind);
+  }
 
-    if(kind === 'image'){
-      const normalized = ext === 'jpeg' ? 'jpg' : ext;
-      list = list.filter(t => t.value !== normalized);
-    }
+  function commonTargets(files){
+    if(!files.length) return [];
+    const first = targetsForFile(files[0]);
+    const others = files.slice(1).map(file => new Set(targetsForFile(file).map(item => item.value)));
+    return first.filter(item => others.every(set => set.has(item.value)));
+  }
 
+  function setTargets(files){
+    const list = commonTargets(files);
     toType.innerHTML = '';
-    if(!list.length){
+
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = list.length ? 'Select output format' : 'No common output format';
+    toType.appendChild(placeholder);
+
+    list.forEach(item => {
       const option = document.createElement('option');
-      option.value = '';
-      option.textContent = 'No supported conversion';
+      option.value = item.value;
+      option.textContent = item.label;
       toType.appendChild(option);
-      convertBtn.disabled = true;
-    }else{
-      list.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.value;
-        option.textContent = item.label;
-        toType.appendChild(option);
-      });
-      convertBtn.disabled = false;
+    });
+
+    if(list.length === 1){
+      toType.value = list[0].value;
     }
 
-    updateOptionFields();
+    updateControls();
   }
 
-  function setFromLabel(kind, ext){
-    fromType.innerHTML = '';
-    const option = document.createElement('option');
-    option.textContent = kindLabel(kind, ext);
-    fromType.appendChild(option);
+  function updateControls(){
+    convertBtn.disabled = !selectedFiles.length || !toType.value;
   }
 
-  function updateOptionFields(){
-    const target = toType.value;
-    const showQuality = ['jpg','webp','avif','pdf','jpg-zip','webp-zip','frame-jpg','frame-webp','frame-avif'].includes(target);
-    const showScale = ['png-zip','jpg-zip','webp-zip'].includes(target);
-    qualityField.classList.toggle('hidden', !showQuality);
-    scaleField.classList.toggle('hidden', !showScale);
+  function renderSelectedFiles(){
+    selectedFilesEl.innerHTML = '';
+
+    const summary = document.createElement('p');
+    summary.className = 'selected-files__summary';
+    summary.textContent = selectedFiles.length === 1
+      ? '1 file selected'
+      : `${selectedFiles.length} files selected`;
+    selectedFilesEl.appendChild(summary);
+
+    selectedFiles.forEach(file => {
+      const row = document.createElement('div');
+      row.className = 'selected-file';
+
+      const name = document.createElement('div');
+      name.className = 'selected-file__name';
+      name.textContent = file.name || 'Untitled file';
+
+      const meta = document.createElement('div');
+      meta.className = 'selected-file__meta';
+      const kind = detectKind(file);
+      meta.textContent = `${kindLabel(kind, extFromName(file.name))} · ${formatSize(file.size || 0)}`;
+
+      row.append(name, meta);
+      selectedFilesEl.appendChild(row);
+    });
   }
 
-  async function handleFile(file){
-    currentFile = file;
-    currentExt = extFromName(file.name);
-    currentKind = detectKind(file);
+  function handleFiles(files){
+    hideProgress();
+    setStatus('', '');
+    selectedFiles = Array.from(files || []).filter(Boolean);
+    currentFile = selectedFiles[0] || null;
+    currentExt = currentFile ? extFromName(currentFile.name) : null;
+    currentKind = currentFile ? detectKind(currentFile) : null;
 
-    fileName.textContent = file.name || 'Untitled file';
-    fileType.textContent = file.type || currentExt || 'Unknown';
-    fileSize.textContent = formatSize(file.size || 0);
-    fileCategory.textContent = currentKind === 'unknown' ? 'Unsupported' : kindLabel(currentKind, currentExt);
-
-    filePanel.classList.remove('hidden');
-    previewBox.classList.add('hidden');
-    previewBox.innerHTML = '';
-    setFromLabel(currentKind, currentExt);
-    setTargets(currentKind, currentExt);
-
-    if(currentKind === 'unknown'){
-      setStatus('This file type is not supported yet.', 'err');
-    }else{
-      setStatus('Ready to convert.', 'ok');
-      await previewFile(file, currentKind);
-    }
-  }
-
-  async function previewFile(file, kind){
-    previewBox.innerHTML = '';
-
-    if(['text','json','csv','tsv','markdown','html','xml'].includes(kind)){
-      previewBox.classList.remove('hidden');
-      const text = await file.text();
-      const pre = document.createElement('pre');
-      pre.textContent = text.slice(0, 6000) || 'Empty file';
-      previewBox.appendChild(pre);
+    if(!selectedFiles.length){
+      clearAll();
       return;
     }
 
-    // No previews for images, HEIC, SVG, PDF, Word, video or audio.
-    previewBox.classList.add('hidden');
+    filePanel.classList.remove('hidden');
+    renderSelectedFiles();
+
+    const unsupported = selectedFiles.filter(file => detectKind(file) === 'unknown');
+    if(unsupported.length){
+      toType.innerHTML = '<option value="">Unsupported file included</option>';
+      convertBtn.disabled = true;
+      setStatus(
+        unsupported.length === 1
+          ? `${unsupported[0].name} is not a supported file type.`
+          : `${unsupported.length} selected files are not supported.`,
+        'err'
+      );
+      return;
+    }
+
+    setTargets(selectedFiles);
+
+    if(!commonTargets(selectedFiles).length){
+      setStatus('These files do not share a compatible output format. Try files of the same or compatible types.', 'err');
+      return;
+    }
+
+    setStatus('', '');
+  }
+
+  function uniqueBatchName(filename){
+    const original = String(filename || 'converted-file');
+    if(!batchNames.has(original)){
+      batchNames.add(original);
+      return original;
+    }
+
+    const dot = original.lastIndexOf('.');
+    const stem = dot > 0 ? original.slice(0, dot) : original;
+    const ext = dot > 0 ? original.slice(dot) : '';
+    let n = 2;
+    let candidate = `${stem}-${n}${ext}`;
+    while(batchNames.has(candidate)){
+      n++;
+      candidate = `${stem}-${n}${ext}`;
+    }
+    batchNames.add(candidate);
+    return candidate;
   }
 
   function downloadBlob(blob, filename){
+    if(batchZip){
+      batchZip.file(uniqueBatchName(filename), blob);
+      return;
+    }
+
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -969,7 +1095,7 @@
       const orientation = canvas.width >= canvas.height ? 'landscape' : 'portrait';
       const pdf = new jsPDF({orientation, unit:'px', format:[canvas.width, canvas.height]});
       pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
-      pdf.save(`${baseName(file.name)}.pdf`);
+      downloadBlob(pdf.output('blob'), `${baseName(file.name)}.pdf`);
       setStatus('Image converted to PDF and downloaded.', 'ok');
       return;
     }
@@ -1042,7 +1168,7 @@
       const orientation = canvas.width >= canvas.height ? 'landscape' : 'portrait';
       const pdf = new jsPDF({orientation, unit:'px', format:[canvas.width, canvas.height]});
       pdf.addImage(canvas.toDataURL('image/jpeg', Number(quality.value || 0.86)), 'JPEG', 0, 0, canvas.width, canvas.height);
-      pdf.save(`${baseName(file.name)}.pdf`);
+      downloadBlob(pdf.output('blob'), `${baseName(file.name)}.pdf`);
       setStatus('SVG converted to PDF and downloaded.', 'ok');
       return;
     }
@@ -1205,7 +1331,7 @@ ${body}
       });
     });
 
-    pdf.save(filename);
+    downloadBlob(pdf.output('blob'), filename);
   }
 
   async function convertTextFile(file, kind, target){
@@ -1627,51 +1753,127 @@ ${body}
     setStatus('Audio converted to WAV and downloaded.', 'ok');
   }
 
+  async function convertOne(file, target){
+    currentFile = file;
+    currentExt = extFromName(file.name);
+    currentKind = detectKind(file);
+
+    if(currentKind === 'image') await convertImage(file, target);
+    else if(currentKind === 'heic') await convertHeic(file, target);
+    else if(currentKind === 'svg') await svgToImageBlob(file, target);
+    else if(currentKind === 'video') await convertVideo(file, target);
+    else if(currentKind === 'audio') await convertAudio(file, target);
+    else if(currentKind === 'pdf') await convertPdf(file, target);
+    else if(currentKind === 'docx') await convertDocx(file, target);
+    else if(['text','json','csv','tsv','markdown','html','xml'].includes(currentKind)) await convertTextFile(file, currentKind, target);
+    else throw new Error(`${file.name} is not a supported file type.`);
+  }
+
   async function convert(){
-    if(!currentFile) return;
-    const target = toType.value;
-    if(!target){
-      setStatus('Please choose a supported output format.', 'err');
+    if(!selectedFiles.length){
+      setStatus('Choose at least one file first.', 'err');
       return;
     }
 
-    try{
-      setStatus('Converting...', '');
-      convertBtn.disabled = true;
+    const target = toType.value;
+    if(!target){
+      setStatus('Select an output format first.', 'err');
+      return;
+    }
 
-      if(currentKind === 'image') await convertImage(currentFile, target);
-      else if(currentKind === 'heic') await convertHeic(currentFile, target);
-      else if(currentKind === 'svg') await svgToImageBlob(currentFile, target);
-      else if(currentKind === 'video') await convertVideo(currentFile, target);
-      else if(currentKind === 'audio') await convertAudio(currentFile, target);
-      else if(currentKind === 'pdf') await convertPdf(currentFile, target);
-      else if(currentKind === 'docx') await convertDocx(currentFile, target);
-      else if(['text','json','csv','tsv','markdown','html','xml'].includes(currentKind)) await convertTextFile(currentFile, currentKind, target);
-      else setStatus('This file type is not supported yet.', 'err');
+    const files = [...selectedFiles];
+    const failures = [];
+    convertBtn.disabled = true;
+    hideProgress();
+    setProgress(3);
+
+    try{
+      if(files.length === 1){
+        batchZip = null;
+        setStatus('Converting...', '');
+        setProgress(12);
+        await convertOne(files[0], target);
+        setProgress(100);
+        requestAnimationFrame(()=>setProgress(100));
+        setStatus(status.textContent.trim() || 'Converted and downloaded.', 'ok');
+        return;
+      }
+
+      if(!window.JSZip){
+        throw new Error('Batch download support could not load. Check your connection and try again.');
+      }
+
+      batchZip = new JSZip();
+      batchNames = new Set();
+
+      for(let i = 0; i < files.length; i++){
+        const file = files[i];
+        setStatus(`Converting ${i + 1} of ${files.length}: ${file.name}`, '');
+        try{
+          await convertOne(file, target);
+        }catch(err){
+          failures.push({
+            file:file.name,
+            message:err && err.message ? err.message : 'Conversion failed.'
+          });
+        }
+        setProgress(8 + ((i + 1) / files.length) * 80);
+      }
+
+      const convertedCount = files.length - failures.length;
+      if(!convertedCount){
+        throw new Error(failures[0]?.message || 'None of the selected files could be converted.');
+      }
+
+      const collectedZip = batchZip;
+      batchZip = null;
+      const zipBlob = await collectedZip.generateAsync({type:'blob'}, metadata => {
+        setProgress(88 + ((metadata.percent || 0) * 0.11));
+      });
+      downloadBlob(zipBlob, `converted-files-${target}.zip`);
+      setProgress(100);
+      requestAnimationFrame(()=>setProgress(100));
+
+      if(failures.length){
+        hideProgress();
+        setStatus(`${convertedCount} of ${files.length} files converted and downloaded as a ZIP. ${failures.length} file(s) could not be converted.`, 'err');
+      }else{
+        setStatus(`${convertedCount} files converted and downloaded as a ZIP.`, 'ok');
+      }
     }catch(err){
+      batchZip = null;
+      hideProgress();
       setStatus(err.message || 'Conversion failed. Try another file or output format.', 'err');
     }finally{
-      convertBtn.disabled = !availableTargets(currentKind).length;
+      batchZip = null;
+      currentFile = selectedFiles[0] || null;
+      currentExt = currentFile ? extFromName(currentFile.name) : null;
+      currentKind = currentFile ? detectKind(currentFile) : null;
+      updateControls();
     }
   }
 
   function clearAll(){
+    selectedFiles = [];
     currentFile = null;
     currentKind = null;
     currentExt = null;
+    batchZip = null;
+    batchNames = new Set();
     fileInput.value = '';
     filePanel.classList.add('hidden');
-    previewBox.classList.add('hidden');
-    previewBox.innerHTML = '';
+    selectedFilesEl.innerHTML = '';
+    toType.innerHTML = '<option value="">Select output format</option>';
+    hideProgress();
     setStatus('', '');
+    updateControls();
   }
 
   fileInput.addEventListener('change', e => {
-    const file = e.target.files && e.target.files[0];
-    if(file) handleFile(file);
+    handleFiles(e.target.files);
   });
 
-  toType.addEventListener('change', updateOptionFields);
+  toType.addEventListener('change', updateControls);
 
   ['dragenter','dragover'].forEach(evt => {
     dropZone.addEventListener(evt, e => {
@@ -1688,8 +1890,9 @@ ${body}
   });
 
   dropZone.addEventListener('drop', e => {
-    const file = e.dataTransfer.files && e.dataTransfer.files[0];
-    if(file) handleFile(file);
+    if(e.dataTransfer.files && e.dataTransfer.files.length){
+      handleFiles(e.dataTransfer.files);
+    }
   });
 
   convertBtn.addEventListener('click', convert);
@@ -1699,6 +1902,6 @@ ${body}
   if(y) y.textContent = new Date().getFullYear();
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk75"></script>
+<script src="../../Assets/site-shell.js?v=mk83"></script>
 </body>
 </html>
