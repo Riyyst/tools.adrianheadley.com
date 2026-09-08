@@ -1,0 +1,1999 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Browser Code Studio | Adrian Headley Tools</title>
+<meta name="description" content="Write, import, search, diagnose, run, preview and export browser-based code projects with starter templates, project-wide tools, offline runtime caching and a local coding coach."/>
+<meta name="theme-color" content="#f5f5f7"/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/coding-studio.html"/>
+<meta property="og:type" content="website"/><meta property="og:site_name" content="Adrian Headley Tools"/><meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Browser Code Studio | Adrian Headley Tools"/>
+<meta property="og:description" content="Write, search, diagnose, run and preview browser projects with starter templates and a built-in local coding coach."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/coding-studio.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="Browser Code Studio | Adrian Headley Tools"/>
+<meta name="twitter:description" content="A browser coding workspace with project-wide search, templates, diagnostics, preview, Python support, offline caching and local coding guidance."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/coding-studio.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/coding-studio.html","name":"Browser Code Studio","description":"A browser-based coding workspace with starter templates, project-wide search, project diagnosis, console input, preview runners and offline enhanced-mode caching.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/coding-studio.html#breadcrumb"},"dateModified":"2026-09-08","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/coding-studio.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/coding-studio.html#app","name":"Browser Code Studio","url":"https://tools.adrianheadley.com/pages/toolpages/coding-studio.html","description":"Browser-based code editor, project workspace, preview runner and local coding coach.","applicationCategory":"DeveloperApplication","operatingSystem":"Any","browserRequirements":"Requires a modern browser with JavaScript enabled. Enhanced editing and Python require internet access unless already cached.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Start with a blank browser coding workspace.","Create, rename and delete project files.","Import individual files, folders, .ahcode projects and legacy ZIP projects.","Export the active file or save the entire project using the .ahcode project format.","Run HTML/CSS/JavaScript projects in a separate preview window.","Run standalone JavaScript in an isolated Web Worker.","Run Python in the browser through Pyodide when the runtime is available.","Preview Markdown, JSON, SVG, text, CSV, XML, YAML, TOML and INI files.","Edit many additional languages even when no browser-native runner is available.","Use a built-in local coding coach for syntax, accessibility, maintainability and safety hints.","Use a coder-only light/dark theme independent of the surrounding website.","Save and restore a browser-local project session.","Use Monaco Editor when available with a built-in text-editor fallback.","Project source files remain in the browser unless the user explicitly exports them.","Search and replace across every text file in the current project.","Create starter projects for basic webpages, responsive landing pages, accessible forms, JavaScript apps and Python scripts.","Run a project-wide local diagnosis across supported text files from the Coding Coach.","Queue console input for Python input() calls, with a synchronous prompt fallback when the queue is empty.","Cache Monaco Editor and Pyodide runtime assets for later offline enhanced-mode use through a scoped service worker."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/coding-studio.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Browser Code Studio","item":"https://tools.adrianheadley.com/pages/toolpages/coding-studio.html"}]}]}</script>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<style>
+:root{
+  --bg:#f5f5f7;
+  --bg-alt:#ffffff;
+  --text:#111827;
+  --text-soft:#4b5563;
+  --accent:#2563eb;
+  --accent-hover:#1d4ed8;
+  --accent-soft:rgba(37,99,235,.08);
+  --border-subtle:#e5e7eb;
+  --border-strong:#d1d5db;
+  --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+  --shadow-lift:0 18px 36px rgba(15,23,42,.12);
+  --radius:20px;
+  --radius-pill:999px;
+  --max-w:1460px;
+  --stack-gap:14px;
+  --editor-bg:#ffffff;
+  --editor-panel:#f8fafc;
+  --editor-panel-2:#eef2f7;
+  --editor-border:#e2e8f0;
+  --editor-text:#111827;
+  --editor-muted:#64748b;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%}
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+  color:var(--text);
+  font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+main{flex:1}
+.container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+.skip-link{position:absolute;left:-999px;top:.5rem;padding:.45rem .75rem;background:#111827;color:#f9fafb;z-index:200;border-radius:var(--radius-pill);font-size:.85rem}
+.skip-link:focus{left:.5rem}
+
+/* Global header/footer styling is supplied by site-shell.css. */
+.intro{text-align:center;padding:2.45rem 0 2.15rem}
+.intro__title{font-size:clamp(2.05rem,3vw,2.65rem);line-height:1.15;margin:0 0 .72rem;font-weight:760;letter-spacing:-.03em}
+.intro__subtitle{max-width:740px;margin:0 auto;color:var(--text-soft);font-size:.96rem;font-weight:500}
+.tool{padding:0 0 4rem}
+.ide-card{background:rgba(255,255,255,.94);border:1px solid var(--border-subtle);border-radius:24px;box-shadow:var(--shadow-soft);padding:1rem;transition:box-shadow .16s,border-color .16s}
+.ide-card:hover{box-shadow:var(--shadow-lift);border-color:rgba(37,99,235,.18)}
+
+.ide-toolbar{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-bottom:.85rem}
+.toolbar-group{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.45rem;min-height:38px;padding:.48rem .88rem;
+  border:1px solid var(--border-strong);border-radius:var(--radius-pill);background:#fff;color:var(--text);font-size:.8rem;font-weight:750;
+  transition:background .16s,color .16s,border-color .16s,transform .14s,box-shadow .16s
+}
+.btn:hover:not(:disabled){background:#f8fafc;transform:translateY(-1px)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover:not(:disabled){background:var(--accent-hover);box-shadow:0 10px 24px rgba(37,99,235,.18)}
+.btn.danger{color:#b91c1c;border-color:rgba(185,28,28,.22)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.icon{width:38px;padding:0;border-radius:12px}
+.btn svg{width:16px;height:16px;fill:currentColor;flex:none}
+.file-input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+
+.workspace{
+  display:grid;grid-template-columns:250px minmax(0,1fr);grid-template-rows:minmax(560px,70vh) 190px;
+  overflow:hidden;border:1px solid var(--editor-border);border-radius:19px;background:var(--editor-bg);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)
+}
+.explorer{grid-row:1 / 3;min-width:0;border-right:1px solid var(--editor-border);background:var(--editor-panel);color:var(--editor-text);display:flex;flex-direction:column}
+.explorer-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.75rem .75rem .6rem;border-bottom:1px solid var(--editor-border)}
+.explorer-title{font-size:.72rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#cbd5e1}
+.explorer-actions{display:flex;gap:.25rem}
+.explorer-actions button{width:29px;height:29px;border:1px solid transparent;border-radius:9px;background:transparent;color:#cbd5e1;display:grid;place-items:center;padding:0}
+.explorer-actions button:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.06)}
+.project-name-wrap{padding:.7rem .75rem .45rem}
+.project-name{width:100%;border:1px solid #334155;border-radius:10px;background:#0f172a;color:#e2e8f0;padding:.5rem .62rem;font:700 .78rem/1.2 Inter,system-ui,sans-serif;outline:none}
+.project-name:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(96,165,250,.12)}
+.file-tree{flex:1;min-height:0;overflow:auto;padding:.35rem .45rem .7rem}
+.file-row{display:flex;align-items:center;gap:.38rem;width:100%;min-width:0;padding:.36rem .45rem;border:1px solid transparent;border-radius:9px;background:transparent;color:#cbd5e1;text-align:left;font:600 .76rem/1.25 Inter,system-ui,sans-serif}
+.file-row:hover{background:rgba(255,255,255,.055)}
+.file-row.active{background:rgba(37,99,235,.23);border-color:rgba(96,165,250,.2);color:#fff}
+.file-icon{width:17px;text-align:center;flex:none;color:#93c5fd;font-size:.68rem;font-weight:850}
+.file-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:rtl;text-align:left}
+.file-name span{direction:ltr}
+.explorer-foot{padding:.62rem .75rem;border-top:1px solid var(--editor-border);font-size:.68rem;line-height:1.4;color:var(--editor-muted)}
+
+.editor-column{min-width:0;min-height:0;display:flex;flex-direction:column;background:var(--editor-bg)}
+.tabbar{display:flex;align-items:stretch;min-height:40px;overflow-x:auto;overflow-y:hidden;background:var(--editor-panel);border-bottom:1px solid var(--editor-border);scrollbar-width:thin}
+.editor-tab{display:flex;align-items:center;gap:.45rem;min-width:118px;max-width:220px;padding:.55rem .65rem;border:0;border-right:1px solid var(--editor-border);background:#111827;color:#94a3b8;font:650 .73rem/1 Inter,system-ui,sans-serif;white-space:nowrap}
+.editor-tab.active{background:#0f172a;color:#e2e8f0;box-shadow:inset 0 2px 0 #3b82f6}
+.editor-tab .tab-name{overflow:hidden;text-overflow:ellipsis}
+.editor-tab .dirty{width:7px;height:7px;border-radius:50%;background:#60a5fa;flex:none;display:none}
+.editor-tab.is-dirty .dirty{display:block}
+.editor-tab .close-tab{margin-left:auto;width:20px;height:20px;border:0;border-radius:5px;background:transparent;color:inherit;padding:0;display:grid;place-items:center;font-size:.9rem}
+.editor-tab .close-tab:hover{background:rgba(255,255,255,.08)}
+.editor-stage{position:relative;flex:1;min-height:0}
+#monacoEditor{position:absolute;inset:0;display:none}
+.fallback-wrap{position:absolute;inset:0;display:grid;grid-template-columns:48px minmax(0,1fr);background:#0f172a}
+.fallback-lines{overflow:hidden;padding:.75rem .55rem .75rem 0;background:#111827;border-right:1px solid #263244;color:#64748b;text-align:right;white-space:pre;font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;user-select:none}
+#fallbackEditor{width:100%;height:100%;resize:none;border:0;outline:none;background:#0f172a;color:#dbeafe;padding:.75rem 1rem;tab-size:2;font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;caret-color:#fff;white-space:pre;overflow:auto}
+.empty-editor{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:2rem;color:#64748b;background:#0f172a;font-size:.82rem;font-weight:650;z-index:4}
+.empty-editor.show{display:flex}
+.statusbar{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap;min-height:29px;padding:.28rem .65rem;border-top:1px solid var(--editor-border);background:#172033;color:#cbd5e1;font-size:.67rem}
+.status-left,.status-right{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap}
+.status-pill{display:inline-flex;align-items:center;gap:.25rem}
+
+.console-panel{grid-column:2;min-width:0;min-height:0;border-top:1px solid var(--editor-border);background:#0b1120;color:#dbeafe;display:flex;flex-direction:column}
+.console-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.45rem .65rem;border-bottom:1px solid var(--editor-border);background:#111827}
+.console-title{font-size:.7rem;font-weight:850;text-transform:uppercase;letter-spacing:.07em;color:#cbd5e1}
+.console-actions{display:flex;gap:.35rem}
+.console-actions button{border:1px solid #334155;border-radius:8px;background:#172033;color:#cbd5e1;padding:.25rem .55rem;font-size:.66rem;font-weight:750}
+.console-actions button:hover{background:#1e293b}
+.console-output{flex:1;min-height:0;overflow:auto;padding:.55rem .7rem;font:12px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+.console-line{display:flex;gap:.65rem;padding:.16rem 0;border-bottom:1px solid rgba(148,163,184,.08);white-space:pre-wrap;overflow-wrap:anywhere}
+.console-line .time{color:#64748b;flex:none}
+.console-line.info .msg{color:#dbeafe}.console-line.log .msg{color:#dbeafe}.console-line.warn .msg{color:#fbbf24}.console-line.error .msg{color:#fca5a5}.console-line.system .msg{color:#93c5fd}
+
+.command-palette,.modal-backdrop{display:none;position:fixed;inset:0;z-index:260;background:rgba(15,23,42,.42);backdrop-filter:blur(4px);align-items:flex-start;justify-content:center;padding:11vh 1rem 2rem}
+.command-palette.show,.modal-backdrop.show{display:flex}
+.palette-card,.modal-card{width:min(600px,100%);border:1px solid var(--border-subtle);border-radius:22px;background:#fff;box-shadow:0 28px 70px rgba(15,23,42,.25);overflow:hidden}
+.palette-input{width:100%;border:0;border-bottom:1px solid var(--border-subtle);outline:none;padding:1rem 1.1rem;font-size:.95rem;font-weight:650}
+.palette-list{max-height:360px;overflow:auto;padding:.45rem}
+.palette-item{display:flex;align-items:center;justify-content:space-between;gap:.75rem;width:100%;padding:.65rem .75rem;border:0;border-radius:12px;background:#fff;color:var(--text);text-align:left;font-size:.84rem}
+.palette-item:hover,.palette-item.active{background:#f1f5f9}
+.palette-shortcut{color:var(--text-soft);font-size:.72rem}
+.modal-card{padding:1.1rem}
+.modal-title{margin:0 0 .25rem;font-size:1.05rem}.modal-text{margin:0 0 1rem;color:var(--text-soft);font-size:.86rem}
+.field{margin:.8rem 0}.field label{display:block;margin-bottom:.3rem;color:var(--text-soft);font-size:.78rem;font-weight:750}.field input,.field select{width:100%;border:1px solid var(--border-strong);border-radius:12px;background:#fff;color:var(--text);padding:.7rem .8rem;outline:none}.field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.1)}
+.modal-actions{display:flex;justify-content:flex-end;gap:.55rem;flex-wrap:wrap;margin-top:1rem}
+.toast-stack{position:fixed;right:1rem;bottom:1rem;z-index:300;display:grid;gap:.5rem;pointer-events:none}
+.toast{max-width:min(360px,calc(100vw - 2rem));padding:.7rem .9rem;border:1px solid var(--border-subtle);border-radius:14px;background:rgba(17,24,39,.96);color:#fff;box-shadow:0 18px 40px rgba(15,23,42,.2);font-size:.8rem;font-weight:650;animation:toastIn .18s ease-out}
+@keyframes toastIn{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+
+.search-modal-card{width:min(820px,100%)}
+.search-options{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin:.65rem 0}
+.search-options label{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-soft);font-size:.76rem;font-weight:700}
+.search-results{max-height:360px;overflow:auto;border:1px solid var(--border-subtle);border-radius:14px;background:#f8fafc;padding:.4rem}
+.search-result{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.6rem;width:100%;padding:.62rem .68rem;border:0;border-bottom:1px solid var(--border-subtle);background:transparent;text-align:left;color:var(--text);cursor:pointer}
+.search-result:last-child{border-bottom:0}
+.search-result:hover{background:#fff}
+.search-result-main{min-width:0}
+.search-result-path{font-size:.75rem;font-weight:800;overflow-wrap:anywhere}
+.search-result-preview{margin-top:.1rem;color:var(--text-soft);font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-result-line{align-self:start;color:var(--text-soft);font-size:.68rem;font-weight:750}
+.search-empty{padding:1rem;text-align:center;color:var(--text-soft);font-size:.8rem}
+.template-help{margin:.35rem 0 0;color:var(--text-soft);font-size:.74rem;line-height:1.45}
+.console-input-row{display:flex;align-items:center;gap:.42rem;padding:.45rem .6rem;border-top:1px solid var(--editor-border);background:#f8fafc}
+.console-input-row[hidden]{display:none}
+.console-input-row input{flex:1;min-width:0;border:1px solid var(--border-strong);border-radius:9px;background:#fff;color:var(--text);padding:.42rem .58rem;font:12px/1.35 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;outline:none}
+.console-input-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.console-input-row button{border:1px solid var(--border-subtle);border-radius:8px;background:#fff;color:var(--text-soft);padding:.32rem .55rem;font-size:.66rem;font-weight:750}
+.console-input-row button:hover{background:#eef2f7;color:var(--text)}
+.stdin-count{flex:none;color:var(--text-soft);font-size:.66rem;font-weight:750;white-space:nowrap}
+.ide-card.coder-dark .console-input-row{background:#111827;border-color:#293548}
+.ide-card.coder-dark .console-input-row input{background:#0f172a;border-color:#334155;color:#e5e7eb}
+.ide-card.coder-dark .console-input-row button{background:#172033;border-color:#334155;color:#cbd5e1}
+.ide-card.coder-dark .console-input-row button:hover{background:#1e293b;color:#fff}
+.ide-card.coder-dark .stdin-count{color:#94a3b8}
+
+html[data-text-size="large"]{font-size:17.5px}html[data-text-size="xlarge"]{font-size:19px}
+html[data-colour-mode="cb"]{--accent:#0f766e;--accent-hover:#115e59;--accent-soft:rgba(15,118,110,.09)}
+html.underline-links a{text-decoration:underline}
+html.reduce-motion *,html.reduce-motion *::before,html.reduce-motion *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+html.strong-focus :focus-visible{outline:3px solid #f59e0b!important;outline-offset:3px!important}
+
+@media(max-width:980px){
+  .tools-global-header-inner{grid-template-columns:1fr auto}.tools-global-nav{grid-column:1 / 3;grid-row:2;padding-bottom:.55rem}.tools-global-header-actions{grid-column:2;grid-row:1}
+  .workspace{grid-template-columns:210px minmax(0,1fr)}
+}
+@media(max-width:760px){
+  .container{width:min(100% - 1rem,var(--max-w))}.intro{padding:1.9rem 0 1.8rem}.tool{padding-bottom:2rem}.ide-card{padding:.5rem;border-radius:19px}
+  .tools-global-brand-name{display:none}.tools-global-header-inner{width:min(100% - 1rem,1240px);gap:.45rem}.tools-global-nav-link{padding:.3rem .58rem;font-size:.76rem}.tools-global-a11y-button{padding:.3rem .65rem;font-size:.76rem}
+  .workspace{grid-template-columns:1fr;grid-template-rows:190px minmax(500px,64vh) 180px}.explorer{grid-row:1;grid-column:1;border-right:0;border-bottom:1px solid var(--editor-border)}.editor-column{grid-row:2;grid-column:1}.console-panel{grid-row:3;grid-column:1}.explorer-foot{display:none}.file-tree{display:flex;gap:.35rem;overflow:auto}.file-row{min-width:150px;max-width:220px}.project-name-wrap{display:none}.ide-toolbar{padding:.25rem}.toolbar-group{gap:.35rem}.btn{padding:.43rem .68rem;font-size:.73rem}
+}
+
+/* Browser Code Studio, seamless light workspace */
+.ide-card{
+  overflow:visible;
+  padding:0;
+  border:1px solid var(--border-subtle);
+  border-radius:24px;
+  background:#fff;
+  box-shadow:var(--shadow-soft);
+  transition:none;
+}
+.ide-card:hover{border-color:var(--border-subtle);box-shadow:var(--shadow-soft)}
+.ide-toolbar{
+  position:relative;
+  z-index:30;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.7rem;
+  min-height:58px;
+  margin:0;
+  padding:.55rem .65rem;
+  border-bottom:1px solid var(--editor-border);
+  border-radius:23px 23px 0 0;
+  background:#fff;
+  flex-wrap:nowrap;
+}
+.toolbar-strip,.toolbar-end{display:flex;align-items:center;gap:.2rem;min-width:0;flex-wrap:nowrap}
+.toolbar-strip{overflow:visible;scrollbar-width:none;padding:1px}
+.toolbar-strip::-webkit-scrollbar{display:none}
+.toolbar-end{flex:none}
+.tool-action,.run-action{
+  display:inline-flex;align-items:center;justify-content:center;gap:.42rem;
+  min-height:36px;padding:.42rem .65rem;border:1px solid transparent;border-radius:10px;
+  background:transparent;color:var(--text-soft);font-size:.76rem;font-weight:750;white-space:nowrap;
+  transition:background .14s,color .14s,border-color .14s,transform .12s;
+}
+.tool-action svg,.run-action svg{width:15px;height:15px;fill:currentColor;flex:none}
+.tool-action:hover,.tool-action:focus-visible{background:#f8fafc;color:var(--text);border-color:var(--border-subtle);transform:none}
+.run-action{padding:.45rem .9rem;border-radius:999px;background:var(--accent);color:#fff;border-color:var(--accent)}
+.run-action:hover,.run-action:focus-visible{background:var(--accent-hover);color:#fff;transform:none}
+.toolbar-divider{width:1px;height:23px;margin:0 .25rem;background:var(--border-subtle);flex:none}
+.toolbar-menu{position:relative;flex:none}
+.toolbar-popover{
+  position:absolute;left:0;top:calc(100% + .45rem);display:none;min-width:170px;padding:.35rem;
+  border:1px solid var(--border-subtle);border-radius:14px;background:#fff;box-shadow:var(--shadow-lift);z-index:80
+}
+.toolbar-popover.show{display:grid}
+.popover-action{display:block;padding:.55rem .65rem;border-radius:9px;color:var(--text);font-size:.78rem;font-weight:700;cursor:pointer}
+.popover-action:hover{background:#f1f5f9}
+.project-name-inline{
+  width:138px;min-height:34px;padding:.38rem .6rem;border:1px solid transparent;border-radius:9px;
+  background:#f8fafc;color:var(--text);font:700 .75rem/1.2 Inter,system-ui,sans-serif;outline:none;text-align:center
+}
+.project-name-inline:hover{border-color:var(--border-subtle)}
+.project-name-inline:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);background:#fff}
+.workspace{
+  display:grid;grid-template-columns:235px minmax(0,1fr);grid-template-rows:minmax(560px,70vh) 180px;
+  overflow:hidden;border:0;border-radius:0 0 23px 23px;background:var(--editor-bg);box-shadow:none
+}
+.explorer{grid-row:1 / 3;min-width:0;border-right:1px solid var(--editor-border);background:#f8fafc;color:var(--editor-text)}
+.explorer-head{padding:.66rem .68rem .55rem;border-bottom:1px solid var(--editor-border);background:#fbfdff}
+.explorer-title{color:var(--text-soft)}
+.explorer-actions button{color:var(--text-soft)}
+.explorer-actions button:hover{background:#eef2f7;border-color:var(--border-subtle);color:var(--text)}
+.file-tree{padding:.35rem .42rem .65rem}
+.file-row{color:var(--text-soft);font-weight:650}
+.file-row:hover{background:#eef2f7;color:var(--text)}
+.file-row.active{background:var(--accent-soft);border-color:var(--accent-soft);color:var(--accent)}
+.file-icon{color:var(--accent)}
+.explorer-foot{border-top:1px solid var(--editor-border);background:#fbfdff;color:var(--text-soft)}
+.editor-column{background:#fff}
+.tabbar{min-height:40px;background:#f8fafc;border-bottom:1px solid var(--editor-border)}
+.editor-tab{border-right:1px solid var(--editor-border);background:#f8fafc;color:var(--text-soft)}
+.editor-tab:hover{background:#f1f5f9;color:var(--text)}
+.editor-tab.active{background:#fff;color:var(--text);box-shadow:inset 0 2px 0 var(--accent)}
+.editor-tab .dirty{background:var(--accent)}
+.editor-tab .close-tab:hover{background:#eef2f7}
+.fallback-wrap{background:#fff;grid-template-columns:48px minmax(0,1fr)}
+.fallback-lines{background:#f8fafc;border-right:1px solid var(--editor-border);color:#94a3b8}
+#fallbackEditor{background:#fff;color:#172033;caret-color:var(--accent)}
+.empty-editor{background:#fff;color:var(--text-soft)}
+.empty-editor-inner{display:grid;gap:.35rem;max-width:520px}.empty-editor-inner strong{color:var(--text);font-size:1rem}.empty-editor-inner span{font-size:.84rem}.empty-editor-inner small{margin-top:.15rem;color:#94a3b8;font-size:.72rem;line-height:1.5}
+.statusbar{border-top:1px solid var(--editor-border);background:#f8fafc;color:var(--text-soft)}
+.console-panel{border-top:1px solid var(--editor-border);background:#fbfdff;color:var(--text)}
+.console-head{border-bottom:1px solid var(--editor-border);background:#f8fafc}
+.console-title{color:var(--text-soft)}
+.console-actions button{border:1px solid var(--border-subtle);background:#fff;color:var(--text-soft)}
+.console-actions button:hover{background:#f1f5f9;color:var(--text)}
+.console-output{background:#fbfdff}
+.console-line{border-bottom:1px solid rgba(148,163,184,.14)}
+.console-line .time{color:#94a3b8}.console-line.info .msg,.console-line.log .msg{color:#1f2937}.console-line.warn .msg{color:#92400e}.console-line.error .msg{color:#b91c1c}.console-line.system .msg{color:var(--accent)}
+
+@media(max-width:980px){
+  .workspace{grid-template-columns:205px minmax(0,1fr)}
+  .project-name-inline{width:125px}
+  .tool-action span:not(.chevron){display:none}
+  .tool-action{width:34px;padding:0}
+  .toolbar-divider{margin:0 .12rem}
+}
+@media(max-width:760px){
+  .ide-card{border-radius:19px}
+  .ide-toolbar{border-radius:18px 18px 0 0;padding:.45rem;gap:.35rem;overflow:visible}
+  .workspace{grid-template-columns:1fr;grid-template-rows:165px minmax(500px,64vh) 170px;border-radius:0 0 18px 18px}
+  .explorer{grid-row:1;grid-column:1;border-right:0;border-bottom:1px solid var(--editor-border)}
+  .editor-column{grid-row:2;grid-column:1}.console-panel{grid-row:3;grid-column:1}
+  .project-name-inline{display:none}
+  .toolbar-strip{flex:1}
+  .toolbar-end{flex:none}
+  .run-action span{display:none}.run-action{width:36px;padding:0;border-radius:10px}.theme-action{width:36px;height:36px}
+  .file-tree{display:flex;gap:.35rem;overflow:auto}.file-row{min-width:150px;max-width:220px}
+}
+
+/* Final workspace polish */
+.tool .container{width:min(1500px,100% - 2rem)}
+.ide-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:.55rem}
+.toolbar-strip{min-width:0;overflow:visible;padding-bottom:1px}
+.toolbar-end{justify-self:end;gap:.35rem}
+.toolbar-popover .popover-action{width:100%;border:0;background:#fff;text-align:left;font:700 .78rem/1.3 Inter,system-ui,sans-serif}
+.workspace{min-height:720px;grid-template-rows:minmax(530px,1fr) 180px;height:min(76vh,820px)}
+.editor-stage{background:#fff}
+.console-output:empty::before{content:"Run code to see output here.";display:block;color:#94a3b8;font:650 .76rem/1.5 Inter,system-ui,sans-serif;padding:.15rem}
+.explorer-foot{font-size:.69rem}
+@media(max-width:1180px){.project-name-inline{display:none}}
+@media(max-width:1100px){
+  .ide-toolbar{grid-template-columns:minmax(0,1fr) auto}.toolbar-strip{overflow:visible}.toolbar-end{grid-column:2}
+}
+@media(max-width:760px){
+  .tool .container{width:min(100% - .7rem,1500px)}
+  .ide-toolbar{display:flex;align-items:center;flex-wrap:nowrap}.toolbar-strip{overflow:visible}
+  .workspace{height:auto;min-height:0}
+}
+
+
+/* Coder-only colour mode and built-in coach */
+.theme-action{
+  width:36px;height:36px;padding:0;border:1px solid var(--border-subtle);border-radius:999px;
+  background:#fff;color:var(--text-soft);display:inline-grid;place-items:center;flex:none;
+  transition:background .14s,color .14s,border-color .14s
+}
+.theme-action:hover,.theme-action:focus-visible{background:#f8fafc;color:var(--text);border-color:var(--border-strong)}
+.theme-action svg{width:16px;height:16px;fill:currentColor}.theme-action .sun-icon{display:none}
+.bottom-tabs{display:flex;align-items:center;gap:.2rem}.panel-tab{display:inline-flex;align-items:center;gap:.35rem;border:0;border-radius:8px;background:transparent;color:var(--text-soft);padding:.3rem .48rem;font-size:.69rem;font-weight:850;text-transform:uppercase;letter-spacing:.065em}.panel-tab:hover{background:#eef2f7;color:var(--text)}.panel-tab.active{background:#fff;color:var(--accent);box-shadow:inset 0 0 0 1px var(--border-subtle)}
+.coach-count{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 .28rem;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:.62rem;letter-spacing:0}
+.coach-output{flex:1;min-height:0;overflow:auto;padding:.65rem .7rem;background:#fbfdff;color:var(--text);font-size:.77rem}
+.coach-empty{display:grid;gap:.28rem;align-content:start;color:var(--text-soft);padding:.2rem}.coach-empty strong{color:var(--text);font-size:.82rem}.coach-summary{display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap;margin-bottom:.55rem;padding:.48rem .58rem;border:1px solid var(--border-subtle);border-radius:11px;background:#fff}.coach-summary strong{font-size:.8rem}.coach-summary span{color:var(--text-soft);font-size:.7rem}
+.coach-list{display:grid;gap:.42rem}.coach-card{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.52rem;padding:.52rem .58rem;border:1px solid var(--border-subtle);border-radius:12px;background:#fff;cursor:default}.coach-card[data-line],.coach-card[data-project-path]{cursor:pointer}.coach-card[data-line]:hover,.coach-card[data-project-path]:hover{border-color:rgba(37,99,235,.28);background:#fcfdff}.coach-badge{align-self:start;margin-top:.04rem;padding:.15rem .38rem;border-radius:999px;font-size:.6rem;font-weight:850;text-transform:uppercase;letter-spacing:.045em}.coach-badge.error{background:#fef2f2;color:#b91c1c}.coach-badge.warn{background:#fffbeb;color:#92400e}.coach-badge.tip{background:#eff6ff;color:#1d4ed8}.coach-badge.good{background:#ecfdf5;color:#047857}.coach-copy{min-width:0}.coach-title{display:flex;align-items:baseline;gap:.4rem;flex-wrap:wrap;color:var(--text);font-weight:800}.coach-line{color:var(--text-soft);font-size:.66rem;font-weight:700}.coach-detail{margin-top:.12rem;color:var(--text-soft);line-height:1.45}.coach-fix{margin-top:.22rem;color:var(--text);line-height:1.45}.coach-fix b{color:var(--accent)}
+.coach-actions{display:flex;gap:.35rem}.coach-actions button{border:1px solid var(--border-subtle);border-radius:8px;background:#fff;color:var(--text-soft);padding:.25rem .55rem;font-size:.66rem;font-weight:750}.coach-actions button:hover{background:#f1f5f9;color:var(--text)}
+
+.ide-card.coder-dark{--editor-bg:#0f172a;--editor-panel:#111827;--editor-panel-2:#172033;--editor-border:#293548;--editor-text:#e5e7eb;--editor-muted:#94a3b8;background:#0f172a;border-color:#293548;box-shadow:0 12px 30px rgba(15,23,42,.18)}
+.ide-card.coder-dark:hover{border-color:#293548;box-shadow:0 12px 30px rgba(15,23,42,.18)}
+.ide-card.coder-dark .ide-toolbar{background:#111827;border-color:#293548}.ide-card.coder-dark .tool-action{color:#cbd5e1}.ide-card.coder-dark .tool-action:hover,.ide-card.coder-dark .tool-action:focus-visible{background:#172033;color:#fff;border-color:#334155}.ide-card.coder-dark .toolbar-divider{background:#334155}.ide-card.coder-dark .toolbar-popover{background:#111827;border-color:#334155}.ide-card.coder-dark .toolbar-popover .popover-action{background:#111827;color:#e5e7eb}.ide-card.coder-dark .popover-action:hover{background:#172033}.ide-card.coder-dark .project-name-inline{background:#172033;color:#e5e7eb}.ide-card.coder-dark .project-name-inline:hover{border-color:#334155}.ide-card.coder-dark .project-name-inline:focus{background:#0f172a}.ide-card.coder-dark .theme-action{background:#172033;color:#cbd5e1;border-color:#334155}.ide-card.coder-dark .theme-action:hover{background:#1e293b;color:#fff}.ide-card.coder-dark .theme-action .moon-icon{display:none}.ide-card.coder-dark .theme-action .sun-icon{display:block}
+.ide-card.coder-dark .workspace{background:#0f172a}.ide-card.coder-dark .explorer{background:#111827;color:#e5e7eb}.ide-card.coder-dark .explorer-head,.ide-card.coder-dark .explorer-foot{background:#0f172a;border-color:#293548;color:#94a3b8}.ide-card.coder-dark .explorer-title,.ide-card.coder-dark .explorer-actions button{color:#94a3b8}.ide-card.coder-dark .explorer-actions button:hover{background:#172033;border-color:#334155;color:#fff}.ide-card.coder-dark .file-row{color:#cbd5e1}.ide-card.coder-dark .file-row:hover{background:#172033;color:#fff}.ide-card.coder-dark .file-row.active{background:rgba(37,99,235,.2);border-color:rgba(96,165,250,.22);color:#bfdbfe}.ide-card.coder-dark .file-icon{color:#60a5fa}
+.ide-card.coder-dark .editor-column,.ide-card.coder-dark .editor-stage{background:#0f172a}.ide-card.coder-dark .tabbar{background:#111827;border-color:#293548}.ide-card.coder-dark .editor-tab{background:#111827;color:#94a3b8;border-color:#293548}.ide-card.coder-dark .editor-tab:hover{background:#172033;color:#e5e7eb}.ide-card.coder-dark .editor-tab.active{background:#0f172a;color:#e5e7eb}.ide-card.coder-dark .editor-tab .close-tab:hover{background:#1e293b}.ide-card.coder-dark .fallback-wrap{background:#0f172a}.ide-card.coder-dark .fallback-lines{background:#111827;border-color:#293548;color:#64748b}.ide-card.coder-dark #fallbackEditor{background:#0f172a;color:#dbeafe;caret-color:#fff}.ide-card.coder-dark .empty-editor{background:#0f172a;color:#94a3b8}.ide-card.coder-dark .empty-editor-inner strong{color:#e5e7eb}.ide-card.coder-dark .empty-editor-inner small{color:#64748b}.ide-card.coder-dark .statusbar{background:#111827;border-color:#293548;color:#94a3b8}
+.ide-card.coder-dark .console-panel{background:#0b1120;color:#e5e7eb;border-color:#293548}.ide-card.coder-dark .console-head{background:#111827;border-color:#293548}.ide-card.coder-dark .panel-tab{color:#94a3b8}.ide-card.coder-dark .panel-tab:hover{background:#172033;color:#e5e7eb}.ide-card.coder-dark .panel-tab.active{background:#0f172a;color:#60a5fa;box-shadow:inset 0 0 0 1px #334155}.ide-card.coder-dark .console-actions button,.ide-card.coder-dark .coach-actions button{background:#172033;color:#cbd5e1;border-color:#334155}.ide-card.coder-dark .console-actions button:hover,.ide-card.coder-dark .coach-actions button:hover{background:#1e293b;color:#fff}.ide-card.coder-dark .console-output,.ide-card.coder-dark .coach-output{background:#0b1120}.ide-card.coder-dark .console-output:empty::before{color:#64748b}.ide-card.coder-dark .console-line{border-color:rgba(148,163,184,.09)}.ide-card.coder-dark .console-line .time{color:#64748b}.ide-card.coder-dark .console-line.info .msg,.ide-card.coder-dark .console-line.log .msg{color:#dbeafe}.ide-card.coder-dark .console-line.warn .msg{color:#fbbf24}.ide-card.coder-dark .console-line.error .msg{color:#fca5a5}.ide-card.coder-dark .console-line.system .msg{color:#93c5fd}.ide-card.coder-dark .coach-empty{color:#94a3b8}.ide-card.coder-dark .coach-empty strong{color:#e5e7eb}.ide-card.coder-dark .coach-summary,.ide-card.coder-dark .coach-card{background:#111827;border-color:#293548}.ide-card.coder-dark .coach-card[data-line]:hover,.ide-card.coder-dark .coach-card[data-project-path]:hover{background:#131d30;border-color:#3b82f666}.ide-card.coder-dark .coach-summary strong,.ide-card.coder-dark .coach-title,.ide-card.coder-dark .coach-fix{color:#e5e7eb}.ide-card.coder-dark .coach-summary span,.ide-card.coder-dark .coach-detail,.ide-card.coder-dark .coach-line{color:#94a3b8}.ide-card.coder-dark .coach-badge.error{background:#3f1d24;color:#fca5a5}.ide-card.coder-dark .coach-badge.warn{background:#422f12;color:#fbbf24}.ide-card.coder-dark .coach-badge.tip{background:#102b52;color:#93c5fd}.ide-card.coder-dark .coach-badge.good{background:#0c3328;color:#6ee7b7}
+
+</style>
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk126">
+
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand"><span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span><span class="tools-global-brand-name">Go to portfolio</span></a>
+    <nav class="tools-global-nav" aria-label="Main navigation"><a href="../../index.html" class="tools-global-nav-link is-current">Tools</a><a href="../about.html" class="tools-global-nav-link">About</a></nav>
+    <div class="tools-global-header-actions"><button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button><div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options"><div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div><div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div><div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div><div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div><div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div></div></div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Browser Code Studio</h1>
+      <p class="intro__subtitle">Write and test code directly in your browser. HTML, CSS and JavaScript run with browser-native tools, Python runs in-browser when its runtime can load, and many other languages can be edited in the same workspace.</p>
+    </div>
+  </section>
+
+  <section class="tool" id="browser-code-studio">
+    <div class="container">
+      <div class="ide-card" id="coderCard">
+        <div class="ide-toolbar" aria-label="Editor toolbar">
+          <div class="toolbar-strip" aria-label="Project and editor actions">
+            <div class="toolbar-menu" id="projectMenu">
+              <button class="tool-action" id="projectMenuBtn" type="button" aria-expanded="false" aria-controls="projectMenuPanel">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6l2 2h8v12H4V5Zm2 2v10h12V9h-6.8l-2-2H6Z"/></svg>
+                <span>Project</span>
+              </button>
+              <div class="toolbar-popover" id="projectMenuPanel">
+                <button class="popover-action" id="blankProjectBtn" type="button">Start blank</button>
+                <button class="popover-action" id="starterTemplatesBtn" type="button">Starter templates</button>
+                <button class="popover-action" id="restoreProjectBtn" type="button">Restore last session</button>
+                <button class="popover-action" id="saveSessionBtn" type="button">Save session now</button>
+                <button class="popover-action" id="offlineCacheBtn" type="button">Prepare offline mode</button>
+              </div>
+            </div>
+
+            <button class="tool-action" id="newFileBtn" type="button" title="New file (Ctrl+N)">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10h-7V3Zm2 0v5h5l-5-5ZM8 13h3v-3h2v3h3v2h-3v3h-2v-3H8v-2Z"/></svg>
+              <span>New file</span>
+            </button>
+
+            <div class="toolbar-menu" id="importMenu">
+              <button class="tool-action" id="importMenuBtn" type="button" aria-expanded="false" aria-controls="importMenuPanel">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3h2v9l3.5-3.5 1.4 1.4-5.9 5.9-5.9-5.9 1.4-1.4L11 12V3ZM5 19h14v-4h2v6H3v-6h2v4Z"/></svg>
+                <span>Import</span>
+              </button>
+              <div class="toolbar-popover" id="importMenuPanel">
+                <label class="popover-action" for="openFiles">Import files</label>
+                <input class="file-input" id="openFiles" type="file" multiple>
+                <label class="popover-action" for="openFolder">Import folder</label>
+                <input class="file-input" id="openFolder" type="file" webkitdirectory directory multiple>
+                <label class="popover-action" for="openZip">Import project (.ahcode / .zip)</label>
+                <input class="file-input" id="openZip" type="file" accept=".ahcode,.zip,application/zip,application/octet-stream">
+              </div>
+            </div>
+
+            <div class="toolbar-menu" id="exportMenu">
+              <button class="tool-action" id="exportMenuBtn" type="button" aria-expanded="false" aria-controls="exportMenuPanel">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4h2v9l3.5-3.5 1.4 1.4-5.9 5.9-5.9-5.9 1.4-1.4L11 13V4ZM5 19h14v2H5v-2Z"/></svg>
+                <span>Export</span>
+              </button>
+              <div class="toolbar-popover" id="exportMenuPanel">
+                <button class="popover-action" id="saveActiveBtn" type="button">Download active file</button>
+                <button class="popover-action" id="exportProjectBtn" type="button">Save project (.ahcode)</button>
+              </div>
+            </div>
+
+            <span class="toolbar-divider" aria-hidden="true"></span>
+
+            <button class="tool-action" id="projectSearchBtn" type="button" title="Search project (Ctrl+Shift+F)">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 4a6.5 6.5 0 1 0 3.92 11.68L19.74 21 21 19.74l-5.32-5.32A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z"/></svg>
+              <span>Search</span>
+            </button>
+            <button class="tool-action" id="formatBtn" type="button" title="Format active file (Shift+Alt+F)">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v2H4V5Zm0 6h10v2H4v-2Zm0 6h16v2H4v-2Zm13-7 1.2 2.3L21 13.5l-2.8 1.2L17 17l-1.2-2.3-2.8-1.2 2.8-1.2L17 10Z"/></svg>
+              <span>Format</span>
+            </button>
+            <button class="tool-action" id="commandBtn" type="button" title="Command palette (Ctrl+Shift+P)">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4V5Zm2 2v10h12V7H6Zm1.5 2 3 3-3 3 1.4 1.4L13.3 12 8.9 7.6 7.5 9Zm5.5 6h4v2h-4v-2Z"/></svg>
+              <span>Commands</span>
+            </button>
+          </div>
+
+          <div class="toolbar-end">
+            <input id="projectName" class="project-name project-name-inline" value="Untitled Project" aria-label="Project name" title="Project name">
+
+            <button class="run-action" id="runBtn" type="button" title="Run current code (Ctrl+Enter)">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7L8 5Z"></path></svg><span>Run</span>
+            </button>
+            <button class="theme-action" id="coderThemeBtn" type="button" title="Switch coder to dark mode" aria-label="Switch coder to dark mode">
+              <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>
+              <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0-7h1v4h-2V0h1Zm0 20h1v4h-2v-4h1ZM4.22 2.8 7.05 5.64 5.64 7.05 2.8 4.22 4.22 2.8Zm14.14 14.14 2.84 2.84-1.42 1.42-2.84-2.84 1.42-1.42ZM0 11h4v2H0v-2Zm20 0h4v2h-4v-2ZM2.8 19.78l2.84-2.84 1.41 1.42-2.83 2.84-1.42-1.42ZM16.94 5.64l2.84-2.84 1.42 1.42-2.84 2.83-1.42-1.41Z"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="workspace" id="workspace">
+          <aside class="explorer" aria-label="Project explorer">
+            <div class="explorer-head">
+              <div class="explorer-title">Explorer</div>
+              <div class="explorer-actions">
+                <button id="explorerNewBtn" type="button" title="New file">+</button>
+                <button id="renameBtn" type="button" title="Rename selected file">✎</button>
+                <button id="deleteBtn" type="button" title="Delete selected file">×</button>
+              </div>
+            </div>
+            <div class="file-tree" id="fileTree"></div>
+            <div class="explorer-foot">Project files stay in this browser unless you explicitly export them. Create a blank file or import an existing project.</div>
+          </aside>
+
+          <section class="editor-column" aria-label="Code editor">
+            <div class="tabbar" id="tabbar"></div>
+            <div class="editor-stage">
+              <div id="monacoEditor"></div>
+              <div class="fallback-wrap" id="fallbackWrap">
+                <pre class="fallback-lines" id="fallbackLines" aria-hidden="true">1</pre>
+                <textarea id="fallbackEditor" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Code editor"></textarea>
+              </div>
+              <div class="empty-editor show" id="emptyEditor"><div class="empty-editor-inner"><strong>Blank workspace</strong><span>Create a file or import an existing project.</span><small>HTML, CSS, JavaScript, Python, TypeScript, JSON, Markdown, SQL, C/C++, C#, Java, Go, Rust, PHP, Ruby, Lua and more.</small></div></div>
+            </div>
+            <div class="statusbar">
+              <div class="status-left"><span class="status-pill" id="activePathStatus">No file open</span></div>
+              <div class="status-right"><span class="status-pill" id="cursorStatus">Ln 1, Col 1</span><span class="status-pill" id="languageStatus">Plain Text</span><span class="status-pill" id="editorStatus">Loading editor…</span></div>
+            </div>
+          </section>
+
+          <section class="console-panel" aria-label="Console and coding coach">
+            <div class="console-head">
+              <div class="bottom-tabs" role="tablist" aria-label="Bottom panel">
+                <button class="panel-tab active" id="consoleTabBtn" type="button" role="tab" aria-selected="true" aria-controls="consoleOutput">Console</button>
+                <button class="panel-tab" id="coachTabBtn" type="button" role="tab" aria-selected="false" aria-controls="coachOutput">Coach <span class="coach-count" id="coachCount">0</span></button>
+              </div>
+              <div class="console-actions" id="consoleActions"><button id="clearConsoleBtn" type="button">Clear</button><button id="openPreviewBtn" type="button">Open Preview</button></div>
+              <div class="coach-actions" id="coachActions" hidden><button id="coachHintBtn" type="button">Best Hint</button><button id="coachExplainBtn" type="button">Explain Line</button><button id="coachProjectBtn" type="button">Project Scan</button></div>
+            </div>
+            <div class="console-output" id="consoleOutput" aria-live="polite"></div>
+            <div class="console-input-row" id="consoleInputRow" hidden>
+              <input id="consoleInput" type="text" autocomplete="off" spellcheck="false" placeholder="Queue Python input, then press Enter">
+              <button id="queueInputBtn" type="button">Queue</button>
+              <button id="clearInputQueueBtn" type="button">Clear</button>
+              <span class="stdin-count" id="stdinCount">0 queued</span>
+            </div>
+            <div class="coach-output" id="coachOutput" aria-live="polite" hidden></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer"><div class="tools-global-footer-inner"><p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p><nav class="tools-global-footer-links" aria-label="Footer navigation"><a href="../privacy.html" class="tools-global-footer-link">Privacy</a><a href="../terms.html" class="tools-global-footer-link">Terms</a><a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a></nav></div></footer>
+
+<div class="command-palette" id="commandPalette" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div class="palette-card">
+    <input class="palette-input" id="paletteInput" placeholder="Type a command…" autocomplete="off">
+    <div class="palette-list" id="paletteList"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="inputModal" role="dialog" aria-modal="true" aria-label="File action">
+  <div class="modal-card">
+    <h2 class="modal-title" id="modalTitle">New File</h2>
+    <p class="modal-text" id="modalText">Enter a file name or relative path.</p>
+    <div class="field"><label for="modalInput">File name</label><input id="modalInput" autocomplete="off" spellcheck="false"></div>
+    <div class="modal-actions"><button class="btn" id="modalCancel" type="button">Cancel</button><button class="btn primary" id="modalConfirm" type="button">Create</button></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="templateModal" role="dialog" aria-modal="true" aria-label="Starter templates">
+  <div class="modal-card">
+    <h2 class="modal-title">Starter templates</h2>
+    <p class="modal-text">Create a clean starter project. This replaces the current browser project after confirmation.</p>
+    <div class="field">
+      <label for="templateSelect">Template</label>
+      <select id="templateSelect">
+        <option value="basic-web">Basic webpage</option>
+        <option value="landing-page">Responsive landing page</option>
+        <option value="accessible-form">Accessible form page</option>
+        <option value="js-app">HTML, CSS & JavaScript app</option>
+        <option value="python-script">Python script</option>
+        <option value="python-cli">Python console / input example</option>
+      </select>
+      <p class="template-help" id="templateHelp"></p>
+    </div>
+    <div class="modal-actions"><button class="btn" id="templateCancelBtn" type="button">Cancel</button><button class="btn primary" id="templateCreateBtn" type="button">Create project</button></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="projectSearchModal" role="dialog" aria-modal="true" aria-label="Project-wide search and replace">
+  <div class="modal-card search-modal-card">
+    <h2 class="modal-title">Project-wide search</h2>
+    <p class="modal-text">Search every text file in the current project and optionally replace matches across the project.</p>
+    <div class="field"><label for="projectSearchInput">Search for</label><input id="projectSearchInput" autocomplete="off" spellcheck="false"></div>
+    <div class="field"><label for="projectReplaceInput">Replace with</label><input id="projectReplaceInput" autocomplete="off" spellcheck="false"></div>
+    <div class="search-options">
+      <label><input type="checkbox" id="projectSearchCase"> Case sensitive</label>
+      <label><input type="checkbox" id="projectSearchRegex"> Regular expression</label>
+      <span id="projectSearchSummary" class="template-help">Enter a search term.</span>
+    </div>
+    <div class="search-results" id="projectSearchResults"><div class="search-empty">Enter a search term to scan the project.</div></div>
+    <div class="modal-actions">
+      <button class="btn" id="projectSearchCloseBtn" type="button">Close</button>
+      <button class="btn" id="projectSearchRunBtn" type="button">Search</button>
+      <button class="btn primary" id="projectReplaceAllBtn" type="button">Replace all</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+<!-- Enhanced language-aware editing loads when available. The built-in editor remains the fallback if the enhanced editor cannot load. -->
+<script>
+(function(){
+'use strict';
+
+const $=(s,e=document)=>e.querySelector(s);
+const $$=(s,e=document)=>Array.from(e.querySelectorAll(s));
+const STORAGE_KEY='browser-code-studio-project-v2';
+const PREF_KEY='browser-code-studio-prefs-v1';
+const CODER_THEME_KEY='browser-code-studio-coder-theme-v1';
+const MAX_STORAGE_BYTES=4.5*1024*1024;
+const TEXT_EXTENSIONS=new Set(['html','htm','css','scss','sass','less','js','mjs','cjs','json','jsonc','md','txt','xml','svg','yaml','yml','toml','ini','csv','ts','tsx','jsx','py','php','java','c','h','cpp','cc','cxx','hpp','cs','go','rs','rb','sh','bash','zsh','sql','vue','svelte','lua','pl','pm','r','dart','kt','kts','swift','scala','groovy','ps1','bat','cmd']);
+const MIME_BY_EXT={html:'text/html',htm:'text/html',css:'text/css',js:'text/javascript',mjs:'text/javascript',json:'application/json',svg:'image/svg+xml',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',gif:'image/gif',webp:'image/webp',ico:'image/x-icon',woff:'font/woff',woff2:'font/woff2',ttf:'font/ttf',otf:'font/otf',mp3:'audio/mpeg',wav:'audio/wav',mp4:'video/mp4',webm:'video/webm',pdf:'application/pdf'};
+const LANGUAGE_BY_EXT={html:'html',htm:'html',css:'css',scss:'scss',sass:'scss',less:'less',js:'javascript',mjs:'javascript',cjs:'javascript',json:'json',jsonc:'json',md:'markdown',xml:'xml',svg:'xml',yaml:'yaml',yml:'yaml',ts:'typescript',tsx:'typescript',jsx:'javascript',py:'python',php:'php',java:'java',c:'c',h:'c',cpp:'cpp',cc:'cpp',cxx:'cpp',hpp:'cpp',cs:'csharp',go:'go',rs:'rust',rb:'ruby',sh:'shell',bash:'shell',zsh:'shell',sql:'sql',lua:'lua',pl:'perl',pm:'perl',r:'r',dart:'dart',kt:'kotlin',kts:'kotlin',swift:'swift',scala:'scala',groovy:'groovy',ps1:'powershell',bat:'bat',cmd:'bat',vue:'html',svelte:'html',toml:'plaintext',ini:'plaintext',csv:'plaintext'};
+const PYODIDE_BASE='https://cdn.jsdelivr.net/pyodide/v0.28.3/full/';
+const OFFLINE_SW_URL='../../code-studio-sw.js';
+
+const state={
+  files:new Map(),
+  openTabs:[],
+  activePath:null,
+  selectedPath:null,
+  editor:null,
+  models:new Map(),
+  fallback:true,
+  previewWindow:null,
+  saveTimer:null,
+  modalMode:null,
+  modalTarget:null,
+  dirty:new Set(),
+  pyodide:null,
+  pyodideLoading:null,
+  jsWorker:null,
+  sessionTouched:false,
+  coderDark:false,
+  coachTimer:null,
+  coachFindings:[],
+  bottomPanel:'console',
+  stdinQueue:[],
+  projectSearchMatches:[],
+  offlineRegistration:null
+};
+
+function defaultProject(){ return []; }
+
+function starterTemplates(){
+  return {
+    'basic-web':{
+      name:'Basic Webpage',
+      description:'A clean responsive HTML page with separate CSS and JavaScript files.',
+      entry:'index.html',
+      files:{
+        'index.html':`<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Webpage</title>
+  <meta name="description" content="A simple starter webpage.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#">My Site</a>
+    <nav aria-label="Main navigation">
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="about">
+      <p class="eyebrow">Welcome</p>
+      <h1>Start building your webpage</h1>
+      <p>This starter keeps the structure simple, responsive and accessible.</p>
+      <button id="helloBtn" type="button">Try the JavaScript</button>
+    </section>
+  </main>
+
+  <footer id="contact">
+    <p>Built in Browser Code Studio.</p>
+  </footer>
+
+  <script src="script.js"><\/script>
+</body>
+</html>
+`,
+        'styles.css':`:root {
+  color-scheme: light;
+  font-family: Inter, system-ui, sans-serif;
+  background: #f5f5f7;
+  color: #111827;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; line-height: 1.6; }
+a { color: #2563eb; }
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 4vw, 3rem);
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+.site-header nav { display: flex; gap: 1rem; }
+.brand { font-weight: 800; color: inherit; text-decoration: none; }
+main { min-height: 72vh; display: grid; place-items: center; padding: 2rem; }
+.hero { width: min(760px, 100%); text-align: center; }
+.eyebrow { color: #2563eb; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+h1 { font-size: clamp(2.2rem, 7vw, 4.4rem); line-height: 1.05; margin: .4rem 0 1rem; }
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: .75rem 1.15rem;
+  background: #2563eb;
+  color: #fff;
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+button:focus-visible, a:focus-visible { outline: 3px solid #f59e0b; outline-offset: 3px; }
+footer { text-align: center; padding: 1.5rem; color: #64748b; }
+@media (max-width: 620px) {
+  .site-header { align-items: flex-start; flex-direction: column; }
+}
+`,
+        'script.js':`const helloBtn = document.querySelector('#helloBtn');
+
+if (helloBtn) {
+  helloBtn.addEventListener('click', () => {
+    helloBtn.textContent = 'JavaScript is working!';
+  });
+}
+`
+      }
+    },
+
+    'landing-page':{
+      name:'Landing Page',
+      description:'A polished responsive landing page with hero, feature cards and call-to-action.',
+      entry:'index.html',
+      files:{
+        'index.html':`<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Product</title>
+  <meta name="description" content="A responsive product landing page.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="nav-wrap">
+    <a class="brand" href="#">YourBrand</a>
+    <nav aria-label="Main navigation">
+      <a href="#features">Features</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <span class="pill">Simple. Useful. Fast.</span>
+      <h1>A clear headline for your product</h1>
+      <p>Explain the value in one short paragraph, then give the visitor one obvious next action.</p>
+      <a class="cta" href="#features">Explore features</a>
+    </section>
+
+    <section class="features" id="features" aria-labelledby="features-title">
+      <h2 id="features-title">Why people use it</h2>
+      <div class="feature-grid">
+        <article><h3>Fast</h3><p>Keep the first benefit concise and concrete.</p></article>
+        <article><h3>Simple</h3><p>Explain the second benefit without unnecessary jargon.</p></article>
+        <article><h3>Reliable</h3><p>Use the third card for trust, quality or support.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact"><p>Contact: hello@example.com</p></footer>
+</body>
+</html>
+`,
+        'styles.css':`:root { font-family: Inter, system-ui, sans-serif; color: #111827; background: #f8fafc; }
+* { box-sizing: border-box; }
+body { margin: 0; line-height: 1.6; }
+a { color: inherit; }
+.nav-wrap { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: 1rem clamp(1rem, 5vw, 4rem); background: rgba(255,255,255,.92); border-bottom: 1px solid #e5e7eb; }
+.nav-wrap nav { display: flex; gap: 1rem; }
+.brand { font-weight: 850; text-decoration: none; }
+.hero { min-height: 70vh; display: grid; place-items: center; align-content: center; text-align: center; padding: 4rem 1rem; max-width: 900px; margin: auto; }
+.pill { border: 1px solid #bfdbfe; background: #eff6ff; color: #1d4ed8; border-radius: 999px; padding: .3rem .65rem; font-weight: 750; }
+h1 { max-width: 780px; margin: 1rem 0; font-size: clamp(2.5rem, 8vw, 5.4rem); line-height: 1; }
+.hero p { max-width: 650px; color: #475569; font-size: 1.08rem; }
+.cta { display: inline-flex; margin-top: .7rem; padding: .75rem 1.1rem; border-radius: 999px; background: #2563eb; color: #fff; text-decoration: none; font-weight: 800; }
+.features { padding: 4rem clamp(1rem, 5vw, 4rem); background: #fff; }
+.features > h2 { text-align: center; font-size: 2rem; }
+.feature-grid { width: min(1050px, 100%); margin: 1.5rem auto 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.feature-grid article { padding: 1.2rem; border: 1px solid #e5e7eb; border-radius: 18px; }
+footer { text-align: center; padding: 2rem; color: #64748b; }
+:focus-visible { outline: 3px solid #f59e0b; outline-offset: 3px; }
+@media (max-width: 720px) { .feature-grid { grid-template-columns: 1fr; } .nav-wrap { align-items: flex-start; flex-direction: column; } }
+`
+      }
+    },
+
+    'accessible-form':{
+      name:'Accessible Form',
+      description:'A base contact form with labels, status messaging and browser-side validation.',
+      entry:'index.html',
+      files:{
+        'index.html':`<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Form</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <form id="contactForm">
+      <h1>Contact us</h1>
+      <p>Required fields are marked with <span aria-hidden="true">*</span>.</p>
+
+      <label for="name">Name <span aria-hidden="true">*</span></label>
+      <input id="name" name="name" autocomplete="name" required>
+
+      <label for="email">Email <span aria-hidden="true">*</span></label>
+      <input id="email" name="email" type="email" autocomplete="email" required>
+
+      <label for="message">Message <span aria-hidden="true">*</span></label>
+      <textarea id="message" name="message" rows="6" required></textarea>
+
+      <button type="submit">Send message</button>
+      <p id="formStatus" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+  <script src="script.js"><\/script>
+</body>
+</html>
+`,
+        'styles.css':`* { box-sizing: border-box; }
+body { margin: 0; background: #f5f5f7; color: #111827; font: 16px/1.55 Inter, system-ui, sans-serif; }
+main { min-height: 100vh; display: grid; place-items: center; padding: 1rem; }
+form { width: min(620px, 100%); padding: clamp(1rem, 4vw, 2rem); background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; }
+label { display: block; margin: .85rem 0 .3rem; font-weight: 750; }
+input, textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 10px; padding: .7rem .8rem; font: inherit; }
+input:focus-visible, textarea:focus-visible, button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+button { margin-top: 1rem; border: 0; border-radius: 999px; padding: .7rem 1rem; background: #2563eb; color: #fff; font: inherit; font-weight: 800; }
+#formStatus { min-height: 1.5rem; color: #166534; font-weight: 700; }
+`,
+        'script.js':`const form = document.querySelector('#contactForm');
+const status = document.querySelector('#formStatus');
+
+form?.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  status.textContent = 'Form is valid. Connect this starter to your preferred form handler.';
+});
+`
+      }
+    },
+
+    'js-app':{
+      name:'JavaScript App',
+      description:'A small interactive counter app with separate HTML, CSS and JavaScript.',
+      entry:'index.html',
+      files:{
+        'index.html':`<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JavaScript App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <h1>Counter</h1>
+    <p id="count" aria-live="polite">0</p>
+    <div class="actions">
+      <button type="button" data-change="-1">Decrease</button>
+      <button type="button" data-change="1">Increase</button>
+      <button type="button" id="resetBtn">Reset</button>
+    </div>
+  </main>
+  <script src="app.js"><\/script>
+</body>
+</html>
+`,
+        'styles.css':`body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f5f5f7; color: #111827; font: 16px/1.5 Inter, system-ui, sans-serif; }
+.app { text-align: center; padding: 2rem; background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; }
+#count { font-size: 4rem; font-weight: 850; margin: 1rem; }
+.actions { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
+button { border: 1px solid #cbd5e1; border-radius: 999px; background: #fff; padding: .6rem .9rem; font: inherit; font-weight: 750; cursor: pointer; }
+button:hover { background: #f8fafc; }
+button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+`,
+        'app.js':`const countOutput = document.querySelector('#count');
+const resetBtn = document.querySelector('#resetBtn');
+let count = 0;
+
+function render() {
+  countOutput.textContent = String(count);
+}
+
+document.querySelectorAll('[data-change]').forEach((button) => {
+  button.addEventListener('click', () => {
+    count += Number(button.dataset.change);
+    render();
+  });
+});
+
+resetBtn?.addEventListener('click', () => {
+  count = 0;
+  render();
+});
+`
+      }
+    },
+
+    'python-script':{
+      name:'Python Starter',
+      description:'A simple Python entry-point pattern that runs directly in the browser.',
+      entry:'main.py',
+      files:{
+        'main.py':`def greet(name: str) -> str:
+    return f"Hello, {name}!"
+
+
+def main() -> None:
+    print(greet("world"))
+
+
+if __name__ == "__main__":
+    main()
+`
+      }
+    },
+
+    'python-cli':{
+      name:'Python Console App',
+      description:'A Python input() example. Queue values in the Console input bar before running.',
+      entry:'main.py',
+      files:{
+        'main.py':`def main() -> None:
+    name = input("What is your name? ")
+    age = input("How old are you? ")
+    print(f"Hello {name}. You entered age {age}.")
+
+
+if __name__ == "__main__":
+    main()
+`
+      }
+    }
+  };
+}
+
+function updateTemplateHelp(){
+  const template=starterTemplates()[$('#templateSelect').value];
+  $('#templateHelp').textContent=template?.description||'';
+}
+
+function showTemplateModal(){
+  closeToolbarMenus();
+  updateTemplateHelp();
+  $('#templateModal').classList.add('show');
+}
+
+function hideTemplateModal(){
+  $('#templateModal').classList.remove('show');
+}
+
+function createStarterProject(){
+  const template=starterTemplates()[$('#templateSelect').value];
+  if(!template)return;
+
+  if(state.files.size && !confirm('Replace the current browser project with this starter template?'))return;
+
+  resetToDefault();
+  $('#projectName').value=template.name;
+
+  Object.entries(template.files).forEach(([path,content])=>{
+    state.files.set(path,{path,kind:'text',content,type:mimeFor(path)});
+  });
+
+  state.sessionTouched=true;
+  renderTree();
+  renderTabs();
+  openFile(template.entry||Object.keys(template.files)[0]);
+  scheduleSave();
+  hideTemplateModal();
+  logConsole('system',template.name+' starter created.');
+  toast('Starter project created.');
+}
+
+function ext(path){const name=path.split('/').pop()||'';const i=name.lastIndexOf('.');return i<0?'':name.slice(i+1).toLowerCase()}
+function basename(path){return path.split('/').pop()||path}
+function dirname(path){const a=path.split('/');a.pop();return a.join('/')}
+function normalisePath(path){
+  const out=[];
+  String(path||'').replace(/\\/g,'/').split('/').forEach(part=>{if(!part||part==='.')return;if(part==='..')out.pop();else out.push(part)});
+  return out.join('/');
+}
+function resolvePath(fromFile,relative){
+  if(!relative)return relative;
+  if(/^(?:[a-z]+:|#|\/\/|data:|blob:)/i.test(relative))return relative;
+  const base=dirname(fromFile);
+  return normalisePath((base?base+'/':'')+relative);
+}
+function mimeFor(path){return MIME_BY_EXT[ext(path)]||'application/octet-stream'}
+function isTextFile(path,type=''){return TEXT_EXTENSIONS.has(ext(path))||type.startsWith('text/')||/json|javascript|xml|svg/.test(type)}
+function languageFor(path){const name=basename(path).toLowerCase();if(name==='dockerfile')return 'dockerfile';if(name==='makefile')return 'plaintext';return LANGUAGE_BY_EXT[ext(path)]||'plaintext'}
+function languageLabel(path){const l=languageFor(path);return ({javascript:'JavaScript',typescript:'TypeScript',plaintext:'Plain Text',markdown:'Markdown',csharp:'C#',cpp:'C++',html:'HTML',css:'CSS',scss:'SCSS',less:'Less',json:'JSON',python:'Python',php:'PHP',java:'Java',go:'Go',rust:'Rust',ruby:'Ruby',shell:'Shell',sql:'SQL',xml:'XML',yaml:'YAML',lua:'Lua',perl:'Perl',r:'R',dart:'Dart',kotlin:'Kotlin',swift:'Swift',scala:'Scala',groovy:'Groovy',powershell:'PowerShell',bat:'Batch'})[l]||l}
+function fileIcon(path){const e=ext(path);if(e==='html'||e==='htm')return '<>';if(['css','scss','sass','less'].includes(e))return '#';if(['js','mjs','cjs','ts','tsx','jsx'].includes(e))return 'JS';if(e==='py')return 'PY';if(['json','jsonc'].includes(e))return '{}';if(['png','jpg','jpeg','gif','svg','webp','ico'].includes(e))return 'IMG';if(['md','txt'].includes(e))return 'TXT';if(['c','h','cpp','cc','cxx','hpp','cs'].includes(e))return 'C';if(e==='java')return 'JV';if(e==='go')return 'GO';if(e==='rs')return 'RS';return '•'}
+function nowTime(){return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toast(message){const el=document.createElement('div');el.className='toast';el.textContent=message;$('#toastStack').appendChild(el);setTimeout(()=>el.remove(),2200)}
+function logConsole(level,...parts){
+  const line=document.createElement('div');line.className='console-line '+level;
+  const msg=parts.map(p=>typeof p==='string'?p:safeStringify(p)).join(' ');
+  line.innerHTML='<span class="time">'+escapeHtml(nowTime())+'</span><span class="msg">'+escapeHtml(msg)+'</span>';
+  $('#consoleOutput').appendChild(line);$('#consoleOutput').scrollTop=$('#consoleOutput').scrollHeight;
+}
+function safeStringify(v){try{return typeof v==='string'?v:JSON.stringify(v,null,2)}catch{return String(v)}}
+
+function projectSearchRegex(){
+  const query=$('#projectSearchInput').value;
+  if(!query)return null;
+
+  const flags='g'+($('#projectSearchCase').checked?'':'i');
+  const source=$('#projectSearchRegex').checked?query:query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+
+  try{return new RegExp(source,flags)}
+  catch(error){
+    $('#projectSearchSummary').textContent='Invalid regular expression: '+error.message;
+    return null;
+  }
+}
+
+function collectProjectSearchMatches(){
+  const regex=projectSearchRegex();
+  const query=$('#projectSearchInput').value;
+
+  if(!query){
+    state.projectSearchMatches=[];
+    return [];
+  }
+  if(!regex)return [];
+
+  const matches=[];
+  outer:
+  for(const file of state.files.values()){
+    if(file.kind!=='text')continue;
+
+    const lines=String(file.content||'').split('\n');
+    for(let lineIndex=0;lineIndex<lines.length;lineIndex++){
+      const line=lines[lineIndex];
+      const local=new RegExp(regex.source,regex.flags);
+      let match;
+
+      while((match=local.exec(line))){
+        matches.push({
+          path:file.path,
+          line:lineIndex+1,
+          column:match.index+1,
+          value:match[0],
+          preview:line.trim()
+        });
+
+        if(match[0]==='')local.lastIndex++;
+        if(matches.length>=500)break outer;
+      }
+    }
+  }
+
+  state.projectSearchMatches=matches;
+  return matches;
+}
+
+function renderProjectSearch(){
+  const box=$('#projectSearchResults');
+  const matches=collectProjectSearchMatches();
+
+  if(!$('#projectSearchInput').value){
+    box.innerHTML='<div class="search-empty">Enter a search term to scan the project.</div>';
+    $('#projectSearchSummary').textContent='Enter a search term.';
+    return;
+  }
+
+  if(!matches.length){
+    box.innerHTML='<div class="search-empty">No matches found in project text files.</div>';
+    $('#projectSearchSummary').textContent='0 matches';
+    return;
+  }
+
+  const files=new Set(matches.map(m=>m.path));
+  $('#projectSearchSummary').textContent=
+    matches.length+(matches.length>=500?'+' :'')+' matches in '+files.size+' file'+(files.size===1?'':'s');
+
+  box.innerHTML='';
+  matches.forEach(match=>{
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='search-result';
+    button.innerHTML=
+      '<span class="search-result-main"><span class="search-result-path">'+escapeHtml(match.path)+'</span>'+
+      '<span class="search-result-preview">'+escapeHtml(match.preview||'(blank line)')+'</span></span>'+
+      '<span class="search-result-line">Ln '+match.line+', Col '+match.column+'</span>';
+
+    button.addEventListener('click',()=>{
+      openFile(match.path);
+      hideProjectSearch();
+      setTimeout(()=>jumpToLine(match.line),0);
+    });
+    box.appendChild(button);
+  });
+}
+
+function showProjectSearch(){
+  closeToolbarMenus();
+  $('#projectSearchModal').classList.add('show');
+
+  if(state.activePath){
+    let selection='';
+    if(state.editor)selection=state.editor.getModel()?.getValueInRange(state.editor.getSelection())||'';
+    else{
+      const ta=$('#fallbackEditor');
+      selection=ta.value.slice(ta.selectionStart,ta.selectionEnd);
+    }
+    if(selection&&!selection.includes('\n')&&selection.length<120)$('#projectSearchInput').value=selection;
+  }
+
+  setTimeout(()=>{
+    $('#projectSearchInput').focus();
+    $('#projectSearchInput').select();
+    renderProjectSearch();
+  },20);
+}
+
+function hideProjectSearch(){
+  $('#projectSearchModal').classList.remove('show');
+}
+
+function replaceProjectMatches(){
+  const query=$('#projectSearchInput').value;
+  const regex=projectSearchRegex();
+  if(!query||!regex)return;
+
+  const replacement=$('#projectReplaceInput').value;
+  const current=collectProjectSearchMatches();
+  if(!current.length){
+    toast('No matches to replace.');
+    renderProjectSearch();
+    return;
+  }
+
+  const fileCount=new Set(current.map(x=>x.path)).size;
+  if(!confirm('Replace '+current.length+' match'+(current.length===1?'':'es')+' across '+fileCount+' file'+(fileCount===1?'':'s')+'?'))return;
+
+  let changedFiles=0;
+  let replacementCount=0;
+
+  for(const file of state.files.values()){
+    if(file.kind!=='text')continue;
+
+    const local=new RegExp(regex.source,regex.flags);
+    const matches=file.content.match(local);
+    if(!matches?.length)continue;
+
+    const updated=$('#projectSearchRegex').checked
+      ? file.content.replace(local,replacement)
+      : file.content.replace(local,()=>replacement);
+
+    if(updated===file.content)continue;
+
+    replacementCount+=matches.length;
+    changedFiles++;
+    file.content=updated;
+    state.dirty.add(file.path);
+
+    const model=state.models.get(file.path);
+    if(model&&model.getValue()!==updated)model.setValue(updated);
+  }
+
+  renderTree();
+  renderTabs();
+  if(state.activePath&&!state.editor){
+    const active=state.files.get(state.activePath);
+    if(active?.kind==='text'){
+      $('#fallbackEditor').value=active.content;
+      updateFallbackLines();
+      updateFallbackCursor();
+    }
+  }
+  scheduleSave();
+  renderProjectSearch();
+  scheduleCoach(0);
+  toast(replacementCount+' replacement'+(replacementCount===1?'':'s')+' across '+changedFiles+' file'+(changedFiles===1?'':'s')+'.');
+}
+
+
+function lineNumberAt(text,index){return Math.max(1,text.slice(0,Math.max(0,index)).split('\n').length)}
+function firstLineOf(text,regex){const m=regex.exec(text);return m?lineNumberAt(text,m.index):null}
+
+function updateStdinQueueUi(){
+  const count=state.stdinQueue.length;
+  $('#stdinCount').textContent=count+' queued';
+}
+
+function queuePythonInput(){
+  const input=$('#consoleInput');
+  const value=input.value;
+  state.stdinQueue.push(value);
+  input.value='';
+  updateStdinQueueUi();
+  logConsole('info','Queued Python input: '+JSON.stringify(value));
+}
+
+function clearPythonInputQueue(){
+  state.stdinQueue=[];
+  updateStdinQueueUi();
+  toast('Queued Python input cleared.');
+}
+
+function consumePythonInput(){
+  let value;
+
+  if(state.stdinQueue.length){
+    value=state.stdinQueue.shift();
+    updateStdinQueueUi();
+    logConsole('info','stdin > '+value);
+    return value+'\n';
+  }
+
+  const entered=window.prompt('Python input() is waiting for a value.');
+  if(entered===null){
+    throw new Error('Python input was cancelled.');
+  }
+
+  logConsole('info','stdin > '+entered);
+  return entered+'\n';
+}
+
+function currentCursorLine(){
+  if(state.editor){const pos=state.editor.getPosition();return pos?pos.lineNumber:1}
+  const ta=$('#fallbackEditor');if(!ta)return 1;return ta.value.slice(0,ta.selectionStart).split('\n').length
+}
+function addFinding(list,severity,title,detail,fix='',line=null){list.push({severity,title,detail,fix,line:line||null})}
+function countMatches(text,regex){const flags=regex.flags.includes('g')?regex.flags:regex.flags+'g';return (text.match(new RegExp(regex.source,flags))||[]).length}
+function projectText(exts){return Array.from(state.files.values()).filter(f=>f.kind==='text'&&exts.includes(ext(f.path))).map(f=>f.content).join('\n')}
+
+function analyseActiveFile(){
+  const path=state.activePath, file=path?state.files.get(path):null, out=[];
+  if(!file||file.kind!=='text')return out;
+  const text=file.content||'', lang=languageFor(path), lines=text.split('\n');
+  if(!text.trim()){addFinding(out,'tip','Start with a small goal','This file is empty. Build one working piece first, then run it before adding more.','Create the smallest runnable version of this file.',1);return out}
+
+  const longLine=lines.findIndex(x=>x.length>150);if(longLine>=0)addFinding(out,'tip','Very long line','Long lines are harder to scan and debug, especially when several expressions are combined.','Split this line into smaller statements or attributes.',longLine+1)
+  const todo=firstLineOf(text,/\b(?:TODO|FIXME|HACK)\b/i);if(todo)addFinding(out,'tip','Unfinished marker found','A TODO or FIXME is useful while working, but it is easy to forget before export.','Resolve it, or make the comment specific enough to act on later.',todo)
+
+  if(lang==='html'){
+    if(!/^\s*<!doctype\s+html/i.test(text))addFinding(out,'warn','Missing HTML doctype','Without a doctype, browsers can enter quirks mode and render the page inconsistently.','Add <!DOCTYPE html> as the first line.',1)
+    if(!/<html\b[^>]*\blang\s*=\s*["'][^"']+["']/i.test(text))addFinding(out,'tip','Page language is not declared','A lang attribute helps screen readers, translation tools and search engines interpret the page.','Add lang="en-GB" or the correct language to <html>.',firstLineOf(text,/<html\b/i)||1)
+    if(!/<meta\b[^>]*name\s*=\s*["']viewport["']/i.test(text))addFinding(out,'tip','No viewport meta tag','Mobile browsers can scale the page unexpectedly without a viewport declaration.','Add <meta name="viewport" content="width=device-width, initial-scale=1"> inside <head>.',firstLineOf(text,/<head\b/i)||1)
+    if(!/<title\b[^>]*>[^<]+<\/title>/i.test(text))addFinding(out,'tip','Missing page title','A clear title improves browser tabs, bookmarks and accessibility.','Add a concise <title> inside <head>.',firstLineOf(text,/<head\b/i)||1)
+    for(const m of text.matchAll(/<img\b[^>]*>/gi)){if(!/\balt\s*=/.test(m[0]))addFinding(out,'warn','Image has no alt attribute','Images need alt text or alt="" so assistive technology knows how to handle them.','Add meaningful alt text, or alt="" for a decorative image.',lineNumberAt(text,m.index))}
+    for(const m of text.matchAll(/<button\b[^>]*>/gi)){if(!/\btype\s*=/.test(m[0]))addFinding(out,'tip','Button type is implicit','Inside a form, a button without type defaults to submit and can trigger unexpected form submissions.','Use type="button" unless this button should submit the form.',lineNumberAt(text,m.index))}
+    for(const m of text.matchAll(/<a\b[^>]*target\s*=\s*["']_blank["'][^>]*>/gi)){if(!/\brel\s*=\s*["'][^"']*noopener/i.test(m[0]))addFinding(out,'warn','New-tab link needs rel="noopener"','noopener prevents the opened page from controlling the original page through window.opener.','Add rel="noopener". You can also add noreferrer when appropriate.',lineNumberAt(text,m.index))}
+    try{
+      const doc=new DOMParser().parseFromString(text,'text/html');const ids=new Map();doc.querySelectorAll('[id]').forEach(el=>ids.set(el.id,(ids.get(el.id)||0)+1));for(const [id,n] of ids)if(n>1)addFinding(out,'warn','Duplicate id: '+id,'An id should identify only one element. Duplicate ids can break labels, fragments and JavaScript selectors.','Rename the duplicates so each id is unique.',firstLineOf(text,new RegExp('id=["\\\']'+id.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'["\\\']','i')))
+    }catch{}
+    for(const m of text.matchAll(/\b(?:src|href)\s*=\s*["']([^"'#?]+)["']/gi)){const ref=m[1];if(/^(?:https?:|data:|blob:|mailto:|tel:|\/\/)/i.test(ref))continue;const resolved=resolvePath(path,ref);if(resolved&&/\.[a-z0-9]{1,8}$/i.test(resolved)&&!state.files.has(resolved))addFinding(out,'warn','Referenced file is missing','This page points to '+ref+', but that file is not in the current project.','Import the file or correct the path.',lineNumberAt(text,m.index))}
+  }
+
+  if(lang==='css'||lang==='scss'||lang==='less'){
+    const imp=firstLineOf(text,/!important\b/i);if(imp)addFinding(out,'tip','Specificity is being forced','!important can make future overrides difficult and often hides a selector-specificity problem.','Prefer a clearer selector or component structure when possible.',imp)
+    const outline=firstLineOf(text,/outline\s*:\s*(?:none|0)\b/i);if(outline&&!/:focus|:focus-visible/i.test(text))addFinding(out,'warn','Focus outline may be removed','Keyboard users can lose track of focus when outlines are removed without a replacement.','Add a visible :focus-visible style before removing the default outline.',outline)
+    const trans=firstLineOf(text,/transition\s*:\s*all\b/i);if(trans)addFinding(out,'tip','transition: all is broad','Animating every changing property can cause surprising motion and extra browser work.','List the properties you actually want to animate.',trans)
+    const colours=[...text.matchAll(/#[0-9a-f]{6}\b/gi)].map(m=>m[0].toLowerCase());const freq={};colours.forEach(c=>freq[c]=(freq[c]||0)+1);const repeated=Object.entries(freq).sort((a,b)=>b[1]-a[1]).find(([,n])=>n>=4);if(repeated)addFinding(out,'tip','Repeated colour value','The colour '+repeated[0]+' appears '+repeated[1]+' times. A custom property would make theme changes safer.','Move repeated design values into :root variables.',firstLineOf(text,new RegExp(repeated[0],'i')))
+    if(typeof CSSStyleSheet!=='undefined'&&CSSStyleSheet.prototype.replaceSync&&lang==='css'){try{const sheet=new CSSStyleSheet();sheet.replaceSync(text)}catch(err){addFinding(out,'error','CSS could not be parsed',String(err.message||err),'Check the nearest selector, brace or declaration.',1)}}
+  }
+
+  if(lang==='javascript'||lang==='typescript'){
+    const varLine=firstLineOf(text,/\bvar\s+[A-Za-z_$]/);if(varLine)addFinding(out,'tip','Prefer let or const','var is function-scoped, which can create accidental reassignments and hoisting surprises.','Use const by default, then let when reassignment is required.',varLine)
+    const loose=firstLineOf(text,/(^|[^=!])==([^=]|$)|(^|[^!])!=([^=]|$)/m);if(loose)addFinding(out,'tip','Loose equality found','== and != coerce types before comparing, which can hide data-shape mistakes.','Use === or !== unless coercion is intentional and documented.',loose)
+    const evalLine=firstLineOf(text,/\beval\s*\(|\bnew\s+Function\s*\(/);if(evalLine)addFinding(out,'warn','Dynamic code execution','eval and new Function make code harder to reason about and can become a security risk with untrusted input.','Use normal functions, parsers or a controlled lookup instead.',evalLine)
+    const htmlLine=firstLineOf(text,/\.innerHTML\s*=/);if(htmlLine)addFinding(out,'warn','innerHTML assignment','If any part of the assigned value can come from a user or remote source, this can create script-injection bugs.','Prefer textContent, DOM methods, or sanitize trusted HTML first.',htmlLine)
+    const qsLine=firstLineOf(text,/document\.querySelector\([^\n]+\)\.addEventListener\s*\(/);if(qsLine)addFinding(out,'tip','Selector is assumed to exist','Calling addEventListener directly on querySelector can throw when the element is absent.','Store the element first, then guard it or use optional chaining.',qsLine)
+    const emptyCatch=firstLineOf(text,/catch\s*(?:\([^)]*\))?\s*{\s*}/);if(emptyCatch)addFinding(out,'warn','Empty catch block','Silently swallowing errors makes failures difficult to diagnose.','Handle the error, report it, or add a comment explaining why it is safe to ignore.',emptyCatch)
+    const logs=countMatches(text,/console\.(?:log|debug)\s*\(/g);if(logs>=3)addFinding(out,'tip','Several debug logs remain','There are '+logs+' console logging calls in this file. They can be useful during development but noisy in finished tools.','Keep purposeful diagnostics and remove temporary logging before export.',firstLineOf(text,/console\.(?:log|debug)\s*\(/))
+    if(lang==='javascript'&&!/^\s*(?:import|export)\b/m.test(text)){try{new Function(text)}catch(err){const m=String(err&&err.stack||err&&err.message||'').match(/<anonymous>:(\d+):\d+/);addFinding(out,'error','JavaScript syntax check failed',String(err.message||err),'Check brackets, parentheses, commas and the statement around the reported area.',m?Math.max(1,Number(m[1])-2):1)}}
+  }
+
+  if(lang==='python'){
+    const tabLine=lines.findIndex(l=>/^\t+\S/.test(l));if(tabLine>=0)addFinding(out,'tip','Tabs are used for indentation','Mixing tabs and spaces can cause Python indentation errors that are difficult to see.','Use four spaces consistently.',tabLine+1)
+    const bare=firstLineOf(text,/^\s*except\s*:\s*$/m);if(bare)addFinding(out,'warn','Bare except catches everything','A bare except also catches SystemExit and KeyboardInterrupt, which is usually broader than intended.','Catch a specific exception, or use except Exception when broad handling is truly needed.',bare)
+    const mutable=firstLineOf(text,/def\s+\w+\s*\([^)]*=\s*(?:\[\]|\{\}|set\(\))/);if(mutable)addFinding(out,'warn','Mutable default argument','Lists, dicts and sets used as defaults are created once and then shared between calls.','Use None as the default and create the collection inside the function.',mutable)
+    const star=firstLineOf(text,/^\s*from\s+\S+\s+import\s+\*/m);if(star)addFinding(out,'tip','Wildcard import','import * hides where names come from and can overwrite existing names.','Import the specific names you use, or import the module itself.',star)
+    const peval=firstLineOf(text,/\beval\s*\(/);if(peval)addFinding(out,'warn','eval executes strings as Python','Using eval with untrusted input can execute arbitrary code.','Use a parser such as json.loads or ast.literal_eval when appropriate.',peval)
+    const prints=countMatches(text,/^\s*print\s*\(/gm);if(prints>=4)addFinding(out,'tip','Many print statements','This file contains '+prints+' print calls. For larger programs, structured logging gives you levels and better control.','Keep print for simple scripts, or switch repeated diagnostics to logging.',firstLineOf(text,/^\s*print\s*\(/m))
+  }
+
+  if(lang==='json'){
+    try{JSON.parse(text)}catch(err){const msg=String(err.message||err);const pos=(msg.match(/position\s+(\d+)/i)||[])[1];addFinding(out,'error','JSON is not valid',msg,'Check commas, quotes, brackets and trailing commas.',pos?lineNumberAt(text,Number(pos)):1)}
+  }
+  if(lang==='markdown'){
+    for(const m of text.matchAll(/!\[\]\([^)]*\)/g))addFinding(out,'tip','Markdown image has empty alt text','Useful images should have concise alternative text. Decorative images can stay empty.','Put a short description between the square brackets when the image conveys information.',lineNumberAt(text,m.index))
+    if(!/^#\s+\S/m.test(text))addFinding(out,'tip','No top-level heading','A single H1 gives a document a clear title and improves navigation.','Add one # heading near the top.',1)
+  }
+  if(lang==='sql'){
+    const del=firstLineOf(text,/\b(?:DELETE\s+FROM|UPDATE\s+\S+\s+SET)\b(?![\s\S]{0,250}\bWHERE\b)/i);if(del)addFinding(out,'warn','Data-changing SQL may lack a WHERE clause','An UPDATE or DELETE without a WHERE condition can affect every row in the table.','Confirm the scope and add a WHERE clause when the change should be limited.',del)
+    const star=firstLineOf(text,/\bSELECT\s+\*/i);if(star)addFinding(out,'tip','SELECT * retrieves every column','Explicit columns make result shapes clearer and can reduce unnecessary data transfer.','List the columns the caller actually needs.',star)
+  }
+  if(lang==='shell'||lang==='powershell'||lang==='bat'){
+    const destructive=firstLineOf(text,/\brm\s+-rf\s+\/|\bRemove-Item\b[^\n]*-Recurse[^\n]*-Force/i);if(destructive)addFinding(out,'warn','Destructive command','This command can recursively delete files with very little protection against a bad path.','Validate the target path and add a dry-run or confirmation step.',destructive)
+  }
+  if(['c','cpp'].includes(lang)){
+    const unsafe=firstLineOf(text,/\b(?:gets|strcpy|sprintf)\s*\(/);if(unsafe)addFinding(out,'warn','Unsafe buffer operation','This function can write beyond a buffer when input is larger than expected.','Use a bounds-aware alternative and validate sizes.',unsafe)
+  }
+
+  const htmlAll=projectText(['html','htm']);
+  if((lang==='css'||lang==='scss'||lang==='less')&&htmlAll){const classes=[...text.matchAll(/\.([a-zA-Z_-][\w-]*)/g)].map(m=>m[1]);const unique=[...new Set(classes)].filter(c=>!new RegExp('class=["\\\'][^"\\\']*\\b'+c.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i').test(htmlAll));if(unique.length>=4)addFinding(out,'tip','Some selectors are not found in project HTML',unique.slice(0,4).join(', ')+' do not appear in the current HTML files. They may be dynamic, or they may be unused.','Check generated classes first, then remove selectors that are genuinely unused.',firstLineOf(text,new RegExp('\\.'+unique[0].replace(/[.*+?^${}()|[\]\\]/g,'\\$&'))))}
+
+  if(!out.some(x=>x.severity==='error'||x.severity==='warn')){
+    const lesson={html:['Strong base','Your HTML has no high-priority issue from the local review.','Next, test keyboard navigation and resize the page to narrow mobile widths.'],css:['Strong base','Your stylesheet has no high-priority issue from the local review.','Next, check focus states, reduced-motion behaviour and whether repeated values belong in variables.'],javascript:['Strong base','Your JavaScript has no high-priority issue from the local review.','Next, test failure paths as deliberately as the success path.'],typescript:['Strong base','Your TypeScript has no high-priority issue from the local review.','Next, keep external data at typed boundaries and avoid broad any types.'],python:['Strong base','Your Python has no high-priority issue from the local review.','Next, separate pure logic from input/output so the code becomes easier to test.']}[lang];if(lesson)addFinding(out,'good',lesson[0],lesson[1],lesson[2],1)
+  }
+  return out.slice(0,14)
+}
+
+function findingMessage(f){return f.title+'. '+f.detail+(f.fix?' Suggestion: '+f.fix:'')}
+function updateCoachMarkers(findings){
+  if(!window.monaco||!state.editor||!state.activePath)return;const model=state.models.get(state.activePath);if(!model)return;
+  const markers=findings.filter(f=>f.line&&f.severity!=='good').map(f=>({startLineNumber:Math.min(f.line,model.getLineCount()),startColumn:1,endLineNumber:Math.min(f.line,model.getLineCount()),endColumn:model.getLineMaxColumn(Math.min(f.line,model.getLineCount())),severity:f.severity==='error'?monaco.MarkerSeverity.Error:f.severity==='warn'?monaco.MarkerSeverity.Warning:monaco.MarkerSeverity.Info,message:'Coach: '+findingMessage(f),source:'Browser Code Coach'}));
+  monaco.editor.setModelMarkers(model,'browser-code-coach',markers)
+}
+function renderCoach(focusIndex=null){
+  const box=$('#coachOutput'), count=$('#coachCount');if(!box||!count)return;
+  const file=state.activePath?state.files.get(state.activePath):null;const findings=state.coachFindings||[];count.textContent=String(findings.filter(f=>f.severity!=='good').length);
+  if(!file||file.kind!=='text'){box.innerHTML='<div class="coach-empty"><strong>Coding Coach</strong><span>Open a text file and I will review it as you work. Your code stays in this browser.</span></div>';return}
+  const errors=findings.filter(f=>f.severity==='error').length,warns=findings.filter(f=>f.severity==='warn').length,tips=findings.filter(f=>f.severity==='tip').length;
+  let html='<div class="coach-summary"><strong>'+escapeHtml(basename(file.path))+'</strong><span>'+errors+' errors · '+warns+' warnings · '+tips+' improvements</span></div>';
+  if(!findings.length)html+='<div class="coach-empty"><strong>No suggestions right now</strong><span>The local review did not find anything useful to flag. Run the code and test real behaviour next.</span></div>';
+  else{html+='<div class="coach-list">';findings.forEach((f,i)=>{html+='<div class="coach-card"'+(f.line?' data-line="'+f.line+'"':'')+(focusIndex===i?' data-focus="true"':'')+'><span class="coach-badge '+f.severity+'">'+escapeHtml(f.severity)+'</span><div class="coach-copy"><div class="coach-title">'+escapeHtml(f.title)+(f.line?'<span class="coach-line">Line '+f.line+'</span>':'')+'</div><div class="coach-detail">'+escapeHtml(f.detail)+'</div>'+(f.fix?'<div class="coach-fix"><b>Try:</b> '+escapeHtml(f.fix)+'</div>':'')+'</div></div>'});html+='</div>'}
+  box.innerHTML=html;$$('.coach-card[data-line]',box).forEach(card=>card.addEventListener('click',()=>jumpToLine(Number(card.dataset.line))));
+  if(focusIndex!=null){const cards=$$('.coach-card',box);cards[focusIndex]?.scrollIntoView({block:'nearest',behavior:document.documentElement.classList.contains('reduce-motion')?'auto':'smooth'})}
+}
+function scheduleCoach(delay=320){clearTimeout(state.coachTimer);state.coachTimer=setTimeout(runCoach,delay)}
+function runCoach(){state.coachFindings=analyseActiveFile();renderCoach();updateCoachMarkers(state.coachFindings)}
+function jumpToLine(line){if(!state.activePath)return;if(state.editor){state.editor.revealLineInCenter(line);state.editor.setPosition({lineNumber:line,column:1});state.editor.focus()}else{const ta=$('#fallbackEditor'),arr=ta.value.split('\n');let pos=0;for(let i=0;i<Math.max(0,line-1);i++)pos+=arr[i].length+1;ta.focus();ta.setSelectionRange(pos,pos);updateFallbackCursor()}}
+function setBottomPanel(name){
+  state.bottomPanel=name;
+  const coach=name==='coach';
+  const active=state.activePath?state.files.get(state.activePath):null;
+  const pythonActive=!!(active&&active.kind==='text'&&ext(active.path)==='py');
+  $('#consoleOutput').hidden=coach;
+  $('#consoleInputRow').hidden=coach||!pythonActive;
+  $('#coachOutput').hidden=!coach;
+  $('#consoleActions').hidden=coach;
+  $('#coachActions').hidden=!coach;
+  $('#consoleTabBtn').classList.toggle('active',!coach);
+  $('#coachTabBtn').classList.toggle('active',coach);
+  $('#consoleTabBtn').setAttribute('aria-selected',String(!coach));
+  $('#coachTabBtn').setAttribute('aria-selected',String(coach));
+  if(coach)runCoach();
+}
+
+function projectDiagnosis(){
+  const originalPath=state.activePath;
+  const findings=[];
+  let scanned=0;
+
+  for(const file of state.files.values()){
+    if(file.kind!=='text')continue;
+    scanned++;
+    state.activePath=file.path;
+
+    const fileFindings=analyseActiveFile().filter(item=>item.severity!=='good');
+    fileFindings.forEach(item=>{
+      if(findings.length<220)findings.push({...item,path:file.path});
+    });
+  }
+
+  state.activePath=originalPath;
+
+  findings.sort((a,b)=>{
+    const rank={error:0,warn:1,tip:2,good:3};
+    return (rank[a.severity]??9)-(rank[b.severity]??9) ||
+      a.path.localeCompare(b.path) ||
+      (a.line||0)-(b.line||0);
+  });
+
+  return {findings,scanned,truncated:findings.length>=220};
+}
+
+function runProjectDiagnosis(){
+  setBottomPanel('coach');
+
+  const box=$('#coachOutput');
+  const report=projectDiagnosis();
+  const findings=report.findings;
+  const errors=findings.filter(x=>x.severity==='error').length;
+  const warnings=findings.filter(x=>x.severity==='warn').length;
+  const tips=findings.filter(x=>x.severity==='tip').length;
+
+  $('#coachCount').textContent=String(errors+warnings+tips);
+
+  let html='<div class="coach-summary"><strong>Project diagnosis</strong><span>'+
+    report.scanned+' files · '+errors+' errors · '+warnings+' warnings · '+tips+' improvements</span></div>';
+
+  if(!report.scanned){
+    html+='<div class="coach-empty"><strong>No text files to scan</strong><span>Create or import project files first.</span></div>';
+  }else if(!findings.length){
+    html+='<div class="coach-empty"><strong>No project-wide issues found</strong><span>The local rules did not find anything useful to flag. Run the project and test real behaviour next.</span></div>';
+  }else{
+    html+='<div class="coach-list">';
+    findings.forEach(item=>{
+      html+='<div class="coach-card" data-project-path="'+escapeHtml(item.path)+'"'+
+        (item.line?' data-line="'+item.line+'"':'')+'>'+
+        '<span class="coach-badge '+item.severity+'">'+escapeHtml(item.severity)+'</span>'+
+        '<div class="coach-copy"><div class="coach-title">'+escapeHtml(item.title)+
+        '<span class="coach-line">'+escapeHtml(item.path)+(item.line?' · Line '+item.line:'')+'</span></div>'+
+        '<div class="coach-detail">'+escapeHtml(item.detail)+'</div>'+
+        (item.fix?'<div class="coach-fix"><b>Try:</b> '+escapeHtml(item.fix)+'</div>':'')+
+        '</div></div>';
+    });
+    html+='</div>';
+  }
+
+  if(report.truncated){
+    html+='<div class="coach-empty"><span>Showing the first 220 findings to keep the browser responsive.</span></div>';
+  }
+
+  box.innerHTML=html;
+
+  $$('.coach-card[data-project-path]',box).forEach(card=>{
+    card.addEventListener('click',()=>{
+      const path=card.dataset.projectPath;
+      const line=Number(card.dataset.line||1);
+      openFile(path);
+      setTimeout(()=>jumpToLine(line),0);
+    });
+  });
+}
+
+function bestCoachHint(){setBottomPanel('coach');runCoach();const rank={error:0,warn:1,tip:2,good:3};let best=-1,score=99;state.coachFindings.forEach((f,i)=>{const r=rank[f.severity]??4;if(r<score){score=r;best=i}});renderCoach(best)}
+function explainCurrentLine(){
+  setBottomPanel('coach');const path=state.activePath,file=path?state.files.get(path):null;if(!file||file.kind!=='text')return;
+  const line=currentCursorLine(),src=(file.content.split('\n')[line-1]||'').trim(),lang=languageFor(path);let detail='',fix='';
+  if(!src){detail='This line is blank. Blank lines are useful for separating logical sections, but they do not change program behaviour.'}
+  else if(lang==='html'){if(/^<\//.test(src))detail='This closes an HTML element. Correct nesting matters because the browser builds a DOM tree from these tags.';else if(/^</.test(src))detail='This creates or configures an HTML element. Think about its semantic meaning first, then attributes, accessibility and styling.';else detail='This is text content inside the HTML document. The surrounding element determines its meaning and default behaviour.'}
+  else if(lang==='css'||lang==='scss'||lang==='less'){if(/^[.#\[:a-z-][^{]*\{/.test(src))detail='This starts a selector rule. The selector decides which elements receive the declarations inside the block.';else if(/^[\w-]+\s*:/.test(src))detail='This is a CSS declaration. The property controls one aspect of presentation, and the value tells the browser how to apply it.';else detail='This line is part of a stylesheet. Read it as selector, property and value, then check cascade and specificity.'}
+  else if(lang==='javascript'||lang==='typescript'){if(/^\s*(?:const|let|var)\b/.test(src))detail='This declares a variable. Prefer const when the binding will not be reassigned, because that makes intent clearer.';else if(/\b(?:function|=>)\b/.test(src))detail='This defines executable behaviour. Good functions have a clear purpose, explicit inputs and a predictable result or side effect.';else if(/^\s*(?:if|else|switch|for|while)\b/.test(src))detail='This controls program flow. The important teaching question is which inputs take each path and what happens at the boundaries.';else detail='This JavaScript/TypeScript statement runs as part of the current scope. Trace the values it reads, the values it changes, and the failure path.'}
+  else if(lang==='python'){if(/^def\s+/.test(src))detail='This defines a Python function. Aim for one responsibility, clear parameters and a return value that is easy to test.';else if(/^class\s+/.test(src))detail='This defines a class. Use a class when state and related behaviour genuinely belong together.';else if(/^\s*(?:if|elif|else|for|while|match|case)\b/.test(src))detail='This controls Python execution flow. Check indentation carefully because indentation is part of Python syntax.';else detail='This Python statement executes within its current indentation block. Trace inputs, state changes and exceptions.'}
+  else detail='This is a '+languageLabel(path)+' line. Read it in context by identifying declarations, inputs, outputs and side effects.';
+  state.coachFindings=[{severity:'tip',title:'Line '+line+' explained',detail,fix:fix||'Use the live review below it to connect this line to project-wide issues.',line},...analyseActiveFile()];renderCoach(0);updateCoachMarkers(state.coachFindings)
+}
+
+
+async function registerOfflineSupport(){
+  if(!('serviceWorker' in navigator))return null;
+  if(!/^https?:$/.test(location.protocol))return null;
+
+  try{
+    if(state.offlineRegistration)return state.offlineRegistration;
+    const registration=await navigator.serviceWorker.register(OFFLINE_SW_URL,{scope:location.pathname});
+    state.offlineRegistration=registration;
+    return registration;
+  }catch(error){
+    logConsole('warn','Offline cache could not be registered:',error.message);
+    return null;
+  }
+}
+
+function activeServiceWorker(registration){
+  return new Promise((resolve,reject)=>{
+    const ready=registration.active||registration.waiting;
+    if(ready)return resolve(ready);
+
+    const worker=registration.installing;
+    if(!worker)return reject(new Error('Offline worker is not available yet.'));
+
+    const check=()=>{
+      if(worker.state==='activated')resolve(worker);
+      else if(worker.state==='redundant')reject(new Error('Offline worker installation failed.'));
+    };
+
+    worker.addEventListener('statechange',check);
+    check();
+  });
+}
+
+async function prepareOfflineMode(){
+  closeToolbarMenus();
+
+  if(!('serviceWorker' in navigator)){
+    toast('Offline enhanced mode is not supported in this browser.');
+    return;
+  }
+
+  const button=$('#offlineCacheBtn');
+  const original=button.textContent;
+  button.disabled=true;
+  button.textContent='Preparing offline mode…';
+  logConsole('system','Preparing enhanced editor and Python runtime for later offline use…');
+
+  try{
+    const registration=await registerOfflineSupport();
+    if(!registration)throw new Error('Offline cache registration is unavailable.');
+
+    const worker=await activeServiceWorker(registration);
+    const channel=new MessageChannel();
+
+    const result=await new Promise((resolve,reject)=>{
+      const timer=setTimeout(()=>reject(new Error('Offline cache preparation timed out.')),120000);
+
+      channel.port1.onmessage=event=>{
+        const data=event.data||{};
+
+        if(data.type==='progress'){
+          logConsole('system','Offline cache '+data.done+'/'+data.total+': '+data.label);
+        }else if(data.type==='complete'){
+          clearTimeout(timer);
+          resolve(data);
+        }else if(data.type==='error'){
+          clearTimeout(timer);
+          reject(new Error(data.message||'Offline caching failed.'));
+        }
+      };
+
+      worker.postMessage({type:'PREPARE_OFFLINE'},[channel.port2]);
+    });
+
+    try{localStorage.setItem('browser-code-studio-offline-ready-v1','1')}catch{}
+    button.textContent='Offline mode ready';
+    logConsole('system','Offline enhanced-mode cache ready. '+result.cached+' core assets cached.');
+    toast('Offline enhanced mode prepared.');
+  }catch(error){
+    button.textContent=original;
+    logConsole('warn','Offline preparation failed:',error.message);
+    toast('Could not fully prepare offline mode.');
+  }finally{
+    button.disabled=false;
+  }
+}
+
+async function initOfflineSupport(){
+  const registration=await registerOfflineSupport();
+  if(!registration)return;
+
+  try{
+    if(localStorage.getItem('browser-code-studio-offline-ready-v1')==='1'){
+      $('#offlineCacheBtn').textContent='Offline mode ready';
+    }
+  }catch{}
+}
+
+function setCoderTheme(dark,save=true){state.coderDark=!!dark;$('#coderCard').classList.toggle('coder-dark',state.coderDark);const btn=$('#coderThemeBtn');btn.title=state.coderDark?'Switch coder to light mode':'Switch coder to dark mode';btn.setAttribute('aria-label',btn.title);applyMonacoTheme();if(save){try{localStorage.setItem(CODER_THEME_KEY,state.coderDark?'dark':'light')}catch{}}}
+function initCoderTheme(){let dark=false;try{dark=localStorage.getItem(CODER_THEME_KEY)==='dark'}catch{}setCoderTheme(dark,false)}
+
+function serialisableProject(){return {name:$('#projectName').value.trim()||'Browser Project',activePath:state.activePath,openTabs:state.openTabs,files:Array.from(state.files.values()).map(f=>({path:f.path,kind:f.kind,content:f.content,type:f.type||''}))}}
+function scheduleSave(){state.sessionTouched=true;clearTimeout(state.saveTimer);state.saveTimer=setTimeout(()=>saveLocal(false),350)}
+function saveLocal(force=false){
+  if(!force&&!state.sessionTouched)return;
+  try{
+    const text=JSON.stringify(serialisableProject());
+    if(text.length>MAX_STORAGE_BYTES){logConsole('warn','Project is too large for browser session storage. Export a ZIP to keep a copy.');return}
+    localStorage.setItem(STORAGE_KEY,text);state.sessionTouched=false;state.dirty.clear();renderTabs();
+  }catch(err){logConsole('warn','Local save failed:',err.message)}
+}
+function loadLocal(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return false;
+    const p=JSON.parse(raw);if(!p||!Array.isArray(p.files))return false;
+    state.files.clear();p.files.forEach(f=>{if(f&&f.path)state.files.set(normalisePath(f.path),{path:normalisePath(f.path),kind:f.kind||'text',content:f.content||'',type:f.type||''})});
+    $('#projectName').value=p.name||'Untitled Project';
+    state.openTabs=(p.openTabs||[]).filter(x=>state.files.has(x));state.activePath=state.files.has(p.activePath)?p.activePath:(state.openTabs[0]||state.files.keys().next().value||null);state.selectedPath=state.activePath;
+    if(state.activePath&&!state.openTabs.includes(state.activePath))state.openTabs.push(state.activePath);state.sessionTouched=false;
+    return true;
+  }catch{return false}
+}
+function resetToDefault(){state.models.forEach(m=>{try{m.dispose()}catch{}});state.models.clear();state.files.clear();state.openTabs=[];state.activePath=null;state.selectedPath=null;state.dirty.clear();state.sessionTouched=false;state.coachFindings=[];state.stdinQueue=[];state.projectSearchMatches=[];$('#projectName').value='Untitled Project';updateStdinQueueUi();renderCoach()}
+
+function renderTree(){
+  const tree=$('#fileTree');tree.innerHTML='';
+  const paths=Array.from(state.files.keys()).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:'base'}));
+  if(!paths.length){tree.innerHTML='<div style="padding:.7rem;color:#64748b;font-size:.76rem">No files yet.</div>';return}
+  paths.forEach(path=>{
+    const b=document.createElement('button');b.type='button';b.className='file-row'+(path===state.selectedPath?' active':'');b.title=path;
+    b.innerHTML='<span class="file-icon">'+escapeHtml(fileIcon(path))+'</span><span class="file-name"><span>'+escapeHtml(path)+'</span></span>';
+    b.addEventListener('click',()=>openFile(path));
+    tree.appendChild(b);
+  });
+}
+function renderTabs(){
+  const bar=$('#tabbar');bar.innerHTML='';
+  state.openTabs=state.openTabs.filter(p=>state.files.has(p));
+  state.openTabs.forEach(path=>{
+    const tab=document.createElement('button');tab.type='button';tab.className='editor-tab'+(path===state.activePath?' active':'')+(state.dirty.has(path)?' is-dirty':'');tab.title=path;
+    tab.innerHTML='<span class="dirty"></span><span class="tab-name">'+escapeHtml(basename(path))+'</span><span class="close-tab" title="Close tab">×</span>';
+    tab.addEventListener('click',e=>{if(e.target.closest('.close-tab'))closeTab(path);else openFile(path)});
+    bar.appendChild(tab);
+  });
+}
+function closeTab(path){
+  const idx=state.openTabs.indexOf(path);state.openTabs=state.openTabs.filter(p=>p!==path);
+  if(state.activePath===path){state.activePath=state.openTabs[Math.min(idx,state.openTabs.length-1)]||null;state.selectedPath=state.activePath;syncActiveEditor()}
+  renderTree();renderTabs();scheduleSave();
+}
+function openFile(path){
+  if(!state.files.has(path))return;state.selectedPath=path;
+  const f=state.files.get(path);
+  if(f.kind!=='text'){renderTree();downloadActiveBinary(path);return}
+  state.activePath=path;if(!state.openTabs.includes(path))state.openTabs.push(path);
+  syncActiveEditor();renderTree();renderTabs();scheduleSave();
+}
+function syncActiveEditor(){
+  const f=state.activePath?state.files.get(state.activePath):null;
+  const pythonActive=!!(f&&f.kind==='text'&&ext(f.path)==='py');
+  $('#consoleInputRow').hidden=!(pythonActive&&state.bottomPanel==='console');
+  $('#emptyEditor').classList.toggle('show',!f||f.kind!=='text');
+  $('#activePathStatus').textContent=f?f.path:'No file open';$('#languageStatus').textContent=f?languageLabel(f.path):'Plain Text';
+  if(!f||f.kind!=='text'){if(state.editor)state.editor.setModel(null);$('#fallbackEditor').value='';updateFallbackLines();scheduleCoach(0);return}
+  if(state.editor){
+    let model=state.models.get(f.path);
+    if(!model){model=monaco.editor.createModel(f.content,languageFor(f.path));model.onDidChangeContent(()=>{if(state.activePath===f.path)editorChanged(model.getValue())});state.models.set(f.path,model)}
+    state.editor.setModel(model);state.editor.focus();
+  }else{$('#fallbackEditor').value=f.content;updateFallbackLines();updateFallbackCursor()}
+  scheduleCoach(0);
+}
+function editorChanged(value){
+  if(!state.activePath||!state.files.has(state.activePath))return;
+  const f=state.files.get(state.activePath);if(f.content===value)return;f.content=value;state.dirty.add(state.activePath);renderTabs();scheduleSave();scheduleCoach();
+}
+function updateFallbackLines(){const n=Math.max(1,$('#fallbackEditor').value.split('\n').length);$('#fallbackLines').textContent=Array.from({length:n},(_,i)=>i+1).join('\n');$('#fallbackLines').scrollTop=$('#fallbackEditor').scrollTop}
+function updateFallbackCursor(){const ta=$('#fallbackEditor');const before=ta.value.slice(0,ta.selectionStart);const lines=before.split('\n');$('#cursorStatus').textContent='Ln '+lines.length+', Col '+(lines.at(-1).length+1)}
+
+function showInputModal(mode,target=''){
+  state.modalMode=mode;state.modalTarget=target;
+  const title=mode==='rename'?'Rename File':'New File';$('#modalTitle').textContent=title;$('#modalText').textContent=mode==='rename'?'Enter the new relative path.':'Enter a file name or relative path, for example src/app.js.';$('#modalConfirm').textContent=mode==='rename'?'Rename':'Create';$('#modalInput').value=mode==='rename'?target:'';$('#inputModal').classList.add('show');setTimeout(()=>{$('#modalInput').focus();$('#modalInput').select()},20)
+}
+function hideInputModal(){$('#inputModal').classList.remove('show');state.modalMode=null;state.modalTarget=null}
+function confirmInputModal(){
+  let path=normalisePath($('#modalInput').value.trim());if(!path){toast('Enter a file name.');return}
+  if(state.modalMode==='rename'){
+    const old=state.modalTarget;if(!state.files.has(old))return hideInputModal();if(path!==old&&state.files.has(path)){toast('That file already exists.');return}
+    const f=state.files.get(old);state.files.delete(old);f.path=path;state.files.set(path,f);
+    state.openTabs=state.openTabs.map(p=>p===old?path:p);if(state.activePath===old)state.activePath=path;if(state.selectedPath===old)state.selectedPath=path;
+    if(state.models.has(old)){const oldModel=state.models.get(old);const content=oldModel.getValue();oldModel.dispose();state.models.delete(old);if(state.editor&&state.activePath===path){const model=monaco.editor.createModel(content,languageFor(path));model.onDidChangeContent(()=>{if(state.activePath===path)editorChanged(model.getValue())});state.models.set(path,model);state.editor.setModel(model)}}
+    state.dirty.add(path);renderTree();renderTabs();syncActiveEditor();scheduleSave();toast('File renamed.');
+  }else{
+    if(state.files.has(path)){toast('That file already exists.');return}
+    state.files.set(path,{path,kind:'text',content:starterFor(path),type:mimeFor(path)});state.dirty.add(path);hideInputModal();openFile(path);toast('File created.');return;
+  }
+  hideInputModal();
+}
+function starterFor(path){return ''}
+function deleteSelected(){const path=state.selectedPath;if(!path||!state.files.has(path))return;const ok=confirm('Delete '+path+' from this browser project?');if(!ok)return;const model=state.models.get(path);if(model){model.dispose();state.models.delete(path)}state.files.delete(path);state.dirty.delete(path);closeTab(path);if(!state.activePath&&state.files.size)openFile(state.files.keys().next().value);renderTree();scheduleSave();toast('File deleted.')}
+
+async function importFileList(list){
+  const files=Array.from(list||[]);if(!files.length)return;
+  let imported=0;
+  for(const file of files){
+    let path=normalisePath(file.webkitRelativePath||file.name);if(!path)continue;
+    try{
+      if(isTextFile(path,file.type)){const content=await file.text();state.files.set(path,{path,kind:'text',content,type:file.type||mimeFor(path)})}
+      else{const content=await readAsDataURL(file);state.files.set(path,{path,kind:'binary',content,type:file.type||mimeFor(path)})}
+      imported++;
+    }catch(err){logConsole('warn','Could not import',path,err.message)}
+  }
+  if(imported){const firstText=Array.from(state.files.values()).find(f=>f.kind==='text');if(firstText)openFile(firstText.path);renderTree();scheduleSave();toast(imported+' file'+(imported===1?'':'s')+' imported.')}
+}
+function readAsDataURL(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error||new Error('Read failed'));r.readAsDataURL(file)})}
+
+function downloadBlob(blob,name){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
+function downloadActive(){const path=state.activePath;if(!path||!state.files.has(path)){toast('Open a file first.');return}const f=state.files.get(path);if(f.kind==='text')downloadBlob(new Blob([f.content],{type:f.type||mimeFor(path)}),basename(path));else downloadActiveBinary(path)}
+function downloadActiveBinary(path){const f=state.files.get(path);if(!f)return;fetch(f.content).then(r=>r.blob()).then(b=>downloadBlob(b,basename(path))).catch(()=>toast('Could not download this file.'))}
+
+function crc32(bytes){
+  if(!crc32.table){crc32.table=Array.from({length:256},(_,n)=>{let c=n;for(let k=0;k<8;k++)c=(c&1)?0xedb88320^(c>>>1):c>>>1;return c>>>0})}
+  let c=0xffffffff;for(const b of bytes)c=crc32.table[(c^b)&255]^(c>>>8);return (c^0xffffffff)>>>0;
+}
+function u16(n){return new Uint8Array([n&255,(n>>>8)&255])}function u32(n){return new Uint8Array([n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255])}
+function concatArrays(parts){let n=0;parts.forEach(p=>n+=p.length);const out=new Uint8Array(n);let o=0;parts.forEach(p=>{out.set(p,o);o+=p.length});return out}
+function dosDateTime(d=new Date()){let time=(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1);let date=((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate();return {time,date}}
+async function fileBytes(f){if(f.kind==='text')return new TextEncoder().encode(f.content);const res=await fetch(f.content);return new Uint8Array(await res.arrayBuffer())}
+async function buildZip(){
+  const locals=[],centrals=[];let offset=0;const dt=dosDateTime();
+  for(const f of Array.from(state.files.values()).sort((a,b)=>a.path.localeCompare(b.path))){
+    const nameBytes=new TextEncoder().encode(f.path);const data=await fileBytes(f);const crc=crc32(data);
+    const local=concatArrays([u32(0x04034b50),u16(20),u16(0),u16(0),u16(dt.time),u16(dt.date),u32(crc),u32(data.length),u32(data.length),u16(nameBytes.length),u16(0),nameBytes,data]);locals.push(local);
+    const central=concatArrays([u32(0x02014b50),u16(20),u16(20),u16(0),u16(0),u16(dt.time),u16(dt.date),u32(crc),u32(data.length),u32(data.length),u16(nameBytes.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset),nameBytes]);centrals.push(central);offset+=local.length;
+  }
+  const centralData=concatArrays(centrals);const end=concatArrays([u32(0x06054b50),u16(0),u16(0),u16(centrals.length),u16(centrals.length),u32(centralData.length),u32(offset),u16(0)]);return new Blob([...locals,centralData,end],{type:'application/zip'})
+}
+async function exportProject(){try{const projectFile=await buildZip();const name=($('#projectName').value.trim()||'browser-project').replace(/[^a-z0-9-_]+/gi,'-').replace(/^-+|-+$/g,'')||'browser-project';downloadBlob(projectFile,name+'.ahcode');toast('Project saved as .ahcode.')}catch(err){logConsole('error','Project export failed:',err.message);toast('Could not save project.')}}
+
+async function importZip(file){
+  if(!file)return;
+  try{
+    const buf=new Uint8Array(await file.arrayBuffer());let eocd=-1;for(let i=buf.length-22;i>=Math.max(0,buf.length-65557);i--){if(readU32(buf,i)===0x06054b50){eocd=i;break}}
+    if(eocd<0)throw new Error('ZIP directory not found');
+    const count=readU16(buf,eocd+10);const centralOffset=readU32(buf,eocd+16);let p=centralOffset;let imported=0;
+    for(let i=0;i<count;i++){
+      if(readU32(buf,p)!==0x02014b50)throw new Error('Invalid ZIP directory');
+      const method=readU16(buf,p+10),compressedSize=readU32(buf,p+20),uncompressedSize=readU32(buf,p+24),nameLen=readU16(buf,p+28),extraLen=readU16(buf,p+30),commentLen=readU16(buf,p+32),localOffset=readU32(buf,p+42);const name=new TextDecoder().decode(buf.slice(p+46,p+46+nameLen));p+=46+nameLen+extraLen+commentLen;
+      if(name.endsWith('/'))continue;
+      if(readU32(buf,localOffset)!==0x04034b50)continue;const localNameLen=readU16(buf,localOffset+26),localExtraLen=readU16(buf,localOffset+28);const start=localOffset+30+localNameLen+localExtraLen;const compressed=buf.slice(start,start+compressedSize);let data;
+      if(method===0)data=compressed;else if(method===8)data=await inflateRaw(compressed,uncompressedSize);else{logConsole('warn','Skipped unsupported ZIP compression for',name);continue}
+      const path=normalisePath(name);if(isTextFile(path,mimeFor(path)))state.files.set(path,{path,kind:'text',content:new TextDecoder().decode(data),type:mimeFor(path)});else state.files.set(path,{path,kind:'binary',content:bytesToDataUrl(data,mimeFor(path)),type:mimeFor(path)});imported++;
+    }
+    renderTree();const entry=findEntryHtml();if(entry)openFile(entry);else{const first=Array.from(state.files.values()).find(f=>f.kind==='text');if(first)openFile(first.path)}scheduleSave();toast(imported+' project file'+(imported===1?'':'s')+' imported.');
+  }catch(err){logConsole('error','Project import failed:',err.message);toast('Could not import this project file.')}
+}
+function readU16(a,o){return a[o]|(a[o+1]<<8)}function readU32(a,o){return (a[o]|(a[o+1]<<8)|(a[o+2]<<16)|(a[o+3]<<24))>>>0}
+async function inflateRaw(bytes){if(typeof DecompressionStream==='undefined')throw new Error('This browser cannot decompress ZIP files');const ds=new DecompressionStream('deflate-raw');const stream=new Blob([bytes]).stream().pipeThrough(ds);return new Uint8Array(await new Response(stream).arrayBuffer())}
+function bytesToDataUrl(bytes,mime){let s='';const chunk=0x8000;for(let i=0;i<bytes.length;i+=chunk)s+=String.fromCharCode(...bytes.subarray(i,i+chunk));return 'data:'+mime+';base64,'+btoa(s)}
+
+function findEntryHtml(){if(state.activePath&&/\.html?$/i.test(state.activePath))return state.activePath;if(state.files.has('index.html'))return 'index.html';return Array.from(state.files.keys()).find(p=>/\.html?$/i.test(p))||null}
+function getText(path){const f=state.files.get(path);return f&&f.kind==='text'?f.content:null}
+function assetData(path){const f=state.files.get(path);return f&&f.kind==='binary'?f.content:null}
+function resolveCssUrls(css,cssPath){
+  return css.replace(/url\((['"]?)([^'"\)]+)\1\)/g,(m,q,url)=>{const u=url.trim();if(/^(?:data:|blob:|https?:|\/\/|#)/i.test(u))return m;const full=resolvePath(cssPath,u);const data=assetData(full);return data?'url("'+data+'")':m})
+}
+function buildPreviewHtml(){
+  const entry=findEntryHtml();if(!entry)throw new Error('Add an HTML file, such as index.html, before running the project.');
+  let html=getText(entry);if(html==null)throw new Error('The selected HTML entry file could not be read.');
+  html=html.replace(/<link\b([^>]*?)href=(['"])(.*?)\2([^>]*)>/gi,(full,a,q,href,b)=>{
+    if(!/rel\s*=\s*(['"]?)stylesheet\1/i.test(a+b))return replaceAssetAttribute(full,entry,'href',href);
+    const path=resolvePath(entry,href),css=getText(path);if(css==null)return full;return '<style data-browser-code-studio-source="'+escapeHtml(path)+'">\n'+resolveCssUrls(css,path)+'\n</style>';
+  });
+  html=html.replace(/<script\b([^>]*?)src=(['"])(.*?)\2([^>]*)>\s*<\/script>/gi,(full,a,q,src,b)=>{
+    const path=resolvePath(entry,src),js=getText(path);if(js==null)return full;const attrs=(a+b).replace(/\s*src=(['"])(.*?)\1/i,'');return '<script '+attrs+' data-browser-code-studio-source="'+escapeHtml(path)+'">\n'+js.replace(/<\/script/gi,'<\\/script')+'\n<\/script>';
+  });
+  html=html.replace(/\b(src|poster)=(['"])(.*?)\2/gi,(full,attr,q,url)=>{const path=resolvePath(entry,url),data=assetData(path);return data?attr+'='+q+data+q:full});
+  html=html.replace(/<link\b([^>]*?)href=(['"])(.*?)\2([^>]*)>/gi,(full,a,q,href,b)=>replaceAssetAttribute(full,entry,'href',href));
+  const bridge='<script>(function(){const send=(level,args)=>{try{window.opener&&window.opener.postMessage({__browserCodeStudio:true,level,args:args.map(a=>{try{return typeof a==="string"?a:JSON.stringify(a)}catch(e){return String(a)}})},"*")}catch(e){}};["log","info","warn","error"].forEach(level=>{const original=console[level].bind(console);console[level]=(...args)=>{original(...args);send(level,args)}});window.addEventListener("error",e=>send("error",[e.message+(e.filename?" at "+e.filename+":"+e.lineno:"")]));window.addEventListener("unhandledrejection",e=>send("error",["Unhandled promise rejection: "+String(e.reason)]));send("system",["Preview loaded"]);})();<\/script>';
+  if(/<head[\s>]/i.test(html))html=html.replace(/<head([^>]*)>/i,'<head$1>'+bridge);else html=bridge+html;
+  return html;
+}
+function replaceAssetAttribute(full,entry,attr,url){const path=resolvePath(entry,url),data=assetData(path);return data?full.replace(new RegExp(attr+'=(['+"'\""+'])'+escapeRegExp(url)+'\\1','i'),attr+'="'+data+'"'):full}
+function escapeRegExp(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+function runProject(forceNew=false){
+  let html;try{html=buildPreviewHtml()}catch(err){logConsole('error',err.message);toast(err.message);return}
+  let w=state.previewWindow;if(forceNew||!w||w.closed)w=window.open('','BrowserCodeStudioPreview','popup=yes,width=1180,height=780,resizable=yes,scrollbars=yes');
+  if(!w){logConsole('error','The preview pop-out was blocked by the browser. Allow pop-ups for this site, then run again.');toast('Preview pop-out blocked.');return}
+  state.previewWindow=w;try{w.document.open();w.document.write(html);w.document.close();w.focus();logConsole('system','Project run in preview window.')}catch(err){logConsole('error','Could not write preview:',err.message)}
+}
+
+
+function openSimplePreview(title,bodyHtml,forceNew=false){
+  let w=state.previewWindow;if(forceNew||!w||w.closed)w=window.open('','BrowserCodeStudioPreview','popup=yes,width=1050,height=760,resizable=yes,scrollbars=yes');
+  if(!w){logConsole('error','The preview pop-out was blocked by the browser.');toast('Preview pop-out blocked.');return}
+  state.previewWindow=w;
+  const doc='<!doctype html><html><head><meta charset="utf-8"><title>'+escapeHtml(title)+'</title><style>body{margin:0;padding:32px;background:#f5f5f7;color:#111827;font:16px/1.65 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:980px;margin:auto;background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:28px;box-shadow:0 12px 30px rgba(15,23,42,.08)}pre{overflow:auto;padding:18px;border:1px solid #e5e7eb;border-radius:14px;background:#f8fafc;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}h1,h2,h3{line-height:1.25}a{color:#2563eb}</style></head><body><main>'+bodyHtml+'</main></body></html>';
+  w.document.open();w.document.write(doc);w.document.close();w.focus();logConsole('system',title+' opened in preview window.');
+}
+function markdownToHtml(md){
+  let src=String(md).replace(/\r\n?/g,'\n');const blocks=[];
+  src=src.replace(/```([\w-]*)\n([\s\S]*?)```/g,(_,lang,code)=>{const token='@@BCS_CODE_'+blocks.length+'@@';blocks.push('<pre><code>'+escapeHtml(code)+'</code></pre>');return token});
+  let out=escapeHtml(src)
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/^&gt; (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^[-*] (.+)$/gm,'<li>$1</li>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/\n{2,}/g,'</p><p>').replace(/\n/g,'<br>');
+  out='<p>'+out+'</p>'.replace(/<p>\s*<h/g,'<h').replace(/<\/h([1-3])>\s*<\/p>/g,'</h$1>');
+  out=out.replace(/(?:<li>.*?<\/li><br>?)+/g,m=>'<ul>'+m.replace(/<br>/g,'')+'</ul>');
+  blocks.forEach((b,i)=>{out=out.replace('@@BCS_CODE_'+i+'@@',b)});return out;
+}
+function runSimpleDocument(forceNew=false){
+  const path=state.activePath,f=path&&state.files.get(path);if(!f||f.kind!=='text')return false;const e=ext(path);
+  if(e==='md'){openSimplePreview(path,markdownToHtml(f.content),forceNew);return true}
+  if(e==='json'||e==='jsonc'){let value=f.content;try{value=JSON.stringify(JSON.parse(f.content),null,2)}catch{}openSimplePreview(path,'<h1>'+escapeHtml(basename(path))+'</h1><pre>'+escapeHtml(value)+'</pre>',forceNew);return true}
+  if(e==='svg'){openSimplePreview(path,'<h1>'+escapeHtml(basename(path))+'</h1><div style="text-align:center">'+f.content+'</div>',forceNew);return true}
+  if(e==='txt'||e==='csv'||e==='xml'||e==='yaml'||e==='yml'||e==='toml'||e==='ini'){openSimplePreview(path,'<h1>'+escapeHtml(basename(path))+'</h1><pre>'+escapeHtml(f.content)+'</pre>',forceNew);return true}
+  return false;
+}
+
+
+function runSmart(forcePreview=false){
+  const active=state.activePath;
+  const activeExt=active?ext(active):'';
+  if(activeExt==='py'&&!forcePreview){runPythonFile();return}
+  if(findEntryHtml()){runProject(forcePreview);return}
+  if(['js','mjs','cjs'].includes(activeExt)&&!forcePreview){runJavaScriptFile();return}
+  if(runSimpleDocument(forcePreview))return;
+  if(forcePreview){logConsole('warn','Add an HTML, Markdown, JSON, SVG or text-based file to open a preview.');toast('Nothing previewable is open.');return}
+  if(!active){toast('Create or import a file first.');return}
+  logConsole('warn',languageLabel(active)+' files are editable here, but this language does not have a browser-native runner in this tool.');
+  toast('No browser runner for this file type.');
+}
+
+function runJavaScriptFile(){
+  const path=state.activePath,f=path&&state.files.get(path);
+  if(!f||f.kind!=='text')return;
+  if(state.jsWorker){try{state.jsWorker.terminate()}catch{}state.jsWorker=null}
+  const source=f.content;
+  const bridge=`
+const send=(level,args)=>postMessage({__bcsWorker:true,level,args:args.map(a=>{try{return typeof a==='string'?a:JSON.stringify(a)}catch(e){return String(a)}})});
+['log','info','warn','error'].forEach(level=>{const original=console[level].bind(console);console[level]=(...args)=>{original(...args);send(level,args)}});
+self.addEventListener('error',e=>send('error',[e.message+(e.lineno?' at line '+e.lineno:'')]));
+self.addEventListener('unhandledrejection',e=>send('error',['Unhandled promise rejection: '+String(e.reason)]));
+`;
+  try{
+    const blob=new Blob([bridge,'\n',source,'\n;send("system",["JavaScript finished"]);'],{type:'text/javascript'});
+    const url=URL.createObjectURL(blob);const worker=new Worker(url);state.jsWorker=worker;
+    worker.onmessage=e=>{const d=e.data;if(d&&d.__bcsWorker)logConsole(['log','info','warn','error','system'].includes(d.level)?d.level:'log',...(d.args||[]))};
+    worker.onerror=e=>logConsole('error',e.message||'JavaScript worker error');
+    setTimeout(()=>URL.revokeObjectURL(url),1000);logConsole('system','Running '+path+'…');
+  }catch(err){logConsole('error','Could not run JavaScript:',err.message)}
+}
+
+async function ensurePyodide(){
+  if(state.pyodide)return state.pyodide;
+  if(state.pyodideLoading)return state.pyodideLoading;
+  state.pyodideLoading=new Promise((resolve,reject)=>{
+    const start=async()=>{
+      try{
+        logConsole('system','Loading Python runtime…');
+        const py=await window.loadPyodide({
+          indexURL:PYODIDE_BASE,
+          stdout:text=>logConsole('log',text),
+          stderr:text=>logConsole('error',text)
+        });
+        state.pyodide=py;logConsole('system','Python runtime ready.');resolve(py);
+      }catch(err){reject(err)}
+    };
+    if(window.loadPyodide){start();return}
+    const script=document.createElement('script');script.src=PYODIDE_BASE+'pyodide.js';script.async=true;script.crossOrigin='anonymous';
+    script.onload=start;script.onerror=()=>reject(new Error('Python runtime could not be loaded. Python needs the browser runtime to be available. HTML, CSS and JavaScript continue to work without it.'));
+    document.head.appendChild(script);
+  }).catch(err=>{state.pyodideLoading=null;throw err});
+  return state.pyodideLoading;
+}
+
+async function runPythonFile(){
+  const path=state.activePath,f=path&&state.files.get(path);
+  if(!f||f.kind!=='text')return;
+  $('#runBtn').disabled=true;logConsole('system','Preparing '+path+'…');
+  try{
+    const py=await ensurePyodide();
+    if(typeof py.setStdin==='function'){
+      py.setStdin({stdin:()=>consumePythonInput(),isatty:true});
+    }
+    for(const item of state.files.values()){
+      if(item.kind!=='text'||ext(item.path)!=='py')continue;
+      const full='/project/'+normalisePath(item.path),dir=dirname(full);
+      try{py.FS.mkdirTree(dir)}catch{}
+      py.FS.writeFile(full,item.content,{encoding:'utf8'});
+    }
+    try{await py.loadPackagesFromImports(f.content)}catch(err){logConsole('warn','Some imported packages could not be loaded:',err.message)}
+    const target='/project/'+normalisePath(path);
+    const working=dirname(target)||'/project';
+    const runner='import os, sys, runpy\n_target='+JSON.stringify(target)+'\n_working='+JSON.stringify(working)+'\nos.chdir(_working)\nif _working not in sys.path: sys.path.insert(0, _working)\nrunpy.run_path(_target, run_name="__main__")';
+    logConsole('system','Running '+path+'…');
+    await py.runPythonAsync(runner);
+    logConsole('system','Python finished.');
+  }catch(err){logConsole('error',err.message||String(err));toast('Python could not run.');}
+  finally{$('#runBtn').disabled=false}
+}
+
+function formatActive(){
+  if(!state.activePath)return;const f=state.files.get(state.activePath);if(!f||f.kind!=='text')return;let out=f.content;const e=ext(f.path);
+  try{
+    if(e==='json')out=JSON.stringify(JSON.parse(out),null,2);else if(['html','htm','xml','svg'].includes(e))out=formatMarkup(out);else if(e==='css')out=formatCss(out);else if(['js','mjs','cjs','ts','jsx','tsx'].includes(e))out=formatJs(out);else{toast('No built-in formatter for this file type.');return}
+    setActiveContent(out);toast('Formatted.');
+  }catch(err){logConsole('warn','Format failed:',err.message);toast('Could not format this file.')}
+}
+function setActiveContent(text){if(!state.activePath)return;const f=state.files.get(state.activePath);f.content=text;state.dirty.add(state.activePath);if(state.editor){const m=state.models.get(state.activePath);if(m&&m.getValue()!==text)m.setValue(text)}else{$('#fallbackEditor').value=text;updateFallbackLines()}renderTabs();scheduleSave()}
+function formatMarkup(s){let out='',indent=0;const tokens=s.replace(/>\s*</g,'><').split(/(?=<)|(?<=>)/g).filter(Boolean);tokens.forEach(t=>{t=t.trim();if(!t)return;if(/^<\//.test(t))indent=Math.max(0,indent-1);out+='  '.repeat(indent)+t+'\n';if(/^<[^!?/][^>]*[^/]>$/.test(t)&&!/^<(?:area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)\b/i.test(t)&&!/<\/[^>]+>$/.test(t))indent++});return out.trim()+'\n'}
+function formatCss(s){return s.replace(/\s*{\s*/g,' {\n  ').replace(/;\s*/g,';\n  ').replace(/\s*}\s*/g,'\n}\n\n').replace(/\n  \n}/g,'\n}').trim()+'\n'}
+function formatJs(s){return s.replace(/;\s*/g,';\n').replace(/\{\s*/g,'{\n').replace(/\}\s*/g,'\n}\n').replace(/\n{3,}/g,'\n\n').trim()+'\n'}
+
+function copyProjectJson(){const text=JSON.stringify(serialisableProject(),null,2);navigator.clipboard?.writeText(text).then(()=>toast('Project JSON copied.')).catch(()=>{downloadBlob(new Blob([text],{type:'application/json'}),'browser-project.json')})}
+function clearProject(){if(!confirm('Clear this browser project and start again?'))return;resetToDefault();localStorage.removeItem(STORAGE_KEY);renderTree();renderTabs();syncActiveEditor();$('#consoleOutput').innerHTML='';logConsole('system','Blank workspace ready.')}
+
+const commands=[
+  {name:'Run current code',shortcut:'Ctrl+Enter',run:()=>runSmart(false)},
+  {name:'Open web preview',shortcut:'',run:()=>runSmart(true)},
+  {name:'New file',shortcut:'Ctrl+N',run:()=>showInputModal('new')},
+  {name:'Rename selected file',shortcut:'F2',run:()=>state.selectedPath&&showInputModal('rename',state.selectedPath)},
+  {name:'Delete selected file',shortcut:'',run:deleteSelected},
+  {name:'Download active file',shortcut:'Ctrl+S',run:downloadActive},
+  {name:'Export project as ZIP',shortcut:'',run:exportProject},
+  {name:'Format active file',shortcut:'Shift+Alt+F',run:formatActive},
+  {name:'Search project',shortcut:'Ctrl+Shift+F',run:showProjectSearch},
+  {name:'Starter templates',shortcut:'',run:showTemplateModal},
+  {name:'Prepare offline mode',shortcut:'',run:prepareOfflineMode},
+  {name:'Open Coding Coach',shortcut:'',run:()=>setBottomPanel('coach')},
+  {name:'Run project diagnosis',shortcut:'',run:runProjectDiagnosis},
+  {name:'Show best coding hint',shortcut:'',run:bestCoachHint},
+  {name:'Explain current line',shortcut:'',run:explainCurrentLine},
+  {name:'Copy project as JSON',shortcut:'',run:copyProjectJson},
+  {name:'Clear console',shortcut:'',run:()=>$('#consoleOutput').innerHTML=''},
+  {name:'Reset project',shortcut:'',run:clearProject}
+];
+function showPalette(){renderPalette('');$('#commandPalette').classList.add('show');$('#paletteInput').value='';setTimeout(()=>$('#paletteInput').focus(),20)}
+function hidePalette(){$('#commandPalette').classList.remove('show')}
+function renderPalette(q){const list=$('#paletteList');list.innerHTML='';const query=q.trim().toLowerCase();commands.filter(c=>!query||c.name.toLowerCase().includes(query)).forEach(c=>{const b=document.createElement('button');b.type='button';b.className='palette-item';b.innerHTML='<span>'+escapeHtml(c.name)+'</span><span class="palette-shortcut">'+escapeHtml(c.shortcut)+'</span>';b.addEventListener('click',()=>{hidePalette();c.run()});list.appendChild(b)})}
+
+function initFallback(){
+  const ta=$('#fallbackEditor');ta.addEventListener('input',()=>{editorChanged(ta.value);updateFallbackLines();updateFallbackCursor()});ta.addEventListener('scroll',()=>{$('#fallbackLines').scrollTop=ta.scrollTop});ta.addEventListener('click',updateFallbackCursor);ta.addEventListener('keyup',updateFallbackCursor);
+  ta.addEventListener('keydown',e=>{if(e.key==='Tab'){e.preventDefault();const s=ta.selectionStart,end=ta.selectionEnd;ta.setRangeText('  ',s,end,'end');ta.dispatchEvent(new Event('input'))}})
+}
+function applyMonacoTheme(){
+  if(!window.monaco||!monaco.editor)return;
+  const styles=getComputedStyle(document.documentElement);const accent=(styles.getPropertyValue('--accent').trim()||'#2563eb');const accentToken=accent.replace('#','');
+  monaco.editor.defineTheme('tools-light',{base:'vs',inherit:true,rules:[{token:'comment',foreground:'64748B',fontStyle:'italic'},{token:'keyword',foreground:accentToken,fontStyle:'bold'},{token:'string',foreground:'047857'},{token:'number',foreground:'7C3AED'},{token:'type',foreground:'0F766E'},{token:'tag',foreground:accentToken},{token:'attribute.name',foreground:'7C3AED'}],colors:{'editor.background':'#FFFFFF','editor.foreground':'#172033','editorLineNumber.foreground':'#94A3B8','editorLineNumber.activeForeground':'#475569','editorCursor.foreground':accent,'editor.selectionBackground':(document.body.classList.contains('cb-mode')?'#CCFBF1':'#DBEAFE'),'editor.inactiveSelectionBackground':(document.body.classList.contains('cb-mode')?'#F0FDFA':'#EFF6FF'),'editor.lineHighlightBackground':'#F8FAFC','editorIndentGuide.background1':'#E2E8F0','editorIndentGuide.activeBackground1':'#CBD5E1','editorGutter.background':'#F8FAFC','editorWidget.background':'#FFFFFF','editorWidget.border':'#E2E8F0','editorSuggestWidget.background':'#FFFFFF','editorSuggestWidget.border':'#E2E8F0','editorHoverWidget.background':'#FFFFFF','editorHoverWidget.border':'#E2E8F0','minimap.background':'#FBFDFF','scrollbarSlider.background':'#CBD5E166','scrollbarSlider.hoverBackground':'#94A3B877','scrollbarSlider.activeBackground':'#64748B88'}});
+  monaco.editor.defineTheme('tools-dark',{base:'vs-dark',inherit:true,rules:[{token:'comment',foreground:'7C8DA6',fontStyle:'italic'},{token:'keyword',foreground:'60A5FA',fontStyle:'bold'},{token:'string',foreground:'6EE7B7'},{token:'number',foreground:'C4B5FD'},{token:'type',foreground:'5EEAD4'},{token:'tag',foreground:'60A5FA'},{token:'attribute.name',foreground:'C4B5FD'}],colors:{'editor.background':'#0F172A','editor.foreground':'#DBEAFE','editorLineNumber.foreground':'#64748B','editorLineNumber.activeForeground':'#CBD5E1','editorCursor.foreground':'#FFFFFF','editor.selectionBackground':'#1E40AF88','editor.inactiveSelectionBackground':'#1E3A5F66','editor.lineHighlightBackground':'#111C30','editorIndentGuide.background1':'#26354B','editorIndentGuide.activeBackground1':'#475569','editorGutter.background':'#111827','editorWidget.background':'#111827','editorWidget.border':'#334155','editorSuggestWidget.background':'#111827','editorSuggestWidget.border':'#334155','editorHoverWidget.background':'#111827','editorHoverWidget.border':'#334155','minimap.background':'#0B1120','scrollbarSlider.background':'#47556966','scrollbarSlider.hoverBackground':'#64748B88','scrollbarSlider.activeBackground':'#94A3B899'}});
+  monaco.editor.setTheme(state.coderDark?'tools-dark':'tools-light');
+}
+
+function registerSmartCompletions(){
+  if(!window.monaco||registerSmartCompletions.done)return;registerSmartCompletions.done=true;
+  const langs=['html','css','javascript','typescript','python','markdown'];
+  langs.forEach(lang=>monaco.languages.registerCompletionItemProvider(lang,{triggerCharacters:['/','.', '"', "'"],provideCompletionItems:(model,position)=>{
+    const word=model.getWordUntilPosition(position);const range={startLineNumber:position.lineNumber,endLineNumber:position.lineNumber,startColumn:word.startColumn,endColumn:word.endColumn};const files=Array.from(state.files.keys()).filter(p=>p!==state.activePath).slice(0,80);const suggestions=files.map(path=>({label:path,kind:monaco.languages.CompletionItemKind.File,insertText:path,range,detail:'Project file'}));
+    if(lang==='python')suggestions.push({label:'main guard',kind:monaco.languages.CompletionItemKind.Snippet,insertText:'if __name__ == "__main__":\n    ${1:main()}',insertTextRules:monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,range,detail:'Python entry-point pattern'});
+    if(lang==='javascript'||lang==='typescript')suggestions.push({label:'safe querySelector',kind:monaco.languages.CompletionItemKind.Snippet,insertText:'const ${1:element} = document.querySelector("${2:#selector}");\nif (${1:element}) {\n  ${3:// use element}\n}',insertTextRules:monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,range,detail:'Guard a DOM lookup before use'});
+    if(lang==='html')suggestions.push({label:'accessible button',kind:monaco.languages.CompletionItemKind.Snippet,insertText:'<button type="button" aria-label="${1:Action}">${2:Action}</button>',insertTextRules:monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,range,detail:'Button with explicit type and accessible name'});
+    return {suggestions};
+  }}));
+}
+
+const shellThemeObserver=new MutationObserver(()=>applyMonacoTheme());
+shellThemeObserver.observe(document.body,{attributes:true,attributeFilter:['class']});
+
+function initMonaco(){
+  function startMonaco(){
+    const amd=window.require;
+    if(!amd||!amd.config){$('#editorStatus').textContent='Built-in editor';return}
+    try{
+      amd.config({paths:{vs:'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs'}});
+      amd(['vs/editor/editor.main'],function(){
+        state.fallback=false;$('#fallbackWrap').style.display='none';$('#monacoEditor').style.display='block';
+        applyMonacoTheme();
+        state.editor=monaco.editor.create($('#monacoEditor'),{theme:state.coderDark?'tools-dark':'tools-light',automaticLayout:true,fontSize:13,lineHeight:21,fontLigatures:true,minimap:{enabled:true},wordWrap:'off',tabSize:2,insertSpaces:true,scrollBeyondLastLine:false,roundedSelection:false,padding:{top:10,bottom:10},renderWhitespace:'selection',bracketPairColorization:{enabled:true},guides:{bracketPairs:true},smoothScrolling:true,formatOnPaste:false,formatOnType:false});
+        state.editor.onDidChangeCursorPosition(e=>{$('#cursorStatus').textContent='Ln '+e.position.lineNumber+', Col '+e.position.column;if(state.bottomPanel==='coach')scheduleCoach(500)});
+        state.editor.addCommand(monaco.KeyMod.CtrlCmd|monaco.KeyCode.Enter,()=>runSmart(false));
+        state.editor.addCommand(monaco.KeyMod.CtrlCmd|monaco.KeyCode.KeyS,()=>downloadActive());
+        state.editor.addCommand(monaco.KeyMod.CtrlCmd|monaco.KeyMod.Shift|monaco.KeyCode.KeyP,()=>showPalette());
+        registerSmartCompletions();$('#editorStatus').textContent='Enhanced editor + Coach';syncActiveEditor();
+      },function(){ $('#editorStatus').textContent='Built-in editor'; });
+    }catch{$('#editorStatus').textContent='Built-in editor'}
+  }
+  if(window.require&&window.require.config){startMonaco();return}
+  const loader=document.createElement('script');
+  loader.src='https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js';
+  loader.async=true;
+  loader.onload=startMonaco;
+  loader.onerror=()=>{$('#editorStatus').textContent='Built-in editor'};
+  document.head.appendChild(loader);
+}
+
+function initA11y(){
+  const prefs=(()=>{try{return JSON.parse(localStorage.getItem(PREF_KEY)||'{}')}catch{return {}}})();
+  function setText(v){document.documentElement.dataset.textSize=v;$$('[data-text-size]').forEach(b=>b.classList.toggle('is-active',b.dataset.textSize===v));prefs.text=v;savePrefs()}
+  function setColour(v){document.documentElement.dataset.colourMode=v;$$('[data-color-mode]').forEach(b=>b.classList.toggle('is-active',b.dataset.colorMode===v));prefs.colour=v;savePrefs();applyMonacoTheme()}
+  function savePrefs(){try{localStorage.setItem(PREF_KEY,JSON.stringify(prefs))}catch{}}
+  $('#a11y-button').addEventListener('click',()=>{const p=$('#a11y-panel');const open=p.classList.toggle('is-open');$('#a11y-button').setAttribute('aria-expanded',String(open))});
+  $$('[data-text-size]').forEach(b=>b.addEventListener('click',()=>setText(b.dataset.textSize)));$$('[data-color-mode]').forEach(b=>b.addEventListener('click',()=>setColour(b.dataset.colorMode)));
+  [['underline-toggle','underline-links','underline'],['motion-toggle','reduce-motion','motion'],['focus-toggle','strong-focus','focus']].forEach(([id,cls,key])=>{const el=$('#'+id);el.checked=!!prefs[key];document.documentElement.classList.toggle(cls,el.checked);el.addEventListener('change',()=>{prefs[key]=el.checked;document.documentElement.classList.toggle(cls,el.checked);savePrefs()})});
+  setText(prefs.text||'normal');setColour(prefs.colour||'normal');
+  document.addEventListener('click',e=>{if(!e.target.closest('.tools-global-header-actions')){$('#a11y-panel').classList.remove('is-open');$('#a11y-button').setAttribute('aria-expanded','false')}})
+}
+
+function toggleToolbarMenu(buttonId,panelId,event){
+  if(event)event.stopPropagation();
+  const panel=$('#'+panelId),button=$('#'+buttonId);const open=!panel.classList.contains('show');
+  $$('.toolbar-popover').forEach(p=>p.classList.remove('show'));$$('.toolbar-menu > button').forEach(b=>b.setAttribute('aria-expanded','false'));
+  if(open){panel.classList.add('show');button.setAttribute('aria-expanded','true')}
+}
+function closeToolbarMenus(){$$('.toolbar-popover').forEach(p=>p.classList.remove('show'));$$('.toolbar-menu > button').forEach(b=>b.setAttribute('aria-expanded','false'))}
+function startBlankProject(){resetToDefault();renderTree();renderTabs();syncActiveEditor();$('#consoleOutput').innerHTML='';logConsole('system','Blank workspace ready. Your previously saved session remains available under Project > Restore last session.');closeToolbarMenus()}
+function restoreLastSession(){
+  resetToDefault();
+  if(loadLocal()){renderTree();renderTabs();syncActiveEditor();logConsole('system','Last saved browser session restored.');toast('Last session restored.')}else{renderTree();renderTabs();syncActiveEditor();toast('No saved session found.');}
+  closeToolbarMenus();
+}
+$('#projectMenuBtn').addEventListener('click',e=>toggleToolbarMenu('projectMenuBtn','projectMenuPanel',e));
+$('#exportMenuBtn').addEventListener('click',e=>toggleToolbarMenu('exportMenuBtn','exportMenuPanel',e));
+$('#blankProjectBtn').addEventListener('click',startBlankProject);$('#starterTemplatesBtn').addEventListener('click',showTemplateModal);$('#restoreProjectBtn').addEventListener('click',restoreLastSession);$('#saveSessionBtn').addEventListener('click',()=>{state.sessionTouched=true;saveLocal(true);toast('Session saved in this browser.');closeToolbarMenus()});$('#offlineCacheBtn').addEventListener('click',prepareOfflineMode);
+
+$('#newFileBtn').addEventListener('click',()=>showInputModal('new'));$('#explorerNewBtn').addEventListener('click',()=>showInputModal('new'));
+$('#renameBtn').addEventListener('click',()=>{if(state.selectedPath)showInputModal('rename',state.selectedPath);else toast('Select a file first.')});$('#deleteBtn').addEventListener('click',deleteSelected);
+$('#openFiles').addEventListener('change',e=>{importFileList(e.target.files);e.target.value='';closeImportMenu()});$('#openFolder').addEventListener('change',e=>{importFileList(e.target.files);e.target.value='';closeImportMenu()});$('#openZip').addEventListener('change',e=>{importZip(e.target.files[0]);e.target.value='';closeImportMenu()});
+function closeImportMenu(){closeToolbarMenus()}
+$('#importMenuBtn').addEventListener('click',e=>toggleToolbarMenu('importMenuBtn','importMenuPanel',e));
+document.addEventListener('click',e=>{if(!e.target.closest('.toolbar-menu'))closeToolbarMenus()});
+$('#saveActiveBtn').addEventListener('click',()=>{downloadActive();closeToolbarMenus()});$('#exportProjectBtn').addEventListener('click',()=>{exportProject();closeToolbarMenus()});$('#runBtn').addEventListener('click',()=>runSmart(false));$('#openPreviewBtn').addEventListener('click',()=>runSmart(true));$('#commandBtn').addEventListener('click',showPalette);$('#projectSearchBtn').addEventListener('click',showProjectSearch);$('#formatBtn').addEventListener('click',formatActive);$('#clearConsoleBtn').addEventListener('click',()=>$('#consoleOutput').innerHTML='');
+$('#coderThemeBtn').addEventListener('click',()=>setCoderTheme(!state.coderDark));$('#consoleTabBtn').addEventListener('click',()=>setBottomPanel('console'));$('#coachTabBtn').addEventListener('click',()=>setBottomPanel('coach'));$('#coachHintBtn').addEventListener('click',bestCoachHint);$('#coachExplainBtn').addEventListener('click',explainCurrentLine);$('#coachProjectBtn').addEventListener('click',runProjectDiagnosis);
+$('#projectName').addEventListener('input',scheduleSave);$('#modalCancel').addEventListener('click',hideInputModal);$('#modalConfirm').addEventListener('click',confirmInputModal);$('#modalInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmInputModal();if(e.key==='Escape')hideInputModal()});$('#inputModal').addEventListener('click',e=>{if(e.target===$('#inputModal'))hideInputModal()});
+$('#templateSelect').addEventListener('change',updateTemplateHelp);$('#templateCancelBtn').addEventListener('click',hideTemplateModal);$('#templateCreateBtn').addEventListener('click',createStarterProject);$('#templateModal').addEventListener('click',e=>{if(e.target===$('#templateModal'))hideTemplateModal()});
+$('#projectSearchRunBtn').addEventListener('click',renderProjectSearch);$('#projectReplaceAllBtn').addEventListener('click',replaceProjectMatches);$('#projectSearchCloseBtn').addEventListener('click',hideProjectSearch);$('#projectSearchInput').addEventListener('input',renderProjectSearch);$('#projectSearchCase').addEventListener('change',renderProjectSearch);$('#projectSearchRegex').addEventListener('change',renderProjectSearch);$('#projectSearchModal').addEventListener('click',e=>{if(e.target===$('#projectSearchModal'))hideProjectSearch()});
+$('#queueInputBtn').addEventListener('click',queuePythonInput);$('#clearInputQueueBtn').addEventListener('click',clearPythonInputQueue);$('#consoleInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();queuePythonInput()}});
+
+$('#paletteInput').addEventListener('input',e=>renderPalette(e.target.value));$('#paletteInput').addEventListener('keydown',e=>{if(e.key==='Escape')hidePalette();if(e.key==='Enter'){const first=$('.palette-item',$('#paletteList'));if(first)first.click()}});$('#commandPalette').addEventListener('click',e=>{if(e.target===$('#commandPalette'))hidePalette()});
+window.addEventListener('message',e=>{const d=e.data;if(d&&d.__browserCodeStudio)logConsole(['log','info','warn','error','system'].includes(d.level)?d.level:'log',...(d.args||[]))});
+window.addEventListener('beforeunload',()=>{if(state.sessionTouched)saveLocal(false)});
+window.addEventListener('keydown',e=>{
+  const mod=e.ctrlKey||e.metaKey;
+  if(mod&&e.key.toLowerCase()==='s'){e.preventDefault();downloadActive()}
+  if(mod&&e.key.toLowerCase()==='n'){e.preventDefault();showInputModal('new')}
+  if(mod&&e.shiftKey&&e.key.toLowerCase()==='p'){e.preventDefault();showPalette()}
+  if(mod&&e.shiftKey&&e.key.toLowerCase()==='f'){e.preventDefault();showProjectSearch()}
+  if(mod&&e.key==='Enter'){e.preventDefault();runSmart(false)}
+  if(e.key==='F2'&&state.selectedPath){e.preventDefault();showInputModal('rename',state.selectedPath)}
+  if(e.shiftKey&&e.altKey&&e.key.toLowerCase()==='f'){e.preventDefault();formatActive()}
+  if(e.key==='Escape'){hidePalette();hideInputModal();hideTemplateModal();hideProjectSearch()}
+});
+
+document.getElementById('year').textContent=new Date().getFullYear();
+initFallback();initCoderTheme();resetToDefault();renderTree();renderTabs();syncActiveEditor();setBottomPanel('console');updateStdinQueueUi();updateTemplateHelp();logConsole('system','Blank workspace ready. Create a file or import a project to begin.');initOfflineSupport();initMonaco();
+})();
+</script>
+<script src="../../Assets/site-shell.js?v=mk126"></script>
+</body>
+</html>

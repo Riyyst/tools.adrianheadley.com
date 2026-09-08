@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="#f5f5f7" name="theme-color"/>
+
+<title>IP &amp; ASN Lookup | Adrian Headley Tools</title>
+<meta name="description" content="Look up a public IP address or autonomous system number for network ownership, prefix, reverse DNS, routing, RPKI, abuse contacts, announced prefixes, routing neighbours and approximate public IP geolocation."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/ip-asn-lookup.html"/>
+
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="IP &amp; ASN Lookup | Adrian Headley Tools"/>
+<meta property="og:description" content="Inspect public IP and autonomous system network information."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/ip-asn-lookup.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="IP &amp; ASN Lookup | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Inspect network ownership, prefixes, routing, RPKI, reverse DNS and public IP geolocation."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/ip-asn-lookup.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/ip-asn-lookup.html","name":"IP & ASN Lookup","description":"Look up a public IP address or autonomous system number for network-level public information.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/ip-asn-lookup.html#breadcrumb"},"dateModified":"2026-09-07","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/ip-asn-lookup.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/ip-asn-lookup.html#app","name":"IP & ASN Lookup","url":"https://tools.adrianheadley.com/pages/toolpages/ip-asn-lookup.html","description":"Inspect public IP and ASN network information without requiring a domain name.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern browser with JavaScript enabled and internet access.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Accept a public IPv4 address, IPv6 address or ASN such as AS15169.","Show the network prefix, originating ASN and ASN holder where public routing data is available.","Resolve public reverse DNS for IP addresses.","Show routing status and RPKI validation where available.","Show public abuse-contact information returned by RIPEstat.","Show announced prefixes and routing neighbours for autonomous systems.","Show approximate public IP geolocation for IP inputs.","Copy or export the report using the site-wide PDF template."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/ip-asn-lookup.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"IP & ASN Lookup","item":"https://tools.adrianheadley.com/pages/toolpages/ip-asn-lookup.html"}]}]}</script>
+
+<style>
+:root{
+  --bg:#f5f5f7;--text:#111827;--text-soft:#4b5563;--accent:#2563eb;--accent-hover:#1d4ed8;
+  --border-subtle:#e5e7eb;--border-strong:#d1d5db;--shadow-soft:0 12px 30px rgba(15,23,42,.08);
+  --radius-pill:999px;--max-w:1080px
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%;overflow-x:hidden}
+body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}
+main{flex:1}
+.container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+.skip-link{position:absolute;left:-999px;top:.5rem;padding:.45rem .75rem;background:#111827;color:#f9fafb;z-index:100;border-radius:var(--radius-pill);font-size:.85rem}
+.skip-link:focus{left:.5rem}
+.intro{text-align:center;padding:2.6rem 0 2.4rem}
+.intro__title{font-size:clamp(2.1rem,3vw,2.6rem);line-height:1.15;margin:0 0 .8rem;font-weight:750;letter-spacing:-.03em}
+.intro__subtitle{max-width:780px;margin:0 auto;color:var(--text-soft);font-size:.96rem;font-weight:500}
+.tool{padding:2.4rem 0 4rem}
+.card{background:rgba(255,255,255,.92);border:1px solid var(--border-subtle);border-radius:24px;box-shadow:var(--shadow-soft);padding:clamp(1.2rem,3vw,1.7rem);max-width:1080px;margin:0 auto}
+.lookup-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:.7rem;align-items:end}
+.field label{display:block;margin:0 0 .35rem;color:var(--text-soft);font-size:.85rem;font-weight:700}
+.field input{width:100%;min-height:44px;padding:.72rem .9rem;border:1px solid var(--border-strong);border-radius:14px;background:#fff;color:var(--text);font:inherit;outline:none;transition:border-color .16s,box-shadow .16s}
+.field input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.11)}
+.btn,.mini-link{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border-radius:var(--radius-pill);font-weight:700;text-decoration:none;cursor:pointer}
+.btn{min-height:44px;padding:.65rem 1.2rem;border:1px solid transparent;background:var(--accent);color:#fff;font-size:.85rem;transition:background .16s,transform .14s,box-shadow .16s}
+.btn:hover:not(:disabled){background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 10px 24px rgba(37,99,235,.18)}
+.btn.secondary{background:#fff;color:var(--text);border-color:var(--border-strong);box-shadow:none}
+.btn.secondary:hover:not(:disabled){background:#f8fafc;box-shadow:none}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.mini-link{min-height:32px;padding:.32rem .62rem;border:1px solid rgba(37,99,235,.22);background:#fff;color:var(--accent);font-size:.74rem}
+#status.progress-status{--progress-fill:0%;position:relative;overflow:hidden;min-height:3.25rem;display:flex;align-items:center;justify-content:center;padding:.65rem .8rem;border:1px solid #bfdbfe;border-radius:12px;background:linear-gradient(90deg,rgba(37,99,235,.20) 0 var(--progress-fill),#f8fafc var(--progress-fill) 100%)!important;color:#334155!important}
+#status.progress-status.is-complete{background:#2563eb!important;border-color:#2563eb!important;color:#fff!important}
+#status.progress-status:empty{display:none!important}
+.status{min-height:1.4rem;margin-top:.75rem;text-align:center;color:var(--text-soft);font-size:.84rem;font-weight:650}
+.status.error{color:#b91c1c}.status.success{color:#047857}
+.results{display:grid;gap:1rem;margin-top:1rem}.hidden{display:none!important}
+.section{border:1px solid var(--border-subtle);border-radius:20px;background:#f8fafc;padding:1rem}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-bottom:.75rem}
+.section h2{margin:0;font-size:1rem;line-height:1.25}
+.summary-grid,.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.65rem}
+.kv{min-width:0;padding:.75rem .82rem;border:1px solid var(--border-subtle);border-radius:14px;background:#fff}
+.kv span{display:block;color:var(--text-soft);font-size:.72rem;font-weight:760;margin-bottom:.14rem}
+.kv b{display:block;color:var(--text);font-size:.88rem;font-weight:800;overflow-wrap:anywhere}
+.kv.full{grid-column:1/-1}
+.records-wrap{overflow:auto;border:1px solid var(--border-subtle);border-radius:14px;background:#fff}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{padding:.64rem .7rem;border-bottom:1px solid var(--border-subtle);text-align:left;vertical-align:top}
+th{background:#f8fafc;color:var(--text-soft);font-size:.72rem;font-weight:800}
+td{font-size:.78rem;overflow-wrap:anywhere}
+tr:last-child td{border-bottom:0}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{display:inline-flex;align-items:center;min-height:29px;padding:.25rem .54rem;border:1px solid var(--border-subtle);border-radius:999px;background:#fff;color:#334155;font-size:.72rem;font-weight:700}
+.result-actions{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.actions{display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;margin-top:.7rem}
+.raw{border:1px solid var(--border-subtle);border-radius:14px;background:#fff;overflow:hidden}
+.raw summary{cursor:pointer;padding:.7rem .8rem;font-size:.8rem;font-weight:750}
+.raw pre{margin:0;padding:.8rem;border-top:1px solid var(--border-subtle);background:#111827;color:#e5e7eb;max-height:420px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.72rem}
+@media(max-width:850px){.summary-grid,.detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.container{width:min(100% - 2rem,var(--max-w))}.intro{padding:2rem 0 2.1rem}.tool{padding:1.6rem 0 3rem}.lookup-row{grid-template-columns:1fr}.lookup-row .btn{width:100%}.summary-grid,.detail-grid{grid-template-columns:1fr}}
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk126">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">IP &amp; ASN Lookup</h1>
+      <p class="intro__subtitle">Inspect a public IP address or autonomous system directly, without needing to start from a domain name.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="card" role="region" aria-label="IP and ASN lookup">
+        <div class="lookup-row">
+          <div class="field">
+            <label for="resourceInput">Public IP address or ASN</label>
+            <input id="resourceInput" type="text" autocomplete="off" spellcheck="false" placeholder="8.8.8.8 or AS15169"/>
+          </div>
+          <button class="btn" id="lookupBtn" type="button">Look Up</button>
+          <button class="btn secondary" id="clearBtn" type="button">Clear</button>
+        </div>
+
+        <div class="status" id="status" aria-live="polite"></div>
+
+        <div class="results hidden" id="results">
+          <section class="section">
+            <div class="section-head"><h2>Overview</h2></div>
+            <div class="summary-grid">
+              <div class="kv"><span>Resource</span><b id="sumResource">—</b></div>
+              <div class="kv"><span>Type</span><b id="sumType">—</b></div>
+              <div class="kv"><span>ASN</span><b id="sumAsn">—</b></div>
+              <div class="kv"><span>Holder</span><b id="sumHolder">—</b></div>
+            </div>
+            <div class="actions" id="overviewActions"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Network &amp; routing</h2></div>
+            <div class="detail-grid" id="networkGrid"></div>
+          </section>
+
+          <section class="section hidden" id="geoSection">
+            <div class="section-head"><h2>Approximate IP location</h2></div>
+            <div class="detail-grid" id="geoGrid"></div>
+          </section>
+
+          <section class="section hidden" id="prefixSection">
+            <div class="section-head"><h2>Announced prefixes</h2></div>
+            <div class="records-wrap">
+              <table>
+                <thead><tr><th>Prefix</th><th>First seen</th><th>Last seen</th></tr></thead>
+                <tbody id="prefixBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section hidden" id="neighbourSection">
+            <div class="section-head"><h2>Routing neighbours</h2></div>
+            <div class="records-wrap">
+              <table>
+                <thead><tr><th>ASN</th><th>Type</th><th>Power</th></tr></thead>
+                <tbody id="neighbourBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Public contacts</h2></div>
+            <div class="chips" id="contactChips"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Raw data</h2></div>
+            <details class="raw">
+              <summary>View raw network data</summary>
+              <pre id="rawData"></pre>
+            </details>
+          </section>
+
+          <div class="result-actions">
+            <button class="btn secondary" id="copyReportBtn" type="button">Copy report</button>
+            <button class="btn secondary" id="savePdfBtn" type="button">Save PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="../../Assets/pdf-export.js?v=mk124"></script>
+<script>
+(function(){
+'use strict';
+
+const RIPE='https://stat.ripe.net/data';
+const DNS='https://dns.google/resolve';
+const IPWHO='https://ipwho.is/';
+const TIMEOUT=14000;
+
+const input=document.getElementById('resourceInput');
+const lookupBtn=document.getElementById('lookupBtn');
+const clearBtn=document.getElementById('clearBtn');
+const statusEl=document.getElementById('status');
+const results=document.getElementById('results');
+
+const sumResource=document.getElementById('sumResource');
+const sumType=document.getElementById('sumType');
+const sumAsn=document.getElementById('sumAsn');
+const sumHolder=document.getElementById('sumHolder');
+const overviewActions=document.getElementById('overviewActions');
+const networkGrid=document.getElementById('networkGrid');
+const geoSection=document.getElementById('geoSection');
+const geoGrid=document.getElementById('geoGrid');
+const prefixSection=document.getElementById('prefixSection');
+const prefixBody=document.getElementById('prefixBody');
+const neighbourSection=document.getElementById('neighbourSection');
+const neighbourBody=document.getElementById('neighbourBody');
+const contactChips=document.getElementById('contactChips');
+const rawData=document.getElementById('rawData');
+const copyReportBtn=document.getElementById('copyReportBtn');
+const savePdfBtn=document.getElementById('savePdfBtn');
+
+let progress=0;
+let active=false;
+let lastReport=null;
+
+function esc(v){
+  return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+}
+
+function setStatus(msg='',type=''){
+  statusEl.textContent=msg;
+  statusEl.className='status'+(type?' '+type:'')+(active?' progress-status':'');
+  if(active){
+    statusEl.classList.add('progress-status');
+    statusEl.classList.toggle('is-complete',progress>=100);
+    statusEl.style.setProperty('--progress-fill',progress+'%');
+    statusEl.setAttribute('role','progressbar');
+    statusEl.setAttribute('aria-valuemin','0');
+    statusEl.setAttribute('aria-valuemax','100');
+    statusEl.setAttribute('aria-valuenow',String(Math.round(progress)));
+  }else{
+    statusEl.classList.remove('progress-status','is-complete');
+    statusEl.style.removeProperty('--progress-fill');
+    ['role','aria-valuemin','aria-valuemax','aria-valuenow'].forEach(a=>statusEl.removeAttribute(a));
+  }
+}
+
+function setProgress(v){
+  progress=Math.max(progress,Math.max(0,Math.min(100,Number(v)||0)));
+  active=true;
+  setStatus(statusEl.textContent);
+}
+
+function resetProgress(){progress=0;active=false;setStatus(statusEl.textContent)}
+
+function setBusy(v){
+  lookupBtn.disabled=v;clearBtn.disabled=v;
+  lookupBtn.textContent=v?'Looking up…':'Look Up';
+}
+
+function isIPv4(v){
+  const parts=String(v).split('.');
+  return parts.length===4&&parts.every(p=>/^\d+$/.test(p)&&Number(p)>=0&&Number(p)<=255);
+}
+
+function isIPv6(v){
+  const s=String(v);
+  return s.includes(':')&&/^[0-9a-f:]+$/i.test(s);
+}
+
+function isPrivateIPv4(v){
+  if(!isIPv4(v)) return false;
+  const p=v.split('.').map(Number);
+  return p[0]===10||p[0]===127||(p[0]===192&&p[1]===168)||(p[0]===172&&p[1]>=16&&p[1]<=31)||(p[0]===169&&p[1]===254);
+}
+
+function normaliseResource(v){
+  const raw=String(v||'').trim();
+  if(!raw) throw new Error('Enter a public IP address or ASN.');
+
+  if(/^as\d+$/i.test(raw)){
+    const n=raw.replace(/^as/i,'');
+    if(!/^\d+$/.test(n)||Number(n)<=0) throw new Error('Enter a valid ASN.');
+    return {type:'asn',resource:'AS'+n,asn:'AS'+n};
+  }
+
+  if(/^\d+$/.test(raw)){
+    const n=Number(raw);
+    if(n>0) return {type:'asn',resource:'AS'+raw,asn:'AS'+raw};
+  }
+
+  if(isIPv4(raw)){
+    if(isPrivateIPv4(raw)) throw new Error('Enter a public IP address, not a private or local address.');
+    return {type:'ip',resource:raw,version:'IPv4'};
+  }
+
+  if(isIPv6(raw)){
+    const low=raw.toLowerCase();
+    if(low==='::1'||low.startsWith('fc')||low.startsWith('fd')||low.startsWith('fe80:')){
+      throw new Error('Enter a public IP address, not a private or local address.');
+    }
+    return {type:'ip',resource:raw,version:'IPv6'};
+  }
+
+  throw new Error('Enter a valid public IPv4 address, IPv6 address or ASN such as AS15169.');
+}
+
+async function fetchTimeout(url,opts={}){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),TIMEOUT);
+  try{return await fetch(url,{...opts,signal:controller.signal,credentials:'omit'})}
+  finally{clearTimeout(timer)}
+}
+
+async function ripe(endpoint,params){
+  try{
+    const qs=new URLSearchParams(params);
+    const r=await fetchTimeout(`${RIPE}/${endpoint}/data.json?${qs}`,{headers:{Accept:'application/json'},cache:'no-store'});
+    if(!r.ok) return null;
+    const j=await r.json();
+    return j?.data??null;
+  }catch(_){return null}
+}
+
+async function ptr(ip){
+  try{
+    const r=await fetchTimeout(`${DNS}?name=${encodeURIComponent(reverseName(ip))}&type=PTR`,{headers:{Accept:'application/dns-json'},cache:'no-store'});
+    if(!r.ok) return [];
+    const j=await r.json();
+    return [...new Set((j.Answer||[]).map(x=>String(x.data||'').replace(/\.$/,'')))];
+  }catch(_){return []}
+}
+
+function reverseName(ip){
+  if(isIPv4(ip)) return ip.split('.').reverse().join('.')+'.in-addr.arpa';
+  const hex=ip.toLowerCase().split(':');
+  const full=[];
+  const empty=hex.indexOf('');
+  if(empty!==-1){
+    const left=hex.slice(0,empty);
+    const right=hex.slice(empty+1).filter(Boolean);
+    const missing=8-left.length-right.length;
+    full.push(...left,...Array(missing).fill('0'),...right);
+  }else full.push(...hex);
+  const padded=full.map(x=>x.padStart(4,'0')).join('');
+  return padded.split('').reverse().join('.')+'.ip6.arpa';
+}
+
+async function geo(ip){
+  try{
+    const r=await fetchTimeout(IPWHO+encodeURIComponent(ip),{headers:{Accept:'application/json'},cache:'no-store'});
+    if(!r.ok) return null;
+    const j=await r.json();
+    return j?.success===false?null:j;
+  }catch(_){return null}
+}
+
+function addKv(parent,label,value,full=false){
+  const el=document.createElement('div');
+  el.className='kv'+(full?' full':'');
+  el.innerHTML=`<span>${esc(label)}</span><b>${esc(value||'Not available')}</b>`;
+  parent.appendChild(el);
+}
+
+function asnFromNetworkInfo(data){
+  const list=data?.asns||data?.asn||[];
+  if(Array.isArray(list)&&list.length) return 'AS'+String(list[0]).replace(/^AS/i,'');
+  if(typeof list==='number'||typeof list==='string'){
+    const v=String(list);
+    return /^AS/i.test(v)?v.toUpperCase():'AS'+v;
+  }
+  return '';
+}
+
+function holderFromOverview(data){
+  return data?.holder||data?.holder_name||data?.description||'Not available';
+}
+
+function extractContacts(data){
+  const found=[];
+  const add=v=>{
+    if(!v) return;
+    if(Array.isArray(v)) v.forEach(add);
+    else if(typeof v==='string'){
+      const matches=v.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/ig)||[];
+      matches.forEach(x=>found.push(x.toLowerCase()));
+    }else if(typeof v==='object'){
+      Object.values(v).forEach(add);
+    }
+  };
+  add(data);
+  return [...new Set(found)];
+}
+
+function renderNetwork(data){
+  networkGrid.innerHTML='';
+  addKv(networkGrid,'Prefix',data.prefix||'Not available');
+  addKv(networkGrid,'Reverse DNS',data.ptr.join(', ')||'None returned');
+  addKv(networkGrid,'Routing status',data.routing||'Not available');
+  addKv(networkGrid,'RPKI',data.rpki||'Not available');
+  addKv(networkGrid,'ASN announced',data.announced===true?'Yes':data.announced===false?'No':'Not available');
+  addKv(networkGrid,'ASN block',data.asBlock||'Not available');
+  addKv(networkGrid,'Registry',data.registry||'Not available');
+  addKv(networkGrid,'Resource name',data.resourceName||'Not available');
+}
+
+function renderGeo(g){
+  geoGrid.innerHTML='';
+  if(!g){geoSection.classList.add('hidden');return}
+  geoSection.classList.remove('hidden');
+  addKv(geoGrid,'Country',g.country||'Not available');
+  addKv(geoGrid,'Region',g.region||'Not available');
+  addKv(geoGrid,'City',g.city||'Not available');
+  addKv(geoGrid,'Timezone',g.timezone?.id||'Not available');
+  addKv(geoGrid,'Latitude',g.latitude!=null?String(g.latitude):'Not available');
+  addKv(geoGrid,'Longitude',g.longitude!=null?String(g.longitude):'Not available');
+  addKv(geoGrid,'ISP',g.connection?.isp||'Not available');
+  addKv(geoGrid,'Organisation',g.connection?.org||'Not available');
+}
+
+function renderPrefixes(items){
+  prefixBody.innerHTML='';
+  if(!items.length){prefixSection.classList.add('hidden');return}
+  prefixSection.classList.remove('hidden');
+  items.slice(0,100).forEach(item=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${esc(item.prefix||item)}</td><td>${esc(item.timelines?.[0]?.starttime||item.first_seen||'—')}</td><td>${esc(item.timelines?.[0]?.endtime||item.last_seen||'—')}</td>`;
+    prefixBody.appendChild(tr);
+  });
+}
+
+function renderNeighbours(items){
+  neighbourBody.innerHTML='';
+  if(!items.length){neighbourSection.classList.add('hidden');return}
+  neighbourSection.classList.remove('hidden');
+  items.slice(0,100).forEach(item=>{
+    const asn=item.asn||item.neighbour||item.resource||'';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${esc(/^AS/i.test(String(asn))?asn:'AS'+asn)}</td><td>${esc(item.type||item.relationship||'—')}</td><td>${esc(item.power!=null?String(item.power):'—')}</td>`;
+    neighbourBody.appendChild(tr);
+  });
+}
+
+function renderContacts(items){
+  contactChips.innerHTML='';
+  if(!items.length){
+    const c=document.createElement('span');c.className='chip';c.textContent='No public abuse email returned';contactChips.appendChild(c);return;
+  }
+  items.forEach(v=>{const c=document.createElement('span');c.className='chip';c.textContent=v;contactChips.appendChild(c)});
+}
+
+function buildReport(r){
+  const lines=[
+    `IP & ASN Lookup: ${r.resource}`,
+    '',
+    'Overview:',
+    `Type: ${r.type}`,
+    `ASN: ${r.asn||'Not available'}`,
+    `Holder: ${r.holder||'Not available'}`,
+    `Prefix: ${r.prefix||'Not available'}`,
+    `Reverse DNS: ${r.ptr.join(', ')||'None returned'}`,
+    `Routing status: ${r.routing||'Not available'}`,
+    `RPKI: ${r.rpki||'Not available'}`,
+    `Registry: ${r.registry||'Not available'}`,
+    '',
+    'Public abuse contacts:',
+    ...(r.contacts.length?r.contacts:['None returned']),
+    '',
+    'Announced prefixes:',
+    ...(r.prefixes.length?r.prefixes.slice(0,100).map(x=>x.prefix||String(x)):['None returned']),
+    '',
+    'Routing neighbours:',
+    ...(r.neighbours.length?r.neighbours.slice(0,100).map(x=>{
+      const n=x.asn||x.neighbour||x.resource||'';
+      return `${/^AS/i.test(String(n))?n:'AS'+n} · ${x.type||x.relationship||'Unknown'}`;
+    }):['None returned'])
+  ];
+
+  if(r.geo){
+    lines.push(
+      '',
+      'Approximate public IP geolocation:',
+      `Country: ${r.geo.country||'Not available'}`,
+      `Region: ${r.geo.region||'Not available'}`,
+      `City: ${r.geo.city||'Not available'}`,
+      `Timezone: ${r.geo.timezone?.id||'Not available'}`,
+      `ISP: ${r.geo.connection?.isp||'Not available'}`,
+      `Organisation: ${r.geo.connection?.org||'Not available'}`
+    );
+  }
+
+  return lines.join('\n');
+}
+
+async function lookup(){
+  let parsed;
+  try{parsed=normaliseResource(input.value)}
+  catch(e){resetProgress();setStatus(e.message,'error');return}
+
+  input.value=parsed.resource;
+  results.classList.add('hidden');
+  geoSection.classList.add('hidden');
+  prefixSection.classList.add('hidden');
+  neighbourSection.classList.add('hidden');
+  resetProgress();setProgress(4);setBusy(true);setStatus('Looking up public network information…');
+
+  try{
+    let asn=parsed.asn||'';
+    let prefix='';
+    let ptrNames=[];
+    let geoData=null;
+    let networkInfo=null;
+
+    if(parsed.type==='ip'){
+      const [net,ptrResult,geoResult]=await Promise.all([
+        ripe('network-info',{resource:parsed.resource}),
+        ptr(parsed.resource),
+        geo(parsed.resource)
+      ]);
+      networkInfo=net;
+      asn=asnFromNetworkInfo(net);
+      prefix=net?.prefix||'';
+      ptrNames=ptrResult;
+      geoData=geoResult;
+    }
+
+    setProgress(35);setStatus('Checking ASN ownership and routing…');
+
+    const overviewPromise=asn?ripe('as-overview',{resource:asn}):Promise.resolve(null);
+    const abusePromise=ripe('abuse-contact-finder',{resource:parsed.resource});
+    const routePromise=ripe('routing-status',{resource:parsed.resource});
+    const prefixesPromise=asn?ripe('announced-prefixes',{resource:asn}):Promise.resolve(null);
+    const neighboursPromise=asn?ripe('asn-neighbours',{resource:asn}):Promise.resolve(null);
+
+    const [overview,abuse,routing,prefixesData,neighboursData]=await Promise.all([
+      overviewPromise,abusePromise,routePromise,prefixesPromise,neighboursPromise
+    ]);
+
+    if(!prefix&&routing?.first_seen?.prefix) prefix=routing.first_seen.prefix;
+    if(!prefix&&routing?.prefix) prefix=routing.prefix;
+
+    setProgress(68);setStatus('Checking RPKI and public contacts…');
+
+    const rpkiData=(asn&&prefix)
+      ?await ripe('rpki-validation',{resource:asn,prefix})
+      :null;
+
+    const holder=holderFromOverview(overview);
+    const contacts=extractContacts(abuse);
+    const prefixes=prefixesData?.prefixes||prefixesData?.announced_prefixes||[];
+    const neighbours=neighboursData?.neighbours||neighboursData?.data||[];
+
+    let routingText='Not available';
+    if(routing){
+      if(routing.visibility!=null) routingText=`Visibility ${routing.visibility}`;
+      else if(routing.routed===true) routingText='Routed';
+      else if(routing.routed===false) routingText='Not routed';
+      else if(routing.status) routingText=String(routing.status);
+    }
+
+    let rpkiText='Not available';
+    if(rpkiData){
+      rpkiText=String(rpkiData.status||rpkiData.validity||rpkiData.state||'Available');
+    }
+
+    const data={
+      resource:parsed.resource,
+      type:parsed.type==='ip'?(parsed.version||'IP'):'ASN',
+      asn,
+      holder,
+      prefix,
+      ptr:ptrNames,
+      routing:routingText,
+      rpki:rpkiText,
+      announced:overview?.announced,
+      asBlock:overview?.block?.resource||overview?.block||'',
+      registry:overview?.registry||networkInfo?.registry||geoData?.connection?.asn?'Public registry data':'',
+      resourceName:overview?.resource||asn||parsed.resource,
+      contacts,
+      prefixes,
+      neighbours,
+      geo:geoData,
+      raw:{networkInfo,overview,abuse,routing,rpkiData,prefixesData,neighboursData,geoData}
+    };
+
+    sumResource.textContent=data.resource;
+    sumType.textContent=data.type;
+    sumAsn.textContent=data.asn||'Not available';
+    sumHolder.textContent=data.holder||'Not available';
+
+    renderNetwork(data);
+    renderGeo(data.geo);
+    renderPrefixes(data.prefixes);
+    renderNeighbours(data.neighbours);
+    renderContacts(data.contacts);
+
+    overviewActions.innerHTML='';
+    if(data.asn){
+      const a=document.createElement('a');
+      a.className='mini-link';a.target='_blank';a.rel='noopener noreferrer';
+      a.href=`https://stat.ripe.net/${encodeURIComponent(data.asn)}`;
+      a.textContent='Open in RIPEstat';
+      overviewActions.appendChild(a);
+    }
+
+    rawData.textContent=JSON.stringify(data.raw,null,2);
+    lastReport={resource:data.resource,text:buildReport(data)};
+
+    setProgress(100);results.classList.remove('hidden');setStatus('IP / ASN lookup complete.','success');
+  }catch(e){
+    resetProgress();setStatus(e.message||'The lookup could not be completed.','error');
+  }finally{
+    setBusy(false);
+  }
+}
+
+function clearAll(){
+  input.value='';results.classList.add('hidden');
+  geoSection.classList.add('hidden');prefixSection.classList.add('hidden');neighbourSection.classList.add('hidden');
+  [networkGrid,geoGrid,prefixBody,neighbourBody,contactChips,overviewActions].forEach(el=>el.innerHTML='');
+  sumResource.textContent='—';sumType.textContent='—';sumAsn.textContent='—';sumHolder.textContent='—';
+  rawData.textContent='';lastReport=null;resetProgress();setStatus('');input.focus();
+}
+
+async function copyReport(){
+  if(!lastReport?.text) return;
+  const original=copyReportBtn.textContent;
+  try{
+    if(navigator.clipboard&&window.isSecureContext) await navigator.clipboard.writeText(lastReport.text);
+    else{
+      const t=document.createElement('textarea');t.value=lastReport.text;t.style.position='fixed';t.style.opacity='0';
+      document.body.appendChild(t);t.select();const ok=document.execCommand('copy');t.remove();if(!ok) throw new Error();
+    }
+    copyReportBtn.textContent='Copied';setTimeout(()=>copyReportBtn.textContent=original,1200);
+  }catch(_){setStatus('Could not copy the report.','error')}
+}
+
+async function savePdf(){
+  if(!lastReport?.text) return;
+  const original=savePdfBtn.textContent;savePdfBtn.disabled=true;savePdfBtn.textContent='Creating PDF…';
+  try{
+    if(!window.ToolsPDFExport) throw new Error('PDF export could not load.');
+    await window.ToolsPDFExport.saveTextPdf({
+      title:'IP & ASN Lookup Report',
+      subtitle:lastReport.resource,
+      text:lastReport.text,
+      filename:'ip-asn-lookup.pdf'
+    });
+    savePdfBtn.textContent='Saved';setTimeout(()=>savePdfBtn.textContent=original,1200);
+  }catch(e){
+    setStatus(e.message||'Could not create the PDF report.','error');savePdfBtn.textContent=original;
+  }finally{savePdfBtn.disabled=false}
+}
+
+lookupBtn.addEventListener('click',lookup);
+clearBtn.addEventListener('click',clearAll);
+copyReportBtn.addEventListener('click',copyReport);
+savePdfBtn.addEventListener('click',savePdf);
+input.addEventListener('keydown',e=>{if(e.key==='Enter') lookup()});
+
+const preset=new URLSearchParams(location.search).get('q');
+if(preset){
+  input.value=preset;
+  lookup();
+}
+})();
+</script>
+<script src="../../Assets/site-shell.js?v=mk126"></script>
+</body>
+</html>

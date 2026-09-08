@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="Project investment growth, compounding, contributions, fees and estimated UK tax for taxable accounts, savings, ISAs, LISAs, pensions and a range of investment types."/>
+<meta name="theme-color" content="#f5f5f7"/>
+<title>Investment Calculator | Adrian Headley Tools</title>
+
+<style>
+:root{
+  --accent:#2563eb;
+  --accent-hover:#1d4ed8;
+  --accent-soft:rgba(37,99,235,.07);
+  --text:#111827;
+  --muted:#64748b;
+  --border:#e3e8ef;
+  --border-strong:#d1d8e2;
+  --panel:#f8fafc;
+  --good:#047857;
+  --bad:#b91c1c;
+  --warn:#946200;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;min-height:100%;scroll-behavior:smooth}
+body{
+  display:flex;flex-direction:column;
+  background:#f5f7fb;
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.5;
+}
+button,input,select{font:inherit}
+.riyst-main{min-height:0;flex:1}
+.riyst-container{width:min(1180px,calc(100% - 2rem));margin:0 auto}
+.container{width:min(920px,100%);margin:0 auto}
+.intro{text-align:center;padding:3rem 0 1.6rem}
+.intro h1{margin:0;font-size:clamp(2rem,4vw,2.75rem);font-weight:1000;letter-spacing:.3px;line-height:1.12;text-transform:uppercase}
+.intro p{margin:.35rem 0 0;color:#65748a}
+main > .riyst-container > section.container{padding-bottom:3.5rem}
+
+.card{
+  background:rgba(255,255,255,.96);
+  border:1px solid var(--border);
+  border-radius:24px;
+  box-shadow:0 12px 30px rgba(15,23,42,.08);
+  padding:clamp(1.15rem,3vw,1.7rem);
+}
+.section{padding-bottom:1rem;margin-bottom:1rem;border-bottom:1px solid #edf1f5}
+.section:last-of-type{border-bottom:0;margin-bottom:.25rem;padding-bottom:.25rem}
+.section-title{margin:0 0 .75rem;font-size:.94rem;font-weight:900}
+.section-copy{margin:-.45rem 0 .8rem;color:var(--muted);font-size:.75rem;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.field{display:flex;flex-direction:column;gap:.36rem;min-width:0}
+.field.full{grid-column:1/-1}
+.field label,.label{color:#475569;font-size:.82rem;font-weight:750}
+.help{color:#64748b;font-size:.71rem;font-weight:600;line-height:1.42}
+.input,.select{
+  width:100%;min-height:47px;border:1px solid var(--border-strong);border-radius:14px;
+  background:#fff;color:var(--text);outline:none;font-size:.95rem;font-weight:700;
+  transition:border-color .16s,box-shadow .16s;
+}
+.input{padding:.78rem 1rem}.select{padding:.78rem 2.2rem .78rem 1rem}
+.input:focus,.select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+.money,.suffix-wrap{position:relative}.money span,.suffix-wrap span{position:absolute;top:50%;transform:translateY(-50%);color:#64748b;font-weight:800;pointer-events:none}
+.money span{left:1rem}.money .input{padding-left:2rem}.suffix-wrap span{right:1rem}.suffix-wrap .input{padding-right:2.6rem}
+
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;padding:.4rem;border:1px solid var(--border);border-radius:16px;background:var(--panel)}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{min-height:40px;display:flex;align-items:center;justify-content:center;padding:.4rem .65rem;border-radius:999px;color:#64748b;font-size:.78rem;font-weight:800;cursor:pointer;text-align:center;transition:.16s}
+.seg input:checked + label{background:var(--accent);color:#fff}
+.conditional{display:none}.conditional.show{display:block}
+.tax-options{margin-top:.8rem;padding:.85rem;border:1px solid #e8edf4;border-radius:17px;background:#f8fafc}
+.tax-options .grid + .grid{margin-top:.75rem}
+
+.actions{display:flex;align-items:center;justify-content:center;gap:.65rem;flex-wrap:wrap;margin-top:1rem}
+.btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;border:1px solid transparent;border-radius:999px;background:var(--accent);color:#fff;font-size:.86rem;font-weight:700;padding:.65rem 1.35rem;cursor:pointer;transition:.16s}
+.btn:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 10px 25px rgba(37,99,235,.18)}
+.btn.secondary{background:#fff;color:#475569;border-color:#d8dee8;box-shadow:none}.btn.secondary:hover{background:#f8fafc;color:var(--accent);box-shadow:none}
+.status{min-height:1.3rem;margin-top:.7rem;text-align:center;color:var(--muted);font-size:.8rem;font-weight:650}.status.error{color:var(--bad)}
+
+.results{display:none;margin-top:1rem}.results.show{display:block}
+.summary-scroll{overflow-x:auto;scrollbar-width:thin;padding-bottom:.15rem}
+.summary{min-width:900px;display:grid;grid-template-columns:repeat(6,1fr);border:1px solid rgba(37,99,235,.17);border-radius:16px;background:var(--accent-soft);overflow:hidden}
+.summary-item{padding:.72rem .65rem;text-align:center;border-right:1px solid rgba(37,99,235,.11)}.summary-item:last-child{border-right:0}
+.summary-item span{display:block;color:#64748b;font-size:.69rem;font-weight:750}.summary-item strong{display:block;margin-top:.08rem;font-size:.94rem;font-weight:900;white-space:nowrap}.summary-item.primary strong{color:var(--accent);font-size:1.04rem}
+
+.breakdown{margin-top:.85rem;border:1px solid var(--border);border-radius:18px;background:#fff;overflow:hidden}
+.breakdown-row{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(2,minmax(110px,.8fr));align-items:center;gap:.6rem;padding:.68rem .8rem;border-bottom:1px solid #eef2f6;font-size:.78rem}
+.breakdown-row:last-child{border-bottom:0}.breakdown-row span{color:#64748b;font-weight:650}.breakdown-row strong{text-align:right;font-weight:850;color:#1f2937}.breakdown-row.head{background:#f8fafc}.breakdown-row.head span{color:#475569;font-weight:850}.breakdown-row.tax strong{color:var(--bad)}
+
+.allowance{margin-top:.8rem;padding:.8rem .9rem;border:1px solid #e5eaf1;border-radius:15px;background:#f8fafc;color:#536276;font-size:.75rem;line-height:1.5}
+.allowance.good{background:#f2fbf7;border-color:#b7e4d2;color:#05603f}.allowance.warn{background:#fffaf0;border-color:#f1d28a;color:#7c5700}.allowance.bad{background:#fff7f7;border-color:#fecaca;color:#991b1b}
+
+.deduction-list{display:grid;gap:.65rem;margin-top:.75rem}
+.deduction-empty{padding:.8rem .9rem;border:1px dashed var(--border-strong);border-radius:15px;background:#fbfcfe;color:#64748b;font-size:.75rem;font-weight:650;text-align:center}
+.deduction-row{
+  display:grid;
+  grid-template-columns:minmax(125px,1fr) minmax(95px,.7fr) minmax(105px,.75fr) minmax(205px,1.45fr) auto;
+  gap:.55rem;
+  align-items:end;
+  padding:.7rem;
+  border:1px solid #e8edf4;
+  border-radius:16px;
+  background:#f8fafc;
+}
+.deduction-row .field{gap:.28rem}
+.deduction-row .field label{font-size:.7rem}
+.deduction-row .input,.deduction-row .select{min-height:42px;padding-top:.62rem;padding-bottom:.62rem;font-size:.82rem}
+.deduction-remove{min-height:42px;padding:.55rem .8rem;white-space:nowrap}
+.deduction-note{margin-top:.65rem;color:#64748b;font-size:.71rem;font-weight:600;line-height:1.45}
+
+.selection-note{
+  margin-top:.55rem;
+  padding:.72rem .82rem;
+  border:1px solid #e6ebf2;
+  border-radius:14px;
+  background:#f8fafc;
+  color:#526174;
+  font-size:.73rem;
+  line-height:1.5;
+}
+.selection-note strong{color:#1f2937}
+.selection-note.good{background:#f2fbf7;border-color:#b7e4d2;color:#05603f}
+.selection-note.warn{background:#fffaf0;border-color:#f1d28a;color:#7c5700}
+.breakdown-row.equivalent.gain strong{color:var(--good)}
+.breakdown-row.equivalent.loss strong{color:var(--bad)}
+.breakdown-row.equivalent.even strong{color:#475569}
+.summary-item.gain strong{color:var(--good)}
+.summary-item.loss strong{color:var(--bad)}
+
+.year-table{margin-top:.85rem;overflow-x:auto;border:1px solid var(--border);border-radius:18px;background:#fff}
+table{width:100%;border-collapse:collapse;min-width:680px;font-size:.75rem}th,td{padding:.62rem .68rem;border-bottom:1px solid #eef2f6;text-align:right;white-space:nowrap}th:first-child,td:first-child{text-align:left}th{background:#f8fafc;color:#475569;font-weight:850}td{color:#334155;font-weight:650}tbody tr:last-child td{border-bottom:0}
+.source-line{margin-top:.65rem;text-align:center;color:#64748b;font-size:.71rem}.source-line a{color:#64748b;text-decoration:none;border-bottom:1px dotted #94a3b8}.source-line a:hover{color:var(--accent)}
+
+@media(max-width:900px){.deduction-row{grid-template-columns:repeat(2,minmax(0,1fr))}.deduction-row .deduction-actions{grid-column:1/-1;display:flex;justify-content:flex-end}}
+@media(max-width:760px){.grid,.grid.three{grid-template-columns:1fr}.field.full{grid-column:auto}.breakdown-row{grid-template-columns:1fr auto}.breakdown-row strong:last-child{grid-column:2}.breakdown-row.head{display:none}.deduction-row{grid-template-columns:1fr}.deduction-row .deduction-actions{grid-column:auto}.deduction-remove{width:100%}}
+@media(max-width:560px){.riyst-container{width:min(100% - 1.2rem,1180px)}.intro{padding:1.9rem 0 1.15rem}.card{border-radius:20px}.seg{grid-template-columns:1fr}.btn{width:100%;max-width:320px}}
+
+
+
+/* Mk126: main-site page shell. Legacy Riyst CSS has been removed. */
+:root{
+  --bg:#f5f5f7;
+  --text:#111827;
+  --text-soft:#4b5563;
+  --accent:#2563eb;
+  --accent-hover:#1d4ed8;
+  --accent-soft:rgba(37,99,235,.08);
+  --border-subtle:#e5e7eb;
+  --border-strong:#d1d5db;
+  --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+  --radius-pill:999px;
+  --max-w:980px;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  overflow-x:hidden;
+  scroll-behavior:smooth;
+}
+body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+  color:var(--text);
+  font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+main{flex:1}
+.container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+.skip-link{
+  position:absolute;
+  left:-999px;
+  top:.5rem;
+  padding:.45rem .75rem;
+  background:#111827;
+  color:#f9fafb;
+  z-index:100;
+  border-radius:var(--radius-pill);
+  font-size:.85rem;
+}
+.skip-link:focus{left:.5rem}
+
+.intro{
+  width:auto;
+  margin:0;
+  padding:2.6rem 0 2.4rem;
+  background:transparent;
+  text-align:center;
+}
+.intro h1{
+  margin:0 0 .8rem;
+  color:var(--text);
+  font-size:clamp(2.1rem,3vw,2.6rem);
+  line-height:1.15;
+  font-weight:750;
+  letter-spacing:-.03em;
+  text-transform:none;
+}
+.intro p{
+  max-width:720px;
+  margin:0 auto;
+  color:var(--text-soft);
+  font-size:.96rem;
+  line-height:1.6;
+  font-weight:500;
+}
+
+.tool{padding:2.4rem 0 4rem}
+
+.card{
+  width:100%;
+  max-width:980px;
+  margin:0 auto;
+  background:rgba(255,255,255,.92);
+  border:1px solid var(--border-subtle);
+  border-radius:24px;
+  box-shadow:var(--shadow-soft);
+  padding:clamp(1.2rem,3vw,1.7rem);
+}
+
+.section{border-bottom-color:#edf1f5}
+.section-title{
+  color:var(--text);
+  font-size:.95rem;
+  font-weight:750;
+}
+.section-copy{
+  color:var(--text-soft);
+  font-size:.75rem;
+  font-weight:600;
+}
+
+.field label,.label{
+  color:var(--text-soft);
+  font-size:.85rem;
+  font-weight:600;
+}
+.help{color:#64748b;font-size:.72rem;font-weight:600}
+
+.input,.select{
+  width:100%;
+  min-height:46px;
+  border:1px solid var(--border-strong);
+  border-radius:14px;
+  background:#fff;
+  color:var(--text);
+  font-size:.95rem;
+  font-weight:600;
+  outline:none;
+}
+.input:focus,.select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+.seg{
+  border-color:var(--border-subtle);
+  background:#f8fafc;
+}
+.seg label{
+  color:#64748b;
+  font-size:.78rem;
+  font-weight:700;
+}
+.seg input:checked + label{
+  background:var(--accent);
+  color:#fff;
+}
+
+.tax-options,
+.deduction-row,
+.selection-note,
+.allowance,
+.deduction-empty{
+  border-color:var(--border-subtle);
+}
+.tax-options,.deduction-row,.selection-note{background:#f8fafc}
+
+.btn{
+  min-height:44px;
+  padding:.65rem 1.3rem;
+  border-radius:var(--radius-pill);
+  border:1px solid transparent;
+  background:var(--accent);
+  color:#fff;
+  font-size:.86rem;
+  font-weight:600;
+  box-shadow:none;
+}
+.btn:hover{
+  background:var(--accent-hover);
+  transform:translateY(-1px);
+  box-shadow:0 10px 25px rgba(37,99,235,.18);
+}
+.btn.secondary{
+  background:transparent;
+  color:var(--text);
+  border-color:rgba(148,163,184,.8);
+  box-shadow:none;
+}
+.btn.secondary:hover{
+  background:rgba(148,163,184,.15);
+  color:var(--text);
+  border-color:rgba(148,163,184,.8);
+  box-shadow:none;
+}
+
+.summary{
+  border-color:rgba(37,99,235,.16);
+  background:rgba(37,99,235,.06);
+}
+.breakdown,.year-table{border-color:var(--border-subtle)}
+.breakdown-row.head,table th{background:#f8fafc}
+.source-line a{
+  color:var(--accent);
+  border-bottom:0;
+  text-decoration:none;
+}
+.source-line a:hover{text-decoration:underline}
+
+@media(max-width:640px){
+  .container{width:min(100% - 2rem,var(--max-w))}
+  .intro{padding:2rem 0 2.1rem}
+  .tool{padding:1.6rem 0 3rem}
+  .card{border-radius:20px}
+}
+
+</style>
+
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/investment-calculator.html"/>
+
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Investment Calculator | Adrian Headley Tools"/>
+<meta property="og:description" content="Project investment growth, fees and estimated UK tax across common account wrappers and investment types."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/investment-calculator.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Investment Calculator | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Project investment growth, fees and estimated UK tax across common account wrappers and investment types."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/investment-calculator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/investment-calculator.html","name":"Investment Calculator","description":"Project investment growth, compounding, contributions, fees and estimated UK tax for taxable accounts, savings, ISAs, LISAs, pensions and a range of investment types.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/investment-calculator.html#breadcrumb"},"dateModified":"2026-09-08","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/investment-calculator.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/investment-calculator.html#app","name":"Investment Calculator","url":"https://tools.adrianheadley.com/pages/toolpages/investment-calculator.html","description":"Browser-based investment growth and UK tax estimator covering compound or simple growth, contributions, deductions, common account wrappers and selected asset tax treatments.","applicationCategory":"FinanceApplication","operatingSystem":"Any","browserRequirements":"Requires a modern browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Project compound or simple investment growth over one to eighty years.","Model monthly or yearly regular contributions.","Add multiple fixed or percentage deductions and choose when each deduction is applied.","Distinguish taxable accounts, savings, Cash ISA, Stocks and Shares ISA, Lifetime ISA, Innovative Finance ISA, Junior ISA, pensions and Premium Bonds.","Model selected cash, shares, funds, dividends, bonds, peer-to-peer lending, bullion, qualifying UK legal-tender coins, commodities, cryptoassets, property and other capital investments.","Estimate selected savings, dividend and Capital Gains Tax outcomes using the rules encoded in the calculator.","Show equivalent value after estimated tax, net gain, yearly growth and deduction breakdowns.","Process calculator inputs locally in the browser.","Link to relevant GOV.UK tax and investment-wrapper references."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/investment-calculator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Investment Calculator","item":"https://tools.adrianheadley.com/pages/toolpages/investment-calculator.html"}]}]}</script>
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png"/>
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk126"/>
+
+</head>
+<body data-in-pages="true">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1>Investment Calculator</h1>
+      <p>Calculate growth, compounding and the tax due on the return from your investment.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="card" role="region" aria-label="Investment Calculator">
+        <section class="section">
+          <h2 class="section-title">Investment</h2>
+          <div class="grid three">
+            <div class="field">
+              <label for="startingAmount">Starting amount</label>
+              <div class="money"><span>£</span><input class="input" id="startingAmount" inputmode="decimal" placeholder="60,000"/></div>
+            </div>
+            <div class="field">
+              <label for="annualReturn">Annual return</label>
+              <div class="suffix-wrap"><input class="input" id="annualReturn" inputmode="decimal" placeholder="3.5"/><span>%</span></div>
+            </div>
+            <div class="field">
+              <label for="termYears">Term</label>
+              <div class="suffix-wrap"><input class="input" id="termYears" type="number" min="1" max="80" step="1" value="3"/><span>years</span></div>
+            </div>
+          </div>
+
+          <div class="grid" style="margin-top:.8rem">
+            <div class="field">
+              <span class="label">Growth method</span>
+              <div class="seg" role="radiogroup" aria-label="Growth method">
+                <input checked id="compound" name="growthMethod" type="radio" value="compound"/>
+                <label for="compound">Compound interest</label>
+                <input id="simple" name="growthMethod" type="radio" value="simple"/>
+                <label for="simple">Simple interest</label>
+              </div>
+            </div>
+            <div class="field" id="frequencyField">
+              <label for="compoundFrequency">Compounding</label>
+              <select class="select" id="compoundFrequency">
+                <option value="1" selected>Yearly</option>
+                <option value="4">Quarterly</option>
+                <option value="12">Monthly</option>
+                <option value="365">Daily</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid" style="margin-top:.8rem">
+            <div class="field">
+              <label for="contribution">Regular contribution <span style="font-weight:600;color:#94a3b8">optional</span></label>
+              <div class="money"><span>£</span><input class="input" id="contribution" inputmode="decimal" value="0"/></div>
+            </div>
+            <div class="field">
+              <label for="contributionFrequency">Contribution frequency</label>
+              <select class="select" id="contributionFrequency">
+                <option value="monthly" selected>Monthly</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">Deductions &amp; fees</h2>
+          <p class="section-copy">Add service fees, platform charges, performance fees or other deductions. You can use a fixed amount or percentage and choose when it is taken.</p>
+
+          <div id="deductionList" class="deduction-list">
+            <div class="deduction-empty" id="deductionEmpty">No deductions added.</div>
+          </div>
+
+          <div class="actions" style="margin-top:.75rem">
+            <button class="btn secondary" id="addDeduction" type="button">Add deduction</button>
+          </div>
+
+          <p class="deduction-note">Deductions reduce the projected investment value. The calculator does not automatically assume a fee is deductible for tax purposes, because HMRC treatment depends on the exact charge and investment.</p>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">Tax &amp; investment type</h2>
+          <p class="section-copy">First choose the account or tax wrapper. Then choose what the money is actually invested in. This lets the calculator apply the right UK tax treatment without mixing up an ISA with the investment held inside it.</p>
+
+          <div class="grid">
+            <div class="field full">
+              <label for="accountType">1. Where is the investment held?</label>
+              <select class="select" id="accountType">
+                <optgroup label="No tax calculation">
+                  <option value="none">Growth only, do not estimate tax</option>
+                </optgroup>
+                <optgroup label="Normal taxable accounts">
+                  <option value="taxable">Taxable investment / GIA, ordinary account or direct holding</option>
+                  <option value="savings">Normal savings or fixed-rate account, bank interest outside an ISA</option>
+                </optgroup>
+                <optgroup label="Tax-free or tax-sheltered accounts">
+                  <option value="cashIsa">Cash ISA, cash savings with tax-free interest</option>
+                  <option value="stocksIsa">Stocks &amp; Shares ISA, investments with tax-free income and gains</option>
+                  <option value="lisa">Lifetime ISA (LISA), cash or investments with a 25% government bonus</option>
+                  <option value="ifisa">Innovative Finance ISA, peer-to-peer / alternative finance held tax-free</option>
+                  <option value="juniorIsa">Junior ISA, tax-free saving or investing for a child</option>
+                  <option value="pension">Pension / SIPP, long-term investing inside a pension wrapper</option>
+                </optgroup>
+                <optgroup label="Tax-free savings product">
+                  <option value="premiumBonds">Premium Bonds, NS&amp;I prize-based savings with tax-free prizes</option>
+                </optgroup>
+              </select>
+              <div class="selection-note" id="accountExplanation"></div>
+            </div>
+          </div>
+
+          <div class="grid conditional" id="assetField">
+            <div class="field full">
+              <label for="assetType">2. What is the money invested in?</label>
+              <select class="select" id="assetType">
+                <optgroup label="Cash">
+                  <option value="cash">Cash / fixed savings, earns interest</option>
+                </optgroup>
+                <optgroup label="Shares and funds">
+                  <option value="stocks" selected>Stocks / individual company shares, price growth + possible dividends</option>
+                  <option value="funds">Funds / ETFs / investment trusts, pooled investments</option>
+                  <option value="dividend">Dividend-focused shares / fund, mainly income</option>
+                </optgroup>
+                <optgroup label="Bonds and lending">
+                  <option value="gilt">UK government gilt, government bond</option>
+                  <option value="qcb">Qualifying corporate bond (QCB), company bond with CGT-exempt capital gain</option>
+                  <option value="corporateBond">Other / non-qualifying corporate bond, company bond</option>
+                  <option value="p2p">Peer-to-peer lending / crowdfunding debt, earns interest</option>
+                </optgroup>
+                <optgroup label="Commodities and physical assets">
+                  <option value="bullion">Gold / silver bullion, bars or non-sterling bullion coins</option>
+                  <option value="legalTenderCoins">UK Britannia / post-1837 Sovereign coins, qualifying sterling legal tender</option>
+                  <option value="commodity">Other commodities, metals, energy or agricultural exposure held directly</option>
+                </optgroup>
+                <optgroup label="Other investments">
+                  <option value="crypto">Cryptoassets, e.g. Bitcoin or Ethereum held as an investment</option>
+                  <option value="property">Investment property / land, capital growth only in this calculator</option>
+                  <option value="otherCgt">Other capital investment, general Capital Gains Tax treatment</option>
+                </optgroup>
+              </select>
+              <div class="selection-note" id="assetExplanation"></div>
+            </div>
+          </div>
+
+          <div class="conditional" id="taxOptions">
+            <div class="tax-options">
+              <div class="grid conditional" id="taxBandField">
+                <div class="field full">
+                  <label for="taxBand">Your Income Tax band</label>
+                  <select class="select" id="taxBand">
+                    <option value="basic" selected>Basic rate, savings 20%, dividends 10.75%</option>
+                    <option value="higher">Higher rate, savings 40%, dividends 35.75%</option>
+                    <option value="additional">Additional rate, savings 45%, dividends 39.35%</option>
+                  </select>
+                  <span class="help">Used when this investment produces taxable interest or dividends.</span>
+                </div>
+              </div>
+
+              <div class="grid conditional" id="cgtIncomeRow">
+                <div class="field full">
+                  <label for="taxableIncome">Taxable income before this capital gain</label>
+                  <div class="money"><span>£</span><input class="input" id="taxableIncome" inputmode="decimal" placeholder="e.g. 30000"/></div>
+                  <span class="help">Enter taxable income after your Personal Allowance and Income Tax reliefs. This lets the calculator split taxable gains between the 18% and 24% CGT rates.</span>
+                </div>
+              </div>
+
+              <div class="grid conditional" id="returnSplitRow">
+                <div class="field full">
+                  <label for="incomeShare" id="incomeShareLabel">Income share of projected return</label>
+                  <div class="percent"><input class="input" id="incomeShare" inputmode="decimal" value="25"/><span>%</span></div>
+                  <span class="help" id="incomeShareHelp">Used to separate income from capital growth.</span>
+                </div>
+              </div>
+
+              <div class="grid conditional" id="interestTimingRow">
+                <div class="field full">
+                  <label for="interestTiming">When is the interest paid or made available?</label>
+                  <select class="select" id="interestTiming">
+                    <option value="annual" selected>Interest credited / available each year</option>
+                    <option value="maturity">Interest only paid / available at maturity</option>
+                  </select>
+                  <span class="help">Savings tax normally follows when interest is received or made available.</span>
+                </div>
+              </div>
+
+              <div class="grid conditional" id="lisaWithdrawalRow">
+                <div class="field full">
+                  <label for="lisaWithdrawal">Lifetime ISA withdrawal</label>
+                  <select class="select" id="lisaWithdrawal">
+                    <option value="qualifying" selected>Qualifying / no withdrawal charge, first home, age 60+, terminal illness, or leave invested</option>
+                    <option value="nonqualifying">Other withdrawal, apply 25% LISA withdrawal charge</option>
+                  </select>
+                  <span class="help">The starting amount is treated as an existing LISA balance. Regular contributions receive the 25% government bonus, subject to the annual LISA limit.</span>
+                </div>
+              </div>
+
+              <div class="allowance" id="taxRulePreview"></div>
+            </div>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button class="btn" id="calculate" type="button">Calculate investment</button>
+          <button class="btn secondary" id="reset" type="button">Reset</button>
+        </div>
+        <div class="status" id="status" aria-live="polite"></div>
+
+        <section class="results" id="results" aria-live="polite">
+          <div class="summary-scroll">
+            <div class="summary">
+              <div class="summary-item primary"><span>Final pot before tax</span><strong id="finalPot">£0.00</strong></div>
+              <div class="summary-item"><span>Total paid in</span><strong id="paidIn">£0.00</strong></div>
+              <div class="summary-item"><span>Gross growth</span><strong id="growth">£0.00</strong></div>
+              <div class="summary-item"><span>Deductions</span><strong id="deductionsTotal">£0.00</strong></div>
+              <div class="summary-item"><span>Estimated tax</span><strong id="tax">£0.00</strong></div>
+              <div class="summary-item" id="netGainItem"><span>Net gain after tax &amp; fees</span><strong id="netGain">£0.00</strong></div>
+            </div>
+          </div>
+
+          <div class="breakdown" id="breakdown"></div>
+          <div class="allowance" id="allowanceMessage"></div>
+
+          <div class="allowance good" style="margin-top:.85rem">
+            <strong>How the tax is shown:</strong> deductions are taken from the projected pot at the point you choose. Estimated tax remains a separate liability and is only deducted in the “Equivalent value after estimated tax” figure.
+          </div>
+
+          <div class="year-table">
+            <table>
+              <thead><tr><th>Year</th><th>Opening pot</th><th>Paid in</th><th>Growth</th><th>Deductions</th><th>Estimated tax due</th><th>Closing pot before tax</th></tr></thead>
+              <tbody id="yearRows"></tbody>
+            </table>
+          </div>
+
+          <div class="source-line">
+            UK tax references, current 2026/27 rules: <a href="https://www.gov.uk/individual-savings-accounts/how-isas-work" target="_blank" rel="noopener noreferrer">ISAs</a> ·
+            <a href="https://www.gov.uk/government/publications/individual-savings-accounts-lifetime-isa/individual-savings-accounts-lifetime-isa" target="_blank" rel="noopener noreferrer">LISA</a> ·
+            <a href="https://www.gov.uk/tax-on-your-private-pension/annual-allowance" target="_blank" rel="noopener noreferrer">Pensions</a> ·
+            <a href="https://www.gov.uk/apply-tax-free-interest-on-savings" target="_blank" rel="noopener noreferrer">Savings</a> ·
+            <a href="https://www.gov.uk/tax-on-dividends" target="_blank" rel="noopener noreferrer">Dividends</a> ·
+            <a href="https://www.gov.uk/capital-gains-tax/rates" target="_blank" rel="noopener noreferrer">CGT</a> ·
+            <a href="https://www.gov.uk/guidance/gilt-edged-securities-exempt-from-capital-gains-tax" target="_blank" rel="noopener noreferrer">Gilts</a> ·
+            <a href="https://www.gov.uk/hmrc-internal-manuals/capital-gains-manual/cg53703" target="_blank" rel="noopener noreferrer">Corporate bonds</a> ·
+            <a href="https://www.gov.uk/hmrc-internal-manuals/capital-gains-manual/cg78305" target="_blank" rel="noopener noreferrer">UK bullion coins</a> ·
+            <a href="https://www.gov.uk/guidance/check-if-you-need-to-pay-tax-when-you-sell-cryptoassets" target="_blank" rel="noopener noreferrer">Crypto</a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+
+const ISA_ALLOWANCE = 20000;
+const LISA_ALLOWANCE = 4000;
+const LISA_BONUS_RATE = .25;
+const LISA_WITHDRAWAL_CHARGE = .25;
+const JUNIOR_ISA_ALLOWANCE = 9000;
+const PENSION_ANNUAL_ALLOWANCE = 60000;
+const CGT_ALLOWANCE = 3000;
+const CGT_BASIC_LIMIT = 37700;
+const DIVIDEND_ALLOWANCE = 500;
+const MAX_DEDUCTIONS = 10;
+
+const BAND = {
+  basic:{savingsAllowance:1000,savingsRate:.20,dividendRate:.1075,label:'Basic rate'},
+  higher:{savingsAllowance:500,savingsRate:.40,dividendRate:.3575,label:'Higher rate'},
+  additional:{savingsAllowance:0,savingsRate:.45,dividendRate:.3935,label:'Additional rate'}
+};
+
+const $ = id => document.getElementById(id);
+const fmt = new Intl.NumberFormat('en-GB',{
+  style:'currency',
+  currency:'GBP',
+  minimumFractionDigits:2,
+  maximumFractionDigits:2
+});
+
+const els = {
+  starting:$('startingAmount'),
+  rate:$('annualReturn'),
+  years:$('termYears'),
+  frequency:$('compoundFrequency'),
+  frequencyField:$('frequencyField'),
+  contribution:$('contribution'),
+  contributionFrequency:$('contributionFrequency'),
+
+  deductionList:$('deductionList'),
+  deductionEmpty:$('deductionEmpty'),
+  addDeduction:$('addDeduction'),
+
+  accountType:$('accountType'),
+  accountExplanation:$('accountExplanation'),
+  assetField:$('assetField'),
+  assetType:$('assetType'),
+  assetExplanation:$('assetExplanation'),
+
+  taxBand:$('taxBand'),
+  taxBandField:$('taxBandField'),
+  taxOptions:$('taxOptions'),
+  cgtIncomeRow:$('cgtIncomeRow'),
+  taxableIncome:$('taxableIncome'),
+  returnSplitRow:$('returnSplitRow'),
+  incomeShare:$('incomeShare'),
+  incomeShareLabel:$('incomeShareLabel'),
+  incomeShareHelp:$('incomeShareHelp'),
+  interestTimingRow:$('interestTimingRow'),
+  interestTiming:$('interestTiming'),
+  lisaWithdrawalRow:$('lisaWithdrawalRow'),
+  lisaWithdrawal:$('lisaWithdrawal'),
+  taxRulePreview:$('taxRulePreview'),
+
+  calculate:$('calculate'),
+  reset:$('reset'),
+  status:$('status'),
+  results:$('results'),
+  finalPot:$('finalPot'),
+  paidIn:$('paidIn'),
+  growth:$('growth'),
+  deductionsTotal:$('deductionsTotal'),
+  tax:$('tax'),
+  netGain:$('netGain'),
+  netGainItem:$('netGainItem'),
+  breakdown:$('breakdown'),
+  allowanceMessage:$('allowanceMessage'),
+  yearRows:$('yearRows')
+};
+
+let deductionCounter=0;
+
+function numberOf(el){
+  const raw=String(el?.value||'').replace(/[^0-9.-]/g,'');
+  return raw==='' ? 0 : Number(raw);
+}
+
+function method(){
+  return document.querySelector('input[name="growthMethod"]:checked')?.value || 'compound';
+}
+
+function band(){
+  return BAND[els.taxBand.value] || BAND.basic;
+}
+
+function clamp(v,min,max){
+  return Math.min(max,Math.max(min,v));
+}
+
+function pct(v,dp=2){
+  return (v*100).toFixed(dp).replace(/\.00$/,'').replace(/(\.\d)0$/,'$1')+'%';
+}
+
+function periodicRate(annualRate){
+  if(method()==='simple') return annualRate/12;
+  const n=Math.max(1,Number(els.frequency.value)||1);
+  return Math.pow(1+annualRate/n,n/12)-1;
+}
+
+function annualContribution(){
+  const amount=Math.max(0,numberOf(els.contribution));
+  return els.contributionFrequency.value==='monthly' ? amount*12 : amount;
+}
+
+function isTaxFreeWrapper(account){
+  return ['cashIsa','stocksIsa','lisa','ifisa','juniorIsa','pension','premiumBonds'].includes(account);
+}
+
+function effectiveAsset(){
+  const account=els.accountType.value;
+  if(account==='savings' || account==='cashIsa') return 'cash';
+  if(account==='ifisa') return 'p2p';
+  if(account==='premiumBonds') return 'premiumBonds';
+  return els.assetType.value;
+}
+
+function assetHasSavingsIncome(asset){
+  return ['cash','gilt','qcb','corporateBond','p2p'].includes(asset);
+}
+
+function assetHasDividendIncome(asset){
+  return ['stocks','funds','dividend'].includes(asset);
+}
+
+function assetHasTaxableCgt(asset){
+  return ['stocks','funds','corporateBond','bullion','commodity','crypto','property','otherCgt'].includes(asset);
+}
+
+function assetNeedsSplit(asset){
+  return ['stocks','funds','gilt','qcb','corporateBond'].includes(asset);
+}
+
+function assetIncomeShare(asset){
+  if(asset==='cash' || asset==='p2p' || asset==='dividend') return 1;
+  if(assetNeedsSplit(asset)) return clamp(numberOf(els.incomeShare)/100,0,1);
+  return 0;
+}
+
+function cgtEstimate(gain){
+  const taxableGain=Math.max(0,gain-CGT_ALLOWANCE);
+  const taxableIncome=Math.max(0,numberOf(els.taxableIncome));
+  const basicBandLeft=Math.max(0,CGT_BASIC_LIMIT-taxableIncome);
+  const at18=Math.min(taxableGain,basicBandLeft);
+  const at24=Math.max(0,taxableGain-at18);
+  return {taxableGain,at18,at24,tax:at18*.18+at24*.24};
+}
+
+function escapeAttribute(value){
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('"','&quot;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;');
+}
+
+function escapeHtml(value){
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
+}
+
+function createDeductionRow(values={}){
+  if(els.deductionList.querySelectorAll('.deduction-row').length>=MAX_DEDUCTIONS) return;
+
+  deductionCounter+=1;
+  const row=document.createElement('div');
+  row.className='deduction-row';
+  row.dataset.deductionId=String(deductionCounter);
+
+  const name=values.name || 'Service fee';
+  const value=values.value ?? '';
+  const unit=values.unit || 'percent';
+  const timing=values.timing || 'annual';
+
+  row.innerHTML=`
+    <div class="field">
+      <label>Deduction</label>
+      <input class="input deduction-name" type="text" value="${escapeAttribute(name)}" placeholder="e.g. Service fee"/>
+    </div>
+    <div class="field">
+      <label>Amount</label>
+      <input class="input deduction-value" inputmode="decimal" value="${escapeAttribute(String(value))}" placeholder="${unit==='percent'?'1':'25'}"/>
+    </div>
+    <div class="field">
+      <label>Type</label>
+      <select class="select deduction-unit">
+        <option value="percent"${unit==='percent'?' selected':''}>Percentage %</option>
+        <option value="money"${unit==='money'?' selected':''}>Fixed £</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>When deducted</label>
+      <select class="select deduction-timing">
+        <option value="start"${timing==='start'?' selected':''}>At start, from starting amount</option>
+        <option value="annual"${timing==='annual'?' selected':''}>Every year, from current pot</option>
+        <option value="endPot"${timing==='endPot'?' selected':''}>At end / withdrawal, from total pot incl. profits</option>
+        <option value="endProfit"${timing==='endProfit'?' selected':''}>At end / withdrawal, from profit only</option>
+      </select>
+    </div>
+    <div class="deduction-actions">
+      <button class="btn secondary deduction-remove" type="button">Remove</button>
+    </div>`;
+
+  row.querySelector('.deduction-remove').addEventListener('click',()=>{
+    row.remove();
+    updateDeductionEmpty();
+  });
+
+  row.querySelector('.deduction-unit').addEventListener('change',()=>{
+    const unitEl=row.querySelector('.deduction-unit');
+    const valueEl=row.querySelector('.deduction-value');
+    valueEl.placeholder=unitEl.value==='percent'?'1':'25';
+  });
+
+  row.querySelectorAll('.input').forEach(el=>{
+    el.addEventListener('keydown',e=>{
+      if(e.key==='Enter') calculate();
+    });
+  });
+
+  els.deductionList.appendChild(row);
+  updateDeductionEmpty();
+}
+
+function updateDeductionEmpty(){
+  const rows=els.deductionList.querySelectorAll('.deduction-row');
+  els.deductionEmpty.style.display=rows.length?'none':'block';
+  els.addDeduction.disabled=rows.length>=MAX_DEDUCTIONS;
+}
+
+function getDeductions(){
+  return [...els.deductionList.querySelectorAll('.deduction-row')].map((row,index)=>({
+    id:row.dataset.deductionId,
+    order:index,
+    name:(row.querySelector('.deduction-name').value || 'Deduction').trim(),
+    value:numberOf(row.querySelector('.deduction-value')),
+    unit:row.querySelector('.deduction-unit').value,
+    timing:row.querySelector('.deduction-timing').value
+  }));
+}
+
+function deductionAmount(deduction,base,available){
+  if(!Number.isFinite(deduction.value) || deduction.value<=0) return 0;
+  const raw=deduction.unit==='percent'
+    ? Math.max(0,base)*(deduction.value/100)
+    : deduction.value;
+  return Math.min(Math.max(0,raw),Math.max(0,available));
+}
+
+function accountText(account){
+  const map={
+    none:'Growth only. Use this when you want the investment projection without any tax estimate.',
+    taxable:'An ordinary taxable investment. Use this for a General Investment Account, broker account, directly held shares, bonds, crypto, bullion, commodities or other investments outside an ISA or pension.',
+    savings:'A normal bank, building society or fixed-rate savings account outside an ISA. Your deposited capital is not taxed. Interest can be taxable.',
+    cashIsa:`A Cash ISA is a tax-free wrapper for cash savings. Interest is tax-free. For 2026/27, the overall ISA subscription limit is ${fmt.format(ISA_ALLOWANCE)}.`,
+    stocksIsa:`A Stocks & Shares ISA is a tax-free wrapper for investments such as shares, funds, ETFs and many bonds. Income and capital gains inside the ISA are tax-free. The 2026/27 ISA subscription limit is ${fmt.format(ISA_ALLOWANCE)}.`,
+    lisa:`A Lifetime ISA can hold cash or investments. You can contribute up to ${fmt.format(LISA_ALLOWANCE)} each tax year and receive a 25% government bonus. It forms part of the overall ISA allowance.`,
+    ifisa:`An Innovative Finance ISA is designed for qualifying peer-to-peer and alternative-finance investments. Qualifying interest and gains inside the ISA are tax-free. It shares the overall ${fmt.format(ISA_ALLOWANCE)} ISA limit.`,
+    juniorIsa:`A Junior ISA is a tax-free account for a child. The 2026/27 subscription limit is ${fmt.format(JUNIOR_ISA_ALLOWANCE)}. The money belongs to the child and is normally locked until age 18.`,
+    pension:`A pension or SIPP shelters investment growth from UK Income Tax and CGT while the money remains inside the pension. The standard 2026/27 annual allowance is ${fmt.format(PENSION_ANNUAL_ALLOWANCE)}, although earnings, tapering, the MPAA and carry-forward can change the amount available.`,
+    premiumBonds:'Premium Bonds are NS&I savings where returns come from prizes rather than guaranteed interest. Prizes are tax-free.'
+  };
+  return map[account] || '';
+}
+
+function assetText(asset){
+  const map={
+    cash:'Cash / fixed savings earns interest. Outside an ISA, interest may use your Personal Savings Allowance and then be subject to Income Tax.',
+    stocks:'Individual company shares can rise or fall in price and may pay dividends. Outside a tax-free wrapper, dividends can face dividend tax and gains on sale can face CGT.',
+    funds:'Funds, ETFs and investment trusts pool many investments together. Outside a tax-free wrapper, distributions can be taxable and gains on sale can face CGT. This calculator models the income part as dividends.',
+    dividend:'Use this when the percentage return you enter mainly represents dividends or investment income rather than price growth.',
+    gilt:'A UK government gilt is a government bond. Coupon interest can be taxable savings income, while gains on qualifying gilts are exempt from CGT.',
+    qcb:'A qualifying corporate bond is a company debt security meeting specific tax rules. Coupon interest can be taxable, but gains on disposal of a QCB are generally exempt from CGT.',
+    corporateBond:'Use this if the company bond is not a qualifying corporate bond, or you want the safer assumption. Coupon interest can be taxable and capital gains may also be chargeable to CGT.',
+    p2p:'Peer-to-peer lending means lending money through a platform to individuals or businesses. Interest outside an ISA is generally savings income and can use the Personal Savings Allowance.',
+    bullion:'Physical gold or silver bullion is a capital asset. A gain on disposal can be subject to CGT. Dealer spreads, storage, insurance and any purchase taxes can be entered under Deductions & fees.',
+    legalTenderCoins:'Qualifying sterling legal-tender bullion coins, including Britannia coins and post-1837 Sovereigns, are exempt from CGT. Foreign bullion coins do not automatically get this exemption.',
+    commodity:'Directly held commodities are generally treated as capital assets for this simplified projection, so a gain on disposal can fall within CGT.',
+    crypto:'Cryptoassets held as investments can create a CGT disposal when sold, exchanged, spent or gifted. This calculator models one disposal at the end of the term and does not model staking or trading income.',
+    property:'This option models capital growth on investment property or land and CGT on a final disposal. It does not model rent, mortgage interest, SDLT/LTT/LBTT or property-specific running costs.',
+    otherCgt:'Use this for another investment where the main return is a capital gain realised when it is sold.'
+  };
+  return map[asset] || '';
+}
+
+function updateUI(){
+  const account=els.accountType.value;
+  let asset=effectiveAsset();
+  const taxableAccount=account==='taxable' || account==='savings';
+
+  const showAsset=['taxable','stocksIsa','lisa','juniorIsa','pension','none'].includes(account);
+  els.assetField.classList.toggle('show',showAsset);
+
+  if(account==='savings' || account==='cashIsa') asset='cash';
+  if(account==='ifisa') asset='p2p';
+  if(account==='premiumBonds') asset='premiumBonds';
+
+  els.accountExplanation.textContent=accountText(account);
+  els.assetExplanation.textContent=asset==='premiumBonds'
+    ? 'Premium Bonds use prize-based returns rather than ordinary interest.'
+    : assetText(asset);
+
+  const showTaxOptions=account!=='none';
+  els.taxOptions.classList.toggle('show',showTaxOptions);
+
+  const needsIncomeBand=taxableAccount && (assetHasSavingsIncome(asset) || assetHasDividendIncome(asset));
+  const needsCgt=account==='taxable' && assetHasTaxableCgt(asset);
+  const needsSplit=account==='taxable' && assetNeedsSplit(asset);
+  const needsInterestTiming=taxableAccount && assetHasSavingsIncome(asset);
+  const isLisa=account==='lisa';
+
+  els.taxBandField.classList.toggle('show',needsIncomeBand);
+  els.cgtIncomeRow.classList.toggle('show',needsCgt);
+  els.returnSplitRow.classList.toggle('show',needsSplit);
+  els.interestTimingRow.classList.toggle('show',needsInterestTiming);
+  els.lisaWithdrawalRow.classList.toggle('show',isLisa);
+
+  els.frequencyField.style.opacity=method()==='compound' ? '1' : '.45';
+  els.frequency.disabled=method()!=='compound';
+
+  if(needsSplit){
+    if(asset==='stocks' || asset==='funds'){
+      els.incomeShareLabel.textContent='Dividend / income share of the projected return';
+      els.incomeShareHelp.textContent='Example: 25% means 25% of the return is treated as dividends and 75% as capital growth.';
+      if(!els.incomeShare.dataset.userChanged) els.incomeShare.value='25';
+    }else{
+      els.incomeShareLabel.textContent='Coupon / interest share of the projected return';
+      els.incomeShareHelp.textContent='Example: 70% means 70% of the return is treated as coupon interest and 30% as capital movement.';
+      if(!els.incomeShare.dataset.userChanged) els.incomeShare.value='70';
+    }
+  }
+
+  const b=band();
+  els.taxRulePreview.className='allowance';
+
+  if(account==='none'){
+    els.taxRulePreview.textContent='No tax calculation selected.';
+  }else if(account==='cashIsa' || account==='stocksIsa' || account==='ifisa' || account==='juniorIsa'){
+    els.taxRulePreview.className='allowance good';
+    els.taxRulePreview.textContent='Returns inside this account are treated as tax-free under current 2026/27 UK rules. The annual limit applies to new subscriptions, not the size of an existing account balance.';
+  }else if(account==='lisa'){
+    els.taxRulePreview.className='allowance good';
+    els.taxRulePreview.textContent=`LISA growth is tax-free. Regular contributions receive a 25% government bonus up to the ${fmt.format(LISA_ALLOWANCE)} annual LISA subscription limit. A non-qualifying withdrawal applies a 25% charge to the amount withdrawn.`;
+  }else if(account==='pension'){
+    els.taxRulePreview.className='allowance good';
+    els.taxRulePreview.textContent='Investment growth inside the pension is treated as tax-sheltered. This calculator does not estimate Income Tax on future pension withdrawals because that depends on how and when benefits are taken.';
+  }else if(account==='premiumBonds'){
+    els.taxRulePreview.className='allowance good';
+    els.taxRulePreview.textContent='Premium Bond prizes are tax-free. The return percentage remains only a projection because prizes are not guaranteed.';
+  }else if(account==='savings'){
+    els.taxRulePreview.textContent=`Only interest is tested for tax. Your selected ${b.label.toLowerCase()} gives a Personal Savings Allowance of ${fmt.format(b.savingsAllowance)} per tax year, then interest above it is estimated at ${pct(b.savingsRate,0)}.`;
+  }else if(account==='taxable'){
+    if(asset==='stocks' || asset==='funds'){
+      els.taxRulePreview.textContent=`The dividend portion uses the ${fmt.format(DIVIDEND_ALLOWANCE)} dividend allowance each tax year. The capital-growth portion is tested against the ${fmt.format(CGT_ALLOWANCE)} CGT annual exempt amount when the investment is assumed sold at the end.`;
+    }else if(asset==='dividend'){
+      els.taxRulePreview.textContent=`The first ${fmt.format(DIVIDEND_ALLOWANCE)} of dividend income each tax year is covered by the dividend allowance. Income above it uses the selected dividend tax rate.`;
+    }else if(asset==='cash' || asset==='p2p'){
+      els.taxRulePreview.textContent=`Interest uses the ${fmt.format(b.savingsAllowance)} Personal Savings Allowance for the selected tax band. Interest above it is estimated at ${pct(b.savingsRate,0)}.`;
+    }else if(asset==='gilt' || asset==='qcb'){
+      els.taxRulePreview.textContent=`Coupon interest can be taxable savings income. The capital movement is treated as CGT-exempt for this selection.`;
+    }else if(asset==='corporateBond'){
+      els.taxRulePreview.textContent=`Coupon interest can be taxable savings income. Any capital gain is also tested against the ${fmt.format(CGT_ALLOWANCE)} CGT annual exempt amount because this option does not assume QCB exemption.`;
+    }else if(asset==='legalTenderCoins'){
+      els.taxRulePreview.className='allowance good';
+      els.taxRulePreview.textContent='Qualifying sterling legal-tender coins are treated as CGT-exempt. No investment tax is estimated on the projected gain.';
+    }else if(assetHasTaxableCgt(asset)){
+      els.taxRulePreview.textContent=`The projected capital gain is tested against the ${fmt.format(CGT_ALLOWANCE)} CGT annual exempt amount when sold. Taxable gains are split between 18% and 24% using the taxable-income figure you enter.`;
+    }
+  }
+}
+
+function validate(){
+  const start=numberOf(els.starting);
+  const rate=numberOf(els.rate);
+  const years=numberOf(els.years);
+  const contrib=numberOf(els.contribution);
+  const account=els.accountType.value;
+  const asset=effectiveAsset();
+
+  if(start<=0 && contrib<=0) return 'Enter a starting amount or a regular contribution.';
+  if(!Number.isFinite(rate) || rate < -100 || rate > 1000) return 'Enter a valid annual return.';
+  if(!Number.isFinite(years) || years<1 || years>80) return 'Enter a term between 1 and 80 years.';
+
+  for(const d of getDeductions()){
+    if(!Number.isFinite(d.value) || d.value<0) return `Enter a valid amount for ${d.name || 'the deduction'}.`;
+    if(d.unit==='percent' && d.value>100) return `${d.name || 'A deduction'} cannot be more than 100%.`;
+  }
+
+  const annual=annualContribution();
+
+  if(['cashIsa','stocksIsa','ifisa'].includes(account) && annual>ISA_ALLOWANCE+0.005){
+    return `Regular contributions equal ${fmt.format(annual)} a year, above the current ${fmt.format(ISA_ALLOWANCE)} overall ISA subscription limit.`;
+  }
+
+  if(account==='lisa' && annual>LISA_ALLOWANCE+0.005){
+    return `Regular contributions equal ${fmt.format(annual)} a year, above the current ${fmt.format(LISA_ALLOWANCE)} Lifetime ISA limit.`;
+  }
+
+  if(account==='juniorIsa' && annual>JUNIOR_ISA_ALLOWANCE+0.005){
+    return `Regular contributions equal ${fmt.format(annual)} a year, above the current ${fmt.format(JUNIOR_ISA_ALLOWANCE)} Junior ISA limit.`;
+  }
+
+  if(account==='taxable' && assetHasTaxableCgt(asset)){
+    const raw=String(els.taxableIncome.value||'').trim();
+    if(raw==='') return 'Enter your taxable income before the capital gain so CGT can be split accurately between 18% and 24%.';
+    const inc=numberOf(els.taxableIncome);
+    if(!Number.isFinite(inc) || inc<0) return 'Enter a valid taxable income amount.';
+  }
+
+  if(account==='taxable' && assetNeedsSplit(asset)){
+    const share=numberOf(els.incomeShare);
+    if(!Number.isFinite(share) || share<0 || share>100) return 'Enter an income share between 0% and 100%.';
+  }
+
+  return '';
+}
+
+function simulate(){
+  const start=Math.max(0,numberOf(els.starting));
+  const annualRate=numberOf(els.rate)/100;
+  const years=Math.round(clamp(numberOf(els.years),1,80));
+  const contribution=Math.max(0,numberOf(els.contribution));
+  const contributionFrequency=els.contributionFrequency.value;
+  const account=els.accountType.value;
+  const asset=effectiveAsset();
+  const b=band();
+  const mRate=periodicRate(annualRate);
+  const isSimple=method()==='simple';
+  const deductions=getDeductions();
+  const taxableAccount=account==='taxable' || account==='savings';
+  const incomeShare=taxableAccount ? assetIncomeShare(asset) : 0;
+
+  let pot=start;
+  let simpleBase=start;
+  let totalPaid=start;
+  let totalGrossGrowth=0;
+  let totalIncomeReturn=0;
+  let totalCapitalGrowth=0;
+  let totalDeductions=0;
+  let totalTax=0;
+  let totalGovernmentBonus=0;
+  let lisaWithdrawalCharge=0;
+
+  const deductionBreakdown={};
+  deductions.forEach(d=>deductionBreakdown[d.id]={name:d.name,total:0});
+
+  function recordDeduction(d,amount){
+    if(amount<=0) return;
+    totalDeductions+=amount;
+    deductionBreakdown[d.id].total+=amount;
+  }
+
+  for(const d of deductions.filter(d=>d.timing==='start')){
+    const amount=deductionAmount(d,start,pot);
+    pot-=amount;
+    simpleBase=Math.max(0,simpleBase-amount);
+    recordDeduction(d,amount);
+  }
+
+  const taxComponents={savings:0,dividends:0,cgt:0};
+  const rows=[];
+
+  for(let y=0;y<years;y++){
+    const opening=pot;
+    let yearPaid=0;
+    let yearGrowth=0;
+    let yearIncome=0;
+    let yearCapital=0;
+    let yearTax=0;
+    let yearDeductions=0;
+    let yearBonus=0;
+    let lisaContributionUsed=0;
+
+    for(let m=1;m<=12;m++){
+      const due=contributionFrequency==='monthly' || (contributionFrequency==='yearly' && m===1);
+
+      if(due && contribution>0){
+        pot+=contribution;
+        simpleBase+=contribution;
+        totalPaid+=contribution;
+        yearPaid+=contribution;
+
+        if(account==='lisa'){
+          const eligible=Math.min(contribution,Math.max(0,LISA_ALLOWANCE-lisaContributionUsed));
+          const bonus=eligible*LISA_BONUS_RATE;
+          lisaContributionUsed+=eligible;
+          pot+=bonus;
+          simpleBase+=bonus;
+          totalGovernmentBonus+=bonus;
+          yearBonus+=bonus;
+        }
+      }
+
+      const growth=isSimple ? simpleBase*(annualRate/12) : pot*mRate;
+      const incomePart=growth*incomeShare;
+      const capitalPart=growth-incomePart;
+
+      pot+=growth;
+      totalGrossGrowth+=growth;
+      totalIncomeReturn+=incomePart;
+      totalCapitalGrowth+=capitalPart;
+      yearGrowth+=growth;
+      yearIncome+=incomePart;
+      yearCapital+=capitalPart;
+    }
+
+    for(const d of deductions.filter(d=>d.timing==='annual')){
+      const amount=deductionAmount(d,pot,pot);
+      pot-=amount;
+      simpleBase=Math.max(0,simpleBase-amount);
+      yearDeductions+=amount;
+      recordDeduction(d,amount);
+    }
+
+    if(taxableAccount){
+      if(assetHasSavingsIncome(asset) && els.interestTiming.value==='annual'){
+        const taxableInterest=Math.max(0,yearIncome-b.savingsAllowance);
+        const tax=taxableInterest*b.savingsRate;
+        totalTax+=tax;
+        taxComponents.savings+=tax;
+        yearTax+=tax;
+      }
+
+      if(assetHasDividendIncome(asset)){
+        const dividendIncome=asset==='dividend' ? yearGrowth : yearIncome;
+        const taxableDividend=Math.max(0,dividendIncome-DIVIDEND_ALLOWANCE);
+        const tax=taxableDividend*b.dividendRate;
+        totalTax+=tax;
+        taxComponents.dividends+=tax;
+        yearTax+=tax;
+      }
+    }
+
+    rows.push({
+      year:y+1,
+      opening,
+      paid:yearPaid,
+      growth:yearGrowth,
+      bonus:yearBonus,
+      deductions:yearDeductions,
+      tax:yearTax,
+      closing:pot
+    });
+  }
+
+  let endDeductions=0;
+
+  for(const d of deductions.filter(d=>d.timing==='endPot')){
+    const amount=deductionAmount(d,pot,pot);
+    pot-=amount;
+    endDeductions+=amount;
+    recordDeduction(d,amount);
+  }
+
+  for(const d of deductions.filter(d=>d.timing==='endProfit')){
+    const profitAvailable=Math.max(0,pot-totalPaid);
+    const amount=deductionAmount(d,profitAvailable,profitAvailable);
+    pot-=amount;
+    endDeductions+=amount;
+    recordDeduction(d,amount);
+  }
+
+  if(rows.length && endDeductions>0){
+    rows[rows.length-1].deductions+=endDeductions;
+    rows[rows.length-1].closing=pot;
+  }
+
+  if(taxableAccount && assetHasSavingsIncome(asset) && els.interestTiming.value==='maturity'){
+    const taxableInterest=Math.max(0,totalIncomeReturn-b.savingsAllowance);
+    const tax=taxableInterest*b.savingsRate;
+    totalTax+=tax;
+    taxComponents.savings+=tax;
+    if(rows.length) rows[rows.length-1].tax+=tax;
+  }
+
+  let cgt=null;
+  if(account==='taxable' && assetHasTaxableCgt(asset)){
+    cgt=cgtEstimate(Math.max(0,totalCapitalGrowth));
+    totalTax+=cgt.tax;
+    taxComponents.cgt+=cgt.tax;
+    if(rows.length) rows[rows.length-1].tax+=cgt.tax;
+  }
+
+  if(account==='lisa' && els.lisaWithdrawal.value==='nonqualifying'){
+    lisaWithdrawalCharge=Math.max(0,pot)*LISA_WITHDRAWAL_CHARGE;
+  }
+
+  const afterTaxValue=Math.max(0,pot-totalTax-lisaWithdrawalCharge);
+  const netGain=afterTaxValue-totalPaid;
+
+  return {
+    account,
+    asset,
+    years,
+    final:pot,
+    afterTaxValue,
+    totalPaid,
+    totalGrossGrowth,
+    totalDeductions,
+    deductionBreakdown:Object.values(deductionBreakdown).filter(x=>x.total>0),
+    totalGovernmentBonus,
+    lisaWithdrawalCharge,
+    totalTax,
+    taxComponents,
+    cgt,
+    netGain,
+    rows
+  };
+}
+
+function render(r){
+  els.finalPot.textContent=fmt.format(r.final);
+  els.paidIn.textContent=fmt.format(r.totalPaid);
+  els.growth.textContent=fmt.format(r.totalGrossGrowth);
+  els.deductionsTotal.textContent=fmt.format(r.totalDeductions);
+  els.tax.textContent=fmt.format(r.totalTax);
+  els.netGain.textContent=fmt.format(r.netGain);
+
+  els.netGainItem.classList.remove('gain','loss');
+  if(r.netGain>0.005) els.netGainItem.classList.add('gain');
+  if(r.netGain<-0.005) els.netGainItem.classList.add('loss');
+
+  const b=band();
+  const lines=[];
+  lines.push(`<div class="breakdown-row head"><span>Account / investment</span><span>Allowance / rule</span><span>Tax / charge</span></div>`);
+
+  lines.push(`<div class="breakdown-row"><span>${escapeHtml(els.accountType.options[els.accountType.selectedIndex].text)}</span><strong>Account / wrapper</strong><strong></strong></div>`);
+  if(els.assetField.classList.contains('show')){
+    lines.push(`<div class="breakdown-row"><span>${escapeHtml(els.assetType.options[els.assetType.selectedIndex].text)}</span><strong>Investment</strong><strong></strong></div>`);
+  }
+
+  if(r.account==='cashIsa' || r.account==='stocksIsa' || r.account==='ifisa'){
+    lines.push(`<div class="breakdown-row"><span>ISA returns</span><strong>${fmt.format(ISA_ALLOWANCE)} annual subscription limit</strong><strong>0%</strong></div>`);
+  }else if(r.account==='juniorIsa'){
+    lines.push(`<div class="breakdown-row"><span>Junior ISA returns</span><strong>${fmt.format(JUNIOR_ISA_ALLOWANCE)} annual subscription limit</strong><strong>0%</strong></div>`);
+  }else if(r.account==='lisa'){
+    lines.push(`<div class="breakdown-row"><span>Lifetime ISA returns</span><strong>${fmt.format(LISA_ALLOWANCE)} annual LISA limit</strong><strong>0%</strong></div>`);
+    lines.push(`<div class="breakdown-row"><span>Government bonus added</span><strong>25% of eligible regular contributions</strong><strong>${fmt.format(r.totalGovernmentBonus)}</strong></div>`);
+    if(r.lisaWithdrawalCharge>0){
+      lines.push(`<div class="breakdown-row"><span>Non-qualifying LISA withdrawal charge</span><strong>25% of amount withdrawn</strong><strong>${fmt.format(r.lisaWithdrawalCharge)}</strong></div>`);
+    }
+  }else if(r.account==='pension'){
+    lines.push(`<div class="breakdown-row"><span>Pension / SIPP growth</span><strong>${fmt.format(PENSION_ANNUAL_ALLOWANCE)} standard annual allowance</strong><strong>0% while invested</strong></div>`);
+  }else if(r.account==='premiumBonds'){
+    lines.push(`<div class="breakdown-row"><span>Premium Bond prizes</span><strong>Tax-free</strong><strong>0%</strong></div>`);
+  }else if(r.account==='savings' || (r.account==='taxable' && assetHasSavingsIncome(r.asset))){
+    lines.push(`<div class="breakdown-row"><span>Savings / coupon interest</span><strong>${fmt.format(b.savingsAllowance)} PSA</strong><strong>${pct(b.savingsRate,0)}</strong></div>`);
+    lines.push(`<div class="breakdown-row"><span>Estimated tax on interest</span><strong></strong><strong>${fmt.format(r.taxComponents.savings)}</strong></div>`);
+  }
+
+  if(r.account==='taxable' && assetHasDividendIncome(r.asset)){
+    lines.push(`<div class="breakdown-row"><span>Dividend income</span><strong>${fmt.format(DIVIDEND_ALLOWANCE)} annual dividend allowance</strong><strong>${pct(b.dividendRate,2)}</strong></div>`);
+    lines.push(`<div class="breakdown-row"><span>Estimated dividend tax</span><strong></strong><strong>${fmt.format(r.taxComponents.dividends)}</strong></div>`);
+  }
+
+  if(r.cgt){
+    lines.push(`<div class="breakdown-row"><span>Capital gain on final disposal</span><strong>${fmt.format(CGT_ALLOWANCE)} annual exempt amount</strong><strong>18% / 24%</strong></div>`);
+    lines.push(`<div class="breakdown-row"><span>Taxable gain after exemption</span><strong></strong><strong>${fmt.format(r.cgt.taxableGain)}</strong></div>`);
+    if(r.cgt.at18>0) lines.push(`<div class="breakdown-row"><span>Gain estimated at 18%</span><strong></strong><strong>${fmt.format(r.cgt.at18)}</strong></div>`);
+    if(r.cgt.at24>0) lines.push(`<div class="breakdown-row"><span>Gain estimated at 24%</span><strong></strong><strong>${fmt.format(r.cgt.at24)}</strong></div>`);
+    lines.push(`<div class="breakdown-row"><span>Estimated Capital Gains Tax</span><strong></strong><strong>${fmt.format(r.taxComponents.cgt)}</strong></div>`);
+  }
+
+  if(r.account==='taxable' && (r.asset==='gilt' || r.asset==='qcb')){
+    lines.push(`<div class="breakdown-row"><span>Capital gain</span><strong>CGT-exempt for this selection</strong><strong>0%</strong></div>`);
+  }
+
+  if(r.account==='taxable' && r.asset==='legalTenderCoins'){
+    lines.push(`<div class="breakdown-row"><span>Qualifying sterling legal-tender coin gain</span><strong>CGT-exempt</strong><strong>0%</strong></div>`);
+  }
+
+  if(r.deductionBreakdown.length){
+    for(const d of r.deductionBreakdown){
+      lines.push(`<div class="breakdown-row"><span>${escapeHtml(d.name)}</span><strong>Deduction / fee</strong><strong>${fmt.format(d.total)}</strong></div>`);
+    }
+    lines.push(`<div class="breakdown-row"><span>Total deductions</span><strong></strong><strong>${fmt.format(r.totalDeductions)}</strong></div>`);
+  }
+
+  lines.push(`<div class="breakdown-row"><span>Original money invested that is taxed</span><strong></strong><strong>${fmt.format(0)}</strong></div>`);
+  lines.push(`<div class="breakdown-row"><span>Estimated tax liability over the term</span><strong></strong><strong>${fmt.format(r.totalTax)}</strong></div>`);
+  lines.push(`<div class="breakdown-row"><span>Final pot before estimated tax</span><strong></strong><strong>${fmt.format(r.final)}</strong></div>`);
+
+  const equivalentClass=r.afterTaxValue>r.totalPaid+0.005
+    ? 'gain'
+    : r.afterTaxValue<r.totalPaid-0.005
+      ? 'loss'
+      : 'even';
+
+  lines.push(`<div class="breakdown-row equivalent ${equivalentClass}"><span>Equivalent value after estimated tax</span><strong></strong><strong>${fmt.format(r.afterTaxValue)}</strong></div>`);
+  els.breakdown.innerHTML=lines.join('');
+
+  let message='';
+
+  if(r.account==='none'){
+    message='No tax estimate was applied.';
+  }else if(r.account==='cashIsa' || r.account==='stocksIsa' || r.account==='ifisa'){
+    message=`The starting amount is treated as an existing balance. Regular contributions are checked against the current ${fmt.format(ISA_ALLOWANCE)} annual ISA subscription limit. Investment returns remain tax-free inside the ISA under the current 2026/27 rules.`;
+  }else if(r.account==='juniorIsa'){
+    message=`The starting amount is treated as an existing Junior ISA balance. Regular contributions are checked against the current ${fmt.format(JUNIOR_ISA_ALLOWANCE)} annual limit.`;
+  }else if(r.account==='lisa'){
+    message=`The starting amount is treated as an existing LISA balance. Regular contributions receive the 25% government bonus and are checked against the ${fmt.format(LISA_ALLOWANCE)} annual LISA limit.`;
+    if(r.lisaWithdrawalCharge>0) message+=` A ${fmt.format(r.lisaWithdrawalCharge)} non-qualifying withdrawal charge has been included in the equivalent after-tax value.`;
+  }else if(r.account==='pension'){
+    message=`Growth inside the pension is treated as tax-sheltered. The standard annual allowance is ${fmt.format(PENSION_ANNUAL_ALLOWANCE)}, but pension contribution limits can be lower or higher in practice because of earnings, tapering, the Money Purchase Annual Allowance and carry-forward. Future pension withdrawal Income Tax is not estimated here.`;
+  }else if(r.account==='premiumBonds'){
+    message='Premium Bond prizes are tax-free. The percentage return entered is only an illustrative expected return and is not guaranteed.';
+  }else if(r.account==='savings'){
+    message=`Only savings interest is tested for tax. The Personal Savings Allowance is applied according to the selected Income Tax band. The tax is shown as a liability and is not automatically removed from the gross account balance.`;
+  }else if(r.account==='taxable'){
+    message=assetText(r.asset);
+    if(r.cgt) message+=` The calculator assumes one disposal at the end of the term for the CGT estimate.`;
+  }
+
+  if(r.totalDeductions>0){
+    message+=` Deductions total ${fmt.format(r.totalDeductions)} and are removed from the projected pot at the timing selected. They are not automatically treated as tax-relievable.`;
+  }
+
+  els.allowanceMessage.className='allowance '+((r.totalTax>0 || r.lisaWithdrawalCharge>0)?'warn':'good');
+  els.allowanceMessage.textContent=message;
+
+  els.yearRows.innerHTML=r.rows.map(row=>`
+    <tr>
+      <td>Year ${row.year}</td>
+      <td>${fmt.format(row.opening)}</td>
+      <td>${fmt.format(row.paid)}</td>
+      <td>${fmt.format(row.growth)}</td>
+      <td>${fmt.format(row.deductions)}</td>
+      <td>${fmt.format(row.tax)}</td>
+      <td>${fmt.format(row.closing)}</td>
+    </tr>`).join('');
+
+  els.results.classList.add('show');
+}
+
+function calculate(){
+  const error=validate();
+  if(error){
+    els.status.textContent=error;
+    els.status.className='status error';
+    els.results.classList.remove('show');
+    return;
+  }
+
+  els.status.textContent='';
+  els.status.className='status';
+  render(simulate());
+}
+
+function reset(){
+  els.starting.value='';
+  els.rate.value='';
+  els.years.value='3';
+  els.contribution.value='0';
+  els.contributionFrequency.value='monthly';
+  $('compound').checked=true;
+  els.frequency.value='1';
+
+  els.deductionList.querySelectorAll('.deduction-row').forEach(row=>row.remove());
+  updateDeductionEmpty();
+
+  els.accountType.value='none';
+  els.assetType.value='stocks';
+  els.taxBand.value='basic';
+  els.taxableIncome.value='';
+  els.incomeShare.value='25';
+  delete els.incomeShare.dataset.userChanged;
+  els.interestTiming.value='annual';
+  els.lisaWithdrawal.value='qualifying';
+
+  els.status.textContent='';
+  els.status.className='status';
+  els.results.classList.remove('show');
+  updateUI();
+  els.starting.focus();
+}
+
+els.addDeduction.addEventListener('click',()=>createDeductionRow());
+els.accountType.addEventListener('change',updateUI);
+els.assetType.addEventListener('change',updateUI);
+els.taxBand.addEventListener('change',updateUI);
+els.incomeShare.addEventListener('input',()=>{els.incomeShare.dataset.userChanged='1';});
+document.querySelectorAll('input[name="growthMethod"]').forEach(el=>el.addEventListener('change',updateUI));
+els.calculate.addEventListener('click',calculate);
+els.reset.addEventListener('click',reset);
+document.querySelectorAll('.input').forEach(el=>el.addEventListener('keydown',e=>{if(e.key==='Enter')calculate();}));
+
+updateDeductionEmpty();
+updateUI();
+})();
+</script>
+<script src="../../Assets/site-shell.js?v=mk126"></script>
+</body>
+</html>

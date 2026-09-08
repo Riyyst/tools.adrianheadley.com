@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="#f5f5f7" name="theme-color"/>
+
+<title>Public Document Finder | Adrian Headley Tools</title>
+<meta name="description" content="Find publicly indexed and archived PDFs, Word files, spreadsheets, presentations and other documents by organisation, keyword or domain using public web-search pages and the Internet Archive."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/public-document-finder.html"/>
+
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Public Document Finder | Adrian Headley Tools"/>
+<meta property="og:description" content="Search for public documents by keyword, organisation or domain, including archived copies."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/public-document-finder.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Public Document Finder | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Find public PDFs, documents, spreadsheets and presentations across the current web and Wayback history."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/public-document-finder.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/public-document-finder.html","name":"Public Document Finder","description":"Find publicly indexed and archived documents by keyword, organisation or domain.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/public-document-finder.html#breadcrumb"},"dateModified":"2026-09-08","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/public-document-finder.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/public-document-finder.html#app","name":"Public Document Finder","url":"https://tools.adrianheadley.com/pages/toolpages/public-document-finder.html","description":"Search public web results and Internet Archive history for document files.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern browser with JavaScript enabled and internet access.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Search by organisation, phrase, keyword or topic.","Optionally restrict results to a public website or domain.","Select document formats including PDF, Word, Excel, PowerPoint, CSV, text/RTF and OpenDocument formats.","Use public search-engine result pages on a best-effort basis to locate currently indexed documents.","Check Internet Archive CDX history for archived document URLs when a domain filter is supplied.","Separate current-web and archived-document matches.","Deduplicate document URLs and classify document type from the public URL.","Provide direct links to live documents and exact Wayback snapshots.","Provide Google, Bing and DuckDuckGo search shortcuts for the generated document query.","Copy or export the document report using the site-wide PDF template.","Search public/indexed material only and do not brute-force hidden paths or directories."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/public-document-finder.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Public Document Finder","item":"https://tools.adrianheadley.com/pages/toolpages/public-document-finder.html"}]}]}</script>
+
+<style>
+:root{
+  --bg:#f5f5f7;--text:#111827;--text-soft:#4b5563;--accent:#2563eb;--accent-hover:#1d4ed8;
+  --border-subtle:#e5e7eb;--border-strong:#d1d5db;--shadow-soft:0 12px 30px rgba(15,23,42,.08);
+  --radius-pill:999px;--max-w:1100px
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%;overflow-x:hidden}
+body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}
+main{flex:1}
+.container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+.skip-link{position:absolute;left:-999px;top:.5rem;padding:.45rem .75rem;background:#111827;color:#f9fafb;z-index:100;border-radius:var(--radius-pill);font-size:.85rem}
+.skip-link:focus{left:.5rem}
+.intro{text-align:center;padding:2.6rem 0 2.4rem}
+.intro__title{font-size:clamp(2.1rem,3vw,2.6rem);line-height:1.15;margin:0 0 .8rem;font-weight:750;letter-spacing:-.03em}
+.intro__subtitle{max-width:820px;margin:0 auto;color:var(--text-soft);font-size:.96rem;font-weight:500}
+.tool{padding:2.4rem 0 4rem}
+.card{background:rgba(255,255,255,.92);border:1px solid var(--border-subtle);border-radius:24px;box-shadow:var(--shadow-soft);padding:clamp(1.2rem,3vw,1.7rem);max-width:1100px;margin:0 auto}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}
+.field label{display:block;margin:0 0 .35rem;color:var(--text-soft);font-size:.85rem;font-weight:700}
+.field input{width:100%;min-height:44px;padding:.72rem .9rem;border:1px solid var(--border-strong);border-radius:14px;background:#fff;color:var(--text);font:inherit;outline:none;transition:border-color .16s,box-shadow .16s}
+.field input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.11)}
+.type-box{margin-top:.8rem;padding:.78rem;border:1px solid var(--border-subtle);border-radius:16px;background:#f8fafc}
+.type-box>span{display:block;margin-bottom:.55rem;color:var(--text-soft);font-size:.8rem;font-weight:800}
+.types{display:flex;flex-wrap:wrap;gap:.42rem}
+.type-chip{position:relative}
+.type-chip input{position:absolute;opacity:0;pointer-events:none}
+.type-chip span{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:.34rem .68rem;border:1px solid var(--border-strong);border-radius:999px;background:#fff;color:#334155;font-size:.74rem;font-weight:760;cursor:pointer;user-select:none}
+.type-chip input:checked+span{border-color:#93c5fd;background:#eff6ff;color:#1d4ed8}
+.scope-row{display:flex;align-items:center;justify-content:center;gap:.9rem;flex-wrap:wrap;margin-top:.75rem}
+.scope-row label{display:inline-flex;align-items:center;gap:.38rem;font-size:.77rem;font-weight:720;color:#475569}
+.actions{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-top:.9rem}
+.btn,.mini-link{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;border-radius:var(--radius-pill);font-weight:700;text-decoration:none;cursor:pointer}
+.btn{min-height:44px;padding:.65rem 1.2rem;border:1px solid transparent;background:var(--accent);color:#fff;font-size:.85rem;transition:background .16s}
+.btn:hover:not(:disabled){background:var(--accent-hover)}
+.btn.secondary{background:#fff;color:var(--text);border-color:var(--border-strong)}
+.btn.secondary:hover:not(:disabled){background:#f8fafc}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.mini-link{min-height:31px;padding:.3rem .6rem;border:1px solid rgba(37,99,235,.22);background:#fff;color:var(--accent);font-size:.72rem;text-align:center;line-height:1.35}
+#status.progress-status{--progress-fill:0%;position:relative;overflow:hidden;min-height:3.25rem;display:flex;align-items:center;justify-content:center;padding:.65rem .8rem;border:1px solid #bfdbfe;border-radius:12px;background:linear-gradient(90deg,rgba(37,99,235,.20) 0 var(--progress-fill),#f8fafc var(--progress-fill) 100%)!important;color:#334155!important;transition:background .18s,border-color .18s}
+#status.progress-status.is-complete{background:#2563eb!important;border-color:#2563eb!important;color:#fff!important}
+#status.progress-status:empty{display:none!important}
+.status{min-height:1.4rem;margin-top:.75rem;text-align:center;color:var(--text-soft);font-size:.84rem;font-weight:650}
+.status.error{color:#b91c1c}
+.results{display:grid;gap:1rem;margin-top:1rem}.hidden{display:none!important}
+.section{border:1px solid var(--border-subtle);border-radius:20px;background:#f8fafc;padding:1rem}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-bottom:.75rem}
+.section h2{margin:0;font-size:1rem;line-height:1.25}
+.summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.65rem}
+.kv{min-width:0;padding:.75rem .82rem;border:1px solid var(--border-subtle);border-radius:14px;background:#fff}
+.kv span{display:block;color:var(--text-soft);font-size:.72rem;font-weight:760;margin-bottom:.14rem}
+.kv b{display:block;color:var(--text);font-size:.86rem;font-weight:800;overflow-wrap:anywhere}
+.records-wrap{overflow:auto;border:1px solid var(--border-subtle);border-radius:14px;background:#fff}
+table{width:100%;border-collapse:collapse;min-width:820px}
+th,td{padding:.64rem .7rem;border-bottom:1px solid var(--border-subtle);text-align:left;vertical-align:top}
+th{background:#f8fafc;color:var(--text-soft);font-size:.72rem;font-weight:800}
+td{font-size:.77rem;overflow-wrap:anywhere}
+tr:last-child td{border-bottom:0}
+.doc-title{font-weight:800;color:#111827}.doc-url{margin-top:.12rem;color:#64748b;font-size:.7rem;word-break:break-all}
+.source-chip{display:inline-flex;align-items:center;justify-content:center;min-height:27px;padding:.22rem .48rem;border:1px solid var(--border-subtle);border-radius:999px;background:#fff;color:#475569;font-size:.69rem;font-weight:760;text-align:center;line-height:1.35}
+.search-shortcuts{display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap}
+.compact-list{display:grid;gap:.45rem}
+.compact-item{padding:.58rem .68rem;border:1px solid var(--border-subtle);border-radius:11px;background:#fff;font-size:.76rem;color:#475569;overflow-wrap:anywhere}
+.compact-item strong{color:#111827}
+.raw{border:1px solid var(--border-subtle);border-radius:14px;background:#fff;overflow:hidden}
+.raw summary{cursor:pointer;padding:.7rem .8rem;font-size:.8rem;font-weight:750}
+.raw pre{margin:0;padding:.8rem;border-top:1px solid var(--border-subtle);background:#111827;color:#e5e7eb;max-height:420px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.72rem}
+.result-actions{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+@media(max-width:780px){.form-grid,.summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.container{width:min(100% - 2rem,var(--max-w))}.intro{padding:2rem 0 2.1rem}.tool{padding:1.6rem 0 3rem}.form-grid,.summary-grid{grid-template-columns:1fr}.actions .btn{width:100%}}
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk126">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Public Document Finder</h1>
+      <p class="intro__subtitle">Find publicly indexed and archived documents by organisation, phrase, keyword or website.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="card" role="region" aria-label="Public Document Finder">
+        <div class="form-grid">
+          <div class="field">
+            <label for="queryInput">Organisation, phrase or keywords</label>
+            <input id="queryInput" type="text" autocomplete="off" spellcheck="false" placeholder="annual report or organisation name"/>
+          </div>
+          <div class="field">
+            <label for="domainInput">Website/domain filter (optional)</label>
+            <input id="domainInput" type="text" autocomplete="off" spellcheck="false" placeholder="example.com"/>
+          </div>
+        </div>
+
+        <div class="type-box">
+          <span>Document types</span>
+          <div class="types">
+            <label class="type-chip"><input type="checkbox" value="pdf" checked><span>PDF</span></label>
+            <label class="type-chip"><input type="checkbox" value="doc" checked><span>Word</span></label>
+            <label class="type-chip"><input type="checkbox" value="xls" checked><span>Excel</span></label>
+            <label class="type-chip"><input type="checkbox" value="ppt" checked><span>PowerPoint</span></label>
+            <label class="type-chip"><input type="checkbox" value="csv"><span>CSV</span></label>
+            <label class="type-chip"><input type="checkbox" value="txt"><span>Text / RTF</span></label>
+            <label class="type-chip"><input type="checkbox" value="odf"><span>OpenDocument</span></label>
+          </div>
+        </div>
+
+        <div class="scope-row">
+          <label><input id="currentWebCheck" type="checkbox" checked> Current web</label>
+          <label><input id="archiveCheck" type="checkbox" checked> Wayback archive</label>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="searchBtn" type="button">Find Documents</button>
+          <button class="btn secondary" id="clearBtn" type="button">Clear</button>
+        </div>
+
+        <div class="status" id="status" aria-live="polite"></div>
+
+        <div class="results hidden" id="results">
+          <section class="section">
+            <div class="section-head"><h2>Summary</h2></div>
+            <div class="summary-grid">
+              <div class="kv"><span>Current matches</span><b id="sumCurrent">0</b></div>
+              <div class="kv"><span>Archived matches</span><b id="sumArchived">0</b></div>
+              <div class="kv"><span>Unique documents</span><b id="sumUnique">0</b></div>
+              <div class="kv"><span>Document types found</span><b id="sumTypes">0</b></div>
+            </div>
+            <div class="search-shortcuts" id="searchShortcuts" style="margin-top:.7rem"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Documents found</h2></div>
+            <div class="records-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Document</th>
+                    <th>Type</th>
+                    <th>Source</th>
+                    <th>Date / capture</th>
+                    <th>Open</th>
+                  </tr>
+                </thead>
+                <tbody id="documentsBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Search details</h2></div>
+            <div class="compact-list" id="searchDetails"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Raw public data</h2></div>
+            <details class="raw">
+              <summary>View raw search and archive data</summary>
+              <pre id="rawData"></pre>
+            </details>
+          </section>
+
+          <div class="result-actions">
+            <button class="btn secondary" id="copyReportBtn" type="button">Copy report</button>
+            <button class="btn secondary" id="savePdfBtn" type="button">Save PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="../../Assets/pdf-export.js?v=mk124"></script>
+<script>
+(function(){
+'use strict';
+
+const ALLORIGINS='https://api.allorigins.win/get?url=';
+const READER='https://r.jina.ai/';
+const WAYBACK='https://web.archive.org/cdx/search/cdx';
+const TIMEOUT=18000;
+
+const TYPE_MAP={
+  pdf:{label:'PDF',exts:['pdf']},
+  doc:{label:'Word',exts:['doc','docx']},
+  xls:{label:'Excel',exts:['xls','xlsx']},
+  ppt:{label:'PowerPoint',exts:['ppt','pptx']},
+  csv:{label:'CSV',exts:['csv']},
+  txt:{label:'Text / RTF',exts:['txt','rtf']},
+  odf:{label:'OpenDocument',exts:['odt','ods','odp']}
+};
+
+const queryInput=document.getElementById('queryInput');
+const domainInput=document.getElementById('domainInput');
+const currentWebCheck=document.getElementById('currentWebCheck');
+const archiveCheck=document.getElementById('archiveCheck');
+const searchBtn=document.getElementById('searchBtn');
+const clearBtn=document.getElementById('clearBtn');
+const statusEl=document.getElementById('status');
+const results=document.getElementById('results');
+
+const sumCurrent=document.getElementById('sumCurrent');
+const sumArchived=document.getElementById('sumArchived');
+const sumUnique=document.getElementById('sumUnique');
+const sumTypes=document.getElementById('sumTypes');
+const searchShortcuts=document.getElementById('searchShortcuts');
+const documentsBody=document.getElementById('documentsBody');
+const searchDetails=document.getElementById('searchDetails');
+const rawData=document.getElementById('rawData');
+const copyReportBtn=document.getElementById('copyReportBtn');
+const savePdfBtn=document.getElementById('savePdfBtn');
+
+let progressValue=0;
+let progressActive=false;
+let lastReport=null;
+
+function esc(v){
+  return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
+    .replaceAll('"','&quot;').replaceAll("'",'&#039;');
+}
+
+function nextPaint(){
+  return new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+}
+
+function setStatus(message='',type=''){
+  statusEl.textContent=message;
+  statusEl.className='status'+(type?' '+type:'')+(progressActive?' progress-status':'');
+  applyProgress();
+}
+
+function applyProgress(){
+  if(progressActive){
+    statusEl.classList.add('progress-status');
+    statusEl.classList.toggle('is-complete',progressValue>=100);
+    statusEl.style.setProperty('--progress-fill',progressValue+'%');
+    statusEl.setAttribute('role','progressbar');
+    statusEl.setAttribute('aria-valuemin','0');
+    statusEl.setAttribute('aria-valuemax','100');
+    statusEl.setAttribute('aria-valuenow',String(Math.round(progressValue)));
+  }else{
+    statusEl.classList.remove('progress-status','is-complete');
+    statusEl.style.removeProperty('--progress-fill');
+    ['role','aria-valuemin','aria-valuemax','aria-valuenow'].forEach(attr=>statusEl.removeAttribute(attr));
+  }
+}
+
+function setProgress(v){
+  progressValue=Math.max(progressValue,Math.max(0,Math.min(100,Number(v)||0)));
+  progressActive=true;
+  applyProgress();
+}
+
+function hideProgress(){
+  progressValue=0;
+  progressActive=false;
+  applyProgress();
+}
+
+function setBusy(v){
+  searchBtn.disabled=v;
+  clearBtn.disabled=v;
+  searchBtn.textContent=v?'Searching…':'Find Documents';
+}
+
+function normaliseDomain(value){
+  let raw=String(value||'').trim().toLowerCase();
+  if(!raw) return '';
+  raw=raw.replace(/^https?:\/\//,'').replace(/^www\./,'').split(/[/?#]/)[0].replace(/\.$/,'');
+  if(!raw.includes('.')||raw.length>253||!/^[a-z0-9.-]+$/i.test(raw)){
+    throw new Error('Enter a valid public website/domain filter.');
+  }
+  return raw;
+}
+
+function selectedExtensions(){
+  const selected=[...document.querySelectorAll('.type-chip input:checked')].map(x=>x.value);
+  const exts=[];
+  selected.forEach(key=>{
+    (TYPE_MAP[key]?.exts||[]).forEach(ext=>exts.push(ext));
+  });
+  return [...new Set(exts)];
+}
+
+function buildSearchQuery(query,domain,extensions){
+  const parts=[];
+  if(query.trim()) parts.push(query.trim());
+  if(domain) parts.push(`site:${domain}`);
+
+  const typeTerms=extensions.map(ext=>`filetype:${ext}`);
+  if(typeTerms.length===1) parts.push(typeTerms[0]);
+  else if(typeTerms.length>1) parts.push(`(${typeTerms.join(' OR ')})`);
+
+  return parts.join(' ').trim();
+}
+
+async function fetchTimeout(url,options={}){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),TIMEOUT);
+  try{
+    return await fetch(url,{...options,signal:controller.signal,credentials:'omit'});
+  }finally{
+    clearTimeout(timer);
+  }
+}
+
+function documentType(url){
+  let pathname='';
+  try{pathname=new URL(url).pathname.toLowerCase()}catch(_){pathname=String(url||'').toLowerCase().split(/[?#]/)[0]}
+  const m=pathname.match(/\.([a-z0-9]{2,5})$/i);
+  const ext=m?m[1].toLowerCase():'';
+
+  for(const item of Object.values(TYPE_MAP)){
+    if(item.exts.includes(ext)) return {ext,label:item.label};
+  }
+
+  return ext?{ext,label:ext.toUpperCase()}:{ext:'',label:'Document'};
+}
+
+function looksLikeSelectedDocument(url,extensions){
+  const type=documentType(url);
+  return !!type.ext&&extensions.includes(type.ext);
+}
+
+function cleanResultUrl(url){
+  let value=String(url||'').trim().replace(/&amp;/g,'&');
+  if(!value) return '';
+
+  if(value.startsWith('//')) value='https:'+value;
+
+  try{
+    const parsed=new URL(value);
+    const duckTarget=parsed.searchParams.get('uddg');
+    if(duckTarget){
+      try{return decodeURIComponent(duckTarget)}catch(_){return duckTarget}
+    }
+    if(!['http:','https:'].includes(parsed.protocol)) return '';
+    return parsed.toString();
+  }catch(_){
+    return '';
+  }
+}
+
+function parseDuckDuckGo(html,extensions,domain){
+  const doc=new DOMParser().parseFromString(String(html||''),'text/html');
+  const rows=[];
+
+  doc.querySelectorAll('.result').forEach(result=>{
+    const a=result.querySelector('.result__a,a[href]');
+    if(!a) return;
+
+    const url=cleanResultUrl(a.getAttribute('href')||'');
+    if(!url||!looksLikeSelectedDocument(url,extensions)) return;
+
+    if(domain){
+      try{
+        const host=new URL(url).hostname.toLowerCase().replace(/^www\./,'');
+        if(host!==domain&&!host.endsWith('.'+domain)) return;
+      }catch(_){return}
+    }
+
+    const snippet=(result.querySelector('.result__snippet')?.textContent||'').trim();
+    const title=(a.textContent||'').trim()||decodeURIComponent(url.split('/').pop()||'Document');
+
+    rows.push({
+      title,
+      url,
+      snippet,
+      source:'Current web',
+      sourceDetail:'DuckDuckGo result page',
+      date:'',
+      archiveUrl:''
+    });
+  });
+
+  return rows;
+}
+
+function parseMarkdownLinks(text,extensions,domain){
+  const rows=[];
+  const linkRe=/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g;
+  let match;
+
+  while((match=linkRe.exec(String(text||'')))){
+    const title=match[1].trim();
+    const url=cleanResultUrl(match[2]);
+    if(!url||!looksLikeSelectedDocument(url,extensions)) continue;
+
+    if(domain){
+      try{
+        const host=new URL(url).hostname.toLowerCase().replace(/^www\./,'');
+        if(host!==domain&&!host.endsWith('.'+domain)) continue;
+      }catch(_){continue}
+    }
+
+    rows.push({
+      title:title||decodeURIComponent(url.split('/').pop()||'Document'),
+      url,
+      snippet:'',
+      source:'Current web',
+      sourceDetail:'Public search-page fallback',
+      date:'',
+      archiveUrl:''
+    });
+  }
+
+  return rows;
+}
+
+async function currentWebSearch(searchQuery,extensions,domain){
+  const ddg=`https://html.duckduckgo.com/html/?q=${encodeURIComponent(searchQuery)}`;
+
+  try{
+    const direct=await fetchTimeout(ddg,{method:'GET',cache:'no-store'});
+    if(direct.ok){
+      const rows=parseDuckDuckGo(await direct.text(),extensions,domain);
+      if(rows.length) return {rows,source:'DuckDuckGo direct',error:''};
+    }
+  }catch(_){}
+
+  try{
+    const proxy=await fetchTimeout(ALLORIGINS+encodeURIComponent(ddg),{
+      headers:{Accept:'application/json'},cache:'no-store'
+    });
+    if(proxy.ok){
+      const payload=await proxy.json();
+      const rows=parseDuckDuckGo(String(payload?.contents||''),extensions,domain);
+      if(rows.length) return {rows,source:'DuckDuckGo via public raw fallback',error:''};
+    }
+  }catch(_){}
+
+  const bing=`https://www.bing.com/search?q=${encodeURIComponent(searchQuery)}`;
+  try{
+    const reader=await fetchTimeout(READER+bing,{
+      headers:{Accept:'application/json'},cache:'no-store'
+    });
+    if(reader.ok){
+      const payload=await reader.json();
+      const data=payload?.data||payload;
+      const content=String(data?.content||'');
+      const rows=parseMarkdownLinks(content,extensions,domain);
+      if(rows.length) return {rows,source:'Bing result page via public reader fallback',error:''};
+    }
+  }catch(_){}
+
+  return {
+    rows:[],
+    source:'Unavailable',
+    error:'Current search result pages did not return machine-readable document matches.'
+  };
+}
+
+function extensionRegex(extensions){
+  const escaped=extensions.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+  return `(?i).*\\.(${escaped.join('|')})(?:\\?.*)?$`;
+}
+
+async function fetchWaybackJson(url){
+  try{
+    const r=await fetchTimeout(url,{headers:{Accept:'application/json'},cache:'no-store'});
+    if(r.ok) return await r.json();
+  }catch(_){}
+
+  try{
+    const r=await fetchTimeout(ALLORIGINS+encodeURIComponent(url),{
+      headers:{Accept:'application/json'},cache:'no-store'
+    });
+    if(!r.ok) return [];
+    const payload=await r.json();
+    return JSON.parse(String(payload?.contents||'[]'));
+  }catch(_){
+    return [];
+  }
+}
+
+async function archiveSearch(domain,extensions){
+  if(!domain||!extensions.length) return {rows:[],source:'Not requested',error:''};
+
+  const filter=`original:${extensionRegex(extensions)}`;
+  const endpoint=
+    `${WAYBACK}?url=${encodeURIComponent(domain+'/*')}`+
+    `&matchType=domain&output=json`+
+    `&fl=timestamp,original,statuscode,mimetype,digest`+
+    `&filter=statuscode:200`+
+    `&filter=${encodeURIComponent(filter)}`+
+    `&collapse=urlkey&limit=250`;
+
+  let data=await fetchWaybackJson(endpoint);
+
+  if(!Array.isArray(data)||data.length<2){
+    const broad=
+      `${WAYBACK}?url=${encodeURIComponent(domain+'/*')}`+
+      `&matchType=domain&output=json`+
+      `&fl=timestamp,original,statuscode,mimetype,digest`+
+      `&filter=statuscode:200&collapse=urlkey&limit=1000`;
+    data=await fetchWaybackJson(broad);
+  }
+
+  if(!Array.isArray(data)||data.length<2){
+    return {rows:[],source:'Wayback CDX',error:'No archived document rows were returned.'};
+  }
+
+  const headers=data[0];
+  const rows=data.slice(1)
+    .map(row=>Object.fromEntries(headers.map((key,i)=>[key,row[i]])))
+    .filter(row=>row.original&&row.timestamp&&looksLikeSelectedDocument(row.original,extensions))
+    .map(row=>({
+      title:decodeURIComponent(String(row.original).split('/').pop()?.split('?')[0]||'Archived document'),
+      url:row.original,
+      snippet:row.mimetype||'',
+      source:'Wayback archive',
+      sourceDetail:'Internet Archive CDX',
+      date:archiveDate(row.timestamp),
+      timestamp:row.timestamp,
+      archiveUrl:`https://web.archive.org/web/${row.timestamp}/${row.original}`
+    }));
+
+  return {rows,source:'Wayback CDX',error:''};
+}
+
+function archiveDate(timestamp){
+  const value=String(timestamp||'');
+  if(value.length<8) return value;
+  return `${value.slice(6,8)}/${value.slice(4,6)}/${value.slice(0,4)}`;
+}
+
+function dedupeRows(rows){
+  const map=new Map();
+
+  rows.forEach(row=>{
+    const key=(row.source==='Wayback archive'
+      ?`${row.source}|${row.url}|${row.timestamp||''}`
+      :`${row.source}|${row.url}`
+    ).toLowerCase();
+
+    if(!map.has(key)) map.set(key,row);
+  });
+
+  return [...map.values()];
+}
+
+function renderDocuments(rows){
+  documentsBody.innerHTML='';
+
+  if(!rows.length){
+    documentsBody.innerHTML='<tr><td colspan="5" style="text-align:center;color:#64748b;padding:1rem">No document matches were returned automatically. Use the search shortcuts above for the same generated query.</td></tr>';
+    return;
+  }
+
+  rows.forEach(row=>{
+    const type=documentType(row.url);
+    const openUrl=row.archiveUrl||row.url;
+    const sourceClass=row.source==='Wayback archive'?'Wayback':'Current web';
+
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td>
+        <div class="doc-title">${esc(row.title||'Document')}</div>
+        <div class="doc-url">${esc(row.url)}</div>
+      </td>
+      <td>${esc(type.label)}${type.ext?` (.${esc(type.ext)})`:''}</td>
+      <td><span class="source-chip">${esc(sourceClass)}</span></td>
+      <td>${esc(row.date||'Current')}</td>
+      <td><a class="mini-link" href="${esc(openUrl)}" target="_blank" rel="noopener noreferrer">${row.archiveUrl?'Open archive':'Open document'}</a></td>
+    `;
+    documentsBody.appendChild(tr);
+  });
+}
+
+function renderShortcuts(searchQuery){
+  searchShortcuts.innerHTML='';
+
+  const links=[
+    ['Google','https://www.google.com/search?q='+encodeURIComponent(searchQuery)],
+    ['Bing','https://www.bing.com/search?q='+encodeURIComponent(searchQuery)],
+    ['DuckDuckGo','https://duckduckgo.com/?q='+encodeURIComponent(searchQuery)]
+  ];
+
+  links.forEach(([label,url])=>{
+    const a=document.createElement('a');
+    a.className='mini-link';
+    a.href=url;
+    a.target='_blank';
+    a.rel='noopener noreferrer';
+    a.textContent=`Search ${label}`;
+    searchShortcuts.appendChild(a);
+  });
+}
+
+function addDetail(title,text){
+  const item=document.createElement('div');
+  item.className='compact-item';
+  item.innerHTML=`<strong>${esc(title)}</strong><br>${esc(text)}`;
+  searchDetails.appendChild(item);
+}
+
+function buildReport(data){
+  const lines=[
+    'Public Document Finder',
+    '',
+    `Search terms: ${data.query||'None'}`,
+    `Domain filter: ${data.domain||'None'}`,
+    `Generated query: ${data.searchQuery}`,
+    `Document extensions: ${data.extensions.join(', ')}`,
+    `Current matches: ${data.currentRows.length}`,
+    `Archived matches: ${data.archiveRows.length}`,
+    `Unique displayed results: ${data.rows.length}`,
+    '',
+    'Documents:'
+  ];
+
+  if(!data.rows.length){
+    lines.push('No document matches were returned automatically.');
+  }else{
+    data.rows.forEach(row=>{
+      const type=documentType(row.url);
+      lines.push(`${row.title||'Document'} [${type.label}]`);
+      lines.push(`Source: ${row.source}`);
+      lines.push(`URL: ${row.url}`);
+      if(row.archiveUrl) lines.push(`Archive: ${row.archiveUrl}`);
+      if(row.date) lines.push(`Date/capture: ${row.date}`);
+      lines.push('');
+    });
+  }
+
+  lines.push(
+    'Search shortcuts:',
+    `Google: https://www.google.com/search?q=${encodeURIComponent(data.searchQuery)}`,
+    `Bing: https://www.bing.com/search?q=${encodeURIComponent(data.searchQuery)}`,
+    `DuckDuckGo: https://duckduckgo.com/?q=${encodeURIComponent(data.searchQuery)}`
+  );
+
+  return lines.join('\n').trim();
+}
+
+async function search(){
+  const query=queryInput.value.trim();
+
+  let domain='';
+  try{
+    domain=normaliseDomain(domainInput.value);
+  }catch(error){
+    hideProgress();
+    setStatus(error.message,'error');
+    return;
+  }
+
+  const extensions=selectedExtensions();
+
+  if(!query&&!domain){
+    hideProgress();
+    setStatus('Enter search terms, a website/domain filter, or both.','error');
+    return;
+  }
+
+  if(!extensions.length){
+    hideProgress();
+    setStatus('Select at least one document type.','error');
+    return;
+  }
+
+  if(!currentWebCheck.checked&&!archiveCheck.checked){
+    hideProgress();
+    setStatus('Select Current web, Wayback archive, or both.','error');
+    return;
+  }
+
+  domainInput.value=domain;
+  results.classList.add('hidden');
+  setBusy(true);
+  hideProgress();
+  setProgress(5);
+  setStatus('Building document search query…');
+  await nextPaint();
+
+  try{
+    const searchQuery=buildSearchQuery(query,domain,extensions);
+    renderShortcuts(searchQuery);
+
+    setProgress(18);
+    setStatus('Searching currently indexed public documents…');
+    await nextPaint();
+
+    let current={rows:[],source:'Not requested',error:''};
+    if(currentWebCheck.checked){
+      current=await currentWebSearch(searchQuery,extensions,domain);
+    }
+
+    setProgress(58);
+    setStatus(domain&&archiveCheck.checked
+      ?'Searching Wayback document history…'
+      :'Preparing public document results…'
+    );
+    await nextPaint();
+
+    let archive={rows:[],source:'Not requested',error:''};
+    if(archiveCheck.checked&&domain){
+      archive=await archiveSearch(domain,extensions);
+    }
+
+    setProgress(86);
+    setStatus('Deduplicating and classifying documents…');
+    await nextPaint();
+
+    const currentRows=dedupeRows(current.rows);
+    const archiveRows=dedupeRows(archive.rows);
+    const rows=dedupeRows([...currentRows,...archiveRows])
+      .sort((a,b)=>{
+        if(a.source!==b.source) return a.source==='Current web'?-1:1;
+        return String(b.timestamp||'').localeCompare(String(a.timestamp||''))||
+          String(a.title||'').localeCompare(String(b.title||''));
+      });
+
+    renderDocuments(rows);
+
+    const typeCount=new Set(rows.map(row=>documentType(row.url).label)).size;
+
+    sumCurrent.textContent=String(currentRows.length);
+    sumArchived.textContent=String(archiveRows.length);
+    sumUnique.textContent=String(rows.length);
+    sumTypes.textContent=String(typeCount);
+
+    searchDetails.innerHTML='';
+    addDetail('Generated query',searchQuery);
+    addDetail('Current-web retrieval',current.source+(current.error?` · ${current.error}`:''));
+    addDetail('Wayback retrieval',
+      archiveCheck.checked
+        ?(domain?archive.source+(archive.error?` · ${archive.error}`:''):'A domain filter is required for archive-wide document discovery.')
+        :'Not requested'
+    );
+    addDetail('Selected extensions',extensions.map(x=>'.'+x).join(', '));
+
+    rawData.textContent=JSON.stringify({
+      query,
+      domain,
+      searchQuery,
+      extensions,
+      current,
+      archive,
+      displayedRows:rows
+    },null,2);
+
+    lastReport={
+      query,
+      domain,
+      text:buildReport({
+        query,domain,searchQuery,extensions,currentRows,archiveRows,rows
+      })
+    };
+
+    setProgress(100);
+    results.classList.remove('hidden');
+    setStatus(`Document search complete. ${rows.length} result${rows.length===1?'':'s'} returned automatically.`);
+  }catch(error){
+    hideProgress();
+    setStatus(error.message||'The public document search could not be completed.','error');
+  }finally{
+    setBusy(false);
+  }
+}
+
+function clearAll(){
+  queryInput.value='';
+  domainInput.value='';
+  currentWebCheck.checked=true;
+  archiveCheck.checked=true;
+
+  document.querySelectorAll('.type-chip input').forEach(input=>{
+    input.checked=['pdf','doc','xls','ppt'].includes(input.value);
+  });
+
+  results.classList.add('hidden');
+  [searchShortcuts,documentsBody,searchDetails].forEach(el=>el.innerHTML='');
+  sumCurrent.textContent='0';
+  sumArchived.textContent='0';
+  sumUnique.textContent='0';
+  sumTypes.textContent='0';
+  rawData.textContent='';
+  lastReport=null;
+  hideProgress();
+  setStatus('');
+  queryInput.focus();
+}
+
+async function copyReport(){
+  if(!lastReport?.text) return;
+
+  const original=copyReportBtn.textContent;
+  try{
+    if(navigator.clipboard&&window.isSecureContext){
+      await navigator.clipboard.writeText(lastReport.text);
+    }else{
+      const area=document.createElement('textarea');
+      area.value=lastReport.text;
+      area.style.position='fixed';
+      area.style.opacity='0';
+      document.body.appendChild(area);
+      area.select();
+      const ok=document.execCommand('copy');
+      area.remove();
+      if(!ok) throw new Error();
+    }
+    copyReportBtn.textContent='Copied';
+    setTimeout(()=>copyReportBtn.textContent=original,1200);
+  }catch(_){
+    hideProgress();
+    setStatus('Could not copy the report.','error');
+  }
+}
+
+async function savePdf(){
+  if(!lastReport?.text) return;
+
+  const original=savePdfBtn.textContent;
+  savePdfBtn.disabled=true;
+  savePdfBtn.textContent='Creating PDF…';
+
+  try{
+    if(!window.ToolsPDFExport) throw new Error('PDF export could not load.');
+    await window.ToolsPDFExport.saveTextPdf({
+      title:'Public Document Finder Report',
+      subtitle:lastReport.domain||lastReport.query||'Public document search',
+      text:lastReport.text,
+      filename:'public-document-finder-report.pdf'
+    });
+    savePdfBtn.textContent='Saved';
+    setTimeout(()=>savePdfBtn.textContent=original,1200);
+  }catch(error){
+    hideProgress();
+    setStatus(error.message||'Could not create the PDF report.','error');
+    savePdfBtn.textContent=original;
+  }finally{
+    savePdfBtn.disabled=false;
+  }
+}
+
+searchBtn.addEventListener('click',search);
+clearBtn.addEventListener('click',clearAll);
+copyReportBtn.addEventListener('click',copyReport);
+savePdfBtn.addEventListener('click',savePdf);
+[queryInput,domainInput].forEach(input=>{
+  input.addEventListener('keydown',event=>{if(event.key==='Enter') search()});
+});
+})();
+</script>
+<script src="../../Assets/site-shell.js?v=mk126"></script>
+</body>
+</html>

@@ -24,7 +24,7 @@
 <meta name="twitter:title" content="Privacy Policy | Adrian Headley Tools"/>
 <meta name="twitter:description" content="Read the privacy information for Adrian Headley Tools, including browser-based processing, external services and how tool data is handled."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/privacy.html#webpage","url":"https://tools.adrianheadley.com/pages/privacy.html","name":"Privacy Policy","description":"Read the privacy information for Adrian Headley Tools, including browser-based processing, external services and how tool data is handled.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"dateModified":"2026-08-28","breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/privacy.html#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/privacy.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Privacy Policy","item":"https://tools.adrianheadley.com/pages/privacy.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/privacy.html#webpage","url":"https://tools.adrianheadley.com/pages/privacy.html","name":"Privacy Policy","description":"Read the privacy information for Adrian Headley Tools, including browser-based processing, external services and how tool data is handled.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"dateModified":"2026-09-07","breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/privacy.html#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/privacy.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Privacy Policy","item":"https://tools.adrianheadley.com/pages/privacy.html"}]}]}</script>
 <style>
 :root{
   --bg:#f5f5f7;
@@ -203,7 +203,7 @@ main{flex:1}
 </style>
 
 <link rel="icon" href="../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../Assets/site-shell.css?v=mk85">
+<link rel="stylesheet" href="../Assets/site-shell.css?v=mk126">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -246,23 +246,25 @@ main{flex:1}
       </div>
       <p>
         Welcome to <strong>tools.adrianheadley.com</strong>. Privacy is built into the way
-        the site works. The tools process information locally inside your browser rather
-        than sending it elsewhere.
+        the site works. Most tools process information locally inside your browser. Tools
+        that require live internet data may contact an independent service directly from
+        your browser.
       </p>
 
       <div class="section-heading">
         <h2>Browser-Only Processing</h2>
       </div>
       <p>
-        All tools hosted on tools.adrianheadley.com run entirely in your browser. Text,
-        images, documents and other information used within the tools are processed on
-        your device.
+        Local tools process text, images, documents and other information on your device.
+        Live-data tools may send the value needed for the lookup directly from your browser
+        to the relevant independent service.
       </p>
       <ul>
-        <li><strong>No processing servers</strong> — No separate server receives or processes your tool inputs.</li>
-        <li><strong>Website hosting only</strong> — The server only delivers the HTML, CSS, JavaScript and other files needed to open the website.</li>
-        <li><strong>No uploads</strong> — Files opened in supported tools remain on your device unless a tool clearly links to an independent external service.</li>
-        <li><strong>No retained tool data</strong> — Information entered into the tools is not saved, logged or stored by tools.adrianheadley.com.</li>
+        <li><strong>No tools.adrianheadley.com processing server</strong> — The website does not operate a separate backend that receives or stores your tool inputs.</li>
+        <li><strong>Website hosting only</strong> — The hosting server delivers the HTML, CSS, JavaScript and other files needed to open the website.</li>
+        <li><strong>Local files stay local</strong> — Files opened in browser-based tools remain on your device unless a tool clearly uses or links to an independent external service.</li>
+        <li><strong>Live lookups</strong> — Some tools contact public or third-party services directly from your browser. The searched domain, URL, address or other value needed for that lookup may therefore be sent to that service.</li>
+        <li><strong>No retained tool data by this site</strong> — tools.adrianheadley.com does not intentionally save or retain the information entered into the tools.</li>
       </ul>
 
       <div class="section-heading">
@@ -296,6 +298,18 @@ main{flex:1}
       </p>
 
       <div class="section-heading">
+        <h2>Live Data Services</h2>
+      </div>
+      <p> Some tools need live public information. Username, Name & Contact OSINT may use AllOrigins, Jina Reader, public search-result pages and the Internet Archive Wayback Machine to check current and archived public profile pages and cross-reference user-supplied public details. Email and phone searches are limited to publicly indexed references and do not use account-recovery or contact-syncing methods. Other
+        live-data tools use their own public or third-party services. These services are
+        independent of tools.adrianheadley.com and may apply their own privacy, logging,
+        rate-limit and retention practices.
+      </p>
+      <p>IP &amp; ASN Lookup may query RIPEstat, Google DNS-over-HTTPS and ipwho.is for public network, reverse-DNS and approximate IP geolocation information. The IP address or ASN entered may therefore be sent to those independent services.</p>
+      <p>Email Domain Analyzer may query Google DNS-over-HTTPS, AllOrigins for a public MTA-STS policy fallback, and Mail.gw for its current public temporary-email-domain list. The domain entered may therefore be sent to those independent services. It does not probe specific mailboxes or test SMTP recipients.</p>
+      <p>Public Document Finder may send the generated public search query to DuckDuckGo or Bing result pages through browser/public-content fallbacks, and may query the Internet Archive CDX service when archive searching is selected. Search terms and any domain filter may therefore be sent to those independent services. The tool searches public/indexed material and does not brute-force hidden directories.</p>
+
+      <div class="section-heading">
         <h2>External Websites</h2>
       </div>
       <p>
@@ -322,9 +336,10 @@ main{flex:1}
         how information is handled will be explained clearly before it is introduced.
       </p>
 
-      <p class="last-updated"><em>Last updated: June 2026</em></p>
+      <p class="last-updated"><em>Last updated: September 2026</em></p>
     </div>
   </section>
+      <p>Browser Code Studio keeps project files, imported code, project-wide search/replace data, local coaching analysis, queued console input and saved sessions in the browser unless you explicitly export them. The enhanced Monaco editor and Pyodide Python runtime are loaded from public jsDelivr CDN resources when available, and Python may download compatible packages needed by imports. If you choose Prepare offline mode, editor/runtime assets are stored in browser Cache Storage for later offline use. Those independent CDN requests are subject to the provider's own logging and privacy practices. The tool does not upload the project source to tools.adrianheadley.com.</p>
 </main>
 
 <footer class="tools-global-footer">
@@ -341,6 +356,6 @@ main{flex:1}
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 </script>
-<script src="../Assets/site-shell.js?v=mk85"></script>
+<script src="../Assets/site-shell.js?v=mk126"></script>
 </body>
 </html>

@@ -25,7 +25,7 @@
 <meta name="twitter:title" content="Free Code 39 Barcode Generator | Adrian Headley Tools"/>
 <meta name="twitter:description" content="Generate a Code 39 barcode with optional name, location and item labels, then download it as PNG, SVG or PDF."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html","name":"Barcode Generator","description":"Generate a Code 39 barcode with optional name, location and item labels, then download it as PNG, SVG or PDF.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#app","name":"Barcode Generator","url":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html","description":"Generate a Code 39 barcode with optional name, location and item labels, then download it as PNG, SVG or PDF.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Optionally add a name, location or item label.","Select Generate barcode to create the barcode and numeric value.","Choose PNG, SVG or PDF and download the result, or copy a setup link."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Barcode Generator","item":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html","name":"Barcode Generator","description":"Generate a Code 39 barcode with optional name, location and item labels, then download it as PNG, SVG or PDF.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#breadcrumb"},"dateModified":"2026-09-07","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#app","name":"Barcode Generator","url":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html","description":"Generate a Code 39 barcode with optional name, location and item labels, then download it as PNG, SVG or PDF.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Optionally add a name, location or item label.","Select Generate barcode to create the barcode and numeric value.","Choose PNG, SVG or PDF and download the result, or copy a setup link.","Export the barcode as a professionally branded PDF using the site-wide Adrian Headley Tools PDF template."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Barcode Generator","item":"https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html"}]}]}</script>
 <style>
     :root{
       --bg:#f5f5f7;
@@ -318,7 +318,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk85">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk126">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -406,6 +406,8 @@
 
 <!-- RIYST_INLINE_SCRIPT_START -->
 
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="../../Assets/pdf-export.js?v=mk124"></script>
 <script>
 (function(){const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();})();
 
@@ -636,57 +638,6 @@ function clearSharedStateHash(){
       });
     }
 
-    async function canvasToPdfBlob(canvas){
-      const dataURL = canvas.toDataURL('image/jpeg', 0.95);
-      const b64 = dataURL.split(',')[1];
-      const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-      const w = canvas.width, h = canvas.height;
-      const pdfW = w, pdfH = h;
-
-      function str2buf(s){ return Uint8Array.from(s, c=>c.charCodeAt(0)); }
-      function concat(...arrays){
-        let len = arrays.reduce((a,b)=>a+b.length,0);
-        let out = new Uint8Array(len);
-        let off = 0;
-        for(const arr of arrays){ out.set(arr, off); off += arr.length; }
-        return out;
-      }
-
-      const header = str2buf('%PDF-1.4\n');
-      const objs = [];
-      const xref = [];
-      let offset = header.length;
-
-      function addObject(s, bin){
-        const head = str2buf(s);
-        const body = bin ? bin : new Uint8Array();
-        const end = str2buf('\nendobj\n');
-        const chunk = concat(head, body, end);
-        const start = offset;
-        offset += chunk.length;
-        objs.push(chunk);
-        xref.push(start);
-      }
-
-      addObject('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
-      addObject(`2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n`);
-      addObject(`3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pdfW} ${pdfH}] /Resources << /XObject << /Im0 4 0 R >> /ProcSet [/PDF /ImageC] >> /Contents 5 0 R >>\nendobj\n`);
-      const imgDict = `4 0 obj\n<< /Type /XObject /Subtype /Image /Width ${w} /Height ${h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.length} >>\nstream\n`;
-      addObject(imgDict, concat(bytes, str2buf('\nendstream')));
-      const content = `q\n${pdfW} 0 0 ${pdfH} 0 0 cm\n/Im0 Do\nQ\n`;
-      const contentBytes = str2buf(content);
-      addObject(`5 0 obj\n<< /Length ${contentBytes.length} >>\nstream\n`, concat(contentBytes, str2buf('\nendstream')));
-
-      let xrefStr = 'xref\n0 ' + (xref.length + 1) + '\n';
-      xrefStr += '0000000000 65535 f \n';
-      for(const off of xref){
-        xrefStr += off.toString().padStart(10,'0') + ' 00000 n \n';
-      }
-      const xrefBuf = str2buf(xrefStr);
-      const trailer = str2buf(`trailer\n<< /Size ${xref.length + 1} /Root 1 0 R >>\nstartxref\n${offset}\n%%EOF`);
-      const full = concat(header, ...objs, xrefBuf, trailer);
-      return new Blob([full], {type:'application/pdf'});
-    }
 
     function download(name, blob){
       const a = document.createElement('a');
@@ -745,8 +696,19 @@ function clearSharedStateHash(){
           i.onerror = rej;
           i.src = url;
         });
-        const pdfBlob = await canvasToPdfBlob(canvas);
-        download('barcode.pdf', pdfBlob);
+        const metaLines=[
+          nameField.value?`Name: ${nameField.value}`:'',
+          locField.value?`Location: ${locField.value}`:'',
+          itemField.value?`Item: ${itemField.value}`:''
+        ].filter(Boolean);
+
+        await window.ToolsPDFExport.saveCanvasPdf({
+          canvas,
+          title:'Barcode Generator Export',
+          subtitle:lastValue?`Barcode: ${lastValue}`:'',
+          metaLines,
+          filename:'barcode.pdf'
+        });
       }
     });
 
@@ -754,6 +716,6 @@ function clearSharedStateHash(){
 </script>
 
 <!-- RIYST_INLINE_SCRIPT_END -->
-<script src="../../Assets/site-shell.js?v=mk85"></script>
+<script src="../../Assets/site-shell.js?v=mk126"></script>
 </body>
 </html>

@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="#f5f5f7" name="theme-color"/>
+
+<title>Email Header Analyzer | Adrian Headley Tools</title>
+<meta name="description" content="Deeply analyse raw email headers locally for delivery hops, visible recipients, sender and reply identities, SPF, DKIM, DMARC, ARC, automation/bulk-mail clues, sending services, public IPs, thread data, MIME structure, attachments and anti-spam headers."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/email-header-analyzer.html"/>
+
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Email Header Analyzer | Adrian Headley Tools"/>
+<meta property="og:description" content="Inspect raw email headers for routing, recipients, authentication, automation, sending-service and message-structure clues."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/email-header-analyzer.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Email Header Analyzer | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Inspect routing, recipients, SPF, DKIM, DMARC, automation, bulk-mail and sender-service clues."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/email-header-analyzer.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/email-header-analyzer.html","name":"Email Header Analyzer","description":"Deeply analyse raw email headers or a saved .eml email locally for routing, recipients, authentication, automation, mail-service and message-structure clues.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/email-header-analyzer.html#breadcrumb"},"dateModified":"2026-09-07","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/email-header-analyzer.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/email-header-analyzer.html#app","name":"Email Header Analyzer","url":"https://tools.adrianheadley.com/pages/toolpages/email-header-analyzer.html","description":"Deep email-header analysis performed locally in the browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Paste raw email headers, upload a saved .eml email, or drag a saved email onto the tool.","Reconstruct Received hops with from/by servers, transport protocol, message IDs, recipient routing, timestamps and delays.","Extract visible To, Cc, Resent-To, Resent-Cc, Delivered-To, X-Original-To, Envelope-To and other recipient clues.","Summarise SPF, DKIM, DMARC and ARC results plus authentication domains and DKIM signing details.","Estimate automation or bulk-mail likelihood using transparent header signals such as Auto-Submitted, Precedence, List-* headers, no-reply senders and bulk-mail-provider headers.","Detect public sending-service clues including Microsoft, Google, Amazon SES, SendGrid, Mailgun, Mailchimp/Mandrill, HubSpot, Brevo, Postmark, SparkPost, Mailjet, Klaviyo, Customer.io and Resend.","Extract public IP addresses and the headers they appeared in.","Show thread and conversation metadata including In-Reply-To, References, Thread-Topic and Thread-Index.","Inspect MIME structure and identify attachment filenames when the full saved email is available.","Summarise spam-filter, antivirus and anti-abuse headers where present.","Highlight From, Reply-To, Return-Path and Message-ID domain mismatches.","Copy or export the report using the site-wide PDF template.","Process the supplied message locally without uploading it."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/email-header-analyzer.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Email Header Analyzer","item":"https://tools.adrianheadley.com/pages/toolpages/email-header-analyzer.html"}]}]}</script>
+
+<style>
+:root{
+  --bg:#f5f5f7;--text:#111827;--text-soft:#4b5563;--accent:#2563eb;--accent-hover:#1d4ed8;
+  --border-subtle:#e5e7eb;--border-strong:#d1d5db;--shadow-soft:0 12px 30px rgba(15,23,42,.08);
+  --radius-pill:999px;--max-w:1080px
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%;overflow-x:hidden}
+body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}
+main{flex:1}
+.container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+.skip-link{position:absolute;left:-999px;top:.5rem;padding:.45rem .75rem;background:#111827;color:#f9fafb;z-index:100;border-radius:var(--radius-pill);font-size:.85rem}
+.skip-link:focus{left:.5rem}
+.intro{text-align:center;padding:2.6rem 0 2.4rem}
+.intro__title{font-size:clamp(2.1rem,3vw,2.6rem);line-height:1.15;margin:0 0 .8rem;font-weight:750;letter-spacing:-.03em}
+.intro__subtitle{max-width:800px;margin:0 auto;color:var(--text-soft);font-size:.96rem;font-weight:500}
+.tool{padding:2.4rem 0 4rem}
+.card{background:rgba(255,255,255,.92);border:1px solid var(--border-subtle);border-radius:24px;box-shadow:var(--shadow-soft);padding:clamp(1.2rem,3vw,1.7rem);max-width:1080px;margin:0 auto}
+.field label{display:block;margin:0 0 .35rem;color:var(--text-soft);font-size:.85rem;font-weight:700}
+.field textarea{width:100%;min-height:190px;padding:.78rem .9rem;border:1px solid var(--border-strong);border-radius:14px;background:#fff;color:var(--text);font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;outline:none;resize:vertical;transition:border-color .16s,box-shadow .16s}
+.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.11)}
+.field textarea.is-dragover{border-color:var(--accent);background:#eff6ff;box-shadow:0 0 0 4px rgba(37,99,235,.11)}
+.upload-note{text-align:center;margin:.45rem 0 0;color:var(--text-soft);font-size:.76rem;font-weight:650}
+
+.toolbar{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-top:.8rem}
+.btn,.file-btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;border-radius:var(--radius-pill);font-weight:700;text-decoration:none;cursor:pointer}
+.btn,.file-btn{min-height:42px;padding:.58rem 1rem;border:1px solid transparent;background:var(--accent);color:#fff;font:700 .82rem/1.2 Inter,system-ui,sans-serif}
+.btn:hover:not(:disabled),.file-btn:hover{background:var(--accent-hover)}
+.btn.secondary,.file-btn.secondary{background:#fff;color:var(--text);border-color:var(--border-strong)}
+.btn.secondary:hover:not(:disabled),.file-btn.secondary:hover{background:#f8fafc}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.file-btn input{display:none}
+#status.progress-status{
+  --progress-fill:0%;
+  position:relative;overflow:hidden;min-height:3.25rem;
+  display:flex;align-items:center;justify-content:center;
+  padding:.65rem .8rem;border:1px solid #bfdbfe;border-radius:12px;
+  background:linear-gradient(90deg,rgba(37,99,235,.20) 0 var(--progress-fill),#f8fafc var(--progress-fill) 100%)!important;
+  color:#334155!important;transition:background .18s,border-color .18s
+}
+#status.progress-status.is-complete{
+  background:#2563eb!important;border-color:#2563eb!important;color:#fff!important
+}
+#status.progress-status:empty{display:none!important}
+.status{min-height:1.4rem;margin-top:.75rem;text-align:center;color:var(--text-soft);font-size:.84rem;font-weight:650}
+.status.error{color:#b91c1c}
+.results{display:grid;gap:1rem;margin-top:1rem}.hidden{display:none!important}
+.section{border:1px solid var(--border-subtle);border-radius:20px;background:#f8fafc;padding:1rem}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-bottom:.75rem}
+.section h2{margin:0;font-size:1rem;line-height:1.25}
+.summary-grid,.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.65rem}
+.kv{min-width:0;padding:.75rem .82rem;border:1px solid var(--border-subtle);border-radius:14px;background:#fff}
+.kv span{display:block;color:var(--text-soft);font-size:.72rem;font-weight:760;margin-bottom:.14rem}
+.kv b{display:block;color:var(--text);font-size:.86rem;font-weight:800;overflow-wrap:anywhere}
+.kv.full{grid-column:1/-1}
+.records-wrap{overflow:auto;border:1px solid var(--border-subtle);border-radius:14px;background:#fff}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th,td{padding:.64rem .7rem;border-bottom:1px solid var(--border-subtle);text-align:left;vertical-align:top}
+th{background:#f8fafc;color:var(--text-soft);font-size:.72rem;font-weight:800}
+td{font-size:.77rem;overflow-wrap:anywhere}
+tr:last-child td{border-bottom:0}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{display:inline-flex;align-items:center;min-height:29px;padding:.25rem .54rem;border:1px solid var(--border-subtle);border-radius:999px;background:#fff;color:#334155;font-size:.72rem;font-weight:700}
+.chip.good{border-color:#a7f3d0;background:#ecfdf5;color:#047857}
+.chip.warn{border-color:#fed7aa;background:#fff7ed;color:#9a3412}
+.chip.bad{border-color:#fecaca;background:#fef2f2;color:#b91c1c}
+.note-list{display:grid;gap:.5rem}
+.note{padding:.68rem .75rem;border:1px solid var(--border-subtle);border-radius:12px;background:#fff;font-size:.78rem;color:#475569}
+.note strong{color:#111827}
+.score-card{display:grid;grid-template-columns:auto 1fr;gap:.8rem;align-items:center;padding:.8rem;border:1px solid var(--border-subtle);border-radius:14px;background:#fff}
+.score-ring{width:72px;height:72px;border:7px solid #dbeafe;border-radius:50%;display:grid;place-items:center;font-size:1rem;font-weight:850;color:#1d4ed8;background:#fff}
+.score-copy h3{margin:0 0 .2rem;font-size:.9rem}.score-copy p{margin:0;color:var(--text-soft);font-size:.76rem}
+.compact-list{display:grid;gap:.4rem}.compact-item{padding:.55rem .65rem;border:1px solid var(--border-subtle);border-radius:11px;background:#fff;font-size:.76rem;color:#475569;overflow-wrap:anywhere}
+.compact-item strong{color:#111827}
+.raw{border:1px solid var(--border-subtle);border-radius:14px;background:#fff;overflow:hidden}
+.raw summary{cursor:pointer;padding:.7rem .8rem;font-size:.8rem;font-weight:750}
+.raw pre{margin:0;padding:.8rem;border-top:1px solid var(--border-subtle);background:#111827;color:#e5e7eb;max-height:420px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.72rem}
+.result-actions{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+@media(max-width:850px){.summary-grid,.detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.container{width:min(100% - 2rem,var(--max-w))}.intro{padding:2rem 0 2.1rem}.tool{padding:1.6rem 0 3rem}.summary-grid,.detail-grid{grid-template-columns:1fr}.toolbar .btn,.toolbar .file-btn{width:100%}}
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk126">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Email Header Analyzer</h1>
+      <p class="intro__subtitle">Paste raw headers or upload a saved email to inspect routing, recipients, authentication, automation, sending-service and message-structure clues. Analysis stays in your browser.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="card" role="region" aria-label="Email Header Analyzer">
+        <div class="field">
+          <label for="headersInput">Raw email headers</label>
+          <textarea id="headersInput" spellcheck="false" autocomplete="off"></textarea>
+        </div>
+
+        <div class="toolbar">
+          <label class="file-btn secondary">Upload Email
+            <input id="fileInput" type="file" accept=".eml,.txt,message/rfc822,text/plain"/>
+          </label>
+          <button class="btn" id="analyseBtn" type="button">Analyse Headers</button>
+          <button class="btn secondary" id="clearBtn" type="button">Clear</button>
+        </div>
+        <p class="upload-note">Upload a saved .eml email or drag it onto the header box.</p>
+
+        <div class="status" id="status" aria-live="polite"></div>
+
+        <div class="results hidden" id="results">
+          <section class="section">
+            <div class="section-head"><h2>Overview</h2></div>
+            <div class="summary-grid">
+              <div class="kv"><span>From</span><b id="sumFrom">—</b></div>
+              <div class="kv"><span>To</span><b id="sumTo">—</b></div>
+              <div class="kv"><span>Subject</span><b id="sumSubject">—</b></div>
+              <div class="kv"><span>Received hops</span><b id="sumHops">0</b></div>
+              <div class="kv"><span>SPF</span><b id="sumSpf">Unknown</b></div>
+              <div class="kv"><span>DKIM</span><b id="sumDkim">Unknown</b></div>
+              <div class="kv"><span>DMARC</span><b id="sumDmarc">Unknown</b></div>
+              <div class="kv"><span>Automation</span><b id="sumAutomation">Unknown</b></div>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Sender &amp; message identity</h2></div>
+            <div class="detail-grid" id="identityGrid"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Recipients found in the headers</h2></div>
+            <div class="records-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Recipient</th>
+                    <th>Type</th>
+                    <th>Header / route source</th>
+                  </tr>
+                </thead>
+                <tbody id="recipientsBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Authentication details</h2></div>
+            <div class="chips" id="authChips"></div>
+            <div class="detail-grid" id="authDetailsGrid" style="margin-top:.65rem"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Automation &amp; bulk-mail clues</h2></div>
+            <div class="score-card">
+              <div class="score-ring" id="automationScore">0</div>
+              <div class="score-copy">
+                <h3 id="automationLabel">No strong automation signals</h3>
+                <p>This is a header-based likelihood estimate, not proof that a person or bot sent the message.</p>
+              </div>
+            </div>
+            <div class="compact-list" id="automationEvidence" style="margin-top:.65rem"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Delivery route</h2></div>
+            <div class="records-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Hop</th>
+                    <th>From</th>
+                    <th>By</th>
+                    <th>With</th>
+                    <th>Public IPs</th>
+                    <th>For</th>
+                    <th>Timestamp</th>
+                    <th>Delay</th>
+                  </tr>
+                </thead>
+                <tbody id="hopsBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Public IP &amp; relay clues</h2></div>
+            <div class="records-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Public IP</th>
+                    <th>Seen in</th>
+                    <th>Header value / clue</th>
+                    <th>Investigate</th>
+                  </tr>
+                </thead>
+                <tbody id="ipBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Sending software &amp; service clues</h2></div>
+            <div class="detail-grid" id="softwareGrid"></div>
+            <div class="chips" id="serviceChips" style="margin-top:.65rem"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Thread, list &amp; message structure</h2></div>
+            <div class="detail-grid" id="messageGrid"></div>
+            <div class="compact-list" id="attachmentList" style="margin-top:.65rem"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Spam, antivirus &amp; security headers</h2></div>
+            <div class="compact-list" id="securityHeaders"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Header observations</h2></div>
+            <div class="note-list" id="observations"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Raw parsed headers</h2></div>
+            <details class="raw">
+              <summary>View parsed header data</summary>
+              <pre id="rawData"></pre>
+            </details>
+          </section>
+
+          <div class="result-actions">
+            <button class="btn secondary" id="copyReportBtn" type="button">Copy report</button>
+            <button class="btn secondary" id="savePdfBtn" type="button">Save PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="../../Assets/pdf-export.js?v=mk124"></script>
+<script>
+(function(){
+'use strict';
+
+const headersInput=document.getElementById('headersInput');
+const fileInput=document.getElementById('fileInput');
+const analyseBtn=document.getElementById('analyseBtn');
+const clearBtn=document.getElementById('clearBtn');
+const statusEl=document.getElementById('status');
+const results=document.getElementById('results');
+
+const sumFrom=document.getElementById('sumFrom');
+const sumTo=document.getElementById('sumTo');
+const sumSubject=document.getElementById('sumSubject');
+const sumHops=document.getElementById('sumHops');
+const sumSpf=document.getElementById('sumSpf');
+const sumDkim=document.getElementById('sumDkim');
+const sumDmarc=document.getElementById('sumDmarc');
+const sumAutomation=document.getElementById('sumAutomation');
+
+const identityGrid=document.getElementById('identityGrid');
+const recipientsBody=document.getElementById('recipientsBody');
+const authChips=document.getElementById('authChips');
+const authDetailsGrid=document.getElementById('authDetailsGrid');
+const automationScore=document.getElementById('automationScore');
+const automationLabel=document.getElementById('automationLabel');
+const automationEvidence=document.getElementById('automationEvidence');
+const hopsBody=document.getElementById('hopsBody');
+const ipBody=document.getElementById('ipBody');
+const softwareGrid=document.getElementById('softwareGrid');
+const serviceChips=document.getElementById('serviceChips');
+const messageGrid=document.getElementById('messageGrid');
+const attachmentList=document.getElementById('attachmentList');
+const securityHeaders=document.getElementById('securityHeaders');
+const observations=document.getElementById('observations');
+const rawData=document.getElementById('rawData');
+const copyReportBtn=document.getElementById('copyReportBtn');
+const savePdfBtn=document.getElementById('savePdfBtn');
+
+let progressValue=0;
+let progressActive=false;
+let lastReport=null;
+
+const PROVIDERS=[
+  ['Amazon SES',/(amazonses|x-ses-|email-amazonses\.com)/i],
+  ['SendGrid',/(sendgrid|x-sg-eid|x-sg-id)/i],
+  ['Mailgun',/(mailgun|x-mailgun)/i],
+  ['Mailchimp / Mandrill',/(mailchimp|mandrill|x-mandrill|x-mc-user)/i],
+  ['HubSpot',/(hubspot|x-hubspot)/i],
+  ['Brevo / Sendinblue',/(brevo|sendinblue)/i],
+  ['Postmark',/(postmarkapp|x-pm-|postmark)/i],
+  ['SparkPost',/(sparkpost|x-msys-api)/i],
+  ['Mailjet',/(mailjet|x-mj-)/i],
+  ['Klaviyo',/(klaviyo)/i],
+  ['Customer.io',/(customer\.io|x-cio)/i],
+  ['Resend',/(resend\.com|x-resend)/i],
+  ['Campaign Monitor',/(createsend|campaignmonitor)/i],
+  ['Constant Contact',/(constantcontact)/i],
+  ['Salesforce / ExactTarget',/(exacttarget|salesforce)/i],
+  ['Microsoft 365 / Exchange',/(protection\.outlook\.com|outlook\.com|microsoft exchange|x-ms-exchange)/i],
+  ['Google / Gmail',/(gmail\.com|googlemail\.com|google smtp|x-google-)/i],
+  ['Zoho Mail',/(zoho\.com|zohomail)/i],
+  ['Mimecast',/(mimecast)/i],
+  ['Proofpoint',/(proofpoint)/i]
+];
+
+const SECURITY_HEADER_NAMES=[
+  'x-spam-status','x-spam-flag','x-spam-score','x-spam-level',
+  'x-virus-scanned','x-virus-status','x-forefront-antispam-report',
+  'x-microsoft-antispam','x-ms-exchange-organization-scl',
+  'x-proofpoint-spam-details','x-proofpoint-virus-version',
+  'x-google-smtp-source','x-google-dkim-signature',
+  'x-barracuda-spam-score','x-barracuda-spam-status',
+  'x-cloudmark-score','x-spam-checker-version',
+  'x-amavis-alert','x-greylist'
+];
+
+function esc(v){
+  return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
+    .replaceAll('"','&quot;').replaceAll("'",'&#039;');
+}
+
+function nextPaint(){
+  return new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+}
+
+function setStatus(message='',type=''){
+  statusEl.textContent=message;
+  statusEl.className='status'+(type?' '+type:'')+(progressActive?' progress-status':'');
+  applyProgress();
+}
+
+function applyProgress(){
+  if(progressActive){
+    statusEl.classList.add('progress-status');
+    statusEl.classList.toggle('is-complete',progressValue>=100);
+    statusEl.style.setProperty('--progress-fill',progressValue+'%');
+    statusEl.setAttribute('role','progressbar');
+    statusEl.setAttribute('aria-valuemin','0');
+    statusEl.setAttribute('aria-valuemax','100');
+    statusEl.setAttribute('aria-valuenow',String(Math.round(progressValue)));
+  }else{
+    statusEl.classList.remove('progress-status','is-complete');
+    statusEl.style.removeProperty('--progress-fill');
+    ['role','aria-valuemin','aria-valuemax','aria-valuenow'].forEach(attr=>statusEl.removeAttribute(attr));
+  }
+}
+
+function setProgress(value){
+  progressValue=Math.max(progressValue,Math.max(0,Math.min(100,Number(value)||0)));
+  progressActive=true;
+  applyProgress();
+}
+
+function hideProgress(){
+  progressValue=0;
+  progressActive=false;
+  applyProgress();
+}
+
+function setBusy(busy){
+  analyseBtn.disabled=busy;
+  clearBtn.disabled=busy;
+  fileInput.disabled=busy;
+  analyseBtn.textContent=busy?'Analysing…':'Analyse Headers';
+}
+
+function unfoldHeaders(text){
+  const headerPart=String(text||'').split(/\r?\n\r?\n/)[0];
+  return headerPart.replace(/\r?\n[ \t]+/g,' ');
+}
+
+function parseHeaders(text){
+  const unfolded=unfoldHeaders(text);
+  const map={};
+  const ordered=[];
+
+  for(const line of unfolded.split(/\r?\n/)){
+    const match=line.match(/^([^:]+):\s*(.*)$/);
+    if(!match) continue;
+    const name=match[1].trim();
+    const value=match[2].trim();
+    const key=name.toLowerCase();
+    if(!map[key]) map[key]=[];
+    map[key].push(value);
+    ordered.push({name,value});
+  }
+
+  return {map,ordered,unfolded};
+}
+
+function first(map,key){return map[key]?.[0]||''}
+function all(map,key){return map[key]||[]}
+
+function decodeQ(value){
+  return String(value).replace(/_/g,' ').replace(/=([0-9A-F]{2})/gi,(_,hex)=>String.fromCharCode(parseInt(hex,16)));
+}
+
+function decodeHeaderValue(value){
+  return String(value||'').replace(
+    /=\?([^?]+)\?([bq])\?([^?]+)\?=/gi,
+    (_,charset,encoding,payload)=>{
+      try{
+        let bytes;
+        if(encoding.toLowerCase()==='b'){
+          const binary=atob(payload);
+          bytes=Uint8Array.from(binary,ch=>ch.charCodeAt(0));
+        }else{
+          const binary=decodeQ(payload);
+          bytes=Uint8Array.from(binary,ch=>ch.charCodeAt(0));
+        }
+        try{return new TextDecoder(charset||'utf-8').decode(bytes)}
+        catch(_){return new TextDecoder('utf-8').decode(bytes)}
+      }catch(_){
+        return _;
+      }
+    }
+  );
+}
+
+function extractEmails(value){
+  const matches=String(value||'').match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/ig)||[];
+  return [...new Set(matches.map(x=>x.toLowerCase()))];
+}
+
+function extractEmail(value){return extractEmails(value)[0]||''}
+
+function displayName(value){
+  const decoded=decodeHeaderValue(value);
+  const email=extractEmail(decoded);
+  if(!email) return decoded.trim();
+  return decoded.replace(email,'').replace(/[<>"']/g,'').trim().replace(/\s+/g,' ');
+}
+
+function domainOfEmail(value){
+  const email=extractEmail(value);
+  return email?email.split('@')[1]:'';
+}
+
+function domainOfMessageId(value){
+  const m=String(value||'').match(/<[^@<>]+@([^<>]+)>/);
+  return m?m[1].toLowerCase().replace(/[>\s]+$/,''):'';
+}
+
+function publicIPv4(ip){
+  const p=ip.split('.').map(Number);
+  if(p.length!==4||p.some(n=>Number.isNaN(n)||n<0||n>255)) return false;
+  return !(p[0]===10||p[0]===127||(p[0]===192&&p[1]===168)||(p[0]===172&&p[1]>=16&&p[1]<=31)||
+    (p[0]===169&&p[1]===254)||p[0]===0||p[0]>=224);
+}
+
+function extractPublicIps(text){
+  const found=[];
+  const v4=String(text||'').match(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g)||[];
+  v4.filter(publicIPv4).forEach(ip=>found.push(ip));
+
+  const v6=String(text||'').match(/\b(?:[A-F0-9]{0,4}:){2,7}[A-F0-9]{0,4}\b/ig)||[];
+  v6.forEach(ip=>{
+    const low=ip.toLowerCase();
+    if(low&&low!=='::1'&&!low.startsWith('fc')&&!low.startsWith('fd')&&!low.startsWith('fe80:')){
+      found.push(ip);
+    }
+  });
+
+  return [...new Set(found)];
+}
+
+function parseReceived(value){
+  const semicolon=value.lastIndexOf(';');
+  const route=semicolon>=0?value.slice(0,semicolon).trim():value.trim();
+  const dateText=semicolon>=0?value.slice(semicolon+1).trim():'';
+
+  const fromMatch=route.match(/\bfrom\s+(.+?)(?=\s+\bby\b|\s+\bwith\b|\s+\bid\b|\s+\bfor\b|$)/i);
+  const byMatch=route.match(/\bby\s+(.+?)(?=\s+\bwith\b|\s+\bid\b|\s+\bfor\b|$)/i);
+  const withMatch=route.match(/\bwith\s+(.+?)(?=\s+\bid\b|\s+\bfor\b|$)/i);
+  const idMatch=route.match(/\bid\s+(.+?)(?=\s+\bfor\b|$)/i);
+  const forMatch=route.match(/\bfor\s+<?([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})>?/i);
+
+  const parsedDate=Date.parse(dateText);
+
+  return {
+    raw:value,
+    from:fromMatch?fromMatch[1].trim():'',
+    by:byMatch?byMatch[1].trim():'',
+    with:withMatch?withMatch[1].trim():'',
+    id:idMatch?idMatch[1].trim():'',
+    forRecipient:forMatch?forMatch[1].toLowerCase():'',
+    ips:extractPublicIps(route),
+    dateText,
+    timestamp:Number.isNaN(parsedDate)?null:parsedDate
+  };
+}
+
+function parseAuthAttributes(value){
+  const text=String(value||'');
+  const get=(pattern)=>{
+    const m=text.match(pattern);
+    return m?m[1].replace(/[;,]+$/,''):'';
+  };
+  return {
+    authServer:(text.split(';')[0]||'').trim(),
+    spfDomain:get(/\bsmtp\.mailfrom=([^\s;]+)/i),
+    spfHelo:get(/\bsmtp\.helo=([^\s;]+)/i),
+    dkimDomain:get(/\bheader\.d=([^\s;]+)/i),
+    dkimSelector:get(/\bheader\.s=([^\s;]+)/i),
+    dmarcDomain:get(/\bheader\.from=([^\s;]+)/i),
+    arcInstance:get(/\barc=(?:pass|fail|none)[^\n;]*?\bi=(\d+)/i)
+  };
+}
+
+function authState(value,key){
+  const patterns={
+    spf:/\bspf=(pass|fail|softfail|neutral|none|temperror|permerror)\b/i,
+    dkim:/\bdkim=(pass|fail|neutral|none|temperror|permerror|policy)\b/i,
+    dmarc:/\bdmarc=(pass|fail|bestguesspass|none|temperror|permerror)\b/i,
+    arc:/\barc=(pass|fail|none)\b/i
+  };
+  const m=String(value||'').match(patterns[key]);
+  return m?m[1].toLowerCase():'unknown';
+}
+
+function overallAuth(map,key){
+  const values=[
+    ...all(map,'authentication-results'),
+    ...all(map,'arc-authentication-results'),
+    ...all(map,'received-spf')
+  ].join(' ');
+  return authState(values,key);
+}
+
+function stateClass(state){
+  if(state==='pass'||state==='bestguesspass') return 'good';
+  if(state==='fail'||state==='softfail'||state==='permerror') return 'bad';
+  return 'warn';
+}
+
+function prettyState(state){
+  return state==='unknown'?'Unknown':state.charAt(0).toUpperCase()+state.slice(1);
+}
+
+function parseDkimSignature(value){
+  const tags={};
+  String(value||'').split(';').forEach(part=>{
+    const i=part.indexOf('=');
+    if(i>0) tags[part.slice(0,i).trim().toLowerCase()]=part.slice(i+1).trim();
+  });
+  return {
+    domain:tags.d||'',
+    selector:tags.s||'',
+    identity:tags.i||'',
+    algorithm:tags.a||'',
+    canonicalisation:tags.c||'',
+    signedHeaders:tags.h||'',
+    bodyHash:tags.bh||''
+  };
+}
+
+function parseArcSeal(value){
+  const tags={};
+  String(value||'').split(';').forEach(part=>{
+    const i=part.indexOf('=');
+    if(i>0) tags[part.slice(0,i).trim().toLowerCase()]=part.slice(i+1).trim();
+  });
+  return {
+    instance:tags.i||'',
+    cv:tags.cv||'',
+    domain:tags.d||'',
+    selector:tags.s||'',
+    algorithm:tags.a||''
+  };
+}
+
+function addKv(parent,label,value,full=false){
+  const el=document.createElement('div');
+  el.className='kv'+(full?' full':'');
+  el.innerHTML=`<span>${esc(label)}</span><b>${esc(value||'Not present')}</b>`;
+  parent.appendChild(el);
+}
+
+function addObservation(title,text,severity=''){
+  const el=document.createElement('div');
+  el.className='note';
+  el.innerHTML=`<strong>${esc(title)}</strong><br>${esc(text)}`;
+  if(severity) el.dataset.severity=severity;
+  observations.appendChild(el);
+}
+
+function humanDelay(ms){
+  if(ms==null||ms<0) return '—';
+  if(ms<1000) return `${ms} ms`;
+  const seconds=Math.round(ms/1000);
+  if(seconds<60) return `${seconds} sec`;
+  const minutes=Math.round(seconds/60);
+  if(minutes<60) return `${minutes} min`;
+  const hours=(minutes/60).toFixed(1);
+  return `${hours} hr`;
+}
+
+function renderAuth(map){
+  authChips.innerHTML='';
+  authDetailsGrid.innerHTML='';
+
+  const states={
+    SPF:overallAuth(map,'spf'),
+    DKIM:overallAuth(map,'dkim'),
+    DMARC:overallAuth(map,'dmarc'),
+    ARC:overallAuth(map,'arc')
+  };
+
+  sumSpf.textContent=prettyState(states.SPF);
+  sumDkim.textContent=prettyState(states.DKIM);
+  sumDmarc.textContent=prettyState(states.DMARC);
+
+  for(const [name,state] of Object.entries(states)){
+    const chip=document.createElement('span');
+    chip.className='chip '+stateClass(state);
+    chip.textContent=`${name}: ${prettyState(state)}`;
+    authChips.appendChild(chip);
+  }
+
+  const authValues=all(map,'authentication-results');
+  const arcAuthValues=all(map,'arc-authentication-results');
+  const attrs=parseAuthAttributes([...authValues,...arcAuthValues].join(' '));
+  const dkim=parseDkimSignature(first(map,'dkim-signature'));
+  const arc=parseArcSeal(first(map,'arc-seal'));
+
+  addKv(authDetailsGrid,'Authentication server',attrs.authServer);
+  addKv(authDetailsGrid,'SPF mail-from domain',attrs.spfDomain);
+  addKv(authDetailsGrid,'SPF HELO domain',attrs.spfHelo);
+  addKv(authDetailsGrid,'DKIM signing domain',attrs.dkimDomain||dkim.domain);
+  addKv(authDetailsGrid,'DKIM selector',attrs.dkimSelector||dkim.selector);
+  addKv(authDetailsGrid,'DKIM algorithm',dkim.algorithm);
+  addKv(authDetailsGrid,'DMARC header-from domain',attrs.dmarcDomain);
+  addKv(authDetailsGrid,'ARC chain instance',attrs.arcInstance||arc.instance);
+  addKv(authDetailsGrid,'ARC seal domain',arc.domain);
+  addKv(authDetailsGrid,'ARC CV',arc.cv);
+
+  return {states,attrs,dkim,arc};
+}
+
+function renderHops(map){
+  hopsBody.innerHTML='';
+  const hops=all(map,'received').map(parseReceived);
+
+  if(!hops.length){
+    hopsBody.innerHTML='<tr><td colspan="8" style="text-align:center;color:#64748b">No Received headers found.</td></tr>';
+    return [];
+  }
+
+  const route=[...hops].reverse();
+
+  route.forEach((hop,index)=>{
+    const previous=index>0?route[index-1]:null;
+    const delay=hop.timestamp!=null&&previous?.timestamp!=null
+      ?Math.max(0,hop.timestamp-previous.timestamp)
+      :null;
+
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td>${index+1}</td>
+      <td>${esc(hop.from||'Not parsed')}</td>
+      <td>${esc(hop.by||'Not parsed')}</td>
+      <td>${esc(hop.with||'Not parsed')}</td>
+      <td>${esc(hop.ips.join(', ')||'None')}</td>
+      <td>${esc(hop.forRecipient||'Not shown')}</td>
+      <td>${esc(hop.dateText||'Not parsed')}</td>
+      <td>${esc(humanDelay(delay))}</td>
+    `;
+    hopsBody.appendChild(tr);
+  });
+
+  return route;
+}
+
+function collectRecipients(map,hops){
+  const rules=[
+    ['To','to'],['Cc','cc'],['Bcc','bcc'],
+    ['Resent-To','resent-to'],['Resent-Cc','resent-cc'],['Resent-Bcc','resent-bcc'],
+    ['Delivered-To','delivered-to'],['X-Original-To','x-original-to'],
+    ['Envelope-To','envelope-to'],['X-Envelope-To','x-envelope-to'],
+    ['Apparently-To','apparently-to'],['X-Forwarded-To','x-forwarded-to'],
+    ['X-MS-Exchange-Organization-OriginalEnvelopeRecipients','x-ms-exchange-organization-originalenveloperecipients']
+  ];
+
+  const rows=[];
+  const seen=new Set();
+
+  for(const [label,key] of rules){
+    for(const value of all(map,key)){
+      for(const email of extractEmails(value)){
+        const id=`${label}|${email}`.toLowerCase();
+        if(seen.has(id)) continue;
+        seen.add(id);
+        rows.push({email,type:label,source:key});
+      }
+    }
+  }
+
+  for(const hop of hops){
+    if(hop.forRecipient){
+      const id=`received for|${hop.forRecipient}`.toLowerCase();
+      if(!seen.has(id)){
+        seen.add(id);
+        rows.push({email:hop.forRecipient,type:'Received for',source:'Received'});
+      }
+    }
+  }
+
+  return rows;
+}
+
+function renderRecipients(rows){
+  recipientsBody.innerHTML='';
+  if(!rows.length){
+    recipientsBody.innerHTML='<tr><td colspan="3" style="text-align:center;color:#64748b">No recipient addresses could be extracted from the supplied headers.</td></tr>';
+    return;
+  }
+
+  rows.forEach(row=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td>${esc(row.email)}</td>
+      <td>${esc(row.type)}</td>
+      <td>${esc(row.source)}</td>
+    `;
+    recipientsBody.appendChild(tr);
+  });
+}
+
+function collectIpClues(parsed,hops){
+  const clues=[];
+  const seen=new Map();
+
+  function add(ip,source,value){
+    const key=ip.toLowerCase();
+    if(!seen.has(key)){
+      seen.set(key,{ip,sources:new Set(),values:[]});
+    }
+    const item=seen.get(key);
+    item.sources.add(source);
+    if(value&&item.values.length<4&&!item.values.includes(value)) item.values.push(value);
+  }
+
+  hops.forEach((hop,index)=>{
+    hop.ips.forEach(ip=>add(ip,`Received hop ${index+1}`,hop.raw));
+  });
+
+  const extraHeaders=[
+    'x-originating-ip','x-sender-ip','x-client-ip','x-source-ip',
+    'x-forwarded-for','x-real-ip','x-ms-exchange-organization-originalclientipaddress',
+    'x-ms-exchange-organization-originalserveripaddress'
+  ];
+
+  extraHeaders.forEach(key=>{
+    all(parsed.map,key).forEach(value=>{
+      extractPublicIps(value).forEach(ip=>add(ip,key,value));
+    });
+  });
+
+  return [...seen.values()].map(item=>({
+    ip:item.ip,
+    sources:[...item.sources],
+    values:item.values
+  }));
+}
+
+function renderIpClues(items){
+  ipBody.innerHTML='';
+  if(!items.length){
+    ipBody.innerHTML='<tr><td colspan="4" style="text-align:center;color:#64748b">No public IP addresses were found in the supplied headers.</td></tr>';
+    return;
+  }
+
+  items.forEach(item=>{
+    const tr=document.createElement('tr');
+    const lookup=`ip-asn-lookup.html?q=${encodeURIComponent(item.ip)}`;
+    tr.innerHTML=`
+      <td>${esc(item.ip)}</td>
+      <td>${esc(item.sources.join(', '))}</td>
+      <td>${esc(item.values[0]||'Route header')}</td>
+      <td><a class="chip" href="${esc(lookup)}">Open IP lookup</a></td>
+    `;
+    ipBody.appendChild(tr);
+  });
+}
+
+function detectProviders(parsed){
+  const haystack=parsed.ordered.map(x=>`${x.name}: ${x.value}`).join('\n');
+  return PROVIDERS.filter(([,pattern])=>pattern.test(haystack)).map(([name])=>name);
+}
+
+function renderSoftware(map,providers){
+  softwareGrid.innerHTML='';
+  serviceChips.innerHTML='';
+
+  addKv(softwareGrid,'X-Mailer',first(map,'x-mailer'));
+  addKv(softwareGrid,'User-Agent',first(map,'user-agent'));
+  addKv(softwareGrid,'Organization',first(map,'organization'));
+  addKv(softwareGrid,'X-MimeOLE',first(map,'x-mimeole'));
+  addKv(softwareGrid,'X-Originating-IP',first(map,'x-originating-ip'));
+  addKv(softwareGrid,'Feedback-ID',first(map,'feedback-id'));
+  addKv(softwareGrid,'X-Campaign / campaign ID',first(map,'x-campaign')||first(map,'x-campaign-id'));
+  addKv(softwareGrid,'X-Entity-ID / provider ID',first(map,'x-entity-id')||first(map,'x-sg-eid')||first(map,'x-mailgun-sid'));
+
+  if(!providers.length){
+    const chip=document.createElement('span');
+    chip.className='chip';
+    chip.textContent='No recognised sending-service header clue';
+    serviceChips.appendChild(chip);
+  }else{
+    providers.forEach(provider=>{
+      const chip=document.createElement('span');
+      chip.className='chip';
+      chip.textContent=provider;
+      serviceChips.appendChild(chip);
+    });
+  }
+}
+
+function extractAttachments(source){
+  const unfolded=String(source||'').replace(/\r?\n[ \t]+/g,' ');
+  const headers=unfolded.match(/(?:Content-Disposition|Content-Type):[^\r\n]+/gi)||[];
+  const files=[];
+
+  for(const line of headers){
+    const nameMatch=line.match(/(?:filename|name)\*?=(?:"([^"]+)"|'([^']+)'|([^;\s]+))/i);
+    if(nameMatch){
+      let name=nameMatch[1]||nameMatch[2]||nameMatch[3]||'';
+      name=decodeHeaderValue(tryPercentDecode(name.replace(/^UTF-8''/i,'')));
+      if(name&&!files.includes(name)) files.push(name);
+    }
+  }
+
+  const dispositions=(unfolded.match(/Content-Disposition:\s*attachment\b/gi)||[]).length;
+  return {files,attachmentHeaders:dispositions};
+}
+
+function tryPercentDecode(value){
+  try{return decodeURIComponent(value)}catch(_){return value}
+}
+
+function renderMessageStructure(map,source,attachments){
+  messageGrid.innerHTML='';
+  attachmentList.innerHTML='';
+
+  const refs=all(map,'references').join(' ');
+  const refIds=refs.match(/<[^<>]+>/g)||[];
+
+  addKv(messageGrid,'Date',decodeHeaderValue(first(map,'date')));
+  addKv(messageGrid,'Message-ID',first(map,'message-id'));
+  addKv(messageGrid,'In-Reply-To',first(map,'in-reply-to'));
+  addKv(messageGrid,'References',refIds.length?`${refIds.length} message ID${refIds.length===1?'':'s'}`:'None');
+  addKv(messageGrid,'Thread-Topic',decodeHeaderValue(first(map,'thread-topic')));
+  addKv(messageGrid,'Thread-Index',first(map,'thread-index'));
+  addKv(messageGrid,'MIME-Version',first(map,'mime-version'));
+  addKv(messageGrid,'Content-Type',first(map,'content-type'));
+  addKv(messageGrid,'Content-Transfer-Encoding',first(map,'content-transfer-encoding'));
+  addKv(messageGrid,'List-ID',first(map,'list-id'));
+  addKv(messageGrid,'List-Unsubscribe',first(map,'list-unsubscribe'),true);
+  addKv(messageGrid,'Precedence',first(map,'precedence'));
+  addKv(messageGrid,'Auto-Submitted',first(map,'auto-submitted'));
+
+  const multipart=/multipart\//i.test(first(map,'content-type'));
+  const hasHtml=/content-type:\s*text\/html/i.test(source);
+  const hasPlain=/content-type:\s*text\/plain/i.test(source);
+
+  const summary=document.createElement('div');
+  summary.className='compact-item';
+  summary.innerHTML=`<strong>Body structure:</strong> ${esc([
+    multipart?'multipart message':'single-part or headers only',
+    hasPlain?'plain-text part':'',
+    hasHtml?'HTML part':''
+  ].filter(Boolean).join(' · '))}`;
+  attachmentList.appendChild(summary);
+
+  if(attachments.files.length){
+    attachments.files.forEach(file=>{
+      const item=document.createElement('div');
+      item.className='compact-item';
+      item.innerHTML=`<strong>Attachment:</strong> ${esc(file)}`;
+      attachmentList.appendChild(item);
+    });
+  }else{
+    const item=document.createElement('div');
+    item.className='compact-item';
+    item.innerHTML=`<strong>Attachments:</strong> ${attachments.attachmentHeaders?'Attachment header detected but no filename was parsed':'No attachment filename detected in the supplied source'}`;
+    attachmentList.appendChild(item);
+  }
+}
+
+function renderSecurityHeaders(map){
+  securityHeaders.innerHTML='';
+  const found=[];
+
+  SECURITY_HEADER_NAMES.forEach(key=>{
+    all(map,key).forEach(value=>found.push({key,value}));
+  });
+
+  if(!found.length){
+    const item=document.createElement('div');
+    item.className='compact-item';
+    item.textContent='No recognised spam-filter, antivirus or security-scoring headers were present.';
+    securityHeaders.appendChild(item);
+    return;
+  }
+
+  found.slice(0,30).forEach(item=>{
+    const el=document.createElement('div');
+    el.className='compact-item';
+    el.innerHTML=`<strong>${esc(item.key)}:</strong> ${esc(item.value)}`;
+    securityHeaders.appendChild(el);
+  });
+}
+
+function automationAnalysis(map,parsed,providers){
+  let score=0;
+  const evidence=[];
+  const from=first(map,'from');
+  const returnPath=first(map,'return-path');
+  const fromEmail=extractEmail(from);
+  const localPart=fromEmail.split('@')[0]||'';
+
+  function add(points,title,detail){
+    score+=points;
+    evidence.push({points,title,detail});
+  }
+
+  const autoSubmitted=first(map,'auto-submitted');
+  if(autoSubmitted&&autoSubmitted.toLowerCase()!=='no'){
+    add(45,'Auto-Submitted header',`Auto-Submitted is "${autoSubmitted}".`);
+  }
+
+  if(first(map,'x-autoreply')||first(map,'x-autorespond')){
+    add(45,'Automatic-response header','X-Autoreply or X-Autorespond is present.');
+  }
+
+  const precedence=first(map,'precedence').toLowerCase();
+  if(/bulk|list|junk/.test(precedence)){
+    add(28,'Bulk/list precedence',`Precedence is "${first(map,'precedence')}".`);
+  }
+
+  if(first(map,'list-id')){
+    add(22,'Mailing-list identity','List-ID is present.');
+  }
+
+  if(first(map,'list-unsubscribe')){
+    add(18,'Unsubscribe mechanism','List-Unsubscribe is present.');
+  }
+
+  if(first(map,'list-unsubscribe-post')){
+    add(8,'One-click unsubscribe clue','List-Unsubscribe-Post is present.');
+  }
+
+  if(first(map,'feedback-id')){
+    add(12,'Bulk-mail feedback identifier','Feedback-ID is present.');
+  }
+
+  if(first(map,'x-auto-response-suppress')){
+    add(15,'Automatic response suppression','X-Auto-Response-Suppress is present.');
+  }
+
+  if(/^(no-?reply|donotreply|do-?not-?reply|notifications?|alerts?|mailer-daemon|postmaster|bot|robot)$/i.test(localPart)){
+    add(22,'Automated-style sender address',`Sender local-part is "${localPart}".`);
+  }
+
+  if(/\b(bounce|bounces|return|mailer-daemon)\b/i.test(returnPath)){
+    add(12,'Bounce-style Return-Path','Return-Path resembles a bounce or automated delivery address.');
+  }
+
+  if(providers.length){
+    add(Math.min(24,10+providers.length*3),'Sending-service clue',`Recognised service clue${providers.length===1?'':'s'}: ${providers.join(', ')}.`);
+  }
+
+  const campaignHeaders=parsed.ordered.filter(x=>/\b(campaign|bulk|newsletter|mailing)\b/i.test(x.name));
+  if(campaignHeaders.length){
+    add(Math.min(18,campaignHeaders.length*5),'Campaign/bulk headers',`${campaignHeaders.length} campaign or bulk-related header${campaignHeaders.length===1?'':'s'} found.`);
+  }
+
+  const listHeaders=parsed.ordered.filter(x=>/^List-/i.test(x.name));
+  if(listHeaders.length>=2){
+    add(10,'Multiple List-* headers',`${listHeaders.length} List-* headers are present.`);
+  }
+
+  score=Math.min(100,score);
+
+  let label='No strong automation signals';
+  if(score>=70) label='Strong automated / bulk-mail signals';
+  else if(score>=45) label='Likely automated or bulk-sent';
+  else if(score>=20) label='Some automation signals';
+
+  return {score,label,evidence};
+}
+
+function renderAutomation(result){
+  automationScore.textContent=String(result.score);
+  automationLabel.textContent=result.label;
+  sumAutomation.textContent=result.label;
+  automationEvidence.innerHTML='';
+
+  if(!result.evidence.length){
+    const item=document.createElement('div');
+    item.className='compact-item';
+    item.textContent='No recognised automation or bulk-mail header signals were found.';
+    automationEvidence.appendChild(item);
+    return;
+  }
+
+  result.evidence
+    .sort((a,b)=>b.points-a.points)
+    .forEach(item=>{
+      const el=document.createElement('div');
+      el.className='compact-item';
+      el.innerHTML=`<strong>${esc(item.title)} (+${item.points})</strong><br>${esc(item.detail)}`;
+      automationEvidence.appendChild(el);
+    });
+}
+
+function renderIdentity(map){
+  identityGrid.innerHTML='';
+
+  const from=decodeHeaderValue(first(map,'from'));
+  const replyTo=decodeHeaderValue(first(map,'reply-to'));
+  const returnPath=first(map,'return-path');
+  const sender=decodeHeaderValue(first(map,'sender'));
+
+  addKv(identityGrid,'From display name',displayName(from));
+  addKv(identityGrid,'From address',extractEmail(from));
+  addKv(identityGrid,'From domain',domainOfEmail(from));
+  addKv(identityGrid,'Sender header',sender);
+  addKv(identityGrid,'Reply-To',replyTo);
+  addKv(identityGrid,'Reply-To domain',domainOfEmail(replyTo));
+  addKv(identityGrid,'Return-Path',returnPath);
+  addKv(identityGrid,'Return-Path domain',domainOfEmail(returnPath));
+  addKv(identityGrid,'Message-ID',first(map,'message-id'));
+  addKv(identityGrid,'Message-ID domain',domainOfMessageId(first(map,'message-id')));
+  addKv(identityGrid,'Errors-To',first(map,'errors-to'));
+  addKv(identityGrid,'Disposition-Notification-To',first(map,'disposition-notification-to'));
+}
+
+function compareIdentities(map,auth,observationRows){
+  const from=first(map,'from');
+  const replyTo=first(map,'reply-to');
+  const returnPath=first(map,'return-path');
+  const messageId=first(map,'message-id');
+
+  const fromDomain=domainOfEmail(from);
+  const replyDomain=domainOfEmail(replyTo);
+  const returnDomain=domainOfEmail(returnPath);
+  const msgDomain=domainOfMessageId(messageId);
+
+  function capture(title,text,severity='warn'){
+    observationRows.push({title,text,severity});
+  }
+
+  if(replyDomain&&fromDomain&&replyDomain!==fromDomain){
+    capture('From / Reply-To mismatch',
+      `From uses ${fromDomain}, while Reply-To uses ${replyDomain}. This can be legitimate, but replies would be sent to a different domain.`);
+  }
+
+  if(returnDomain&&fromDomain&&returnDomain!==fromDomain){
+    capture('From / Return-Path mismatch',
+      `From uses ${fromDomain}, while Return-Path uses ${returnDomain}. This is common with delegated mailing services but should match the expected sender setup.`);
+  }
+
+  if(msgDomain&&fromDomain&&msgDomain!==fromDomain){
+    capture('From / Message-ID domain mismatch',
+      `From uses ${fromDomain}, while Message-ID appears to use ${msgDomain}. Outsourced or hosted mail systems can legitimately cause this.`);
+  }
+
+  if(auth.attrs.dkimDomain&&fromDomain&&auth.attrs.dkimDomain!==fromDomain&&!fromDomain.endsWith('.'+auth.attrs.dkimDomain)&&!auth.attrs.dkimDomain.endsWith('.'+fromDomain)){
+    capture('From / DKIM signing-domain difference',
+      `Visible From is ${fromDomain}, while the parsed DKIM signing domain is ${auth.attrs.dkimDomain}.`);
+  }
+
+  if(auth.attrs.dmarcDomain&&fromDomain&&auth.attrs.dmarcDomain!==fromDomain){
+    capture('From / DMARC evaluated-domain difference',
+      `Visible From is ${fromDomain}, while Authentication-Results reports DMARC header.from=${auth.attrs.dmarcDomain}.`);
+  }
+
+  if(auth.states.SPF==='fail'||auth.states.SPF==='softfail'){
+    capture('SPF did not pass',`SPF result is ${auth.states.SPF}.`);
+  }
+  if(auth.states.DKIM==='fail'){
+    capture('DKIM did not pass','Authentication-Results indicates DKIM failure.');
+  }
+  if(auth.states.DMARC==='fail'){
+    capture('DMARC did not pass','Authentication-Results indicates DMARC failure.');
+  }
+
+  if(!all(map,'received').length){
+    capture('No Received chain','No Received headers are present, so the delivery route cannot be reconstructed.');
+  }
+
+  return {fromDomain,replyDomain,returnDomain,msgDomain};
+}
+
+function renderObservations(rows,ipClues,recipients,attachments,providers){
+  observations.innerHTML='';
+
+  if(ipClues.length){
+    rows.push({
+      title:'Public network clues',
+      text:`${ipClues.length} unique public IP address${ipClues.length===1?'':'es'} found: ${ipClues.map(x=>x.ip).join(', ')}.`,
+      severity:'info'
+    });
+  }
+
+  if(recipients.length){
+    const direct=recipients.filter(x=>['To','Cc','Bcc','Resent-To','Resent-Cc','Resent-Bcc'].includes(x.type));
+    rows.push({
+      title:'Recipient visibility',
+      text:`${recipients.length} recipient clue${recipients.length===1?'':'s'} found in headers${direct.length?`, including ${direct.length} visible To/Cc/Bcc/Resent recipient entr${direct.length===1?'y':'ies'}`:''}. Standard email headers normally cannot reveal hidden Bcc recipients unless the provider preserved a delivery-specific header.`,
+      severity:'info'
+    });
+  }
+
+  if(attachments.files.length||attachments.attachmentHeaders){
+    rows.push({
+      title:'Attachment clue',
+      text:attachments.files.length
+        ?`Attachment filename${attachments.files.length===1?'':'s'} found: ${attachments.files.join(', ')}.`
+        :'An attachment Content-Disposition header was found, but no filename was parsed.',
+      severity:'info'
+    });
+  }
+
+  if(providers.length){
+    rows.push({
+      title:'Sending-service clues',
+      text:`Headers contain clues associated with: ${providers.join(', ')}. This suggests infrastructure or filtering involvement, not necessarily the original author.`,
+      severity:'info'
+    });
+  }
+
+  if(!rows.length){
+    rows.push({
+      title:'No notable mismatch detected',
+      text:'No obvious sender-domain mismatch, authentication failure or other highlighted header condition was detected by this parser.',
+      severity:'info'
+    });
+  }
+
+  rows.forEach(row=>addObservation(row.title,row.text,row.severity));
+}
+
+function buildReport(data){
+  const {
+    parsed,auth,hops,recipients,automation,ipClues,providers,attachments,
+    observations:observationRows
+  }=data;
+  const map=parsed.map;
+
+  const lines=[
+    'Email Header Analyzer',
+    '',
+    'Overview:',
+    `From: ${decodeHeaderValue(first(map,'from'))||'Not present'}`,
+    `To: ${decodeHeaderValue(first(map,'to'))||'Not present'}`,
+    `Cc: ${decodeHeaderValue(first(map,'cc'))||'Not present'}`,
+    `Subject: ${decodeHeaderValue(first(map,'subject'))||'Not present'}`,
+    `Date: ${decodeHeaderValue(first(map,'date'))||'Not present'}`,
+    `Message-ID: ${first(map,'message-id')||'Not present'}`,
+    `Received hops: ${hops.length}`,
+    `SPF: ${prettyState(auth.states.SPF)}`,
+    `DKIM: ${prettyState(auth.states.DKIM)}`,
+    `DMARC: ${prettyState(auth.states.DMARC)}`,
+    `ARC: ${prettyState(auth.states.ARC)}`,
+    `Automation score: ${automation.score}/100`,
+    `Automation assessment: ${automation.label}`,
+    '',
+    'Sender identities:',
+    `From address: ${extractEmail(first(map,'from'))||'Not present'}`,
+    `From domain: ${domainOfEmail(first(map,'from'))||'Not present'}`,
+    `Reply-To: ${first(map,'reply-to')||'Not present'}`,
+    `Return-Path: ${first(map,'return-path')||'Not present'}`,
+    `Message-ID domain: ${domainOfMessageId(first(map,'message-id'))||'Not present'}`,
+    '',
+    'Authentication details:',
+    `Authentication server: ${auth.attrs.authServer||'Not present'}`,
+    `SPF mail-from: ${auth.attrs.spfDomain||'Not present'}`,
+    `SPF HELO: ${auth.attrs.spfHelo||'Not present'}`,
+    `DKIM domain: ${auth.attrs.dkimDomain||auth.dkim.domain||'Not present'}`,
+    `DKIM selector: ${auth.attrs.dkimSelector||auth.dkim.selector||'Not present'}`,
+    `DMARC header.from: ${auth.attrs.dmarcDomain||'Not present'}`,
+    '',
+    'Recipients found:'
+  ];
+
+  if(recipients.length){
+    recipients.forEach(r=>lines.push(`${r.type}: ${r.email} [${r.source}]`));
+  }else{
+    lines.push('No recipient addresses extracted.');
+  }
+
+  lines.push('','Automation / bulk-mail evidence:');
+  if(automation.evidence.length){
+    automation.evidence.forEach(x=>lines.push(`${x.title} (+${x.points}): ${x.detail}`));
+  }else{
+    lines.push('No recognised automation signals.');
+  }
+
+  lines.push('','Sending-service clues:');
+  lines.push(providers.length?providers.join(', '):'No recognised sending-service clue.');
+
+  lines.push('','Delivery route:');
+  if(hops.length){
+    hops.forEach((hop,index)=>{
+      lines.push(`Hop ${index+1}`);
+      lines.push(`From: ${hop.from||'Not parsed'}`);
+      lines.push(`By: ${hop.by||'Not parsed'}`);
+      lines.push(`With: ${hop.with||'Not parsed'}`);
+      lines.push(`Public IPs: ${hop.ips.join(', ')||'None'}`);
+      lines.push(`For: ${hop.forRecipient||'Not shown'}`);
+      lines.push(`Timestamp: ${hop.dateText||'Not parsed'}`);
+      lines.push('');
+    });
+  }else{
+    lines.push('No Received headers found.');
+  }
+
+  lines.push('','Public IP clues:');
+  if(ipClues.length){
+    ipClues.forEach(item=>lines.push(`${item.ip}: ${item.sources.join(', ')}`));
+  }else{
+    lines.push('None found.');
+  }
+
+  lines.push('','Message structure:');
+  lines.push(`Content-Type: ${first(map,'content-type')||'Not present'}`);
+  lines.push(`MIME-Version: ${first(map,'mime-version')||'Not present'}`);
+  lines.push(`In-Reply-To: ${first(map,'in-reply-to')||'Not present'}`);
+  lines.push(`References: ${first(map,'references')||'Not present'}`);
+  lines.push(`List-ID: ${first(map,'list-id')||'Not present'}`);
+  lines.push(`List-Unsubscribe: ${first(map,'list-unsubscribe')||'Not present'}`);
+  lines.push(`Attachments: ${attachments.files.length?attachments.files.join(', '):(attachments.attachmentHeaders?'Attachment header detected':'None detected')}`);
+
+  lines.push('','Header observations:');
+  observationRows.forEach(x=>lines.push(`${x.title}: ${x.text}`));
+
+  return lines.join('\n');
+}
+
+async function analyse(){
+  const source=headersInput.value.trim();
+
+  if(!source){
+    hideProgress();
+    setStatus('Paste raw email headers or upload a saved .eml email.','error');
+    return;
+  }
+
+  results.classList.add('hidden');
+  setBusy(true);
+  hideProgress();
+  setProgress(4);
+  setStatus('Parsing email header structure…');
+  await nextPaint();
+
+  try{
+    const parsed=parseHeaders(source);
+    const map=parsed.map;
+
+    if(!Object.keys(map).length){
+      throw new Error('No valid email headers could be parsed.');
+    }
+
+    setProgress(18);
+    setStatus('Reading sender, recipient and message identity…');
+    await nextPaint();
+
+    const from=decodeHeaderValue(first(map,'from'));
+    const to=decodeHeaderValue(first(map,'to'));
+    const subject=decodeHeaderValue(first(map,'subject'));
+
+    sumFrom.textContent=from||'Not present';
+    sumTo.textContent=to||'Not present';
+    sumSubject.textContent=subject||'Not present';
+
+    renderIdentity(map);
+
+    setProgress(34);
+    setStatus('Analysing authentication results…');
+    await nextPaint();
+
+    const auth=renderAuth(map);
+
+    setProgress(49);
+    setStatus('Reconstructing delivery route and recipients…');
+    await nextPaint();
+
+    const hops=renderHops(map);
+    sumHops.textContent=String(hops.length);
+
+    const recipients=collectRecipients(map,hops);
+    renderRecipients(recipients);
+
+    setProgress(64);
+    setStatus('Checking public IPs and sending-service clues…');
+    await nextPaint();
+
+    const ipClues=collectIpClues(parsed,hops);
+    renderIpClues(ipClues);
+
+    const providers=detectProviders(parsed);
+    renderSoftware(map,providers);
+
+    setProgress(77);
+    setStatus('Estimating automation and bulk-mail signals…');
+    await nextPaint();
+
+    const automation=automationAnalysis(map,parsed,providers);
+    renderAutomation(automation);
+
+    setProgress(87);
+    setStatus('Inspecting thread, MIME, attachments and security headers…');
+    await nextPaint();
+
+    const attachments=extractAttachments(source);
+    renderMessageStructure(map,source,attachments);
+    renderSecurityHeaders(map);
+
+    const observationRows=[];
+    compareIdentities(map,auth,observationRows);
+
+    if(all(map,'dkim-signature').length){
+      observationRows.push({
+        title:'DKIM signature present',
+        text:`${all(map,'dkim-signature').length} DKIM-Signature header${all(map,'dkim-signature').length===1?'':'s'} found.`,
+        severity:'info'
+      });
+    }
+
+    if(all(map,'arc-seal').length||all(map,'arc-message-signature').length){
+      observationRows.push({
+        title:'ARC chain present',
+        text:'Authenticated Received Chain headers are present.',
+        severity:'info'
+      });
+    }
+
+    if(first(map,'list-unsubscribe')){
+      observationRows.push({
+        title:'Mailing-list / bulk-mail clue',
+        text:'List-Unsubscribe is present, which commonly appears on mailing-list, newsletter and marketing messages.',
+        severity:'info'
+      });
+    }
+
+    renderObservations(observationRows,ipClues,recipients,attachments,providers);
+
+    setProgress(95);
+    setStatus('Building the complete header report…');
+    await nextPaint();
+
+    const raw={
+      headers:parsed.ordered,
+      authentication:auth,
+      route:hops,
+      recipients,
+      automation,
+      publicIpClues:ipClues,
+      sendingServiceClues:providers,
+      attachments,
+      securityHeaders:SECURITY_HEADER_NAMES.flatMap(key=>all(map,key).map(value=>({header:key,value})))
+    };
+    rawData.textContent=JSON.stringify(raw,null,2);
+
+    const reportData={
+      parsed,auth,hops,recipients,automation,ipClues,providers,attachments,
+      observations:observationRows
+    };
+
+    lastReport={
+      text:buildReport(reportData),
+      subject:subject||'email-header'
+    };
+
+    setProgress(100);
+    results.classList.remove('hidden');
+    setStatus('Email header analysis complete.');
+  }catch(error){
+    hideProgress();
+    setStatus(error.message||'Email header analysis could not be completed.','error');
+  }finally{
+    setBusy(false);
+  }
+}
+
+function clearAll(){
+  headersInput.value='';
+  fileInput.value='';
+  results.classList.add('hidden');
+
+  [
+    identityGrid,recipientsBody,authChips,authDetailsGrid,automationEvidence,hopsBody,
+    ipBody,softwareGrid,serviceChips,messageGrid,attachmentList,securityHeaders,observations
+  ].forEach(el=>el.innerHTML='');
+
+  automationScore.textContent='0';
+  automationLabel.textContent='No strong automation signals';
+  rawData.textContent='';
+  lastReport=null;
+  hideProgress();
+  setStatus('');
+  headersInput.focus();
+}
+
+function readEmailFileWithProgress(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+
+    reader.addEventListener('loadstart',()=>{
+      hideProgress();
+      setProgress(4);
+      setStatus(`Loading ${file.name||'email file'}…`);
+    });
+
+    reader.addEventListener('progress',event=>{
+      if(event.lengthComputable&&event.total>0){
+        const percent=Math.max(4,Math.min(96,(event.loaded/event.total)*96));
+        setProgress(percent);
+        setStatus(`Loading ${file.name||'email file'}… ${Math.round((event.loaded/event.total)*100)}%`);
+      }else{
+        setProgress(Math.min(90,progressValue+8));
+        setStatus(`Loading ${file.name||'email file'}…`);
+      }
+    });
+
+    reader.addEventListener('load',()=>{
+      resolve(String(reader.result||''));
+    });
+
+    reader.addEventListener('error',()=>{
+      reject(reader.error||new Error('File read failed'));
+    });
+
+    reader.addEventListener('abort',()=>{
+      reject(new Error('File read cancelled'));
+    });
+
+    reader.readAsText(file);
+  });
+}
+
+async function loadEmailFile(file){
+  if(!file) return;
+
+  const name=String(file.name||'').toLowerCase();
+  const allowed=name.endsWith('.eml')||name.endsWith('.txt')||file.type==='message/rfc822'||file.type==='text/plain';
+
+  if(!allowed){
+    hideProgress();
+    setStatus('Upload a saved .eml email or a plain-text email/header file.','error');
+    return;
+  }
+
+  setBusy(true);
+
+  try{
+    const text=await readEmailFileWithProgress(file);
+
+    if(!text.trim()){
+      throw new Error('empty');
+    }
+
+    headersInput.value=text;
+
+    setProgress(100);
+    setStatus(`Loaded ${file.name||'email file'}. Click Analyse Headers to inspect it.`);
+  }catch(_){
+    hideProgress();
+    setStatus('Could not read that email file.','error');
+  }finally{
+    setBusy(false);
+  }
+}
+
+fileInput.addEventListener('change',async()=>{
+  await loadEmailFile(fileInput.files?.[0]);
+});
+
+['dragenter','dragover'].forEach(type=>{
+  headersInput.addEventListener(type,event=>{
+    event.preventDefault();
+    event.stopPropagation();
+    headersInput.classList.add('is-dragover');
+  });
+});
+
+['dragleave','drop'].forEach(type=>{
+  headersInput.addEventListener(type,event=>{
+    event.preventDefault();
+    event.stopPropagation();
+    headersInput.classList.remove('is-dragover');
+  });
+});
+
+headersInput.addEventListener('drop',async event=>{
+  const file=event.dataTransfer?.files?.[0];
+  if(file) await loadEmailFile(file);
+});
+
+async function copyReport(){
+  if(!lastReport?.text) return;
+
+  const original=copyReportBtn.textContent;
+  try{
+    if(navigator.clipboard&&window.isSecureContext){
+      await navigator.clipboard.writeText(lastReport.text);
+    }else{
+      const area=document.createElement('textarea');
+      area.value=lastReport.text;
+      area.setAttribute('readonly','');
+      area.style.position='fixed';
+      area.style.opacity='0';
+      document.body.appendChild(area);
+      area.select();
+      const ok=document.execCommand('copy');
+      area.remove();
+      if(!ok) throw new Error('Copy failed');
+    }
+
+    copyReportBtn.textContent='Copied';
+    setTimeout(()=>copyReportBtn.textContent=original,1200);
+  }catch(_){
+    hideProgress();
+    setStatus('Could not copy the report.','error');
+  }
+}
+
+async function savePdf(){
+  if(!lastReport?.text) return;
+
+  const original=savePdfBtn.textContent;
+  savePdfBtn.disabled=true;
+  savePdfBtn.textContent='Creating PDF…';
+
+  try{
+    if(!window.ToolsPDFExport) throw new Error('PDF export could not load.');
+
+    await window.ToolsPDFExport.saveTextPdf({
+      title:'Email Header Analyzer Report',
+      subtitle:lastReport.subject,
+      text:lastReport.text,
+      filename:'email-header-analysis.pdf'
+    });
+
+    savePdfBtn.textContent='Saved';
+    setTimeout(()=>savePdfBtn.textContent=original,1200);
+  }catch(error){
+    hideProgress();
+    setStatus(error.message||'Could not create the PDF report.','error');
+    savePdfBtn.textContent=original;
+  }finally{
+    savePdfBtn.disabled=false;
+  }
+}
+
+analyseBtn.addEventListener('click',analyse);
+clearBtn.addEventListener('click',clearAll);
+copyReportBtn.addEventListener('click',copyReport);
+savePdfBtn.addEventListener('click',savePdf);
+})();
+</script>
+<script src="../../Assets/site-shell.js?v=mk126"></script>
+</body>
+</html>

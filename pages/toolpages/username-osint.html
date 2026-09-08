@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="#f5f5f7" name="theme-color"/>
+
+<title>Username, Name &amp; Contact OSINT | Adrian Headley Tools</title>
+<meta name="description" content="Search current and archived public profiles by username, name, email address or phone number, including Wayback Machine history when archived profile evidence exists."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/username-osint.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Username OSINT | Adrian Headley Tools"/>
+<meta property="og:description" content="Search a username or real name across public profile pages on major platforms and show successful public matches."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/username-osint.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta property="og:image:width" content="2048"/>
+<meta property="og:image:height" content="1365"/>
+<meta property="og:image:alt" content="Adrian Headley Tools"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Username OSINT | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Search usernames and real names across public social, developer, creator and community profile pages."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/username-osint.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/username-osint.html","name":"Username, Name & Contact OSINT","description":"Search current public profiles and Internet Archive Wayback Machine history by username, real name, email address or phone number.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/username-osint.html#breadcrumb"},"dateModified":"2026-09-07","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/username-osint.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/username-osint.html#app","name":"Username, Name & Contact OSINT","url":"https://tools.adrianheadley.com/pages/toolpages/username-osint.html","description":"Search current public profiles and archived Wayback Machine snapshots by username, name, email or phone.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled and internet access.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Search by username, real name, email address or phone number.","Add optional username context such as a known alternate username, known platform, real name and location.","Add optional name clues such as age, birthday, location, school, alias and interest.","Validate profile-like URLs before displaying them so search-engine home pages and malformed URLs are excluded.","Check the Internet Archive Wayback Machine for archived versions of relevant profile URLs and surface archived page titles or possible historical usernames when available.","For email and phone searches, show only publicly indexed profile references containing the exact identifier.","Do not use account-recovery pages, contact syncing or private account-enumeration techniques.","Copy or export successful matches using the site-wide PDF template."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/username-osint.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Username, Name & Contact OSINT","item":"https://tools.adrianheadley.com/pages/toolpages/username-osint.html"}]}]}</script>
+
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --text:#111827;
+    --text-soft:#4b5563;
+    --accent:#2563eb;
+    --accent-hover:#1d4ed8;
+    --border-subtle:#e5e7eb;
+    --border-strong:#d1d5db;
+    --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+    --radius-pill:999px;
+    --max-w:1080px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%;overflow-x:hidden}
+  body{
+    min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--text);
+    font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:none}
+  main{flex:1}
+  .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+  .skip-link{
+    position:absolute;left:-999px;top:.5rem;padding:.45rem .75rem;background:#111827;color:#f9fafb;
+    z-index:100;border-radius:var(--radius-pill);font-size:.85rem
+  }
+  .skip-link:focus{left:.5rem}
+
+  .intro{text-align:center;padding:2.6rem 0 2.4rem}
+  .intro__title{
+    font-size:clamp(2.1rem,3vw,2.6rem);line-height:1.15;margin:0 0 .8rem;
+    font-weight:750;letter-spacing:-.03em
+  }
+  .intro__subtitle{max-width:760px;margin:0 auto;color:var(--text-soft);font-size:.96rem;font-weight:500}
+
+  .tool{padding:2.4rem 0 4rem}
+  .card{
+    background:rgba(255,255,255,.92);border:1px solid var(--border-subtle);border-radius:24px;
+    box-shadow:var(--shadow-soft);padding:clamp(1.2rem,3vw,1.7rem);max-width:1080px;margin:0 auto
+  }
+
+  .mode-row{
+    display:flex;justify-content:center;gap:.45rem;flex-wrap:wrap;margin-bottom:1rem
+  }
+  .mode-btn{
+    min-height:36px;padding:.4rem .8rem;border:1px solid var(--border-strong);border-radius:999px;
+    background:#fff;color:var(--text);font:inherit;font-size:.78rem;font-weight:750;cursor:pointer
+  }
+  .mode-btn.is-active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .name-clues,.username-clues{
+    display:none;margin:1.45rem 0 0;border:1px solid var(--border-subtle);border-radius:16px;background:#f8fafc;overflow:hidden
+  }
+  .name-clues.is-visible,.username-clues.is-visible{display:block}
+  .name-clues summary,.username-clues summary{
+    cursor:pointer;padding:.72rem .85rem;font-size:.8rem;font-weight:800;color:var(--text)
+  }
+  .name-clues-grid{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;padding:0 .85rem .85rem
+  }
+  .name-clues .field input,.username-clues .field input,.username-clues .field select{
+    width:100%;min-height:40px;padding:.58rem .72rem;font-size:.84rem;border:1px solid var(--border-strong);
+    border-radius:12px;background:#fff;color:var(--text);font:inherit
+  }
+  .name-clues .field label,.username-clues .field label{font-size:.76rem}
+  .lookup-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:.7rem;align-items:end}
+  .field label{display:block;margin:0 0 .35rem;color:var(--text-soft);font-size:.85rem;font-weight:700}
+  .field input{
+    width:100%;min-height:44px;padding:.72rem .9rem;border:1px solid var(--border-strong);
+    border-radius:14px;background:#fff;color:var(--text);font:inherit;outline:none;
+    transition:border-color .16s,box-shadow .16s
+  }
+  .field input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.11)}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;
+    padding:.65rem 1.2rem;border:1px solid transparent;border-radius:var(--radius-pill);
+    background:var(--accent);color:#fff;font-size:.85rem;font-weight:700;cursor:pointer;text-decoration:none;
+    transition:background .16s,transform .14s,box-shadow .16s,border-color .16s
+  }
+  .btn:hover:not(:disabled){background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 10px 24px rgba(37,99,235,.18)}
+  .btn.secondary{background:#fff;color:var(--text);border-color:var(--border-strong);box-shadow:none}
+  .btn.secondary:hover:not(:disabled){background:#f8fafc;box-shadow:none}
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+  #status.progress-status{
+    --progress-fill:0%;
+    position:relative;overflow:hidden;min-height:3.25rem;display:flex;align-items:center;justify-content:center;
+    padding:.65rem .8rem;border:1px solid #bfdbfe;border-radius:12px;
+    background:linear-gradient(90deg,rgba(37,99,235,.20) 0 var(--progress-fill),#f8fafc var(--progress-fill) 100%)!important;
+    color:#334155!important;transition:background .18s,border-color .18s
+  }
+  #status.progress-status.success,#status.progress-status[data-tools-state="success"]{color:#047857!important}
+  #status.progress-status.error,#status.progress-status[data-tools-state="error"]{color:#b91c1c!important}
+  #status.progress-status.is-complete,
+  #status.progress-status.is-complete.success,
+  #status.progress-status.is-complete.error,
+  #status.progress-status.is-complete[data-tools-state="success"],
+  #status.progress-status.is-complete[data-tools-state="error"],
+  #status.progress-status.is-complete[data-tools-state="warning"],
+  #status.progress-status.is-complete[data-tools-state="info"]{
+    background:#2563eb!important;border-color:#2563eb!important;color:#fff!important
+  }
+  #status.progress-status:empty{display:none!important}
+  .status{min-height:1.4rem;margin-top:.75rem;text-align:center;color:var(--text-soft);font-size:.84rem;font-weight:650}
+  .status.error{color:#b91c1c}
+  .status.success{color:#047857}
+
+  .results{display:grid;gap:1rem;margin-top:1rem}
+  .results.hidden{display:none}
+  .section{border:1px solid var(--border-subtle);border-radius:20px;background:#f8fafc;padding:1rem}
+  .section-head{display:flex;align-items:center;justify-content:flex-start;gap:.8rem;margin-bottom:.75rem}
+  .section h2{margin:0;font-size:1rem;line-height:1.25}
+
+  .summary-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.65rem}
+  .kv{
+    min-width:0;padding:.75rem .82rem;border:1px solid var(--border-subtle);border-radius:14px;background:#fff
+  }
+  .kv span{display:block;color:var(--text-soft);font-size:.72rem;font-weight:760;margin-bottom:.14rem}
+  .kv b{display:block;color:var(--text);font-size:.9rem;font-weight:800;overflow-wrap:anywhere}
+  .kv.found b{color:#047857}
+  .kv.missing b{color:#b91c1c}
+  .kv.unknown b{color:#64748b}
+
+  .records-wrap{overflow:auto;border:1px solid var(--border-subtle);border-radius:14px;background:#fff}
+  table{width:100%;border-collapse:collapse;min-width:760px}
+  th,td{padding:.65rem .7rem;border-bottom:1px solid var(--border-subtle);text-align:left;vertical-align:top}
+  th{background:#f8fafc;color:var(--text-soft);font-size:.72rem;font-weight:800}
+  td{font-size:.78rem;overflow-wrap:anywhere}
+  tr:last-child td{border-bottom:0}
+  .platform{font-weight:800;color:var(--text)}
+  .category{font-size:.7rem;color:var(--text-soft);margin-top:.12rem}
+  .state{font-weight:800;white-space:nowrap}
+  .state.found{color:#047857}
+  .state.missing{color:#b91c1c}
+  .state.unknown{color:#64748b}
+  .mini-link{
+    display:inline-flex;align-items:center;min-height:32px;padding:.32rem .62rem;
+    border:1px solid rgba(37,99,235,.22);border-radius:999px;background:#fff;color:var(--accent);
+    font-size:.74rem;font-weight:750;text-decoration:none
+  }
+  .mini-link:hover{background:#f5f9ff}
+
+  .result-actions{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+
+  @media(max-width:760px){
+    .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media(max-width:640px){
+    .container{width:min(100% - 2rem,var(--max-w))}
+    .intro{padding:2rem 0 2.1rem}
+    .tool{padding:1.6rem 0 3rem}
+    .lookup-row{grid-template-columns:1fr}
+    .lookup-row .btn{width:100%}
+    .name-clues-grid{grid-template-columns:1fr}
+    .summary-grid{grid-template-columns:1fr}
+    table{min-width:680px}
+  }
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk126">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Username, Name &amp; Contact OSINT</h1>
+      <p class="intro__subtitle">Search public profiles using a username, real name, email address or phone number across major platforms.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="card" role="region" aria-label="Username, name and contact OSINT lookup">
+        <div class="mode-row" role="group" aria-label="Search type">
+          <button class="mode-btn is-active" id="usernameModeBtn" type="button" aria-pressed="true">Username</button>
+          <button class="mode-btn" id="nameModeBtn" type="button" aria-pressed="false">Name</button>
+          <button class="mode-btn" id="contactModeBtn" type="button" aria-pressed="false">Email / Phone</button>
+        </div>
+        <div class="lookup-row">
+          <div class="field">
+            <label for="usernameInput" id="searchLabel">Username</label>
+            <input id="usernameInput" type="text" autocomplete="off" spellcheck="false" placeholder="exampleuser"/>
+          </div>
+          <button class="btn" id="searchBtn" type="button">Search Username</button>
+          <button class="btn secondary" id="clearBtn" type="button">Clear</button>
+        </div>
+        <div class="status" id="status" aria-live="polite"></div>
+
+        <details class="username-clues" id="usernameClues">
+          <summary>Add extra details to improve username matching</summary>
+          <div class="name-clues-grid">
+            <div class="field">
+              <label for="knownAliasInput">Known other username / alias</label>
+              <input id="knownAliasInput" type="text" autocomplete="off"/>
+            </div>
+            <div class="field">
+              <label for="knownPlatformInput">Platform where that username is known</label>
+              <select id="knownPlatformInput">
+                <option value="">Any / not specified</option>
+                <option>Facebook</option>
+                <option>GitHub</option>
+                <option>Instagram</option>
+                <option>LinkedIn</option>
+                <option>Reddit</option>
+                <option>Snapchat</option>
+                <option>TikTok</option>
+                <option>Telegram</option>
+                <option>Twitch</option>
+                <option>X</option>
+                <option>YouTube</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="usernameRealNameInput">Real name</label>
+              <input id="usernameRealNameInput" type="text" autocomplete="off"/>
+            </div>
+            <div class="field">
+              <label for="usernameLocationInput">Location / area</label>
+              <input id="usernameLocationInput" type="text" autocomplete="off"/>
+            </div>
+          </div>
+        </details>
+
+        <details class="name-clues" id="nameClues">
+          <summary>Add extra details to improve name matching</summary>
+          <div class="name-clues-grid">
+            <div class="field">
+              <label for="ageInput">Age</label>
+              <input id="ageInput" type="text" inputmode="numeric" autocomplete="off"/>
+            </div>
+            <div class="field">
+              <label for="birthdayInput">Birthday / date of birth</label>
+              <input id="birthdayInput" type="text" autocomplete="off"/>
+            </div>
+            <div class="field">
+              <label for="locationInput">Location / area</label>
+              <input id="locationInput" type="text" autocomplete="off"/>
+            </div>
+            <div class="field">
+              <label for="schoolInput">School / college / university</label>
+              <input id="schoolInput" type="text" autocomplete="off"/>
+            </div>
+            <div class="field">
+              <label for="aliasInput">Known username / alias</label>
+              <input id="aliasInput" type="text" autocomplete="off"/>
+            </div>
+            <div class="field">
+              <label for="interestInput">Hobby / interest / public keyword</label>
+              <input id="interestInput" type="text" autocomplete="off"/>
+            </div>
+          </div>
+        </details>
+
+<div class="results hidden" id="results">
+          <section class="section">
+            <div class="section-head"><h2>Summary</h2></div>
+            <div class="summary-grid">
+              <div class="kv"><span id="summaryQueryLabel">Username</span><b id="summaryUsername">—</b></div>
+              <div class="kv found"><span>Successful matches</span><b id="summaryFound">0</b></div>
+              <div class="kv"><span>Wayback matches</span><b id="summaryArchived">0</b></div>
+              <div class="kv"><span>Platforms searched</span><b id="summaryPlatforms">0</b></div>
+              <div class="kv"><span>Search type</span><b id="summaryMode">Username</b></div>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Successful public matches</h2></div>
+            <div class="records-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Platform</th>
+                    <th>Status</th>
+                    <th>Evidence</th>
+                    <th>Profile</th>
+                  </tr>
+                </thead>
+                <tbody id="resultsBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section hidden" id="waybackSection">
+            <div class="section-head"><h2>Wayback history</h2></div>
+            <div class="records-wrap">
+              <table>
+                <thead><tr><th>Platform</th><th>Archived date</th><th>Archived identity</th><th>Snapshot</th></tr></thead>
+                <tbody id="waybackBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <div class="result-actions">
+            <button class="btn secondary" id="copyReportBtn" type="button">Copy report</button>
+            <button class="btn secondary" id="savePdfBtn" type="button">Save PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="../../Assets/pdf-export.js?v=mk124"></script>
+<script>
+(function(){
+  'use strict';
+
+  const ALLORIGINS='https://api.allorigins.win/get?url=';
+  const READER='https://r.jina.ai/';
+  const TIMEOUT_MS=12000;
+  const USERNAME_BATCH=5;
+  const NAME_BATCH=6;
+  const CONTACT_BATCH=7;
+  const WAYBACK_BATCH=8;
+  const MAX_WAYBACK_CANDIDATES=100;
+  const MAX_WAYBACK_RESULTS=30;
+  const CDX='https://web.archive.org/cdx/search/cdx';
+
+  const PLATFORMS=[
+    {name:'GitHub',category:'Developer',domain:'github.com',searchScope:'site:github.com',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://github.com/${u}`,notFound:/page not found|there isn.t a github pages site here|not found/i},
+    {name:'GitLab',category:'Developer',domain:'gitlab.com',searchScope:'site:gitlab.com',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://gitlab.com/${u}`,notFound:/404|page not found|the page could not be found/i},
+    {name:'Codeberg',category:'Developer',domain:'codeberg.org',searchScope:'site:codeberg.org',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://codeberg.org/${u}`,notFound:/page not found|404/i},
+    {name:'DEV Community',category:'Developer',domain:'dev.to',searchScope:'site:dev.to',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://dev.to/${u}`,notFound:/page not found|404/i},
+    {name:'Replit',category:'Developer',domain:'replit.com',searchScope:'site:replit.com/@',profilePath:/^\/@[^/]+\/?$/i,url:u=>`https://replit.com/@${u}`,notFound:/page not found|404/i},
+    {name:'CodePen',category:'Developer',domain:'codepen.io',searchScope:'site:codepen.io',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://codepen.io/${u}`,notFound:/page not found|404/i},
+    {name:'npm',category:'Developer',domain:'npmjs.com',searchScope:'site:npmjs.com/~',profilePath:/^\/~[^/]+\/?$/i,url:u=>`https://www.npmjs.com/~${u}`,notFound:/page not found|404/i},
+    {name:'PyPI',category:'Developer',domain:'pypi.org',searchScope:'site:pypi.org/user/',profilePath:/^\/user\/[^/]+\/?$/i,url:u=>`https://pypi.org/user/${u}/`,notFound:/404|page not found/i},
+    {name:'Docker Hub',category:'Developer',domain:'hub.docker.com',searchScope:'site:hub.docker.com/u/',profilePath:/^\/u\/[^/]+\/?$/i,url:u=>`https://hub.docker.com/u/${u}`,notFound:/page not found|404/i},
+    {name:'Product Hunt',category:'Developer',domain:'producthunt.com',searchScope:'site:producthunt.com/@',profilePath:/^\/@[^/]+\/?$/i,url:u=>`https://www.producthunt.com/@${u}`,notFound:/page not found|404/i},
+    {name:'Kaggle',category:'Developer',domain:'kaggle.com',searchScope:'site:kaggle.com',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://www.kaggle.com/${u}`,notFound:/page not found|404/i},
+    {name:'LeetCode',category:'Developer',domain:'leetcode.com',searchScope:'site:leetcode.com/u/',profilePath:/^\/u\/[^/]+\/?$/i,url:u=>`https://leetcode.com/u/${u}/`,notFound:/page not found|404/i},
+    {name:'HackerRank',category:'Developer',domain:'hackerrank.com',searchScope:'site:hackerrank.com/profile/',profilePath:/^\/profile\/[^/]+\/?$/i,url:u=>`https://www.hackerrank.com/profile/${u}`,notFound:/page not found|404/i},
+    {name:'Hacker News',category:'Community',domain:'news.ycombinator.com',searchScope:'site:news.ycombinator.com/user',profilePath:/^\/user$/i,url:u=>`https://news.ycombinator.com/user?id=${u}`,notFound:/no such user/i},
+    {name:'Reddit',category:'Community',domain:'reddit.com',searchScope:'site:reddit.com/user/',profilePath:/^\/user\/[^/]+\/?$/i,url:u=>`https://www.reddit.com/user/${u}/`,notFound:/page not found|nobody on reddit goes by that name|sorry.*page.*not found/i},
+    {name:'Medium',category:'Publishing',domain:'medium.com',searchScope:'site:medium.com/@',profilePath:/^\/@[^/]+\/?$/i,url:u=>`https://medium.com/@${u}`,notFound:/page not found|404/i},
+    {name:'Substack',category:'Publishing',domain:'substack.com',searchScope:'site:substack.com',subdomainProfile:true,url:u=>`https://${u}.substack.com/`,notFound:/page not found|404/i},
+    {name:'Tumblr',category:'Publishing',domain:'tumblr.com',searchScope:'site:tumblr.com',subdomainProfile:true,url:u=>`https://${u}.tumblr.com/`,notFound:/page not found|404/i},
+    {name:'Facebook',category:'Social',domain:'facebook.com',searchScope:'site:facebook.com',profilePath:/^\/(?!home|login|help|watch|marketplace|groups|pages|events)[^/]+\/?$/i,url:u=>`https://www.facebook.com/${u}`,notFound:/content isn.t available|page not found|404/i},
+    {name:'X',category:'Social',domain:'x.com',searchScope:'site:x.com',profilePath:/^\/(?!home|search|explore|settings|i\/)[^/]+\/?$/i,url:u=>`https://x.com/${u}`,notFound:/this account doesn.t exist|account suspended|page doesn.t exist/i},
+    {name:'Instagram',category:'Social',domain:'instagram.com',searchScope:'site:instagram.com',profilePath:/^\/(?!accounts|explore|reel|p\/)[^/]+\/?$/i,url:u=>`https://www.instagram.com/${u}/`,notFound:/sorry.*page isn.t available|page not found/i},
+    {name:'Threads',category:'Social',domain:'threads.net',searchScope:'site:threads.net/@',profilePath:/^\/@[^/]+\/?$/i,url:u=>`https://www.threads.net/@${u}`,notFound:/page not found|content isn.t available/i},
+    {name:'TikTok',category:'Social',domain:'tiktok.com',searchScope:'site:tiktok.com/@',profilePath:/^\/@[^/]+\/?$/i,url:u=>`https://www.tiktok.com/@${u}`,notFound:/couldn.t find this account|page not available|404/i},
+    {name:'Bluesky',category:'Social',domain:'bsky.app',searchScope:'site:bsky.app/profile/',profilePath:/^\/profile\/[^/]+\/?$/i,url:u=>`https://bsky.app/profile/${u}`,notFound:/profile not found|account not found|404/i},
+    {name:'Mastodon.social',category:'Social',domain:'mastodon.social',searchScope:'site:mastodon.social/@',profilePath:/^\/@[^/]+\/?$/i,url:u=>`https://mastodon.social/@${u}`,notFound:/record not found|page not found|404/i},
+    {name:'Pinterest',category:'Social',domain:'pinterest.com',searchScope:'site:pinterest.com',profilePath:/^\/(?!pin|ideas|search|business)[^/]+\/?$/i,url:u=>`https://www.pinterest.com/${u}/`,notFound:/sorry.*couldn.t find that page|page not found/i},
+    {name:'Snapchat',category:'Social',domain:'snapchat.com',searchScope:'site:snapchat.com/add/',profilePath:/^\/add\/[^/]+\/?$/i,url:u=>`https://www.snapchat.com/add/${u}`,notFound:/page not found|404/i},
+    {name:'Telegram',category:'Social',domain:'t.me',searchScope:'site:t.me',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://t.me/${u}`,notFound:/page not found|404/i},
+    {name:'YouTube',category:'Video',domain:'youtube.com',searchScope:'site:youtube.com',profilePath:/^\/(@[^/]+|channel\/[^/]+|c\/[^/]+|user\/[^/]+)\/?$/i,url:u=>`https://www.youtube.com/@${u}`,notFound:/404 not found|this page isn.t available/i},
+    {name:'Twitch',category:'Streaming',domain:'twitch.tv',searchScope:'site:twitch.tv',profilePath:/^\/(?!directory|downloads|jobs|p\/)[^/]+\/?$/i,url:u=>`https://www.twitch.tv/${u}`,notFound:/sorry.*page is in another castle|channel.*does not exist|404/i},
+    {name:'Vimeo',category:'Video',domain:'vimeo.com',searchScope:'site:vimeo.com',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://vimeo.com/${u}`,notFound:/page not found|404/i},
+    {name:'Flickr',category:'Photography',domain:'flickr.com',searchScope:'site:flickr.com/people/',profilePath:/^\/people\/[^/]+\/?$/i,url:u=>`https://www.flickr.com/people/${u}/`,notFound:/page not found|404/i},
+    {name:'Behance',category:'Creative',domain:'behance.net',searchScope:'site:behance.net',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://www.behance.net/${u}`,notFound:/page not found|404/i},
+    {name:'Dribbble',category:'Creative',domain:'dribbble.com',searchScope:'site:dribbble.com',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://dribbble.com/${u}`,notFound:/page not found|404/i},
+    {name:'DeviantArt',category:'Creative',domain:'deviantart.com',searchScope:'site:deviantart.com',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://www.deviantart.com/${u}`,notFound:/page not found|404/i},
+    {name:'ArtStation',category:'Creative',domain:'artstation.com',searchScope:'site:artstation.com',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://www.artstation.com/${u}`,notFound:/page not found|404/i},
+    {name:'SoundCloud',category:'Audio',domain:'soundcloud.com',searchScope:'site:soundcloud.com',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://soundcloud.com/${u}`,notFound:/we can.t find that user|page not found|404/i},
+    {name:'Bandcamp',category:'Audio',domain:'bandcamp.com',searchScope:'site:bandcamp.com',subdomainProfile:true,url:u=>`https://${u}.bandcamp.com/`,notFound:/page not found|404/i},
+    {name:'Last.fm',category:'Audio',domain:'last.fm',searchScope:'site:last.fm/user/',profilePath:/^\/user\/[^/]+\/?$/i,url:u=>`https://www.last.fm/user/${u}`,notFound:/page not found|404/i},
+    {name:'Steam',category:'Gaming',domain:'steamcommunity.com',searchScope:'site:steamcommunity.com/id/',profilePath:/^\/id\/[^/]+\/?$/i,url:u=>`https://steamcommunity.com/id/${u}`,notFound:/specified profile could not be found|error/i},
+    {name:'Chess.com',category:'Gaming',domain:'chess.com',searchScope:'site:chess.com/member/',profilePath:/^\/member\/[^/]+\/?$/i,url:u=>`https://www.chess.com/member/${u}`,notFound:/page not found|404/i},
+    {name:'Lichess',category:'Gaming',domain:'lichess.org',searchScope:'site:lichess.org/@/',profilePath:/^\/@\/[^/]+\/?$/i,url:u=>`https://lichess.org/@/${u}`,notFound:/page not found|404/i},
+    {name:'Letterboxd',category:'Entertainment',domain:'letterboxd.com',searchScope:'site:letterboxd.com',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://letterboxd.com/${u}/`,notFound:/page not found|404/i},
+    {name:'Keybase',category:'Identity',domain:'keybase.io',searchScope:'site:keybase.io',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://keybase.io/${u}`,notFound:/user not found|page not found|404/i},
+    {name:'Buy Me a Coffee',category:'Creator',domain:'buymeacoffee.com',searchScope:'site:buymeacoffee.com',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://buymeacoffee.com/${u}`,notFound:/page not found|404/i},
+    {name:'Ko-fi',category:'Creator',domain:'ko-fi.com',searchScope:'site:ko-fi.com',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://ko-fi.com/${u}`,notFound:/page not found|404/i},
+    {name:'Patreon',category:'Creator',domain:'patreon.com',searchScope:'site:patreon.com',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://www.patreon.com/${u}`,notFound:/page not found|404/i},
+    {name:'Linktree',category:'Creator',domain:'linktr.ee',searchScope:'site:linktr.ee',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://linktr.ee/${u}`,notFound:/page not found|404/i},
+    {name:'About.me',category:'Profile',domain:'about.me',searchScope:'site:about.me',profilePath:/^\/[^/]+\/?$/i,url:u=>`https://about.me/${u}`,notFound:/page not found|404/i}
+  ];
+
+  const NAME_ONLY=[
+    {name:'LinkedIn',category:'Professional',domain:'linkedin.com',searchScope:'site:linkedin.com/in/',profilePath:/^\/in\/[^/]+\/?$/i},
+    {name:'Quora',category:'Community',domain:'quora.com',searchScope:'site:quora.com/profile/',profilePath:/^\/profile\/[^/]+\/?$/i},
+    {name:'Stack Overflow',category:'Developer',domain:'stackoverflow.com',searchScope:'site:stackoverflow.com/users/',profilePath:/^\/users\/\d+/i},
+    {name:'Stack Exchange',category:'Developer',domain:'stackexchange.com',searchScope:'site:stackexchange.com/users/',profilePath:/^\/users\/\d+/i},
+    {name:'Goodreads',category:'Books',domain:'goodreads.com',searchScope:'site:goodreads.com/user/show/',profilePath:/^\/user\/show\/\d+/i}
+  ];
+
+  const usernameInput=document.getElementById('usernameInput');
+  const searchBtn=document.getElementById('searchBtn');
+  const clearBtn=document.getElementById('clearBtn');
+  const usernameModeBtn=document.getElementById('usernameModeBtn');
+  const nameModeBtn=document.getElementById('nameModeBtn');
+  const contactModeBtn=document.getElementById('contactModeBtn');
+  const searchLabel=document.getElementById('searchLabel');
+  const usernameClues=document.getElementById('usernameClues');
+  const nameClues=document.getElementById('nameClues');
+
+  const knownAliasInput=document.getElementById('knownAliasInput');
+  const knownPlatformInput=document.getElementById('knownPlatformInput');
+  const usernameRealNameInput=document.getElementById('usernameRealNameInput');
+  const usernameLocationInput=document.getElementById('usernameLocationInput');
+
+  const ageInput=document.getElementById('ageInput');
+  const birthdayInput=document.getElementById('birthdayInput');
+  const locationInput=document.getElementById('locationInput');
+  const schoolInput=document.getElementById('schoolInput');
+  const aliasInput=document.getElementById('aliasInput');
+  const interestInput=document.getElementById('interestInput');
+
+  const statusEl=document.getElementById('status');
+  const results=document.getElementById('results');
+  const resultsBody=document.getElementById('resultsBody');
+  const waybackSection=document.getElementById('waybackSection');
+  const waybackBody=document.getElementById('waybackBody');
+  const summaryUsername=document.getElementById('summaryUsername');
+  const summaryFound=document.getElementById('summaryFound');
+  const summaryArchived=document.getElementById('summaryArchived');
+  const summaryPlatforms=document.getElementById('summaryPlatforms');
+  const summaryMode=document.getElementById('summaryMode');
+  const summaryQueryLabel=document.getElementById('summaryQueryLabel');
+  const copyReportBtn=document.getElementById('copyReportBtn');
+  const savePdfBtn=document.getElementById('savePdfBtn');
+
+  let mode='username';
+  let progressValue=0;
+  let progressActive=false;
+  let lastReport=null;
+
+  function escapeHtml(value){
+    return String(value??'')
+      .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
+      .replaceAll('"','&quot;').replaceAll("'",'&#039;');
+  }
+
+  function clean(value){
+    return String(value||'').trim().replace(/\s+/g,' ');
+  }
+
+  function setMode(next){
+    mode=['username','name','contact'].includes(next)?next:'username';
+
+    usernameModeBtn.classList.toggle('is-active',mode==='username');
+    nameModeBtn.classList.toggle('is-active',mode==='name');
+    contactModeBtn.classList.toggle('is-active',mode==='contact');
+
+    usernameModeBtn.setAttribute('aria-pressed',String(mode==='username'));
+    nameModeBtn.setAttribute('aria-pressed',String(mode==='name'));
+    contactModeBtn.setAttribute('aria-pressed',String(mode==='contact'));
+
+    usernameClues.classList.toggle('is-visible',mode==='username');
+    nameClues.classList.toggle('is-visible',mode==='name');
+
+    if(mode==='username'){
+      searchLabel.textContent='Username';
+      usernameInput.placeholder='exampleuser';
+      searchBtn.textContent='Search Username';
+      summaryQueryLabel.textContent='Username';
+      summaryMode.textContent='Username';
+    }else if(mode==='name'){
+      searchLabel.textContent='Name';
+      usernameInput.placeholder='Jane Smith';
+      searchBtn.textContent='Search Name';
+      summaryQueryLabel.textContent='Name';
+      summaryMode.textContent='Name';
+    }else{
+      searchLabel.textContent='Email address or phone number';
+      usernameInput.placeholder='';
+      searchBtn.textContent='Search Public Matches';
+      summaryQueryLabel.textContent='Email / Phone';
+      summaryMode.textContent='Email / Phone';
+    }
+
+    usernameInput.focus();
+  }
+
+  function getNameClues(){
+    return {
+      age:clean(ageInput.value),
+      birthday:clean(birthdayInput.value),
+      location:clean(locationInput.value),
+      school:clean(schoolInput.value),
+      alias:clean(aliasInput.value).replace(/^@+/,''),
+      interest:clean(interestInput.value)
+    };
+  }
+
+  function nameClueEntries(clues){
+    return [
+      ['age',clues.age],
+      ['birthday',clues.birthday],
+      ['location',clues.location],
+      ['school',clues.school],
+      ['alias',clues.alias],
+      ['interest',clues.interest]
+    ].filter(([,value])=>value);
+  }
+
+  function getUsernameClues(){
+    return {
+      alias:clean(knownAliasInput.value).replace(/^@+/,''),
+      platform:clean(knownPlatformInput.value),
+      realName:clean(usernameRealNameInput.value),
+      location:clean(usernameLocationInput.value)
+    };
+  }
+
+  function setStatus(message='',type=''){
+    statusEl.textContent=message;
+    statusEl.className='status'+(type?' '+type:'')+(progressActive?' progress-status':'');
+    applyProgressAppearance();
+  }
+
+  function applyProgressAppearance(){
+    if(progressActive){
+      statusEl.classList.add('progress-status');
+      statusEl.classList.toggle('is-complete',progressValue>=100);
+      statusEl.style.setProperty('--progress-fill',progressValue+'%');
+      statusEl.setAttribute('role','progressbar');
+      statusEl.setAttribute('aria-valuemin','0');
+      statusEl.setAttribute('aria-valuemax','100');
+      statusEl.setAttribute('aria-valuenow',String(Math.round(progressValue)));
+    }else{
+      statusEl.classList.remove('progress-status','is-complete');
+      statusEl.style.removeProperty('--progress-fill');
+      statusEl.removeAttribute('role');
+      statusEl.removeAttribute('aria-valuemin');
+      statusEl.removeAttribute('aria-valuemax');
+      statusEl.removeAttribute('aria-valuenow');
+    }
+  }
+
+  function setProgress(percent){
+    progressValue=Math.max(progressValue,Math.max(0,Math.min(100,Number(percent)||0)));
+    progressActive=true;
+    applyProgressAppearance();
+  }
+
+  function hideProgress(){
+    progressValue=0;
+    progressActive=false;
+    applyProgressAppearance();
+  }
+
+  function setBusy(busy){
+    searchBtn.disabled=busy;
+    clearBtn.disabled=busy;
+    usernameModeBtn.disabled=busy;
+    nameModeBtn.disabled=busy;
+    contactModeBtn.disabled=busy;
+
+    if(busy){
+      searchBtn.textContent='Searching…';
+    }else if(mode==='username'){
+      searchBtn.textContent='Search Username';
+    }else if(mode==='name'){
+      searchBtn.textContent='Search Name';
+    }else{
+      searchBtn.textContent='Search Public Matches';
+    }
+  }
+
+  function normaliseQuery(value){
+    const raw=clean(value);
+    if(!raw){
+      if(mode==='name') throw new Error('Enter a name.');
+      if(mode==='contact') throw new Error('Enter an email address or phone number.');
+      throw new Error('Enter a username.');
+    }
+
+    if(mode==='username'){
+      const username=raw.replace(/^@+/,'');
+      if(username.length>64) throw new Error('Username is too long.');
+      if(/\s/.test(username)) throw new Error('Use Name mode when searching a real name.');
+      if(/[/?#\\]/.test(username)) throw new Error('Enter only the username, not a profile URL.');
+      return username;
+    }
+
+    if(mode==='name'){
+      if(raw.length<2) throw new Error('Enter a longer name.');
+      if(raw.length>100) throw new Error('Name is too long.');
+      return raw;
+    }
+
+    if(raw.includes('@')){
+      const email=raw.toLowerCase();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
+        throw new Error('Enter a valid email address.');
+      }
+      return email;
+    }
+
+    const digits=raw.replace(/\D/g,'');
+    if(digits.length<7||digits.length>15){
+      throw new Error('Enter a valid email address or phone number.');
+    }
+    return raw;
+  }
+
+  function contactType(value){
+    return String(value).includes('@')?'email':'phone';
+  }
+
+  function contactVariants(value){
+    if(contactType(value)==='email') return [String(value).toLowerCase()];
+
+    const raw=clean(value);
+    const digits=raw.replace(/\D/g,'');
+    const variants=[raw,digits];
+    if(raw.startsWith('+')) variants.push('+'+digits);
+    return [...new Set(variants.filter(Boolean))];
+  }
+
+  async function fetchWithTimeout(url,options={}){
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),TIMEOUT_MS);
+    try{
+      return await fetch(url,{...options,signal:controller.signal,credentials:'omit'});
+    }finally{
+      clearTimeout(timer);
+    }
+  }
+
+  async function viaAllOrigins(url){
+    try{
+      const response=await fetchWithTimeout(ALLORIGINS+encodeURIComponent(url),{
+        method:'GET',
+        headers:{Accept:'application/json'},
+        cache:'no-store'
+      });
+      if(!response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload=await response.json();
+      const remote=payload?.status||{};
+      return {
+        ok:true,
+        source:'AllOrigins',
+        status:Number(remote?.http_code||remote?.status||200)||200,
+        content:String(payload?.contents||'')
+      };
+    }catch(error){
+      return {ok:false,error:error.message||'AllOrigins unavailable'};
+    }
+  }
+
+  async function viaReader(url){
+    try{
+      const response=await fetchWithTimeout(READER+url,{
+        method:'GET',
+        headers:{Accept:'application/json'}
+      });
+      if(!response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload=await response.json();
+      const data=payload?.data||payload;
+      return {
+        ok:true,
+        source:'Jina Reader',
+        status:Number(data?.status_code||data?.status||200)||200,
+        title:String(data?.title||''),
+        content:String(data?.content||'')
+      };
+    }catch(error){
+      return {ok:false,error:error.message||'Reader unavailable'};
+    }
+  }
+
+  async function getPublicPage(url){
+    let probe=await viaAllOrigins(url);
+    if(!probe.ok) probe=await viaReader(url);
+    return probe;
+  }
+
+  function decodeLoose(value){
+    let out=String(value||'').trim();
+    for(let i=0;i<2;i++){
+      try{
+        const decoded=decodeURIComponent(out);
+        if(decoded===out) break;
+        out=decoded;
+      }catch(_){break;}
+    }
+    return out;
+  }
+
+  function cleanCandidateUrl(raw){
+    try{
+      let value=decodeLoose(raw);
+      value=value.replace(/^["'(<\[]+|[>"')\],.;:!?]+$/g,'');
+      value=value.replace(/^(https?:\/\/)[*_~`]+/i,'$1');
+      value=value.replace(/[*_`]/g,'');
+      value=value.replace(/&amp;/g,'&');
+
+      let url=new URL(value);
+
+      const uddg=url.searchParams.get('uddg');
+      if(uddg){
+        return cleanCandidateUrl(uddg);
+      }
+
+      const host=url.hostname.toLowerCase();
+      if(!host||/[*%]/.test(host)) return '';
+      if(['bing.com','www.bing.com','duckduckgo.com','html.duckduckgo.com','r.jina.ai','api.allorigins.win'].includes(host)){
+        return '';
+      }
+
+      url.hash='';
+      url.username='';
+      url.password='';
+
+      return url.toString();
+    }catch(_){
+      return '';
+    }
+  }
+
+  function parseLinks(text){
+    const links=[];
+    const source=String(text||'');
+
+    let m;
+    const md=/\[[^\]]*\]\((https?:\/\/[^)\s]+)\)/gi;
+    while((m=md.exec(source))) links.push(m[1]);
+
+    links.push(...(source.match(/https?:\/\/[^\s<>"')\]]+/gi)||[]));
+
+    return [...new Set(links.map(cleanCandidateUrl).filter(Boolean))];
+  }
+
+  function isPlatformUrl(raw,platform){
+    try{
+      const url=new URL(raw);
+      const host=url.hostname.replace(/^www\./,'').toLowerCase();
+      const platformHost=platform.domain.toLowerCase();
+
+      if(!(host===platformHost||host.endsWith('.'+platformHost))) return false;
+
+      if(platform.subdomainProfile){
+        const left=host.slice(0,-('.'+platformHost).length);
+        return !!left&&left!=='www'&&left!=='help'&&left!=='support';
+      }
+
+      if(platform.profilePath&&!platform.profilePath.test(url.pathname)) return false;
+      if(url.pathname==='/'&&!platform.profilePath) return false;
+
+      return true;
+    }catch(_){
+      return false;
+    }
+  }
+
+  function resultContext(searchContent,url){
+    const content=String(searchContent||'');
+    const candidates=[url,decodeLoose(url)];
+
+    try{
+      const parsed=new URL(url);
+      candidates.push(parsed.hostname+parsed.pathname);
+      candidates.push(parsed.pathname);
+    }catch(_){}
+
+    for(const needle of candidates.filter(Boolean)){
+      const pos=content.toLowerCase().indexOf(String(needle).toLowerCase());
+      if(pos>=0){
+        return content.slice(Math.max(0,pos-700),Math.min(content.length,pos+1100));
+      }
+    }
+
+    return '';
+  }
+
+  function normaliseText(value){
+    return String(value||'')
+      .toLowerCase()
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^a-z0-9@.+:/_-]+/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+  }
+
+  function containsPhrase(content,value){
+    if(!value) return false;
+    const haystack=normaliseText(content);
+    const needle=normaliseText(value);
+    return !!needle&&haystack.includes(needle);
+  }
+
+  function nameVariants(name){
+    const parts=clean(name).split(' ').filter(Boolean);
+    const variants=[clean(name)];
+    if(parts.length>2){
+      variants.push(`${parts[0]} ${parts[parts.length-1]}`);
+    }
+    return [...new Set(variants)];
+  }
+
+  function bingUrl(query){
+    return `https://www.bing.com/search?q=${encodeURIComponent(query)}&count=15`;
+  }
+
+  function ddgUrl(query){
+    return `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+  }
+
+  async function searchWeb(query){
+    let probe=await viaReader(bingUrl(query));
+    let content=probe.ok?probe.content:'';
+
+    if(!probe.ok||parseLinks(content).length===0){
+      const fallback=await viaReader(ddgUrl(query));
+      if(fallback.ok) content+='\n'+fallback.content;
+    }
+
+    if(!content.trim()){
+      const raw=await viaAllOrigins(bingUrl(query));
+      if(raw.ok) content=raw.content;
+    }
+
+    return content;
+  }
+
+  function classifyUsername(platform,probe,username,usernameClues){
+    if(!probe?.ok||probe.status===404||probe.status===410) return null;
+    const page=String(probe.content||'').slice(0,180000);
+    if(platform.notFound?.test(page)) return null;
+    if(!(probe.status>=200&&probe.status<400&&page.trim().length>40)) return null;
+
+    const matched=[];
+    if(usernameClues.realName&&containsPhrase(page,usernameClues.realName)) matched.push('real name');
+    if(usernameClues.location&&containsPhrase(page,usernameClues.location)) matched.push('location');
+
+    let confidence='Direct username';
+    if(matched.length) confidence='Cross-referenced username';
+
+    return {
+      platform:platform.name,
+      category:platform.category,
+      label:'Match found',
+      confidence,
+      evidence:matched.length
+        ?`Username @${username} · matched ${matched.join(', ')}`
+        :`Public profile responded for @${username} via ${probe.source}`
+    };
+  }
+
+  async function checkUsernamePlatform(platform,username,usernameClues,sourceLabel){
+    const url=platform.url(username);
+    const probe=await getPublicPage(url);
+    const result=classifyUsername(platform,probe,username,usernameClues);
+    if(!result) return null;
+
+    if(sourceLabel==='alias'){
+      result.confidence=usernameClues.platform&&usernameClues.platform===platform.name
+        ?'Known-platform alias'
+        :'Known alias';
+      result.evidence=`Known alias @${username}${usernameClues.platform?` · supplied platform: ${usernameClues.platform}`:''}`;
+    }
+
+    return {...result,url};
+  }
+
+  async function searchByUsername(username,usernameClues){
+    const aliases=[
+      {value:username,label:'primary'},
+      ...(usernameClues.alias&&usernameClues.alias.toLowerCase()!==username.toLowerCase()
+        ?[{value:usernameClues.alias,label:'alias'}]
+        :[])
+    ];
+
+    const rows=[];
+    const totalChecks=PLATFORMS.length*aliases.length;
+    let checked=0;
+
+    for(let i=0;i<PLATFORMS.length;i+=USERNAME_BATCH){
+      const platforms=PLATFORMS.slice(i,i+USERNAME_BATCH);
+      const jobs=[];
+
+      for(const platform of platforms){
+        for(const alias of aliases){
+          jobs.push(checkUsernamePlatform(platform,alias.value,usernameClues,alias.label));
+        }
+      }
+
+      const batchRows=await Promise.all(jobs);
+      rows.push(...batchRows.filter(Boolean));
+
+      checked+=jobs.length;
+      setProgress(5+(checked/totalChecks)*90);
+      setStatus(`Checked ${Math.min(checked,totalChecks)} of ${totalChecks} username/profile combinations…`);
+    }
+
+    return [...new Map(rows.map(item=>[item.url,item])).values()];
+  }
+
+  function buildNameQueries(platform,name,clues){
+    const queries=[];
+
+    for(const variant of nameVariants(name)){
+      queries.push(`"${variant}" ${platform.searchScope}`);
+    }
+
+    const priority=[
+      clues.alias,
+      clues.location,
+      clues.school,
+      clues.birthday,
+      clues.age,
+      clues.interest
+    ].filter(Boolean);
+
+    for(const clue of priority.slice(0,3)){
+      queries.push(`"${name}" "${clue}" ${platform.searchScope}`);
+    }
+
+    return [...new Set(queries)].slice(0,5);
+  }
+
+  function scoreNameCandidate(name,clues,snippet,pageContent,url){
+    const pageAndUrl=`${pageContent}\n${url}`;
+    const searchAndPage=`${snippet}\n${pageContent}\n${url}`;
+
+    let score=0;
+    const matched=[];
+
+    const nameOnPage=nameVariants(name).some(variant=>containsPhrase(pageAndUrl,variant));
+    const nameInSnippet=nameVariants(name).some(variant=>containsPhrase(snippet,variant));
+
+    if(nameOnPage){
+      score+=6;
+      matched.push('name');
+    }else if(nameInSnippet){
+      score+=5;
+      matched.push('name');
+    }
+
+    const weights={age:2,birthday:4,location:2,school:3,alias:4,interest:1};
+
+    for(const [label,value] of nameClueEntries(clues)){
+      if(containsPhrase(searchAndPage,value)){
+        score+=weights[label]||1;
+        matched.push(label);
+      }
+    }
+
+    if(clues.alias&&normaliseText(url).includes(normaliseText(clues.alias))){
+      score+=2;
+      if(!matched.includes('alias')) matched.push('alias');
+    }
+
+    return {
+      score,
+      matched:[...new Set(matched)],
+      nameOnPage,
+      nameInSnippet
+    };
+  }
+
+  async function searchPlatformByName(platform,name,clues){
+    const candidates=new Map();
+
+    for(const query of buildNameQueries(platform,name,clues)){
+      const searchContent=await searchWeb(query);
+
+      for(const url of parseLinks(searchContent).filter(url=>isPlatformUrl(url,platform)).slice(0,5)){
+        if(!candidates.has(url)){
+          candidates.set(url,{
+            url,
+            snippet:resultContext(searchContent,url)
+          });
+        }
+      }
+
+      if(candidates.size>=3) break;
+    }
+
+    const results=[];
+
+    for(const candidate of [...candidates.values()].slice(0,3)){
+      const page=await getPublicPage(candidate.url);
+      const pageContent=page.ok?page.content:'';
+      const scored=scoreNameCandidate(name,clues,candidate.snippet,pageContent,candidate.url);
+
+      const strongClue=scored.matched.some(item=>['alias','birthday','school'].includes(item));
+      const validNameEvidence=scored.nameOnPage||scored.nameInSnippet;
+
+      if(scored.score>=5&&(validNameEvidence||strongClue)){
+        let confidence='Name match';
+        if(scored.score>=10) confidence='Strong cross-reference';
+        else if(scored.score>=7) confidence='Cross-referenced';
+
+        results.push({
+          platform:platform.name,
+          category:platform.category,
+          label:'Match found',
+          confidence,
+          evidence:`Matched: ${scored.matched.join(', ')||'name'}`,
+          url:candidate.url,
+          score:scored.score
+        });
+      }
+    }
+
+    return results;
+  }
+
+  async function searchByName(name,clues){
+    const searchable=[
+      ...PLATFORMS.map(({name,category,domain,searchScope,profilePath,subdomainProfile})=>({
+        name,category,domain,searchScope,profilePath,subdomainProfile
+      })),
+      ...NAME_ONLY
+    ];
+
+    const rows=[];
+
+    for(let i=0;i<searchable.length;i+=NAME_BATCH){
+      const batch=searchable.slice(i,i+NAME_BATCH);
+      const batchResults=await Promise.all(
+        batch.map(platform=>searchPlatformByName(platform,name,clues))
+      );
+
+      batchResults.forEach(list=>rows.push(...list));
+
+      const checked=Math.min(i+NAME_BATCH,searchable.length);
+      setProgress(5+(checked/searchable.length)*90);
+      setStatus(`Searched ${checked} of ${searchable.length} platforms…`);
+    }
+
+    const byPlatform=new Map();
+    for(const row of rows){
+      const current=byPlatform.get(row.platform);
+      if(!current||row.score>current.score) byPlatform.set(row.platform,row);
+    }
+
+    return [...byPlatform.values()].map(({score,...row})=>row);
+  }
+
+  function contactMatches(content,value,type){
+    if(!content) return false;
+
+    if(type==='email'){
+      return String(content).toLowerCase().includes(String(value).toLowerCase());
+    }
+
+    const haystack=String(content).replace(/\D/g,'');
+    const needle=String(value).replace(/\D/g,'');
+    return needle.length>=7&&haystack.includes(needle);
+  }
+
+  async function searchPlatformByContact(platform,value,type){
+    const candidates=new Map();
+
+    for(const variant of contactVariants(value).slice(0,3)){
+      const query=`"${variant}" ${platform.searchScope}`;
+      const searchContent=await searchWeb(query);
+
+      for(const url of parseLinks(searchContent).filter(url=>isPlatformUrl(url,platform)).slice(0,4)){
+        if(!candidates.has(url)){
+          candidates.set(url,{
+            url,
+            snippet:resultContext(searchContent,url)
+          });
+        }
+      }
+    }
+
+    const results=[];
+
+    for(const candidate of [...candidates.values()].slice(0,3)){
+      const page=await getPublicPage(candidate.url);
+      const pageContent=page.ok?page.content:'';
+
+      const matchedInPage=contactMatches(pageContent,value,type);
+      const matchedInSnippet=contactMatches(candidate.snippet,value,type);
+
+      if(matchedInPage||matchedInSnippet){
+        results.push({
+          platform:platform.name,
+          category:platform.category,
+          label:'Public match',
+          confidence:type==='email'?'Public email match':'Public phone match',
+          evidence:matchedInPage
+            ?`Exact ${type} appears on the public profile page`
+            :`Exact ${type} appears in the public search result`,
+          url:candidate.url
+        });
+      }
+    }
+
+    return results;
+  }
+
+  async function searchByContact(value){
+    const type=contactType(value);
+    const searchable=[
+      ...PLATFORMS.map(({name,category,domain,searchScope,profilePath,subdomainProfile})=>({
+        name,category,domain,searchScope,profilePath,subdomainProfile
+      })),
+      ...NAME_ONLY
+    ];
+
+    const rows=[];
+
+    for(let i=0;i<searchable.length;i+=CONTACT_BATCH){
+      const batch=searchable.slice(i,i+CONTACT_BATCH);
+      const batchResults=await Promise.all(
+        batch.map(platform=>searchPlatformByContact(platform,value,type))
+      );
+
+      batchResults.forEach(list=>rows.push(...list));
+
+      const checked=Math.min(i+CONTACT_BATCH,searchable.length);
+      setProgress(5+(checked/searchable.length)*90);
+      setStatus(`Searched ${checked} of ${searchable.length} public profile sources…`);
+    }
+
+    return [...new Map(rows.map(item=>[item.url,item])).values()];
+  }
+
+
+  async function fetchWaybackJson(url){
+    try{
+      const response=await fetchWithTimeout(url,{method:'GET',headers:{Accept:'application/json'},cache:'no-store'});
+      if(response.ok) return await response.json();
+    }catch(_){}
+
+    try{
+      const response=await fetchWithTimeout(ALLORIGINS+encodeURIComponent(url),{method:'GET',headers:{Accept:'application/json'},cache:'no-store'});
+      if(!response.ok) return [];
+      const payload=await response.json();
+      const raw=String(payload?.contents||'');
+      return raw?JSON.parse(raw):[];
+    }catch(_){ return []; }
+  }
+
+  async function waybackCaptures(url){
+    const request=`${CDX}?url=${encodeURIComponent(url)}&output=json&fl=timestamp,original,statuscode,digest,mimetype&filter=statuscode:200&collapse=digest&limit=4`;
+    const data=await fetchWaybackJson(request);
+    if(!Array.isArray(data)||data.length<2) return [];
+    const headers=data[0];
+    return data.slice(1).map(row=>Object.fromEntries(headers.map((key,i)=>[key,row[i]]))).filter(row=>row.timestamp&&row.original);
+  }
+
+  function waybackOpenUrl(capture){
+    return `https://web.archive.org/web/${capture.timestamp}/${capture.original}`;
+  }
+
+  function waybackRawUrl(capture){
+    return `https://web.archive.org/web/${capture.timestamp}id_/${capture.original}`;
+  }
+
+  function archiveDate(timestamp){
+    const value=String(timestamp||'');
+    if(value.length<8) return value||'Unknown';
+    return `${value.slice(6,8)}/${value.slice(4,6)}/${value.slice(0,4)}`;
+  }
+
+  function cleanArchivedTitle(title,platform){
+    let value=clean(title);
+    if(!value) return '';
+    for(const suffix of [` - ${platform}`,` | ${platform}`,` • ${platform}`,` – ${platform}`,` — ${platform}`]){
+      if(value.toLowerCase().endsWith(suffix.toLowerCase())) value=value.slice(0,-suffix.length).trim();
+    }
+    return value.replace(/\s+/g,' ').trim();
+  }
+
+  function archivedHandle(text){
+    const match=String(text||'').match(/(?:^|[\s(])@([A-Za-z0-9._-]{2,64})(?=$|[\s),|•·-])/);
+    return match?match[1]:'';
+  }
+
+  async function archiveIdentity(capture,platform,searchedIdentity){
+    const rawUrl=waybackRawUrl(capture);
+    let title='';
+    let content='';
+
+    const reader=await viaReader(rawUrl);
+    if(reader.ok){
+      title=cleanArchivedTitle(reader.title,platform.name);
+      content=reader.content||'';
+    }
+
+    if(!title){
+      const raw=await viaAllOrigins(rawUrl);
+      if(raw.ok){
+        content=content||raw.content||'';
+        const match=String(raw.content||'').match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+        if(match){
+          const parsed=new DOMParser().parseFromString(`<textarea>${match[1]}</textarea>`,'text/html');
+          title=cleanArchivedTitle(parsed.querySelector('textarea')?.value||match[1],platform.name);
+        }
+      }
+    }
+
+    const handle=archivedHandle(`${title}\n${String(content).slice(0,3500)}`);
+    const searched=String(searchedIdentity||'').replace(/^@/,'').toLowerCase();
+
+    if(handle&&searched&&handle.toLowerCase()!==searched){
+      return {identity:`Possible historical username: @${handle}`,evidence:title?`Archived page title: ${title}`:'Handle found in archived profile content'};
+    }
+    if(title) return {identity:title,evidence:'Archived page title'};
+    if(handle) return {identity:`@${handle}`,evidence:'Handle found in archived profile content'};
+    return {identity:`Archived profile for ${searchedIdentity||platform.name}`,evidence:'Archived capture found'};
+  }
+
+  function platformForCurrentRow(row){
+    return [...PLATFORMS,...NAME_ONLY].find(item=>item.name===row.platform)||{
+      name:row.platform,
+      category:row.category||'Profile',
+      domain:new URL(row.url).hostname.replace(/^www\./,''),
+      searchScope:''
+    };
+  }
+
+  function addWaybackCandidate(map,platform,url,searchedIdentity){
+    if(!url) return;
+    const cleaned=cleanCandidateUrl(url);
+    if(!cleaned) return;
+    const key=cleaned.toLowerCase();
+    if(!map.has(key)) map.set(key,{platform,url:cleaned,searchedIdentity});
+  }
+
+  function buildWaybackCandidates(query,currentRows,nameCluesData,usernameCluesData){
+    const candidates=new Map();
+
+    for(const row of currentRows){
+      addWaybackCandidate(candidates,platformForCurrentRow(row),row.url,mode==='username'?query:(mode==='name'?query:''));
+    }
+
+    if(mode==='username'){
+      for(const platform of PLATFORMS) addWaybackCandidate(candidates,platform,platform.url(query),query);
+
+      if(usernameCluesData.alias){
+        const ordered=[
+          ...PLATFORMS.filter(item=>item.name===usernameCluesData.platform),
+          ...PLATFORMS.filter(item=>item.name!==usernameCluesData.platform)
+        ];
+        for(const platform of ordered){
+          addWaybackCandidate(candidates,platform,platform.url(usernameCluesData.alias),usernameCluesData.alias);
+        }
+      }
+    }
+
+    if(mode==='name'&&nameCluesData.alias){
+      for(const platform of PLATFORMS) addWaybackCandidate(candidates,platform,platform.url(nameCluesData.alias),nameCluesData.alias);
+    }
+
+    return [...candidates.values()].slice(0,MAX_WAYBACK_CANDIDATES);
+  }
+
+  async function searchWayback(query,currentRows,nameCluesData,usernameCluesData){
+    const candidates=buildWaybackCandidates(query,currentRows,nameCluesData,usernameCluesData);
+    const rows=[];
+    if(!candidates.length) return rows;
+
+    for(let i=0;i<candidates.length;i+=WAYBACK_BATCH){
+      const batch=candidates.slice(i,i+WAYBACK_BATCH);
+      const groups=await Promise.all(batch.map(async candidate=>({candidate,captures:await waybackCaptures(candidate.url)})));
+
+      for(const group of groups){
+        if(!group.captures.length) continue;
+        const capture=group.captures[0];
+        const identity=await archiveIdentity(capture,group.candidate.platform,group.candidate.searchedIdentity);
+        rows.push({
+          platform:group.candidate.platform.name,
+          category:group.candidate.platform.category||'Profile',
+          date:archiveDate(capture.timestamp),
+          timestamp:capture.timestamp,
+          identity:identity.identity,
+          evidence:identity.evidence,
+          snapshotUrl:waybackOpenUrl(capture),
+          originalUrl:capture.original
+        });
+        if(rows.length>=MAX_WAYBACK_RESULTS) break;
+      }
+
+      const checked=Math.min(i+WAYBACK_BATCH,candidates.length);
+      setProgress(95+(checked/candidates.length)*4);
+      setStatus(`Checking Wayback history ${checked} of ${candidates.length} profile URLs…`);
+      if(rows.length>=MAX_WAYBACK_RESULTS) break;
+    }
+
+    return [...new Map(rows.map(item=>[`${item.platform}|${item.timestamp}|${item.snapshotUrl}`,item])).values()];
+  }
+
+  function renderWaybackRow(item){
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><div class="platform">${escapeHtml(item.platform)}</div><div class="category">${escapeHtml(item.category)}</div></td>
+      <td>${escapeHtml(item.date)}</td>
+      <td><div class="platform">${escapeHtml(item.identity)}</div><div class="category">${escapeHtml(item.evidence)}</div></td>
+      <td><a class="mini-link" href="${escapeHtml(item.snapshotUrl)}" target="_blank" rel="noopener noreferrer">Open archive</a></td>
+    `;
+    waybackBody.appendChild(tr);
+  }
+
+  function renderRow(item){
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td>
+        <div class="platform">${escapeHtml(item.platform)}</div>
+        <div class="category">${escapeHtml(item.category)}</div>
+      </td>
+      <td><span class="state found">${escapeHtml(item.confidence||item.label)}</span></td>
+      <td>${escapeHtml(item.evidence)}</td>
+      <td><a class="mini-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Open profile</a></td>
+    `;
+    resultsBody.appendChild(tr);
+  }
+
+  function modeLabel(){
+    if(mode==='name') return 'Name';
+    if(mode==='contact') return 'Email / Phone';
+    return 'Username';
+  }
+
+  function buildReport(query,rows,archivedRows,platformCount,nameCluesData,usernameCluesData){
+    const lines=[
+      `${modeLabel()} OSINT: ${query}`,
+      '',
+      'Summary:',
+      `Search type: ${modeLabel()}`,
+      `Platforms searched: ${platformCount}`,
+      `Successful matches: ${rows.length}`
+    ];
+
+    if(mode==='name'){
+      const used=nameClueEntries(nameCluesData);
+      lines.push(`Cross-reference clues: ${used.length?used.map(([label,value])=>`${label}=${value}`).join(' · '):'None supplied'}`);
+    }
+
+    if(mode==='username'){
+      const used=[];
+      if(usernameCluesData.alias) used.push(`known alias=${usernameCluesData.alias}`);
+      if(usernameCluesData.platform) used.push(`known platform=${usernameCluesData.platform}`);
+      if(usernameCluesData.realName) used.push(`real name=${usernameCluesData.realName}`);
+      if(usernameCluesData.location) used.push(`location=${usernameCluesData.location}`);
+      lines.push(`Extra username clues: ${used.length?used.join(' · '):'None supplied'}`);
+    }
+
+    lines.push('','Successful matches:');
+
+    if(!rows.length){
+      lines.push('No successful public matches were returned.');
+    }else{
+      rows.forEach(item=>{
+        lines.push(`${item.platform} (${item.category})`);
+        lines.push(`Confidence: ${item.confidence||item.label}`);
+        lines.push(`URL: ${item.url}`);
+        lines.push(`Evidence: ${item.evidence}`);
+        lines.push('');
+      });
+    }
+
+    lines.push('','Wayback history:');
+    if(!archivedRows.length){
+      lines.push('No archived profile matches were returned.');
+    }else{
+      archivedRows.forEach(item=>{
+        lines.push(`${item.platform} (${item.category})`);
+        lines.push(`Archived date: ${item.date}`);
+        lines.push(`Archived identity: ${item.identity}`);
+        lines.push(`Snapshot: ${item.snapshotUrl}`);
+        lines.push(`Evidence: ${item.evidence}`);
+        lines.push('');
+      });
+    }
+
+    return lines.join('\n').trim();
+  }
+
+  async function search(){
+    let query;
+    try{
+      query=normaliseQuery(usernameInput.value);
+    }catch(error){
+      hideProgress();
+      setStatus(error.message,'error');
+      return;
+    }
+
+    const nameCluesData=getNameClues();
+    const usernameCluesData=getUsernameClues();
+
+    usernameInput.value=query;
+    results.classList.add('hidden');
+    resultsBody.innerHTML='';
+    waybackBody.innerHTML='';
+    waybackSection.classList.add('hidden');
+    summaryArchived.textContent='0';
+    hideProgress();
+    setProgress(3);
+    setBusy(true);
+
+    if(mode==='username') setStatus('Checking public usernames and known aliases…');
+    else if(mode==='name') setStatus('Searching public profiles and cross-referencing details…');
+    else setStatus('Searching publicly indexed profile references…');
+
+    try{
+      let rows=[];
+      let platformCount=0;
+
+      if(mode==='username'){
+        platformCount=PLATFORMS.length;
+        rows=await searchByUsername(query,usernameCluesData);
+      }else if(mode==='name'){
+        platformCount=PLATFORMS.length+NAME_ONLY.length;
+        rows=await searchByName(query,nameCluesData);
+      }else{
+        platformCount=PLATFORMS.length+NAME_ONLY.length;
+        rows=await searchByContact(query);
+      }
+
+      rows.sort((a,b)=>a.platform.localeCompare(b.platform)||a.url.localeCompare(b.url));
+      rows.forEach(renderRow);
+
+      setStatus('Checking Wayback Machine history…');
+      const archivedRows=await searchWayback(query,rows,nameCluesData,usernameCluesData);
+      archivedRows.sort((a,b)=>a.platform.localeCompare(b.platform)||a.timestamp.localeCompare(b.timestamp)).forEach(renderWaybackRow);
+      if(archivedRows.length) waybackSection.classList.remove('hidden');
+
+      summaryUsername.textContent=query;
+      summaryFound.textContent=String(rows.length);
+      summaryArchived.textContent=String(archivedRows.length);
+      summaryPlatforms.textContent=String(platformCount);
+      summaryMode.textContent=modeLabel();
+      summaryQueryLabel.textContent=modeLabel();
+
+      if(!rows.length){
+        const tr=document.createElement('tr');
+        tr.innerHTML='<td colspan="4" style="text-align:center;color:#64748b;padding:1.2rem">No successful public matches were returned.</td>';
+        resultsBody.appendChild(tr);
+      }
+
+      lastReport={
+        query,
+        mode,
+        rows,
+        archivedRows,
+        platformCount,
+        text:buildReport(query,rows,archivedRows,platformCount,nameCluesData,usernameCluesData)
+      };
+
+      setProgress(100);
+      results.classList.remove('hidden');
+      setStatus(
+        `${rows.length} current match${rows.length===1?'':'es'} · ${archivedRows.length} Wayback match${archivedRows.length===1?'':'es'}.`,
+        'success'
+      );
+    }catch(error){
+      hideProgress();
+      setStatus(error.message||'The public profile search could not be completed.','error');
+    }finally{
+      setBusy(false);
+    }
+  }
+
+  function clearAll(){
+    usernameInput.value='';
+
+    [
+      knownAliasInput,usernameRealNameInput,usernameLocationInput,
+      ageInput,birthdayInput,locationInput,schoolInput,aliasInput,interestInput
+    ].forEach(input=>input.value='');
+
+    knownPlatformInput.value='';
+
+    results.classList.add('hidden');
+    resultsBody.innerHTML='';
+    waybackBody.innerHTML='';
+    waybackSection.classList.add('hidden');
+    summaryUsername.textContent='—';
+    summaryFound.textContent='0';
+    summaryArchived.textContent='0';
+    summaryPlatforms.textContent='0';
+    summaryMode.textContent=modeLabel();
+    summaryQueryLabel.textContent=modeLabel();
+    lastReport=null;
+    hideProgress();
+    setStatus('');
+    usernameInput.focus();
+  }
+
+  async function copyReport(){
+    if(!lastReport?.text) return;
+    const original=copyReportBtn.textContent;
+
+    try{
+      if(navigator.clipboard&&window.isSecureContext){
+        await navigator.clipboard.writeText(lastReport.text);
+      }else{
+        const textarea=document.createElement('textarea');
+        textarea.value=lastReport.text;
+        textarea.setAttribute('readonly','');
+        textarea.style.position='fixed';
+        textarea.style.opacity='0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const ok=document.execCommand('copy');
+        textarea.remove();
+        if(!ok) throw new Error('Copy failed');
+      }
+
+      copyReportBtn.textContent='Copied';
+      setTimeout(()=>copyReportBtn.textContent=original,1200);
+    }catch(_){
+      setStatus('Could not copy the report.','error');
+    }
+  }
+
+  async function savePdf(){
+    if(!lastReport?.text) return;
+
+    const original=savePdfBtn.textContent;
+    savePdfBtn.disabled=true;
+    savePdfBtn.textContent='Creating PDF…';
+
+    try{
+      if(!window.ToolsPDFExport){
+        throw new Error('PDF export could not load. Please refresh the page and try again.');
+      }
+
+      await window.ToolsPDFExport.saveTextPdf({
+        title:'Username, Name & Contact OSINT Report',
+        subtitle:lastReport.query,
+        metaLines:[
+          `Search type: ${lastReport.mode==='name'?'Name':lastReport.mode==='contact'?'Email / Phone':'Username'}`,
+          `${lastReport.rows.length} current match${lastReport.rows.length===1?'':'es'}`,
+          `${lastReport.archivedRows.length} Wayback match${lastReport.archivedRows.length===1?'':'es'}`
+        ],
+        text:lastReport.text,
+        filename:`${lastReport.query.replace(/[^a-z0-9_-]+/gi,'-').replace(/^-+|-+$/g,'')||'profile'}-osint.pdf`
+      });
+
+      savePdfBtn.textContent='Saved';
+      setTimeout(()=>savePdfBtn.textContent=original,1200);
+    }catch(error){
+      setStatus(error.message||'Could not create the PDF report.','error');
+      savePdfBtn.textContent=original;
+    }finally{
+      savePdfBtn.disabled=false;
+    }
+  }
+
+  usernameModeBtn.addEventListener('click',()=>setMode('username'));
+  nameModeBtn.addEventListener('click',()=>setMode('name'));
+  contactModeBtn.addEventListener('click',()=>setMode('contact'));
+  searchBtn.addEventListener('click',search);
+  clearBtn.addEventListener('click',clearAll);
+  copyReportBtn.addEventListener('click',copyReport);
+  savePdfBtn.addEventListener('click',savePdf);
+
+  usernameInput.addEventListener('keydown',event=>{
+    if(event.key==='Enter') search();
+  });
+
+  setMode('username');
+})();
+</script>
+<script src="../../Assets/site-shell.js?v=mk126"></script>
+</body>
+</html>

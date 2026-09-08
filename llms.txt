@@ -15,6 +15,7 @@ Language: English (UK)
 - [ASCII Art Generator](https://tools.adrianheadley.com/pages/toolpages/ascii-art.html): Turn text or an image into ASCII-style artwork directly in your browser, with controls for font, size and image detail.
 - [Barcode Generator](https://tools.adrianheadley.com/pages/toolpages/barcode-generator.html): Create a simple Code 39 barcode with a generated numeric value and optional descriptive labels.
 - [Date Difference Calculator](https://tools.adrianheadley.com/pages/toolpages/date-difference.html): Calculate the exact amount of time between two dates or moments.
+- [DNS Lookup](https://tools.adrianheadley.com/pages/toolpages/dns-lookup.html): Advanced passive domain intelligence covering RDAP registration, expiry and possible release timing, registrar abuse contacts, DNS analysis, email security, Certificate Transparency hostnames, nameserver/mail infrastructure, ASN routing, RPKI and raw data.
 - [Fake Information Generator](https://tools.adrianheadley.com/pages/toolpages/fake-information-generator.html): Generate realistic-looking but fictional placeholder identity information for testing, demos and mock-ups.
 - [File Compressor](https://tools.adrianheadley.com/pages/toolpages/file-compressor.html): Reduce the size of supported files using browser-based compression controls.
 - [File Converter](https://tools.adrianheadley.com/pages/toolpages/file-converter.html): Convert one or multiple supported files between common formats; multiple outputs download together as a ZIP.
@@ -43,6 +44,16 @@ Language: English (UK)
 - [URL Lengthener](https://tools.adrianheadley.com/pages/toolpages/url-lengthener.html): Create a deliberately longer version of a URL for novelty or testing.
 - [URL Shortener](https://tools.adrianheadley.com/pages/toolpages/url-shortener.html): Create a shorter version of a long web address using an online shortening service.
 - [Video Editor](https://tools.adrianheadley.com/pages/toolpages/video-editor.html): Edit video, images, text and audio on a multi-track timeline directly in your browser.
+- [Email Domain Analyzer](https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html): Analyse an email domain for mail acceptance, MX/provider, SPF, DMARC, MTA-STS, TLS-RPT, BIMI, DNSSEC clues, common DKIM selectors and temporary-email indicators without probing a mailbox.
+- [Email Header Analyzer](https://tools.adrianheadley.com/pages/toolpages/email-header-analyzer.html): Deep local email-header analysis for delivery hops, recipients, public IPs, SPF/DKIM/DMARC/ARC, automation and bulk-mail clues, sender services, threads, MIME/attachments and security headers.
+- [IP & ASN Lookup](https://tools.adrianheadley.com/pages/toolpages/ip-asn-lookup.html): Inspect a public IP address or ASN for network ownership, prefix, reverse DNS, routing, RPKI, abuse contacts, announced prefixes, routing neighbours and approximate public IP geolocation.
+- [Public Document Finder](https://tools.adrianheadley.com/pages/toolpages/public-document-finder.html): Find publicly indexed and Wayback-archived PDFs, Word files, spreadsheets, presentations and other document formats by keyword, organisation or domain.
+- [Username, Name & Contact OSINT](https://tools.adrianheadley.com/pages/toolpages/username-osint.html): Search current public profiles and Wayback Machine history by username, real name, email or phone, with optional public cross-reference clues.
 - [Word & Character Counter](https://tools.adrianheadley.com/pages/toolpages/word-character-counter.html): Count words, characters, lines, sentences, paragraphs and writing-time estimates as you type.
 
 This file is a supplementary machine-readable index. The canonical HTML pages and sitemap are the primary source of site content.
+
+- [Browser Code Studio](https://tools.adrianheadley.com/pages/toolpages/coding-studio.html): Browser-based project editor with local session storage, HTML/CSS/JavaScript preview, standalone JavaScript execution, optional in-browser Python through Pyodide, .ahcode project save/load with legacy ZIP import, coder-only light/dark mode and a local coding coach.
+
+- [Income Tax Calculator](https://tools.adrianheadley.com/pages/toolpages/income-tax-calculator.html): Estimate annual UK Income Tax for one or more jobs, common PAYE tax codes and standard or Scottish tax bands.
+- [Investment Calculator](https://tools.adrianheadley.com/pages/toolpages/investment-calculator.html): Project investment growth, contributions, fees and selected UK tax outcomes across common account wrappers and investment types.

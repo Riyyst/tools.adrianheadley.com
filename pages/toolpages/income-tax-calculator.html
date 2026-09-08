@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="description" content="Calculate estimated UK Income Tax for one or more jobs, compare standard UK and Scottish bands, and model common PAYE tax codes including multiple employments."/>
+<meta name="theme-color" content="#f5f5f7"/>
+<title>Income Tax Calculator | Adrian Headley Tools</title>
+
+<style>
+  :root{
+    --tax-accent:#2563eb;
+    --tax-accent-hover:#1d4ed8;
+    --tax-accent-soft:rgba(37,99,235,.08);
+    --tax-text:#111827;
+    --tax-muted:#64748b;
+    --tax-border:#e5e7eb;
+    --tax-border-strong:#d1d5db;
+    --tax-panel:#f8fafc;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0;min-height:100%;scroll-behavior:smooth}
+  body{
+  display:flex;flex-direction:column;
+    background:#f5f7fb;
+    color:var(--tax-text);
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;
+  }
+  button,input,select{font:inherit}
+  .riyst-main{min-height:0;flex:1}
+  .riyst-container{width:min(1180px,calc(100% - 2rem));margin:0 auto}
+  .container{width:min(980px,100%);margin:0 auto}
+  .intro{text-align:center;padding:3rem 0 1.75rem}
+  .intro h1{margin:0;color:#111827;line-height:1.12;font-size:clamp(2rem,4vw,2.75rem);font-weight:1000;letter-spacing:.3px;text-transform:uppercase}
+  .muted{margin:.35rem 0 0;color:#65748a}
+  main > .riyst-container > section.container{padding-bottom:3.5rem}
+
+  .tax-tool{width:min(980px,100%);margin:0 auto}
+  .tax-card{
+    background:rgba(255,255,255,.95);
+    border:1px solid var(--tax-border);
+    border-radius:24px;
+    box-shadow:0 12px 30px rgba(15,23,42,.08);
+    padding:clamp(1.1rem,3vw,1.7rem);
+  }
+
+  .jobs-editor{display:grid;gap:.9rem}
+  .job-entry{
+    border:1px solid transparent;
+    border-radius:18px;
+    padding:0;
+    transition:border-color .16s,background .16s,padding .16s;
+  }
+  .jobs-editor.multi .job-entry{
+    border-color:var(--tax-border);
+    background:var(--tax-panel);
+    padding:1rem;
+  }
+  .job-entry-head{
+    display:none;
+    align-items:center;
+    justify-content:space-between;
+    gap:.75rem;
+    margin-bottom:.75rem;
+  }
+  .jobs-editor.multi .job-entry-head{display:flex}
+  .job-entry-title{margin:0;font-size:.9rem;font-weight:900;color:var(--tax-text)}
+  .job-remove{
+    min-height:34px;
+    padding:.35rem .72rem;
+    border:1px solid #d8dee8;
+    border-radius:999px;
+    background:#fff;
+    color:#64748b;
+    font-size:.76rem;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .job-remove:hover{background:#f8fafc;color:#b91c1c;border-color:#fecaca}
+  .job-remove[disabled]{visibility:hidden}
+
+  .tax-input-grid{display:grid;grid-template-columns:1fr;gap:1rem;align-items:stretch}
+  .tax-field{display:flex;flex-direction:column;gap:.4rem;min-width:0}
+  .tax-field label,.tax-label{color:#475569;font-size:.84rem;font-weight:750}
+  .field-help{color:#64748b;font-size:.74rem;font-weight:600}
+
+  .salary-wrap{position:relative}
+  .salary-symbol{
+    position:absolute;left:1rem;top:50%;transform:translateY(-50%);
+    color:#64748b;font-weight:800;pointer-events:none;
+  }
+  .salary-input,.tax-code-select,.custom-code-input{
+    width:100%;min-height:48px;border:1px solid var(--tax-border-strong);border-radius:14px;
+    background:#fff;color:var(--tax-text);font:inherit;font-size:1rem;font-weight:700;
+    outline:none;transition:border-color .16s,box-shadow .16s;
+  }
+  .salary-input{padding:.8rem 1rem .8rem 2rem}
+  .tax-code-select,.custom-code-input{padding:.8rem 1rem}
+  .salary-input:focus,.tax-code-select:focus,.custom-code-input:focus{
+    border-color:var(--tax-accent);box-shadow:0 0 0 4px rgba(37,99,235,.12);
+  }
+
+  .tax-seg{
+    display:grid;grid-template-columns:1fr 1fr;gap:.4rem;padding:.4rem;
+    border:1px solid var(--tax-border);background:var(--tax-panel);border-radius:16px;
+  }
+  .tax-seg input{position:absolute;opacity:0;pointer-events:none}
+  .tax-seg label{
+    min-height:40px;display:flex;align-items:center;justify-content:center;text-align:center;
+    padding:.45rem .7rem;border-radius:999px;color:#64748b;font-size:.8rem;line-height:1.2;
+    font-weight:800;cursor:pointer;transition:background .16s,color .16s,transform .12s;
+  }
+  .tax-seg input:checked + label{background:var(--tax-accent);color:#fff}
+  .tax-seg label:hover{transform:translateY(-1px)}
+
+  .custom-code-wrap{display:none;margin-top:.55rem}
+  .custom-code-wrap.show{display:block}
+
+  .job-actions{
+    display:flex;align-items:center;justify-content:center;gap:.65rem;flex-wrap:wrap;margin-top:1rem;
+  }
+  .tax-btn{
+    min-height:44px;display:inline-flex;align-items:center;justify-content:center;
+    border:1px solid transparent;border-radius:999px;background:var(--tax-accent);color:#fff;
+    font:inherit;font-size:.86rem;font-weight:700;padding:.65rem 1.35rem;cursor:pointer;
+    transition:background .16s,transform .14s,box-shadow .16s,border-color .16s,color .16s;
+  }
+  .tax-btn:hover{background:var(--tax-accent-hover);transform:translateY(-1px);box-shadow:0 10px 25px rgba(37,99,235,.18)}
+  .tax-btn:active{transform:translateY(0)}
+  .tax-btn.secondary{background:#fff;color:#475569;border-color:#d8dee8;box-shadow:none}
+  .tax-btn.secondary:hover{background:#f8fafc;color:var(--tax-accent);border-color:rgba(37,99,235,.25);box-shadow:none}
+  .tax-btn.small{min-height:38px;padding:.48rem 1rem;font-size:.8rem}
+
+  .multi-job-message{
+    display:none;margin:.75rem 0 0;text-align:center;color:#64748b;font-size:.76rem;font-weight:650;
+  }
+  .multi-job-message.show{display:block}
+
+  .tax-status{min-height:1.35rem;margin-top:.8rem;text-align:center;color:#64748b;font-size:.84rem;font-weight:650}
+  .tax-status.error{color:#b91c1c}
+
+  .tax-results{margin-top:1rem;display:none}
+  .tax-results.show{display:block}
+  .total-strip{
+    display:flex;align-items:center;justify-content:center;gap:.55rem 1.15rem;flex-wrap:wrap;
+    padding:.8rem 1rem;border:1px solid rgba(37,99,235,.18);border-radius:16px;
+    background:rgba(37,99,235,.055);color:var(--tax-text);text-align:center;
+  }
+  .total-item{display:inline-flex;align-items:baseline;gap:.35rem;white-space:nowrap}
+  .total-item span{color:#64748b;font-size:.78rem;font-weight:750}
+  .total-item strong{color:var(--tax-text);font-size:.96rem;font-weight:900}
+  .total-item.primary strong{color:var(--tax-accent);font-size:1.08rem}
+
+  .results-timelines{display:grid;gap:1rem;margin-top:1rem}
+  .timeline-panel{
+    border:1px solid var(--tax-border);border-radius:20px;background:#fff;padding:1rem;overflow:hidden;
+  }
+  .timeline-panel.combined{border-color:rgba(37,99,235,.24);background:rgba(37,99,235,.025)}
+  .timeline-head{margin-bottom:.85rem;text-align:center}
+  .timeline-title{margin:0;color:var(--tax-text);font-size:1rem;font-weight:900}
+  .timeline-subtitle{margin:.15rem 0 0;color:#64748b;font-size:.78rem;font-weight:600}
+  .timeline-scroll{width:100%;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:thin;padding:.15rem .05rem .35rem}
+  .timeline{
+    display:grid;grid-template-columns:repeat(var(--band-count,4),minmax(125px,1fr));
+    min-width:calc(var(--band-count,4) * 125px);align-items:start;
+  }
+  .tax-band{position:relative;min-width:0;text-align:center;padding:0 .5rem .2rem}
+  .tax-band::before{
+    content:"";position:absolute;top:49px;left:0;right:0;height:2px;background:#dbe3ec;
+  }
+  .tax-band:first-child::before{left:50%}
+  .tax-band:last-child::before{right:50%}
+  .band-threshold-main{
+    min-height:35px;display:flex;align-items:flex-end;justify-content:center;color:#334155;
+    font-size:.76rem;line-height:1.25;font-weight:800;
+  }
+  .tax-band-marker{position:relative;z-index:1;height:29px;margin-top:.1rem}
+  .tax-band-marker::before{
+    content:"";position:absolute;left:50%;top:4px;width:2px;height:22px;
+    transform:translateX(-50%);background:#cbd5e1;
+  }
+  .tax-band.reached .tax-band-marker::before{background:var(--tax-accent)}
+  .tax-band-content{padding:.2rem .1rem 0}
+  .band-name{margin:0;color:var(--tax-text);font-size:.82rem;font-weight:900}
+  .rate-pill{display:block;margin:.18rem 0 .08rem;color:var(--tax-accent);font-size:1.12rem;line-height:1.15;font-weight:950}
+  .band-tax{display:block;color:var(--tax-text);font-size:.87rem;font-weight:900}
+  .band-income{display:block;margin-top:.08rem;color:#64748b;font-size:.7rem;font-weight:650}
+
+  .tax-note{
+    margin-top:.9rem;padding:.78rem .9rem;border:1px solid #e8edf4;border-radius:15px;
+    background:#f8fafc;color:#64748b;font-size:.78rem;line-height:1.55;
+  }
+  .tax-note strong{color:#334155}
+  .tax-source-links{display:flex;align-items:center;justify-content:center;gap:.45rem;flex-wrap:wrap;margin-top:.65rem;font-size:.76rem}
+  .tax-source-links a{color:#64748b;text-decoration:none;border-bottom:1px dotted #94a3b8}
+  .tax-source-links a:hover{color:var(--tax-accent)}
+
+  @media (max-width:560px){
+    .riyst-container{width:min(100% - 1.2rem,1180px)}
+    .intro{padding:1.9rem 0 1.15rem}
+    .tax-card{border-radius:20px}
+    .tax-seg{grid-template-columns:1fr}
+    .tax-btn{width:100%;max-width:320px}
+    .timeline-panel{padding:.8rem .65rem}
+    .timeline{grid-template-columns:repeat(var(--band-count,4),minmax(142px,1fr));min-width:calc(var(--band-count,4) * 142px)}
+    .total-strip{justify-content:flex-start;text-align:left}
+  }
+
+
+  
+  /* Mk126: main-site page shell. Legacy Riyst CSS has been removed. */
+  :root{
+    --bg:#f5f5f7;
+    --text:#111827;
+    --text-soft:#4b5563;
+    --accent:#2563eb;
+    --accent-hover:#1d4ed8;
+    --accent-soft:rgba(37,99,235,.08);
+    --border-subtle:#e5e7eb;
+    --border-strong:#d1d5db;
+    --shadow-soft:0 12px 30px rgba(15,23,42,.08);
+    --radius-pill:999px;
+    --max-w:980px;
+  }
+
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+    overflow-x:hidden;
+    scroll-behavior:smooth;
+  }
+  body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background:var(--bg);
+    color:var(--text);
+    font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  main{flex:1}
+  .container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+
+  .skip-link{
+    position:absolute;
+    left:-999px;
+    top:.5rem;
+    padding:.45rem .75rem;
+    background:#111827;
+    color:#f9fafb;
+    z-index:100;
+    border-radius:var(--radius-pill);
+    font-size:.85rem;
+  }
+  .skip-link:focus{left:.5rem}
+
+  .intro{
+    width:auto;
+    margin:0;
+    padding:2.6rem 0 2.4rem;
+    background:transparent;
+    text-align:center;
+  }
+  .intro h1{
+    margin:0 0 .8rem;
+    color:var(--text);
+    font-size:clamp(2.1rem,3vw,2.6rem);
+    line-height:1.15;
+    font-weight:750;
+    letter-spacing:-.03em;
+    text-transform:none;
+  }
+  .intro .muted{
+    max-width:720px;
+    margin:0 auto;
+    color:var(--text-soft);
+    font-size:.96rem;
+    line-height:1.6;
+    font-weight:500;
+  }
+
+  .tool{padding:2.4rem 0 4rem}
+
+  .tax-tool{
+    width:100%;
+    max-width:980px;
+    margin:0 auto;
+  }
+  .tax-card{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--border-subtle);
+    border-radius:24px;
+    box-shadow:var(--shadow-soft);
+    padding:clamp(1.2rem,3vw,1.7rem);
+  }
+
+  .tax-field label,.tax-label{
+    color:var(--text-soft);
+    font-size:.85rem;
+    font-weight:600;
+  }
+  .field-help{color:#64748b;font-size:.74rem;font-weight:600}
+
+  .salary-input,.tax-code-select,.custom-code-input{
+    width:100%;
+    min-height:46px;
+    border:1px solid var(--border-strong);
+    border-radius:14px;
+    background:#fff;
+    color:var(--text);
+    font:inherit;
+    font-size:.95rem;
+    font-weight:600;
+    outline:none;
+  }
+  .salary-input:focus,.tax-code-select:focus,.custom-code-input:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+  }
+
+  .tax-seg{
+    border-color:var(--border-subtle);
+    background:#f8fafc;
+  }
+  .tax-seg label{
+    color:#64748b;
+    font-size:.78rem;
+    font-weight:700;
+  }
+  .tax-seg input:checked + label{
+    background:var(--accent);
+    color:#fff;
+  }
+
+  .tax-btn{
+    min-height:44px;
+    padding:.65rem 1.3rem;
+    border-radius:var(--radius-pill);
+    border:1px solid transparent;
+    background:var(--accent);
+    color:#fff;
+    font-size:.86rem;
+    font-weight:600;
+    box-shadow:none;
+  }
+  .tax-btn:hover{
+    background:var(--accent-hover);
+    transform:translateY(-1px);
+    box-shadow:0 10px 25px rgba(37,99,235,.18);
+  }
+  .tax-btn.secondary{
+    background:transparent;
+    color:var(--text);
+    border-color:rgba(148,163,184,.8);
+    box-shadow:none;
+  }
+  .tax-btn.secondary:hover{
+    background:rgba(148,163,184,.15);
+    color:var(--text);
+    border-color:rgba(148,163,184,.8);
+    box-shadow:none;
+  }
+
+  .job-entry-title,.timeline-title,.band-name{font-weight:750}
+  .total-strip{
+    border-color:rgba(37,99,235,.16);
+    background:rgba(37,99,235,.06);
+  }
+  .timeline-panel{
+    border-color:var(--border-subtle);
+    background:#fff;
+  }
+  .tax-note{
+    border-color:var(--border-subtle);
+    background:#f8fafc;
+    color:var(--text-soft);
+  }
+  .tax-note strong{color:var(--text)}
+  .tax-source-links a{
+    color:var(--accent);
+    border-bottom:0;
+    text-decoration:none;
+  }
+  .tax-source-links a:hover{text-decoration:underline}
+
+  @media(max-width:640px){
+    .container{width:min(100% - 2rem,var(--max-w))}
+    .intro{padding:2rem 0 2.1rem}
+    .tool{padding:1.6rem 0 3rem}
+    .tax-card{border-radius:20px}
+  }
+
+</style>
+
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/income-tax-calculator.html"/>
+
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Income Tax Calculator | Adrian Headley Tools"/>
+<meta property="og:description" content="Estimate UK Income Tax across one or more jobs, tax codes and UK tax bands."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/income-tax-calculator.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Income Tax Calculator | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Estimate UK Income Tax across one or more jobs, tax codes and UK tax bands."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/income-tax-calculator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/income-tax-calculator.html","name":"Income Tax Calculator","description":"Calculate estimated UK Income Tax for one or more jobs, compare standard UK and Scottish bands, and model common PAYE tax codes including multiple employments.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/income-tax-calculator.html#breadcrumb"},"dateModified":"2026-09-08","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/income-tax-calculator.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/income-tax-calculator.html#app","name":"Income Tax Calculator","url":"https://tools.adrianheadley.com/pages/toolpages/income-tax-calculator.html","description":"Browser-based UK Income Tax calculator for salary, multiple employments, common PAYE tax codes and progressive tax-band breakdowns.","applicationCategory":"FinanceApplication","operatingSystem":"Any","browserRequirements":"Requires a modern browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Calculate annual salary Income Tax for England, Wales and Northern Ireland using progressive tax bands.","Calculate Scottish Income Tax using Scottish progressive tax bands.","Add up to six employments and estimate each job separately from its selected PAYE tax code.","Support common standard, BR, D0/D1, Scottish S-prefixed, NT, 0T, K and emergency-code patterns used by the calculator.","Show tax charged within each band and a combined multiple-job summary.","Show total estimated Income Tax, effective rate and income remaining after Income Tax.","Process calculator inputs locally in the browser.","Link to GOV.UK tax-rate and tax-code references."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/income-tax-calculator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Income Tax Calculator","item":"https://tools.adrianheadley.com/pages/toolpages/income-tax-calculator.html"}]}]}</script>
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png"/>
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk126"/>
+
+</head>
+<body data-in-pages="true">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1>Income Tax Calculator</h1>
+      <p class="muted">See exactly how income from one or more jobs is taxed across UK Income Tax bands.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="tax-tool">
+        <div class="tax-card" role="region" aria-label="Income Tax Calculator">
+          <div class="jobs-editor" id="jobsEditor"></div>
+
+          <div class="job-actions">
+            <button class="tax-btn secondary small" id="addJob" type="button">Add another job</button>
+          </div>
+          <p class="multi-job-message" id="multiJobMessage">With more than one job, select the tax code used for each employment so the calculator can estimate PAYE separately.</p>
+
+          <div class="job-actions">
+            <button class="tax-btn" id="calculateTax" type="button">Calculate tax</button>
+          </div>
+
+          <div class="tax-status" id="taxStatus" aria-live="polite"></div>
+
+          <section class="tax-results" id="taxResults" aria-live="polite">
+            <div class="total-strip">
+              <div class="total-item primary"><span>Total Income Tax</span><strong id="summaryTax">£0</strong></div>
+              <div class="total-item"><span>Effective rate</span><strong id="summaryEffective">0%</strong></div>
+              <div class="total-item"><span>After Income Tax</span><strong id="summaryNet">£0</strong></div>
+            </div>
+
+            <div class="results-timelines" id="resultsTimelines"></div>
+
+            <div class="tax-note" id="taxNote">
+              <strong>What this includes:</strong> an annual PAYE-style Income Tax estimate for salary only. National Insurance, pension contributions, student loans, benefits, savings, dividends and other reliefs are not included.
+            </div>
+
+            <div class="tax-source-links" aria-label="Tax rate sources">
+              <span>Rates and tax codes:</span>
+              <a href="https://www.gov.uk/income-tax-rates" target="_blank" rel="noopener noreferrer">GOV.UK Income Tax</a>
+              <span>·</span>
+              <a href="https://www.gov.uk/tax-codes/what-your-tax-code-means" target="_blank" rel="noopener noreferrer">GOV.UK Tax Codes</a>
+              <span>·</span>
+              <a href="https://www.gov.uk/scottish-income-tax" target="_blank" rel="noopener noreferrer">Scottish Income Tax</a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  const PERSONAL_ALLOWANCE = 12570;
+  const TAPER_START = 100000;
+  const TAPER_END = 125140;
+  const MAX_JOBS = 6;
+
+  const progressiveTables = {
+    rest: {
+      name:'England, Wales & Northern Ireland',
+      bands:[
+        {name:'Basic rate',rate:.20,lower:0,upper:37700,threshold:'Up to £37,700 taxable'},
+        {name:'Higher rate',rate:.40,lower:37700,upper:125140,threshold:'£37,701 to £125,140 taxable'},
+        {name:'Additional rate',rate:.45,lower:125140,upper:null,threshold:'Over £125,140 taxable'}
+      ]
+    },
+    scotland: {
+      name:'Scotland',
+      bands:[
+        {name:'Starter rate',rate:.19,lower:0,upper:3967,threshold:'Up to £3,967 taxable'},
+        {name:'Basic rate',rate:.20,lower:3967,upper:16956,threshold:'£3,968 to £16,956 taxable'},
+        {name:'Intermediate rate',rate:.21,lower:16956,upper:31092,threshold:'£16,957 to £31,092 taxable'},
+        {name:'Higher rate',rate:.42,lower:31092,upper:62430,threshold:'£31,093 to £62,430 taxable'},
+        {name:'Advanced rate',rate:.45,lower:62430,upper:125140,threshold:'£62,431 to £125,140 taxable'},
+        {name:'Top rate',rate:.48,lower:125140,upper:null,threshold:'Over £125,140 taxable'}
+      ]
+    }
+  };
+
+  const codeOptions = [
+    {group:'England & Northern Ireland',value:'1257L',label:'1257L · Standard Personal Allowance'},
+    {group:'England & Northern Ireland',value:'0T',label:'0T · No Personal Allowance'},
+    {group:'England & Northern Ireland',value:'BR',label:'BR · All pay at 20%'},
+    {group:'England & Northern Ireland',value:'D0',label:'D0 · All pay at 40%'},
+    {group:'England & Northern Ireland',value:'D1',label:'D1 · All pay at 45%'},
+    {group:'Wales',value:'C1257L',label:'C1257L · Standard Personal Allowance'},
+    {group:'Wales',value:'C0T',label:'C0T · No Personal Allowance'},
+    {group:'Wales',value:'CBR',label:'CBR · All pay at 20%'},
+    {group:'Wales',value:'CD0',label:'CD0 · All pay at 40%'},
+    {group:'Wales',value:'CD1',label:'CD1 · All pay at 45%'},
+    {group:'Scotland',value:'S1257L',label:'S1257L · Standard Personal Allowance'},
+    {group:'Scotland',value:'S0T',label:'S0T · No Personal Allowance'},
+    {group:'Scotland',value:'SBR',label:'SBR · All pay at 20%'},
+    {group:'Scotland',value:'SD0',label:'SD0 · All pay at 21%'},
+    {group:'Scotland',value:'SD1',label:'SD1 · All pay at 42%'},
+    {group:'Scotland',value:'SD2',label:'SD2 · All pay at 45%'},
+    {group:'Scotland',value:'SD3',label:'SD3 · All pay at 48%'},
+    {group:'Other',value:'NT',label:'NT · No Income Tax'},
+    {group:'Other',value:'CUSTOM',label:'Other tax code…'}
+  ];
+
+  const jobsEditor = document.getElementById('jobsEditor');
+  const addJobButton = document.getElementById('addJob');
+  const calcButton = document.getElementById('calculateTax');
+  const results = document.getElementById('taxResults');
+  const status = document.getElementById('taxStatus');
+  const timelines = document.getElementById('resultsTimelines');
+  const multiJobMessage = document.getElementById('multiJobMessage');
+  const summaryTax = document.getElementById('summaryTax');
+  const summaryEffective = document.getElementById('summaryEffective');
+  const summaryNet = document.getElementById('summaryNet');
+  const taxNote = document.getElementById('taxNote');
+
+  let jobs = [{id:1,salary:'',region:'rest',code:'',customCode:''}];
+  let nextJobId = 2;
+
+  const money = new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',minimumFractionDigits:2,maximumFractionDigits:2});
+  const moneyWhole = new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',minimumFractionDigits:0,maximumFractionDigits:0});
+
+  function escapeHtml(text){
+    return String(text)
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'",'&#039;');
+  }
+
+  function parseSalary(value){
+    const cleaned = String(value || '').replace(/[^0-9.]/g,'');
+    if(!cleaned) return NaN;
+    const parts = cleaned.split('.');
+    const normalised = parts.shift() + (parts.length ? '.' + parts.join('') : '');
+    return Number(normalised);
+  }
+
+  function getAllowanceFromIncome(income){
+    if(income <= TAPER_START) return PERSONAL_ALLOWANCE;
+    if(income >= TAPER_END) return 0;
+    return Math.max(0,PERSONAL_ALLOWANCE - ((income - TAPER_START) / 2));
+  }
+
+  function buildCodeOptions(selected){
+    const groups = {};
+    codeOptions.forEach(option => {
+      groups[option.group] ||= [];
+      groups[option.group].push(option);
+    });
+    let html = '<option value="">Select tax code</option>';
+    Object.entries(groups).forEach(([group,items]) => {
+      html += `<optgroup label="${escapeHtml(group)}">`;
+      items.forEach(item => {
+        html += `<option value="${escapeHtml(item.value)}" ${item.value === selected ? 'selected' : ''}>${escapeHtml(item.label)}</option>`;
+      });
+      html += '</optgroup>';
+    });
+    return html;
+  }
+
+  function syncJobsFromDom(){
+    jobs.forEach(job => {
+      const entry = jobsEditor.querySelector(`[data-job-id="${job.id}"]`);
+      if(!entry) return;
+      const salary = entry.querySelector('.salary-input');
+      const region = entry.querySelector('input[type="radio"]:checked');
+      const code = entry.querySelector('.tax-code-select');
+      const custom = entry.querySelector('.custom-code-input');
+      if(salary) job.salary = salary.value;
+      if(region) job.region = region.value;
+      if(code) job.code = code.value;
+      if(custom) job.customCode = custom.value;
+    });
+  }
+
+  function renderJobs(){
+    const multi = jobs.length > 1;
+    jobsEditor.classList.toggle('multi',multi);
+    multiJobMessage.classList.toggle('show',multi);
+    addJobButton.disabled = jobs.length >= MAX_JOBS;
+    addJobButton.textContent = jobs.length >= MAX_JOBS ? 'Maximum 6 jobs' : 'Add another job';
+
+    jobsEditor.innerHTML = jobs.map((job,index) => {
+      const regionName = `region-${job.id}`;
+      const codeValue = job.code || '';
+      return `
+        <section class="job-entry" data-job-id="${job.id}">
+          <div class="job-entry-head">
+            <h2 class="job-entry-title">Job ${index + 1}</h2>
+            <button class="job-remove" type="button" data-remove-job="${job.id}" ${index === 0 && jobs.length === 1 ? 'disabled' : ''}>Remove</button>
+          </div>
+          <div class="tax-input-grid">
+            <div class="tax-field">
+              <label for="salary-${job.id}">${multi ? `Job ${index + 1} yearly salary` : 'Yearly salary'}</label>
+              <div class="salary-wrap">
+                <span class="salary-symbol" aria-hidden="true">£</span>
+                <input class="salary-input" id="salary-${job.id}" data-job-salary="${job.id}" type="text" inputmode="decimal" autocomplete="off" placeholder="50,000" value="${escapeHtml(job.salary)}"/>
+              </div>
+              <span class="field-help">Gross salary before Income Tax.</span>
+            </div>
+
+            ${multi ? `
+              <div class="tax-field">
+                <label for="code-${job.id}">Tax code</label>
+                <select class="tax-code-select" id="code-${job.id}" data-job-code="${job.id}">${buildCodeOptions(codeValue)}</select>
+                <span class="field-help">Use the tax code shown on your payslip or HMRC record.</span>
+                <div class="custom-code-wrap ${codeValue === 'CUSTOM' ? 'show' : ''}" data-custom-wrap="${job.id}">
+                  <input class="custom-code-input" data-custom-code="${job.id}" type="text" autocomplete="off" placeholder="e.g. 1185L, K475 or SK200" value="${escapeHtml(job.customCode)}" aria-label="Other tax code"/>
+                </div>
+              </div>` : `
+              <div class="tax-field">
+                <span class="tax-label">Where you pay Income Tax</span>
+                <div class="tax-seg" role="radiogroup" aria-label="Income Tax region">
+                  <input ${job.region !== 'scotland' ? 'checked' : ''} id="${regionName}-rest" name="${regionName}" type="radio" value="rest"/>
+                  <label for="${regionName}-rest">England, Wales &amp; NI</label>
+                  <input ${job.region === 'scotland' ? 'checked' : ''} id="${regionName}-scotland" name="${regionName}" type="radio" value="scotland"/>
+                  <label for="${regionName}-scotland">Scotland</label>
+                </div>
+              </div>`}
+          </div>
+        </section>`;
+    }).join('');
+
+    jobsEditor.querySelectorAll('[data-remove-job]').forEach(button => {
+      button.addEventListener('click',() => removeJob(Number(button.dataset.removeJob)));
+    });
+
+    jobsEditor.querySelectorAll('.salary-input').forEach(input => {
+      input.addEventListener('focus',() => input.select());
+      input.addEventListener('keydown',event => {
+        if(event.key === 'Enter') runCalculation();
+      });
+      input.addEventListener('input',() => {
+        const job = jobs.find(item => item.id === Number(input.dataset.jobSalary));
+        if(job) job.salary = input.value;
+      });
+    });
+
+    jobsEditor.querySelectorAll('.tax-code-select').forEach(select => {
+      select.addEventListener('change',() => {
+        const id = Number(select.dataset.jobCode);
+        const job = jobs.find(item => item.id === id);
+        if(job) job.code = select.value;
+        const wrap = jobsEditor.querySelector(`[data-custom-wrap="${id}"]`);
+        if(wrap) wrap.classList.toggle('show',select.value === 'CUSTOM');
+      });
+    });
+
+    jobsEditor.querySelectorAll('.custom-code-input').forEach(input => {
+      input.addEventListener('input',() => {
+        const job = jobs.find(item => item.id === Number(input.dataset.customCode));
+        if(job) job.customCode = input.value;
+      });
+      input.addEventListener('keydown',event => {
+        if(event.key === 'Enter') runCalculation();
+      });
+    });
+
+    jobsEditor.querySelectorAll('.tax-seg input').forEach(radio => {
+      radio.addEventListener('change',() => {
+        const entry = radio.closest('.job-entry');
+        const job = jobs.find(item => item.id === Number(entry.dataset.jobId));
+        if(job) job.region = radio.value;
+      });
+    });
+  }
+
+  function addJob(){
+    syncJobsFromDom();
+    if(jobs.length >= MAX_JOBS) return;
+    if(jobs.length === 1 && !jobs[0].code){
+      jobs[0].code = jobs[0].region === 'scotland' ? 'S1257L' : '1257L';
+    }
+    jobs.push({id:nextJobId++,salary:'',region:jobs[0].region,code:'',customCode:''});
+    results.classList.remove('show');
+    status.textContent = '';
+    renderJobs();
+    requestAnimationFrame(() => {
+      const last = jobsEditor.querySelector(`[data-job-id="${jobs[jobs.length - 1].id}"] .salary-input`);
+      if(last) last.focus();
+    });
+  }
+
+  function removeJob(id){
+    syncJobsFromDom();
+    jobs = jobs.filter(job => job.id !== id);
+    if(!jobs.length) jobs = [{id:nextJobId++,salary:'',region:'rest',code:'',customCode:''}];
+    if(jobs.length === 1){
+      const code = normaliseCode(jobs[0].code === 'CUSTOM' ? jobs[0].customCode : jobs[0].code);
+      jobs[0].region = code.startsWith('S') ? 'scotland' : 'rest';
+      jobs[0].code = '';
+      jobs[0].customCode = '';
+    }
+    results.classList.remove('show');
+    status.textContent = '';
+    renderJobs();
+  }
+
+  function normaliseCode(raw){
+    return String(raw || '').toUpperCase().replace(/[\s-]+/g,'').trim();
+  }
+
+  function parseTaxCode(raw){
+    let code = normaliseCode(raw);
+    if(!code) return {valid:false,error:'Select a tax code for every job.'};
+
+    let emergency = false;
+    if(/(W1|M1|X)$/.test(code)){
+      emergency = true;
+      code = code.replace(/(W1|M1|X)$/,'');
+    }
+
+    if(code === 'NT') return {valid:true,code:'NT',region:'rest',type:'nt',rate:0,emergency};
+
+    const region = code.startsWith('S') ? 'scotland' : 'rest';
+    const stripped = code.replace(/^[SC]/,'');
+
+    const fixedRates = region === 'scotland'
+      ? {BR:.20,D0:.21,D1:.42,D2:.45,D3:.48}
+      : {BR:.20,D0:.40,D1:.45};
+
+    if(Object.prototype.hasOwnProperty.call(fixedRates,stripped)){
+      return {valid:true,code,region,type:'fixed',rate:fixedRates[stripped],emergency};
+    }
+
+    if(stripped === '0T'){
+      return {valid:true,code,region,type:'progressive',allowance:0,emergency};
+    }
+
+    const kMatch = stripped.match(/^K(\d+)$/);
+    if(kMatch){
+      return {valid:true,code,region,type:'progressive',allowance:0,kAdjustment:Number(kMatch[1]) * 10,emergency};
+    }
+
+    const suffixMatch = stripped.match(/^(\d+)([LMNTP])$/);
+    if(suffixMatch){
+      return {valid:true,code,region,type:'progressive',allowance:Number(suffixMatch[1]) * 10,emergency};
+    }
+
+    return {valid:false,error:`Tax code ${code} is not recognised by this calculator.`};
+  }
+
+  function calculateProgressive(salary,region,allowance,kAdjustment){
+    const table = progressiveTables[region];
+    const usableAllowance = Math.min(salary,Math.max(0,allowance || 0));
+    const taxableIncome = Math.max(0,salary - usableAllowance + (kAdjustment || 0));
+    const segments = [];
+    let totalTax = 0;
+
+    if(usableAllowance > 0){
+      segments.push({name:'Tax-free allowance',threshold:`${moneyWhole.format(usableAllowance)} tax free`,rate:0,amount:usableAllowance,tax:0,reached:true});
+    } else if(kAdjustment){
+      segments.push({name:'K code adjustment',threshold:`Adds ${moneyWhole.format(kAdjustment)} to taxable pay`,rate:0,amount:0,tax:0,reached:true,adjustment:true});
+    } else {
+      segments.push({name:'No tax-free allowance',threshold:'£0 tax free',rate:0,amount:0,tax:0,reached:false});
+    }
+
+    table.bands.forEach(band => {
+      const top = band.upper === null ? taxableIncome : Math.min(taxableIncome,band.upper);
+      const amount = Math.max(0,top - band.lower);
+      const tax = amount * band.rate;
+      totalTax += tax;
+      segments.push({name:band.name,threshold:band.threshold,rate:band.rate,amount,tax,reached:amount > 0});
+    });
+
+    if(kAdjustment){
+      totalTax = Math.min(totalTax,salary * .5);
+      if(totalTax < segments.reduce((sum,segment) => sum + segment.tax,0)){
+        let remaining = totalTax;
+        segments.forEach(segment => {
+          if(segment.rate <= 0) return;
+          const allowed = Math.min(segment.tax,remaining);
+          segment.tax = allowed;
+          remaining -= allowed;
+        });
+      }
+    }
+
+    return {totalTax,segments,allowance:usableAllowance,taxableIncome,regionName:table.name};
+  }
+
+  function applyStandardGrossThresholds(result,region){
+    if(!result || result.allowance !== PERSONAL_ALLOWANCE) return result;
+    const labels = region === 'scotland'
+      ? ['£12,571 to £16,537','£16,538 to £29,526','£29,527 to £43,662','£43,663 to £75,000','£75,001 to £125,140','Over £125,140']
+      : ['£12,571 to £50,270','£50,271 to £125,140','Over £125,140'];
+    result.segments[0].threshold = 'Up to £12,570';
+    result.segments.slice(1).forEach((segment,index) => {
+      if(labels[index]) segment.threshold = labels[index];
+    });
+    return result;
+  }
+
+  function calculateFromCode(salary,parsed){
+    if(parsed.type === 'nt'){
+      return {
+        totalTax:0,
+        segments:[{name:'No Income Tax',threshold:'All pay covered by NT',rate:0,amount:salary,tax:0,reached:salary > 0}],
+        allowance:salary,
+        taxableIncome:0,
+        regionName:'Tax code NT'
+      };
+    }
+
+    if(parsed.type === 'fixed'){
+      const tax = salary * parsed.rate;
+      const nameMap = {
+        '0.2':'Basic rate','0.21':'Intermediate rate','0.4':'Higher rate','0.42':'Higher rate',
+        '0.45':parsed.region === 'scotland' ? 'Advanced rate' : 'Additional rate','0.48':'Top rate'
+      };
+      return {
+        totalTax:tax,
+        segments:[{name:nameMap[String(parsed.rate)] || 'Taxed at fixed rate',threshold:'All pay from this job',rate:parsed.rate,amount:salary,tax,reached:salary > 0}],
+        allowance:0,
+        taxableIncome:salary,
+        regionName:parsed.region === 'scotland' ? 'Scotland' : 'England, Wales & Northern Ireland'
+      };
+    }
+
+    const result = calculateProgressive(salary,parsed.region,parsed.allowance || 0,parsed.kAdjustment || 0);
+    if(!parsed.kAdjustment && parsed.allowance === PERSONAL_ALLOWANCE){
+      applyStandardGrossThresholds(result,parsed.region);
+    }
+    return result;
+  }
+
+  function calculateSingleStandard(salary,region){
+    const allowance = Math.min(salary,getAllowanceFromIncome(salary));
+    const result = calculateProgressive(salary,region,allowance,0);
+    if(allowance === PERSONAL_ALLOWANCE) applyStandardGrossThresholds(result,region);
+    return result;
+  }
+
+  function aggregateSegments(jobResults){
+    const byRate = new Map();
+    jobResults.forEach(job => {
+      job.result.segments.forEach(segment => {
+        if(segment.adjustment) return;
+        const rate = segment.rate || 0;
+        const key = String(rate);
+        if(!byRate.has(key)) byRate.set(key,{rate,amount:0,tax:0});
+        const item = byRate.get(key);
+        item.amount += segment.amount || 0;
+        item.tax += segment.tax || 0;
+      });
+    });
+
+    const names = {
+      '0':'Tax free','0.19':'Starter rate','0.2':'Basic rate','0.21':'Intermediate rate',
+      '0.4':'Higher rate','0.42':'Higher rate','0.45':'Additional / Advanced rate','0.48':'Top rate'
+    };
+
+    return [...byRate.values()]
+      .filter(item => item.amount > 0 || item.tax > 0)
+      .sort((a,b) => a.rate - b.rate)
+      .map(item => ({
+        name:names[String(item.rate)] || `${Math.round(item.rate * 100)}% rate`,
+        threshold:'Across all jobs',
+        rate:item.rate,
+        amount:item.amount,
+        tax:item.tax,
+        reached:item.amount > 0
+      }));
+  }
+
+  function renderTimelinePanel(title,subtitle,segments,combined){
+    const count = Math.max(1,segments.length);
+    const bands = segments.map(segment => `
+      <article class="tax-band ${segment.reached ? 'reached' : ''}">
+        <div class="band-threshold-main">${escapeHtml(segment.threshold)}</div>
+        <div class="tax-band-marker" aria-hidden="true"></div>
+        <div class="tax-band-content">
+          <h3 class="band-name">${escapeHtml(segment.name)}</h3>
+          <span class="rate-pill">${Math.round(segment.rate * 100)}%</span>
+          <strong class="band-tax">Tax ${money.format(segment.tax)}</strong>
+          <span class="band-income">${money.format(segment.amount)} ${combined ? 'across jobs' : 'in band'}</span>
+        </div>
+      </article>`).join('');
+
+    return `
+      <section class="timeline-panel ${combined ? 'combined' : ''}">
+        <div class="timeline-head">
+          <h2 class="timeline-title">${escapeHtml(title)}</h2>
+          <p class="timeline-subtitle">${escapeHtml(subtitle)}</p>
+        </div>
+        <div class="timeline-scroll">
+          <div class="timeline" style="--band-count:${count}">${bands}</div>
+        </div>
+      </section>`;
+  }
+
+  function runCalculation(){
+    syncJobsFromDom();
+    const multi = jobs.length > 1;
+    const calculated = [];
+    let hasEmergency = false;
+    let hasK = false;
+
+    for(let i = 0; i < jobs.length; i++){
+      const job = jobs[i];
+      const salary = parseSalary(job.salary);
+      if(!Number.isFinite(salary) || salary < 0){
+        status.textContent = `Enter a valid yearly salary for Job ${i + 1}.`;
+        status.className = 'tax-status error';
+        results.classList.remove('show');
+        return;
+      }
+      if(salary > 100000000){
+        status.textContent = `Enter a salary below £100,000,000 for Job ${i + 1}.`;
+        status.className = 'tax-status error';
+        results.classList.remove('show');
+        return;
+      }
+
+      let parsed = null;
+      let result = null;
+      let codeLabel = '';
+
+      if(multi){
+        const rawCode = job.code === 'CUSTOM' ? job.customCode : job.code;
+        parsed = parseTaxCode(rawCode);
+        if(!parsed.valid){
+          status.textContent = `Job ${i + 1}: ${parsed.error}`;
+          status.className = 'tax-status error';
+          results.classList.remove('show');
+          return;
+        }
+        codeLabel = parsed.code;
+        hasEmergency ||= parsed.emergency;
+        hasK ||= Boolean(parsed.kAdjustment);
+        result = calculateFromCode(salary,parsed);
+      } else {
+        result = calculateSingleStandard(salary,job.region || 'rest');
+        codeLabel = job.region === 'scotland' ? 'Standard Scottish rates' : 'Standard rates';
+      }
+
+      const input = jobsEditor.querySelector(`[data-job-salary="${job.id}"]`);
+      if(input) input.value = salary.toLocaleString('en-GB',{maximumFractionDigits:2});
+      job.salary = input ? input.value : job.salary;
+
+      calculated.push({job,index:i,salary,parsed,result,codeLabel});
+    }
+
+    const totalSalary = calculated.reduce((sum,item) => sum + item.salary,0);
+    const totalTax = calculated.reduce((sum,item) => sum + item.result.totalTax,0);
+    const net = totalSalary - totalTax;
+    const effective = totalSalary > 0 ? (totalTax / totalSalary) * 100 : 0;
+
+    summaryTax.textContent = money.format(totalTax);
+    summaryEffective.textContent = effective.toFixed(2) + '%';
+    summaryNet.textContent = money.format(net);
+
+    if(multi){
+      let html = calculated.map(item => {
+        const subtitle = `${moneyWhole.format(item.salary)} salary · Tax code ${item.codeLabel} · Income Tax ${money.format(item.result.totalTax)}`;
+        return renderTimelinePanel(`Job ${item.index + 1}`,subtitle,item.result.segments,false);
+      }).join('');
+
+      const combinedSegments = aggregateSegments(calculated);
+      html += renderTimelinePanel(
+        'Combined',
+        `${moneyWhole.format(totalSalary)} total salary · ${money.format(totalTax)} total Income Tax · ${effective.toFixed(2)}% effective rate`,
+        combinedSegments,
+        true
+      );
+      timelines.innerHTML = html;
+
+      taxNote.innerHTML = '<strong>Multiple jobs:</strong> each employment is calculated from the tax code you selected, then the results are added together. The combined timeline groups the actual amounts charged at each rate across all jobs. This is an annual PAYE-style estimate rather than a full HMRC year-end reconciliation.' +
+        (hasK ? ' K codes increase taxable pay and are subject here to the PAYE 50% tax-deduction cap.' : '') +
+        (hasEmergency ? ' Emergency W1, M1 and X suffixes are treated as their underlying annual code because pay-period data is not entered.' : '');
+    } else {
+      const item = calculated[0];
+      const title = item.job.region === 'scotland' ? 'How your Scottish Income Tax is built up' : 'How your Income Tax is built up';
+      const subtitle = 'Each threshold stays on one line. Only income inside a band is charged at that rate.';
+      timelines.innerHTML = renderTimelinePanel(title,subtitle,item.result.segments,false);
+
+      const allowance = item.result.allowance;
+      let taperText = '';
+      if(item.salary > TAPER_START){
+        taperText = allowance > 0
+          ? ` Your Personal Allowance is reduced to ${money.format(allowance)} because income above £100,000 reduces it by £1 for every £2.`
+          : ' Your Personal Allowance is £0 at this income level.';
+      }
+      taxNote.innerHTML = '<strong>What this includes:</strong> salary Income Tax using the standard Personal Allowance and 2026/27 rates.' + taperText + ' National Insurance, pension contributions, student loans, benefits, savings, dividends and other reliefs are not included.';
+    }
+
+    status.textContent = multi ? `Calculated ${calculated.length} jobs using the selected tax codes.` : 'Calculation complete.';
+    status.className = 'tax-status';
+    results.classList.add('show');
+  }
+
+  addJobButton.addEventListener('click',addJob);
+  calcButton.addEventListener('click',runCalculation);
+
+  renderJobs();
+})();
+</script>
+<script src="../../Assets/site-shell.js?v=mk126"></script>
+</body>
+</html>

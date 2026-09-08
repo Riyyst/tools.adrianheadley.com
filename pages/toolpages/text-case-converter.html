@@ -24,7 +24,7 @@
 <meta name="twitter:title" content="Text Case Converter | Adrian Headley Tools"/>
 <meta name="twitter:description" content="Convert text to uppercase, lowercase, sentence case, title case, toggle case or alternating case, with import and download options."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html","name":"Text Case Converter","description":"Convert text to uppercase, lowercase, sentence case, title case, toggle case or alternating case, with import and download options.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html#app","name":"Text Case Converter","url":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html","description":"Convert text to uppercase, lowercase, sentence case, title case, toggle case or alternating case, with import and download options.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Paste or type text, or import a supported document.","Choose uppercase, lowercase, sentence, title, toggle or alternating case.","Copy or download the converted result."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Text Case Converter","item":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html","name":"Text Case Converter","description":"Convert text to uppercase, lowercase, sentence case, title case, toggle case or alternating case, with import and download options.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html#breadcrumb"},"dateModified":"2026-09-07","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html#app","name":"Text Case Converter","url":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html","description":"Convert text to uppercase, lowercase, sentence case, title case, toggle case or alternating case, with import and download options.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Paste or type text, or import a supported document.","Choose uppercase, lowercase, sentence, title, toggle or alternating case.","Copy or download the converted result.","Export converted text as a professionally branded PDF using the site-wide Adrian Headley Tools PDF template."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Text Case Converter","item":"https://tools.adrianheadley.com/pages/toolpages/text-case-converter.html"}]}]}</script>
 <style>
 :root{
   --bg:#f5f5f7;
@@ -394,7 +394,7 @@ select:focus{
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk85">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk126">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -495,6 +495,8 @@ select:focus{
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="../../Assets/pdf-export.js?v=mk124"></script>
 <script>
 const $ = sel => document.querySelector(sel);
     const input = $('#input');
@@ -768,7 +770,7 @@ const $ = sel => document.querySelector(sel);
       btnDownload.style.display = dlType.value ? '' : 'none';
       updateCTAState();
     });
-    btnDownload.addEventListener('click', ()=>{
+    btnDownload.addEventListener('click', async ()=>{
       const text = output.value || '';
       const type = dlType.value;
       if(!type || !text) return;
@@ -778,8 +780,11 @@ const $ = sel => document.querySelector(sel);
         const html = '<!DOCTYPE html><html><body><pre style="font-family:Segoe UI,Roboto,Arial,sans-serif;white-space:pre-wrap">' + escapeHtml(text) + '</pre></body></html>';
         downloadBlob(new Blob([html], {type:'application/msword'}), 'text.doc');
       } else if(type === 'pdf'){
-        const pdfBytes = generateSimplePDF(text);
-        downloadBlob(new Blob([pdfBytes], {type:'application/pdf'}), 'text.pdf');
+        await window.ToolsPDFExport.saveTextPdf({
+          title:'Text Case Converter Export',
+          text,
+          filename:'text-case-converter-export.pdf'
+        });
       }
     });
     function downloadBlob(blob, filename){
@@ -800,79 +805,6 @@ const $ = sel => document.querySelector(sel);
       return s.replace(/[&<>"']/g, ch => map[ch]);
     }
 
-    // Simple PDF generator
-    function generateSimplePDF(text){
-      const pages = paginateText(text);
-      let pdf = '%PDF-1.4\\n';
-      const objects = [];
-      const fontObjNum = 1;
-      const pagesObjNum = 2;
-      const kids = [];
-      let objNum = 3;
-
-      const fontObj = fontObjNum + ' 0 obj\\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\\nendobj\\n';
-      objects.push(fontObj);
-
-      for(const lines of pages){
-        const content = buildContentStream(lines);
-        const contentObjNum = objNum++;
-        objects.push(contentObjNum + ' 0 obj\\n<< /Length ' + content.length + ' >>\\nstream\\n' + content + 'endstream\\nendobj\\n');
-        const pageObjNum = objNum++;
-        objects.push(pageObjNum + ' 0 obj\\n<< /Type /Page /Parent ' + pagesObjNum + ' 0 R /MediaBox [0 0 595 842] /Contents ' + contentObjNum + ' 0 R /Resources << /Font << /F1 ' + fontObjNum + ' 0 R >> >> >>\\nendobj\\n');
-        kids.push(pageObjNum + ' 0 R');
-      }
-      const pagesObj = pagesObjNum + ' 0 obj\\n<< /Type /Pages /Count ' + kids.length + ' /Kids [ ' + kids.join(' ') + ' ] >>\\nendobj\\n';
-      objects.splice(1, 0, pagesObj);
-      const catalogObjNum = objNum++;
-      const catalogObj = catalogObjNum + ' 0 obj\\n<< /Type /Catalog /Pages ' + pagesObjNum + ' 0 R >>\\nendobj\\n';
-      objects.push(catalogObj);
-
-      const xref = [];
-      let offset = pdf.length;
-      for(const obj of objects){
-        xref.push(strPad(offset,10) + ' 00000 n ');
-        pdf += obj;
-        offset = pdf.length;
-      }
-      const xrefStart = pdf.length;
-      pdf += 'xref\\n';
-      pdf += '0 ' + (objects.length+1) + '\\n';
-      pdf += '0000000000 65535 f \\n';
-      for(const line of xref) pdf += line + '\\n';
-      pdf += 'trailer\\n<< /Size ' + (objects.length+1) + ' /Root ' + catalogObjNum + ' 0 R >>\\nstartxref\\n' + xrefStart + '\\n%%EOF';
-      return new TextEncoder().encode(pdf);
-    }
-    function strPad(num, size){ const s = String(num); return '0'.repeat(Math.max(0,size-s.length)) + s; }
-    function buildContentStream(lines){
-      let yStart = 812;
-      let out = 'BT\\n/F1 12 Tf\\n1 0 0 1 30 ' + yStart + ' Tm\\n14 TL\\n';
-      for(const line of lines){ out += '(' + pdfEscape(line) + ') Tj\\nT*\\n'; }
-      out += 'ET\\n'; return out;
-    }
-    function pdfEscape(s){ return s.replace(/([\\()])/g, '\\\\$1').replace(/\\r?\\n/g, '\\\\n'); }
-    function paginateText(text){
-      const maxWidthChars = 85;
-      const words = (text || '').replace(/\\r\\n/g,'\\n').split(/(\\s+)/);
-      const lines = []; let line = '';
-      for(let token of words){
-        if(token === '\\n'){ lines.push(line); line=''; }
-        else if(/\\s+/.test(token)){
-          if(line.length + token.length <= maxWidthChars) line += token;
-          else { lines.push(line); line=''; }
-        } else {
-          if((line + token).length <= maxWidthChars) line += token;
-          else {
-            if(line) lines.push(line);
-            while(token.length > maxWidthChars){ lines.push(token.slice(0, maxWidthChars)); token = token.slice(maxWidthChars); }
-            line = token;
-          }
-        }
-      }
-      if(line) lines.push(line);
-      const linesPerPage = 46, pages = [];
-      for(let i=0;i<lines.length;i+=linesPerPage) pages.push(lines.slice(i,i+linesPerPage));
-      return pages.length ? pages : [[]];
-    }
 
     // Case button activation
     document.querySelectorAll('.case-btn').forEach(btn => {
@@ -906,6 +838,6 @@ dropZone.addEventListener('dragover', () => dropZone.classList.add('dragging'));
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragging'));
 dropZone.addEventListener('drop', () => dropZone.classList.remove('dragging'));
 </script>
-<script src="../../Assets/site-shell.js?v=mk85"></script>
+<script src="../../Assets/site-shell.js?v=mk126"></script>
 </body>
 </html>

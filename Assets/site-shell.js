@@ -65,6 +65,14 @@
       "Download or use the generated barcode where needed."
     ]
   },
+  "coding-studio.html": {
+    "description": "A browser coding workspace with starter projects, project-wide search, local diagnosis, preview runners and offline enhanced-mode caching.",
+    "steps": [
+      "Start blank, choose a starter template, or import files, folders, an .ahcode project or a legacy ZIP. Project > Starter templates includes base webpages, a responsive landing page, an accessible form, a JavaScript app and Python starters.",
+      "Use Search or Ctrl+Shift+F to search and replace across every text file. The Coach can review the current file or run Project Scan across the whole project.",
+      "For Python, queue console input before running when code uses input(). Project > Prepare offline mode caches the enhanced Monaco editor and core Pyodide runtime for later offline use. Additional Python packages are cached after they are fetched while online. Project source remains in the browser unless you explicitly save/export it. Saved Browser Code Studio projects use the .ahcode extension."
+    ]
+  },
   "colour-picker.html": {
     "description": "Pick colours from an uploaded image or, where supported, directly from your screen.",
     "steps": [
@@ -79,6 +87,14 @@
       "Enter the starting date and time.",
       "Enter the ending date and time.",
       "Review the calculated difference in the available time units."
+    ]
+  },
+  "dns-lookup.html": {
+    "description": "Choose between a fast core DNS/domain lookup and a deeper passive OSINT lookup.",
+    "steps": [
+      "Enter a domain name such as example.com.",
+      "Choose Light Search for core DNS, registrar, registration, expiry, estimated purchase availability, prefilled lookup links, expiry calendar saving, email security and basic IP information.",
+      "Choose Deep Search for Certificate Transparency hostnames, DKIM/SRV discovery, nameserver and mail infrastructure, ASN routing, RPKI and broader passive OSINT. You can copy the report or save the lookup information as a watermarked PDF."
     ]
   },
   "encrypt-decrypt.html": {
@@ -279,6 +295,62 @@
       "Paste the URL you want to lengthen.",
       "Run the lengthening tool.",
       "Copy the resulting URL."
+    ]
+  },
+  "email-domain-analyzer.html": {
+    "description": "Inspect the email side of a domain without trying to enumerate a specific mailbox.",
+    "steps": [
+      "Enter either an email address or a domain. If you enter an email address, only the domain after @ is analysed.",
+      "The tool checks mail acceptance, MX/provider clues, SPF, DMARC, MTA-STS and its public policy file, TLS-RPT, BIMI, DNSSEC clues, common DKIM selectors and recognised temporary-email-domain indicators.",
+      "The posture score is a transparent configuration score, not a verdict that a sender or domain is trustworthy. Specific mailbox existence and catch-all behaviour are deliberately not tested because they require recipient-level probing."
+    ]
+  },
+  "email-header-analyzer.html": {
+    "description": "Deeply analyse a raw email header or saved .eml email locally for routing, recipients, authentication, automation and mail-service clues.",
+    "steps": [
+      "Paste raw headers, click Upload Email to choose a saved .eml email, or drag a saved .eml file onto the header box. The blue progress bar also tracks the local file read before analysis starts. The message stays in your browser.",
+      "The analyzer reconstructs Received hops, extracts visible and delivery-specific recipient clues, public IP addresses, SPF/DKIM/DMARC/ARC details, sender/reply/return-path identities, sending software, bulk-mail provider clues, thread/list headers, MIME structure, attachment filenames and spam/antivirus headers.",
+      "Automation likelihood is a transparent header-based estimate using signals such as Auto-Submitted, Precedence, List-* headers, no-reply senders and mailing-provider headers. It is not proof that a bot wrote or sent the message. Hidden Bcc recipients normally cannot be recovered unless a mail provider preserved a delivery-specific recipient header."
+    ]
+  },
+  "income-tax-calculator.html": {
+    "description": "Estimate annual UK Income Tax for salary, including multiple jobs and common PAYE tax-code patterns.",
+    "steps": [
+      "Enter a yearly salary. For one job, choose the standard UK or Scottish tax region. Add another job to calculate employments separately using the tax code shown on each payslip or HMRC record.",
+      "The calculator shows the estimated tax charged within each encoded band, total estimated Income Tax, effective rate and income after Income Tax. Multiple jobs are added together after each employment is calculated.",
+      "This is an annual PAYE-style estimate, not an HMRC calculation or tax advice. National Insurance, pensions, student loans, benefits, savings, dividends and other reliefs are outside this calculator. Check the linked GOV.UK sources if you need to confirm current rules."
+    ]
+  },
+  "investment-calculator.html": {
+    "description": "Project investment growth, contributions, deductions and selected UK tax outcomes across common account wrappers and asset types.",
+    "steps": [
+      "Enter the starting amount, expected annual return and term, then choose compound or simple growth. You can add regular contributions and up to ten fixed or percentage deductions.",
+      "Choose where the investment is held and what it is invested in. The calculator uses the tax rules and allowances encoded in the page to estimate selected savings, dividend and capital-gain outcomes.",
+      "The result is an illustrative projection, not financial or tax advice. Investment returns are not guaranteed, actual tax depends on individual circumstances, and future rules can change. Use the linked GOV.UK references to verify the rules that matter to you."
+    ]
+  },
+  "ip-asn-lookup.html": {
+    "description": "Inspect a public IP address or autonomous system directly, without starting from a domain name.",
+    "steps": [
+      "Enter a public IPv4 address, IPv6 address or ASN such as AS15169.",
+      "For an IP address, the tool can show the originating ASN, routed prefix, reverse DNS, RPKI status, public abuse contacts and approximate public IP geolocation. For an ASN, it focuses on the autonomous system, announced prefixes and routing neighbours.",
+      "The results describe public network infrastructure. Approximate IP location is not a precise physical address, and routing or ownership data can change."
+    ]
+  },
+  "public-document-finder.html": {
+    "description": "Find publicly indexed and archived document files without brute-forcing hidden paths.",
+    "steps": [
+      "Enter an organisation, phrase or keywords. Optionally add a website/domain filter, then choose the document formats you want to look for.",
+      "Current-web searching uses public search-result pages on a best-effort basis. If a search engine blocks machine-readable results, the Google, Bing and DuckDuckGo shortcut buttons open the exact same generated filetype query for manual review.",
+      "When a domain filter is supplied, the tool can also query Internet Archive CDX history for public document URLs and link directly to exact archived snapshots. Results are limited to public/indexed or archived material and do not perform hidden-directory discovery."
+    ]
+  },
+  "username-osint.html": {
+    "description": "Search current public profiles and Wayback Machine history using a username, name, email address or phone number.",
+    "steps": [
+      "Choose Username, Name or Email / Phone. Username mode can also use a known alternate username and platform; Name mode can use the optional basic cross-reference details.",
+      "The current-profile search runs first. The tool then checks the Internet Archive Wayback Machine for archived versions of relevant profile URLs. Username mode can find archived copies even when the current profile has disappeared; Name mode can also do this when a known alias gives it a concrete historical profile URL to check.",
+      "Wayback results are shown separately with the archived date, archived page title or possible historical username when one can be extracted, and a direct link to the archived snapshot. Open every result to verify it manually."
     ]
   },
   "url-shortener.html": {

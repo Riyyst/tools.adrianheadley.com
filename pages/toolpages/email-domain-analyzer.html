@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="#f5f5f7" name="theme-color"/>
+
+<title>Email Domain Analyzer | Adrian Headley Tools</title>
+<meta name="description" content="Analyse the mail side of an email address or domain for MX provider, mail acceptance, SPF, DMARC, MTA-STS, TLS-RPT, BIMI, DNSSEC, common DKIM selectors and temporary-email indicators without probing a mailbox."/>
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
+<meta name="author" content="Adrian Headley"/>
+<meta name="application-name" content="Adrian Headley Tools"/>
+<link rel="canonical" href="https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html"/>
+
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Adrian Headley Tools"/>
+<meta property="og:locale" content="en_GB"/>
+<meta property="og:title" content="Email Domain Analyzer | Adrian Headley Tools"/>
+<meta property="og:description" content="Inspect the email infrastructure and mail-security posture of a domain."/>
+<meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html"/>
+<meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Email Domain Analyzer | Adrian Headley Tools"/>
+<meta name="twitter:description" content="Analyse MX, SPF, DMARC, MTA-STS, TLS-RPT, BIMI, DNSSEC and mail-provider clues."/>
+<meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html","name":"Email Domain Analyzer","description":"Analyse the mail infrastructure and security posture of an email domain without probing a mailbox.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#breadcrumb"},"dateModified":"2026-09-08","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#app","name":"Email Domain Analyzer","url":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html","description":"Email-domain analysis focused on mail delivery and mail-security configuration.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern browser with JavaScript enabled and internet access.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Accept an email address or domain and analyse the domain side only.","Show whether the domain publishes MX records, a null MX, or appears to rely on address-record fallback.","Identify common hosted mail providers from MX infrastructure.","Parse SPF mechanisms and the final all-policy qualifier.","Parse DMARC policy, subdomain policy, percentage, alignment and reporting destinations.","Check MTA-STS TXT and retrieve the public MTA-STS policy when available.","Check TLS-RPT and BIMI records.","Check common DKIM selectors without trying to enumerate private mailboxes.","Show DNSSEC/DNSKEY clues from the public resolver.","Flag recognised temporary-email domains using local indicators and the current Mail.gw public domain list when available.","Produce a transparent mail-domain posture score.","Do not test whether a specific mailbox exists and do not perform SMTP recipient probing.","Copy or export the report using the site-wide PDF template."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Email Domain Analyzer","item":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html"}]}]}</script>
+
+<style>
+:root{
+  --bg:#f5f5f7;--text:#111827;--text-soft:#4b5563;--accent:#2563eb;--accent-hover:#1d4ed8;
+  --border-subtle:#e5e7eb;--border-strong:#d1d5db;--shadow-soft:0 12px 30px rgba(15,23,42,.08);
+  --radius-pill:999px;--max-w:1080px
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;scroll-behavior:smooth;min-height:100%;overflow-x:hidden}
+body{min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}
+main{flex:1}
+.container{width:min(var(--max-w),100% - 3rem);margin-inline:auto}
+.skip-link{position:absolute;left:-999px;top:.5rem;padding:.45rem .75rem;background:#111827;color:#f9fafb;z-index:100;border-radius:var(--radius-pill);font-size:.85rem}
+.skip-link:focus{left:.5rem}
+.intro{text-align:center;padding:2.6rem 0 2.4rem}
+.intro__title{font-size:clamp(2.1rem,3vw,2.6rem);line-height:1.15;margin:0 0 .8rem;font-weight:750;letter-spacing:-.03em}
+.intro__subtitle{max-width:800px;margin:0 auto;color:var(--text-soft);font-size:.96rem;font-weight:500}
+.tool{padding:2.4rem 0 4rem}
+.card{background:rgba(255,255,255,.92);border:1px solid var(--border-subtle);border-radius:24px;box-shadow:var(--shadow-soft);padding:clamp(1.2rem,3vw,1.7rem);max-width:1080px;margin:0 auto}
+.lookup-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:.7rem;align-items:end}
+.field label{display:block;margin:0 0 .35rem;color:var(--text-soft);font-size:.85rem;font-weight:700}
+.field input{width:100%;min-height:44px;padding:.72rem .9rem;border:1px solid var(--border-strong);border-radius:14px;background:#fff;color:var(--text);font:inherit;outline:none;transition:border-color .16s,box-shadow .16s}
+.field input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(37,99,235,.11)}
+.btn,.mini-link{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border-radius:var(--radius-pill);font-weight:700;text-decoration:none;cursor:pointer}
+.btn{min-height:44px;padding:.65rem 1.2rem;border:1px solid transparent;background:var(--accent);color:#fff;font-size:.85rem;transition:background .16s}
+.btn:hover:not(:disabled){background:var(--accent-hover)}
+.btn.secondary{background:#fff;color:var(--text);border-color:var(--border-strong)}
+.btn.secondary:hover:not(:disabled){background:#f8fafc}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.mini-link{min-height:32px;padding:.32rem .62rem;border:1px solid rgba(37,99,235,.22);background:#fff;color:var(--accent);font-size:.74rem}
+#status.progress-status{--progress-fill:0%;position:relative;overflow:hidden;min-height:3.25rem;display:flex;align-items:center;justify-content:center;padding:.65rem .8rem;border:1px solid #bfdbfe;border-radius:12px;background:linear-gradient(90deg,rgba(37,99,235,.20) 0 var(--progress-fill),#f8fafc var(--progress-fill) 100%)!important;color:#334155!important;transition:background .18s,border-color .18s}
+#status.progress-status.is-complete{background:#2563eb!important;border-color:#2563eb!important;color:#fff!important}
+#status.progress-status:empty{display:none!important}
+.status{min-height:1.4rem;margin-top:.75rem;text-align:center;color:var(--text-soft);font-size:.84rem;font-weight:650}
+.status.error{color:#b91c1c}
+.results{display:grid;gap:1rem;margin-top:1rem}.hidden{display:none!important}
+.section{border:1px solid var(--border-subtle);border-radius:20px;background:#f8fafc;padding:1rem}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-bottom:.75rem}
+.section h2{margin:0;font-size:1rem;line-height:1.25}
+.summary-grid,.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.65rem}
+.kv{min-width:0;padding:.75rem .82rem;border:1px solid var(--border-subtle);border-radius:14px;background:#fff}
+.kv span{display:block;color:var(--text-soft);font-size:.72rem;font-weight:760;margin-bottom:.14rem}
+.kv b{display:block;color:var(--text);font-size:.86rem;font-weight:800;overflow-wrap:anywhere}
+.kv.full{grid-column:1/-1}
+.score-card{display:grid;grid-template-columns:auto 1fr;gap:.9rem;align-items:center;padding:.85rem;border:1px solid var(--border-subtle);border-radius:14px;background:#fff}
+.score-ring{width:76px;height:76px;border:7px solid #dbeafe;border-radius:50%;display:grid;place-items:center;color:#1d4ed8;font-size:1.05rem;font-weight:850}
+.score-copy h3{margin:0 0 .18rem;font-size:.92rem}.score-copy p{margin:0;color:var(--text-soft);font-size:.76rem}
+.records-wrap{overflow:auto;border:1px solid var(--border-subtle);border-radius:14px;background:#fff}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{padding:.64rem .7rem;border-bottom:1px solid var(--border-subtle);text-align:left;vertical-align:top}
+th{background:#f8fafc;color:var(--text-soft);font-size:.72rem;font-weight:800}
+td{font-size:.78rem;overflow-wrap:anywhere}
+tr:last-child td{border-bottom:0}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{display:inline-flex;align-items:center;min-height:29px;padding:.25rem .54rem;border:1px solid var(--border-subtle);border-radius:999px;background:#fff;color:#334155;font-size:.72rem;font-weight:700}
+.chip.good{border-color:#a7f3d0;background:#ecfdf5;color:#047857}
+.chip.warn{border-color:#fed7aa;background:#fff7ed;color:#9a3412}
+.chip.bad{border-color:#fecaca;background:#fef2f2;color:#b91c1c}
+.compact-list{display:grid;gap:.45rem}
+.compact-item{padding:.58rem .68rem;border:1px solid var(--border-subtle);border-radius:11px;background:#fff;font-size:.76rem;color:#475569;overflow-wrap:anywhere}
+.compact-item strong{color:#111827}
+.actions,.result-actions{display:flex;justify-content:center;gap:.55rem;flex-wrap:wrap;margin-top:.7rem}
+.raw{border:1px solid var(--border-subtle);border-radius:14px;background:#fff;overflow:hidden}
+.raw summary{cursor:pointer;padding:.7rem .8rem;font-size:.8rem;font-weight:750}
+.raw pre{margin:0;padding:.8rem;border-top:1px solid var(--border-subtle);background:#111827;color:#e5e7eb;max-height:420px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.72rem}
+@media(max-width:850px){.summary-grid,.detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.container{width:min(100% - 2rem,var(--max-w))}.intro{padding:2rem 0 2.1rem}.tool{padding:1.6rem 0 3rem}.lookup-row{grid-template-columns:1fr}.lookup-row .btn{width:100%}.summary-grid,.detail-grid{grid-template-columns:1fr}}
+</style>
+
+<link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk126">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="tools-global-header" id="top">
+  <div class="tools-global-header-inner">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+      <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
+      <span class="tools-global-brand-name">Go to portfolio</span>
+    </a>
+    <nav class="tools-global-nav" aria-label="Main navigation">
+      <a href="../../index.html" class="tools-global-nav-link is-current">Tools</a>
+      <a href="../about.html" class="tools-global-nav-link">About</a>
+    </nav>
+    <div class="tools-global-header-actions">
+      <button class="tools-global-a11y-button" id="a11y-button" type="button" aria-expanded="false" aria-controls="a11y-panel">Accessibility</button>
+      <div class="tools-global-a11y-panel" id="a11y-panel" aria-label="Accessibility options">
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Text size</span><button type="button" class="tools-global-a11y-chip" data-text-size="normal">A</button><button type="button" class="tools-global-a11y-chip" data-text-size="large">A+</button><button type="button" class="tools-global-a11y-chip" data-text-size="xlarge">A++</button></div>
+        <div class="tools-global-a11y-group"><span class="tools-global-a11y-label">Colour</span><button type="button" class="tools-global-a11y-chip" data-color-mode="normal">Default</button><button type="button" class="tools-global-a11y-chip" data-color-mode="cb">Colourblind friendly</button></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="underline-toggle"><span>Underline links</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="motion-toggle"><span>Reduce motion</span></label></div>
+        <div class="tools-global-a11y-group"><label class="tools-global-a11y-toggle"><input type="checkbox" id="focus-toggle"><span>Stronger focus outlines</span></label></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div class="container">
+      <h1 class="intro__title">Email Domain Analyzer</h1>
+      <p class="intro__subtitle">Inspect the mail side of an email address or domain: delivery, provider, SPF, DMARC, transport security and other public email-domain signals.</p>
+    </div>
+  </section>
+
+  <section class="tool">
+    <div class="container">
+      <div class="card" role="region" aria-label="Email Domain Analyzer">
+        <div class="lookup-row">
+          <div class="field">
+            <label for="domainInput">Email address or domain</label>
+            <input id="domainInput" type="text" autocomplete="off" spellcheck="false" placeholder="name@example.com or example.com"/>
+          </div>
+          <button class="btn" id="analyseBtn" type="button">Analyse Domain</button>
+          <button class="btn secondary" id="clearBtn" type="button">Clear</button>
+        </div>
+
+        <div class="status" id="status" aria-live="polite"></div>
+
+        <div class="results hidden" id="results">
+          <section class="section">
+            <div class="section-head"><h2>Overview</h2></div>
+            <div class="summary-grid">
+              <div class="kv"><span>Domain</span><b id="sumDomain">—</b></div>
+              <div class="kv"><span>Receives email</span><b id="sumReceives">—</b></div>
+              <div class="kv"><span>Mail provider</span><b id="sumProvider">—</b></div>
+              <div class="kv"><span>Temporary-email indicator</span><b id="sumDisposable">—</b></div>
+            </div>
+            <div class="actions" id="overviewActions"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Mail-domain posture</h2></div>
+            <div class="score-card">
+              <div class="score-ring" id="postureScore">0</div>
+              <div class="score-copy">
+                <h3 id="postureLabel">Not assessed</h3>
+                <p>A transparent configuration score based on published mail controls. It is not a guarantee that email from the domain is safe.</p>
+              </div>
+            </div>
+            <div class="compact-list" id="postureEvidence" style="margin-top:.65rem"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Mail delivery</h2></div>
+            <div class="records-wrap">
+              <table>
+                <thead><tr><th>Priority</th><th>MX host</th><th>Provider clue</th></tr></thead>
+                <tbody id="mxBody"></tbody>
+              </table>
+            </div>
+            <div class="detail-grid" id="deliveryGrid" style="margin-top:.65rem"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>SPF</h2></div>
+            <div class="detail-grid" id="spfGrid"></div>
+            <div class="chips" id="spfChips" style="margin-top:.65rem"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>DMARC</h2></div>
+            <div class="detail-grid" id="dmarcGrid"></div>
+            <div class="compact-list" id="dmarcReports" style="margin-top:.65rem"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Transport security</h2></div>
+            <div class="detail-grid" id="transportGrid"></div>
+            <div class="compact-list" id="mtaPolicyList" style="margin-top:.65rem"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>DKIM selectors</h2></div>
+            <div class="records-wrap">
+              <table>
+                <thead><tr><th>Selector</th><th>Published</th><th>Key / record clue</th></tr></thead>
+                <tbody id="dkimBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>BIMI &amp; brand-mail signals</h2></div>
+            <div class="detail-grid" id="bimiGrid"></div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Mailbox-testing boundaries</h2></div>
+            <div class="compact-list">
+              <div class="compact-item"><strong>Specific mailbox existence:</strong> Not tested. The tool does not attempt account enumeration or SMTP recipient probing.</div>
+              <div class="compact-item"><strong>Catch-all behaviour:</strong> Not tested. Reliable catch-all detection requires recipient-level SMTP probing and can be misleading or intrusive.</div>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head"><h2>Raw public data</h2></div>
+            <details class="raw">
+              <summary>View raw DNS and policy data</summary>
+              <pre id="rawData"></pre>
+            </details>
+          </section>
+
+          <div class="result-actions">
+            <button class="btn secondary" id="copyReportBtn" type="button">Copy report</button>
+            <button class="btn secondary" id="savePdfBtn" type="button">Save PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="tools-global-footer">
+  <div class="tools-global-footer-inner">
+    <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
+    <nav class="tools-global-footer-links" aria-label="Footer navigation">
+      <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../terms.html" class="tools-global-footer-link">Terms</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="../../Assets/pdf-export.js?v=mk124"></script>
+<script>
+(function(){
+'use strict';
+
+const DNS='https://dns.google/resolve';
+const ALLORIGINS='https://api.allorigins.win/get?url=';
+const MAILGW='https://api.mail.gw';
+const TIMEOUT=14000;
+
+const DKIM_SELECTORS=['default','google','selector1','selector2','s1','s2','k1','mail','smtp','dkim'];
+
+const COMMON_TEMP_DOMAINS=new Set([
+  '10minutemail.com','guerrillamail.com','guerrillamailblock.com','sharklasers.com',
+  'grr.la','guerrillamail.info','guerrillamail.biz','guerrillamail.de','mailinator.com',
+  'yopmail.com','temp-mail.org','tempmail.com','throwawaymail.com','getnada.com',
+  'dispostable.com','maildrop.cc','trashmail.com','fakeinbox.com','mintemail.com'
+]);
+
+const PROVIDERS=[
+  ['Google Workspace',/(\.|^)google\.com$|googlemail\.com$|aspmx\.l\.google\.com$/i],
+  ['Microsoft 365',/mail\.protection\.outlook\.com$|outlook\.com$/i],
+  ['Zoho Mail',/zoho\.(com|eu|in|com\.au)$/i],
+  ['Proton Mail',/protonmail\.ch$|proton\.ch$/i],
+  ['Fastmail',/messagingengine\.com$/i],
+  ['Cloudflare Email Routing',/mx\.cloudflare\.net$/i],
+  ['Amazon SES',/inbound-smtp\..*\.amazonaws\.com$/i],
+  ['Proofpoint',/pphosted\.com$/i],
+  ['Mimecast',/mimecast\.com$/i],
+  ['Titan',/titan\.email$/i],
+  ['GoDaddy',/secureserver\.net$/i],
+  ['Namecheap Private Email',/privateemail\.com$/i],
+  ['Apple iCloud',/icloud\.com$/i],
+  ['Mailgun',/mailgun\.org$/i],
+  ['SendGrid',/sendgrid\.net$/i]
+];
+
+const domainInput=document.getElementById('domainInput');
+const analyseBtn=document.getElementById('analyseBtn');
+const clearBtn=document.getElementById('clearBtn');
+const statusEl=document.getElementById('status');
+const results=document.getElementById('results');
+
+const sumDomain=document.getElementById('sumDomain');
+const sumReceives=document.getElementById('sumReceives');
+const sumProvider=document.getElementById('sumProvider');
+const sumDisposable=document.getElementById('sumDisposable');
+const overviewActions=document.getElementById('overviewActions');
+
+const postureScore=document.getElementById('postureScore');
+const postureLabel=document.getElementById('postureLabel');
+const postureEvidence=document.getElementById('postureEvidence');
+
+const mxBody=document.getElementById('mxBody');
+const deliveryGrid=document.getElementById('deliveryGrid');
+const spfGrid=document.getElementById('spfGrid');
+const spfChips=document.getElementById('spfChips');
+const dmarcGrid=document.getElementById('dmarcGrid');
+const dmarcReports=document.getElementById('dmarcReports');
+const transportGrid=document.getElementById('transportGrid');
+const mtaPolicyList=document.getElementById('mtaPolicyList');
+const dkimBody=document.getElementById('dkimBody');
+const bimiGrid=document.getElementById('bimiGrid');
+const rawData=document.getElementById('rawData');
+const copyReportBtn=document.getElementById('copyReportBtn');
+const savePdfBtn=document.getElementById('savePdfBtn');
+
+let progressValue=0;
+let progressActive=false;
+let lastReport=null;
+
+function esc(v){
+  return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
+    .replaceAll('"','&quot;').replaceAll("'",'&#039;');
+}
+
+function nextPaint(){
+  return new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+}
+
+function setStatus(message='',type=''){
+  statusEl.textContent=message;
+  statusEl.className='status'+(type?' '+type:'')+(progressActive?' progress-status':'');
+  applyProgress();
+}
+
+function applyProgress(){
+  if(progressActive){
+    statusEl.classList.add('progress-status');
+    statusEl.classList.toggle('is-complete',progressValue>=100);
+    statusEl.style.setProperty('--progress-fill',progressValue+'%');
+    statusEl.setAttribute('role','progressbar');
+    statusEl.setAttribute('aria-valuemin','0');
+    statusEl.setAttribute('aria-valuemax','100');
+    statusEl.setAttribute('aria-valuenow',String(Math.round(progressValue)));
+  }else{
+    statusEl.classList.remove('progress-status','is-complete');
+    statusEl.style.removeProperty('--progress-fill');
+    ['role','aria-valuemin','aria-valuemax','aria-valuenow'].forEach(attr=>statusEl.removeAttribute(attr));
+  }
+}
+
+function setProgress(v){
+  progressValue=Math.max(progressValue,Math.max(0,Math.min(100,Number(v)||0)));
+  progressActive=true;
+  applyProgress();
+}
+
+function hideProgress(){
+  progressValue=0;
+  progressActive=false;
+  applyProgress();
+}
+
+function setBusy(v){
+  analyseBtn.disabled=v;
+  clearBtn.disabled=v;
+  analyseBtn.textContent=v?'Analysing…':'Analyse Domain';
+}
+
+function normaliseInput(value){
+  let raw=String(value||'').trim().toLowerCase();
+  if(!raw) throw new Error('Enter an email address or domain.');
+
+  if(raw.includes('@')){
+    const match=raw.match(/^[^@\s]+@([^@\s]+)$/);
+    if(!match) throw new Error('Enter a valid email address or domain.');
+    raw=match[1];
+  }
+
+  raw=raw.replace(/^https?:\/\//,'').replace(/^www\./,'').split(/[/?#]/)[0].replace(/\.$/,'');
+  if(!raw.includes('.')||raw.length>253||!/^[a-z0-9.-]+$/i.test(raw)){
+    throw new Error('Enter a valid email address or public domain.');
+  }
+
+  return raw;
+}
+
+async function fetchTimeout(url,options={}){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),TIMEOUT);
+  try{
+    return await fetch(url,{...options,signal:controller.signal,credentials:'omit'});
+  }finally{
+    clearTimeout(timer);
+  }
+}
+
+async function dnsQuery(name,type){
+  try{
+    const r=await fetchTimeout(`${DNS}?name=${encodeURIComponent(name)}&type=${encodeURIComponent(type)}&do=1`,{
+      headers:{Accept:'application/dns-json'},cache:'no-store'
+    });
+    if(!r.ok) return {Status:-1,Answer:[],AD:false,error:`HTTP ${r.status}`};
+    return await r.json();
+  }catch(error){
+    return {Status:-1,Answer:[],AD:false,error:error.message||'DNS request failed'};
+  }
+}
+
+function answers(response){
+  return Array.isArray(response?.Answer)?response.Answer:[];
+}
+
+function cleanTxt(value){
+  const input=String(value||'').trim();
+  const pieces=input.match(/"([^"]*)"/g);
+  if(pieces?.length) return pieces.map(x=>x.slice(1,-1)).join('');
+  return input.replace(/^"|"$/g,'');
+}
+
+function txtRecords(response){
+  return answers(response).map(x=>cleanTxt(x.data)).filter(Boolean);
+}
+
+function parseTagRecord(record){
+  const out={};
+  String(record||'').split(';').forEach(part=>{
+    const i=part.indexOf('=');
+    if(i>0){
+      out[part.slice(0,i).trim().toLowerCase()]=part.slice(i+1).trim();
+    }
+  });
+  return out;
+}
+
+function parseMx(response){
+  return answers(response).map(item=>{
+    const value=String(item.data||'').trim();
+    const m=value.match(/^(\d+)\s+(.+)$/);
+    return {
+      priority:m?Number(m[1]):0,
+      host:(m?m[2]:value).replace(/\.$/,'').toLowerCase()
+    };
+  }).sort((a,b)=>a.priority-b.priority||a.host.localeCompare(b.host));
+}
+
+function providerForHost(host){
+  if(host==='.') return 'Null MX';
+  for(const [name,pattern] of PROVIDERS){
+    if(pattern.test(host)) return name;
+  }
+  return 'Other / self-hosted';
+}
+
+function providerSummary(mx){
+  const providers=[...new Set(mx.filter(x=>x.host!=='.').map(x=>providerForHost(x.host)))];
+  if(!providers.length) return 'Not identified';
+  if(providers.length===1) return providers[0];
+  return providers.join(' + ');
+}
+
+function parseSpf(record){
+  const tokens=String(record||'').trim().split(/\s+/);
+  const mechanisms=tokens.slice(1);
+  const finalAll=[...mechanisms].reverse().find(x=>/^[+\-~?]?all$/i.test(x))||'';
+  const includes=mechanisms.filter(x=>/^include:/i.test(x)).map(x=>x.slice(8));
+  const redirects=mechanisms.filter(x=>/^redirect=/i.test(x)).map(x=>x.slice(9));
+  const ips=mechanisms.filter(x=>/^ip[46]:/i.test(x));
+  return {mechanisms,finalAll,includes,redirects,ips};
+}
+
+function finalAllMeaning(v){
+  const q=String(v||'').charAt(0);
+  if(v==='all'||q==='+') return 'Pass (+all) - very permissive';
+  if(q==='-') return 'Hard fail (-all)';
+  if(q==='~') return 'Soft fail (~all)';
+  if(q==='?') return 'Neutral (?all)';
+  return v||'Not published';
+}
+
+function parseRua(value){
+  return String(value||'').split(',').map(x=>x.trim()).filter(Boolean);
+}
+
+async function fetchMtaStsPolicy(domain){
+  const target=`https://mta-sts.${domain}/.well-known/mta-sts.txt`;
+
+  try{
+    const r=await fetchTimeout(target,{cache:'no-store'});
+    if(r.ok){
+      return {ok:true,source:'Direct browser read',url:r.url||target,text:await r.text()};
+    }
+  }catch(_){}
+
+  try{
+    const r=await fetchTimeout(ALLORIGINS+encodeURIComponent(target),{
+      headers:{Accept:'application/json'},cache:'no-store'
+    });
+    if(r.ok){
+      const j=await r.json();
+      const text=String(j?.contents||'');
+      if(text.trim()) return {ok:true,source:'Public raw fallback',url:target,text};
+    }
+  }catch(_){}
+
+  return {ok:false,source:'Unavailable',url:target,text:''};
+}
+
+function parseMtaPolicy(text){
+  const out={version:'',mode:'',mx:[],maxAge:''};
+  String(text||'').split(/\r?\n/).forEach(line=>{
+    const m=line.match(/^\s*([^:#]+):\s*(.*?)\s*$/);
+    if(!m) return;
+    const key=m[1].trim().toLowerCase();
+    const value=m[2].trim();
+    if(key==='version') out.version=value;
+    else if(key==='mode') out.mode=value;
+    else if(key==='mx') out.mx.push(value);
+    else if(key==='max_age') out.maxAge=value;
+  });
+  return out;
+}
+
+async function checkTempDomain(domain){
+  if(COMMON_TEMP_DOMAINS.has(domain)) return {state:'Recognised temporary domain',source:'Local indicator'};
+
+  try{
+    const r=await fetchTimeout(`${MAILGW}/domains?page=1`,{
+      headers:{Accept:'application/ld+json'},cache:'no-store'
+    });
+    if(!r.ok) return {state:'Not identified',source:'Mail.gw unavailable'};
+    const j=await r.json();
+    const raw=Array.isArray(j)?j:(j['hydra:member']||j.member||j.domains||[]);
+    const domains=raw.map(x=>String(x?.domain||'').toLowerCase()).filter(Boolean);
+    if(domains.includes(domain)){
+      return {state:'Current temporary-email domain',source:'Mail.gw public domain list'};
+    }
+    return {state:'Not identified',source:'Known indicators checked'};
+  }catch(_){
+    return {state:'Not identified',source:'Live temporary-domain list unavailable'};
+  }
+}
+
+function addKv(parent,label,value,full=false){
+  const el=document.createElement('div');
+  el.className='kv'+(full?' full':'');
+  el.innerHTML=`<span>${esc(label)}</span><b>${esc(value||'Not published')}</b>`;
+  parent.appendChild(el);
+}
+
+function addCompact(parent,title,text){
+  const el=document.createElement('div');
+  el.className='compact-item';
+  el.innerHTML=`<strong>${esc(title)}</strong><br>${esc(text)}`;
+  parent.appendChild(el);
+}
+
+function renderMx(mx){
+  mxBody.innerHTML='';
+  if(!mx.length){
+    mxBody.innerHTML='<tr><td colspan="3" style="text-align:center;color:#64748b">No MX records published.</td></tr>';
+    return;
+  }
+  mx.forEach(item=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${item.priority}</td><td>${esc(item.host)}</td><td>${esc(providerForHost(item.host))}</td>`;
+    mxBody.appendChild(tr);
+  });
+}
+
+function renderSpf(record,parsed){
+  spfGrid.innerHTML='';
+  spfChips.innerHTML='';
+
+  addKv(spfGrid,'SPF record',record||'Not published',true);
+  addKv(spfGrid,'Final all policy',finalAllMeaning(parsed.finalAll));
+  addKv(spfGrid,'Include mechanisms',parsed.includes.join(', ')||'None');
+  addKv(spfGrid,'Redirect',parsed.redirects.join(', ')||'None');
+
+  parsed.mechanisms.forEach(mech=>{
+    const chip=document.createElement('span');
+    chip.className='chip'+(/^-all$/i.test(mech)?' good':(/^\+?all$/i.test(mech)?' bad':''));
+    chip.textContent=mech;
+    spfChips.appendChild(chip);
+  });
+
+  if(!parsed.mechanisms.length){
+    const chip=document.createElement('span');
+    chip.className='chip warn';
+    chip.textContent='No SPF policy found';
+    spfChips.appendChild(chip);
+  }
+}
+
+function renderDmarc(record,tags){
+  dmarcGrid.innerHTML='';
+  dmarcReports.innerHTML='';
+
+  addKv(dmarcGrid,'DMARC record',record||'Not published',true);
+  addKv(dmarcGrid,'Policy (p)',tags.p||'Not published');
+  addKv(dmarcGrid,'Subdomain policy (sp)',tags.sp||'Inherited / not set');
+  addKv(dmarcGrid,'Percentage (pct)',tags.pct||'100');
+  addKv(dmarcGrid,'DKIM alignment (adkim)',tags.adkim||'relaxed');
+  addKv(dmarcGrid,'SPF alignment (aspf)',tags.aspf||'relaxed');
+  addKv(dmarcGrid,'Failure options (fo)',tags.fo||'Default');
+
+  const rua=parseRua(tags.rua);
+  const ruf=parseRua(tags.ruf);
+
+  addCompact(dmarcReports,'Aggregate reporting (rua)',rua.join(', ')||'Not published');
+  addCompact(dmarcReports,'Forensic/failure reporting (ruf)',ruf.join(', ')||'Not published');
+}
+
+function renderTransport(data){
+  transportGrid.innerHTML='';
+  mtaPolicyList.innerHTML='';
+
+  addKv(transportGrid,'MTA-STS TXT',data.mtaTxt||'Not published',true);
+  addKv(transportGrid,'MTA-STS policy available',data.policy.ok?'Yes':'No / could not retrieve');
+  addKv(transportGrid,'MTA-STS mode',data.policyParsed.mode||'Not available');
+  addKv(transportGrid,'MTA-STS max_age',data.policyParsed.maxAge||'Not available');
+  addKv(transportGrid,'TLS-RPT record',data.tlsRpt||'Not published',true);
+  addKv(transportGrid,'DNSKEY published',data.dnskeyCount?'Yes':'No');
+  addKv(transportGrid,'Resolver DNSSEC validation',data.dnssecValidated?'Validated':'Not validated / unavailable');
+
+  if(data.policy.ok){
+    addCompact(mtaPolicyList,'Policy source',data.policy.source);
+    addCompact(mtaPolicyList,'MX patterns',data.policyParsed.mx.join(', ')||'None published');
+    addCompact(mtaPolicyList,'Policy URL',data.policy.url);
+  }else{
+    addCompact(mtaPolicyList,'MTA-STS policy file','No public policy file was retrieved.');
+  }
+
+  const tlsTags=parseTagRecord(data.tlsRpt);
+  addCompact(mtaPolicyList,'TLS report destination',tlsTags.rua||'Not published');
+}
+
+function renderDkim(items){
+  dkimBody.innerHTML='';
+  items.forEach(item=>{
+    const tr=document.createElement('tr');
+    const clue=item.record
+      ?item.record.slice(0,160)+(item.record.length>160?'…':'')
+      :'No TXT record returned';
+    tr.innerHTML=`
+      <td>${esc(item.selector)}</td>
+      <td>${item.record?'Yes':'No'}</td>
+      <td>${esc(clue)}</td>
+    `;
+    dkimBody.appendChild(tr);
+  });
+}
+
+function renderBimi(record,tags){
+  bimiGrid.innerHTML='';
+  addKv(bimiGrid,'BIMI record',record||'Not published',true);
+  addKv(bimiGrid,'Version',tags.v||'Not published');
+  addKv(bimiGrid,'Logo location (l)',tags.l||'Not published');
+  addKv(bimiGrid,'Authority / VMC (a)',tags.a||'Not published');
+}
+
+function calculatePosture(data){
+  let score=0;
+  const evidence=[];
+
+  function add(points,title,text,state='good'){
+    score+=points;
+    evidence.push({points,title,text,state});
+  }
+
+  if(data.acceptance==='MX records published'){
+    add(20,'Mail delivery configured','The domain publishes normal MX records.');
+  }else if(data.acceptance==='Address-record fallback'){
+    add(8,'Legacy delivery fallback','No MX is published, but address records exist. SMTP may fall back to the address record.');
+  }else if(data.acceptance==='Null MX - explicitly does not accept email'){
+    evidence.push({points:0,title:'Null MX',text:'The domain explicitly publishes that it does not accept email.',state:'warn'});
+  }else{
+    evidence.push({points:0,title:'No mail delivery record',text:'No usable MX or address-record fallback was found.',state:'warn'});
+  }
+
+  if(data.spfRecord){
+    if(/(?:^|\s)[+-]?all(?:\s|$)/i.test(data.spfRecord)&&/(?:^|\s)\+?all(?:\s|$)/i.test(data.spfRecord)&&!/(?:^|\s)[-~?]all(?:\s|$)/i.test(data.spfRecord)){
+      add(4,'SPF published','SPF exists, but the final all policy appears permissive.','warn');
+    }else{
+      add(15,'SPF published','An SPF policy is published.');
+    }
+  }else{
+    evidence.push({points:0,title:'SPF missing',text:'No SPF record was found.',state:'warn'});
+  }
+
+  if(data.dmarcRecord){
+    const p=(data.dmarcTags.p||'').toLowerCase();
+    if(p==='reject') add(25,'DMARC reject policy','DMARC requests rejection of failing mail.');
+    else if(p==='quarantine') add(20,'DMARC quarantine policy','DMARC requests quarantine of failing mail.');
+    else if(p==='none') add(10,'DMARC monitoring policy','DMARC is published with p=none.');
+    else add(8,'DMARC published','A DMARC record is present.');
+  }else{
+    evidence.push({points:0,title:'DMARC missing',text:'No DMARC record was found.',state:'warn'});
+  }
+
+  if(data.mtaTxt&&data.policy.ok){
+    const mode=(data.policyParsed.mode||'').toLowerCase();
+    add(mode==='enforce'?15:10,'MTA-STS published',mode==='enforce'?'MTA-STS is in enforce mode.':'MTA-STS exists but is not confirmed in enforce mode.');
+  }else if(data.mtaTxt){
+    add(5,'MTA-STS TXT only','The TXT marker exists but the policy file could not be retrieved.','warn');
+  }else{
+    evidence.push({points:0,title:'MTA-STS missing',text:'No MTA-STS TXT marker was found.',state:'warn'});
+  }
+
+  if(data.tlsRpt) add(10,'TLS-RPT published','TLS failure reporting is configured.');
+  else evidence.push({points:0,title:'TLS-RPT missing',text:'No TLS-RPT record was found.',state:'warn'});
+
+  if(data.dnskeyCount||data.dnssecValidated) add(10,'DNSSEC clue','DNSKEY data or resolver validation indicates DNSSEC use.');
+  else evidence.push({points:0,title:'DNSSEC not confirmed',text:'DNSSEC validation was not confirmed by the resolver.',state:'warn'});
+
+  if(data.bimiRecord) add(5,'BIMI published','A BIMI record is present.');
+  else evidence.push({points:0,title:'BIMI not published',text:'No BIMI record was found. BIMI is optional and does not itself make mail secure.',state:'warn'});
+
+  score=Math.min(100,score);
+
+  let label='Limited published mail controls';
+  if(score>=85) label='Strong published mail controls';
+  else if(score>=65) label='Good published mail controls';
+  else if(score>=40) label='Some published mail controls';
+
+  return {score,label,evidence};
+}
+
+function renderPosture(result){
+  postureScore.textContent=String(result.score);
+  postureLabel.textContent=result.label;
+  postureEvidence.innerHTML='';
+
+  result.evidence.forEach(item=>{
+    const el=document.createElement('div');
+    el.className='compact-item';
+    el.innerHTML=`<strong>${esc(item.title)}${item.points?` (+${item.points})`:''}</strong><br>${esc(item.text)}`;
+    postureEvidence.appendChild(el);
+  });
+}
+
+function buildReport(data){
+  const lines=[
+    `Email Domain Analyzer: ${data.domain}`,
+    '',
+    'Overview:',
+    `Mail acceptance: ${data.acceptance}`,
+    `Mail provider: ${data.provider}`,
+    `Temporary-email indicator: ${data.temp.state}`,
+    `Temporary-email source: ${data.temp.source}`,
+    `Posture score: ${data.posture.score}/100`,
+    `Posture label: ${data.posture.label}`,
+    '',
+    'MX records:'
+  ];
+
+  if(data.mx.length){
+    data.mx.forEach(x=>lines.push(`${x.priority} ${x.host} [${providerForHost(x.host)}]`));
+  }else{
+    lines.push('No MX records published.');
+  }
+
+  lines.push(
+    '',
+    'SPF:',
+    data.spfRecord||'Not published',
+    `Final all policy: ${finalAllMeaning(data.spf.finalAll)}`,
+    `Includes: ${data.spf.includes.join(', ')||'None'}`,
+    '',
+    'DMARC:',
+    data.dmarcRecord||'Not published',
+    `Policy: ${data.dmarcTags.p||'Not published'}`,
+    `Subdomain policy: ${data.dmarcTags.sp||'Not set'}`,
+    `Percentage: ${data.dmarcTags.pct||'100'}`,
+    `DKIM alignment: ${data.dmarcTags.adkim||'relaxed'}`,
+    `SPF alignment: ${data.dmarcTags.aspf||'relaxed'}`,
+    `Aggregate reports: ${data.dmarcTags.rua||'Not published'}`,
+    `Failure reports: ${data.dmarcTags.ruf||'Not published'}`,
+    '',
+    'Transport security:',
+    `MTA-STS TXT: ${data.mtaTxt||'Not published'}`,
+    `MTA-STS policy available: ${data.policy.ok?'Yes':'No'}`,
+    `MTA-STS mode: ${data.policyParsed.mode||'Not available'}`,
+    `MTA-STS MX patterns: ${data.policyParsed.mx.join(', ')||'None'}`,
+    `TLS-RPT: ${data.tlsRpt||'Not published'}`,
+    `DNSKEY published: ${data.dnskeyCount?'Yes':'No'}`,
+    `Resolver DNSSEC validation: ${data.dnssecValidated?'Validated':'Not validated / unavailable'}`,
+    '',
+    'DKIM common-selector checks:'
+  );
+
+  data.dkim.forEach(x=>lines.push(`${x.selector}: ${x.record?'Published':'No TXT returned'}`));
+
+  lines.push(
+    '',
+    'BIMI:',
+    data.bimiRecord||'Not published',
+    `Logo: ${data.bimiTags.l||'Not published'}`,
+    `Authority/VMC: ${data.bimiTags.a||'Not published'}`,
+    '',
+    'Mailbox testing:',
+    'Specific mailbox existence: Not tested.',
+    'Catch-all behaviour: Not tested.',
+    'This tool does not perform SMTP recipient probing or account enumeration.'
+  );
+
+  return lines.join('\n');
+}
+
+async function analyse(){
+  let domain;
+  try{
+    domain=normaliseInput(domainInput.value);
+  }catch(error){
+    hideProgress();
+    setStatus(error.message,'error');
+    return;
+  }
+
+  domainInput.value=domain;
+  results.classList.add('hidden');
+  setBusy(true);
+  hideProgress();
+  setProgress(5);
+  setStatus('Checking mail delivery records…');
+  await nextPaint();
+
+  try{
+    const [mxResp,aResp,aaaaResp,spfResp,dmarcResp,mtaResp,tlsResp,bimiResp,dnskeyResp]=await Promise.all([
+      dnsQuery(domain,'MX'),
+      dnsQuery(domain,'A'),
+      dnsQuery(domain,'AAAA'),
+      dnsQuery(domain,'TXT'),
+      dnsQuery(`_dmarc.${domain}`,'TXT'),
+      dnsQuery(`_mta-sts.${domain}`,'TXT'),
+      dnsQuery(`_smtp._tls.${domain}`,'TXT'),
+      dnsQuery(`default._bimi.${domain}`,'TXT'),
+      dnsQuery(domain,'DNSKEY')
+    ]);
+
+    const mx=parseMx(mxResp);
+    const nullMx=mx.some(x=>x.priority===0&&x.host==='.');
+    const hasAddress=answers(aResp).length>0||answers(aaaaResp).length>0;
+
+    let acceptance='No mail delivery record found';
+    if(nullMx) acceptance='Null MX - explicitly does not accept email';
+    else if(mx.length) acceptance='MX records published';
+    else if(hasAddress) acceptance='Address-record fallback';
+
+    const provider=providerSummary(mx);
+    const spfRecord=txtRecords(spfResp).find(x=>/^v=spf1\b/i.test(x))||'';
+    const spf=parseSpf(spfRecord);
+    const dmarcRecord=txtRecords(dmarcResp).find(x=>/^v=dmarc1\b/i.test(x))||'';
+    const dmarcTags=parseTagRecord(dmarcRecord);
+    const mtaTxt=txtRecords(mtaResp).find(x=>/^v=stsv1\b/i.test(x))||'';
+    const tlsRpt=txtRecords(tlsResp).find(x=>/^v=tlsrptv1\b/i.test(x))||'';
+    const bimiRecord=txtRecords(bimiResp).find(x=>/^v=bimi1\b/i.test(x))||'';
+    const bimiTags=parseTagRecord(bimiRecord);
+    const dnskeyCount=answers(dnskeyResp).length;
+    const dnssecValidated=!!(mxResp?.AD||spfResp?.AD||dmarcResp?.AD||dnskeyResp?.AD);
+
+    setProgress(38);
+    setStatus('Checking transport-security policy…');
+    await nextPaint();
+
+    const policy=mtaTxt?await fetchMtaStsPolicy(domain):{ok:false,source:'Not requested',url:`https://mta-sts.${domain}/.well-known/mta-sts.txt`,text:''};
+    const policyParsed=parseMtaPolicy(policy.text);
+
+    setProgress(58);
+    setStatus('Checking common DKIM selectors…');
+    await nextPaint();
+
+    const dkimResults=await Promise.all(DKIM_SELECTORS.map(async selector=>{
+      const response=await dnsQuery(`${selector}._domainkey.${domain}`,'TXT');
+      const records=txtRecords(response);
+      return {selector,record:records[0]||''};
+    }));
+
+    setProgress(75);
+    setStatus('Checking temporary-email indicators…');
+    await nextPaint();
+
+    const temp=await checkTempDomain(domain);
+
+    setProgress(88);
+    setStatus('Building mail-domain assessment…');
+    await nextPaint();
+
+    const data={
+      domain,mx,nullMx,hasAddress,acceptance,provider,
+      spfRecord,spf,dmarcRecord,dmarcTags,mtaTxt,tlsRpt,bimiRecord,bimiTags,
+      dnskeyCount,dnssecValidated,policy,policyParsed,dkim:dkimResults,temp
+    };
+    data.posture=calculatePosture(data);
+
+    sumDomain.textContent=domain;
+    sumReceives.textContent=acceptance;
+    sumProvider.textContent=provider;
+    sumDisposable.textContent=temp.state;
+
+    overviewActions.innerHTML='';
+    const dnsLink=document.createElement('a');
+    dnsLink.className='mini-link';
+    dnsLink.href=`dns-lookup.html?q=${encodeURIComponent(domain)}`;
+    dnsLink.textContent='Open full DNS lookup';
+    overviewActions.appendChild(dnsLink);
+
+    renderPosture(data.posture);
+    renderMx(mx);
+
+    deliveryGrid.innerHTML='';
+    addKv(deliveryGrid,'Mail acceptance',acceptance);
+    addKv(deliveryGrid,'MX provider clue',provider);
+    addKv(deliveryGrid,'Null MX published',nullMx?'Yes':'No');
+    addKv(deliveryGrid,'Address-record fallback',!mx.length&&hasAddress?'Available':'Not used');
+    addKv(deliveryGrid,'Specific mailbox existence','Not tested');
+    addKv(deliveryGrid,'Catch-all behaviour','Not tested');
+
+    renderSpf(spfRecord,spf);
+    renderDmarc(dmarcRecord,dmarcTags);
+    renderTransport(data);
+    renderDkim(dkimResults);
+    renderBimi(bimiRecord,bimiTags);
+
+    rawData.textContent=JSON.stringify({
+      inputDomain:domain,
+      mx:mxResp,
+      a:aResp,
+      aaaa:aaaaResp,
+      spf:spfResp,
+      dmarc:dmarcResp,
+      mtaSts:mtaResp,
+      tlsRpt:tlsResp,
+      bimi:bimiResp,
+      dnskey:dnskeyResp,
+      mtaStsPolicy:policy,
+      dkim:dkimResults,
+      temporaryDomain:temp
+    },null,2);
+
+    lastReport={
+      domain,
+      text:buildReport(data)
+    };
+
+    setProgress(100);
+    results.classList.remove('hidden');
+    setStatus('Email domain analysis complete.');
+  }catch(error){
+    hideProgress();
+    setStatus(error.message||'The email domain analysis could not be completed.','error');
+  }finally{
+    setBusy(false);
+  }
+}
+
+function clearAll(){
+  domainInput.value='';
+  results.classList.add('hidden');
+  [
+    overviewActions,postureEvidence,mxBody,deliveryGrid,spfGrid,spfChips,dmarcGrid,
+    dmarcReports,transportGrid,mtaPolicyList,dkimBody,bimiGrid
+  ].forEach(el=>el.innerHTML='');
+  postureScore.textContent='0';
+  postureLabel.textContent='Not assessed';
+  rawData.textContent='';
+  lastReport=null;
+  hideProgress();
+  setStatus('');
+  domainInput.focus();
+}
+
+async function copyReport(){
+  if(!lastReport?.text) return;
+  const original=copyReportBtn.textContent;
+  try{
+    if(navigator.clipboard&&window.isSecureContext){
+      await navigator.clipboard.writeText(lastReport.text);
+    }else{
+      const t=document.createElement('textarea');
+      t.value=lastReport.text;t.style.position='fixed';t.style.opacity='0';
+      document.body.appendChild(t);t.select();
+      const ok=document.execCommand('copy');
+      t.remove();
+      if(!ok) throw new Error();
+    }
+    copyReportBtn.textContent='Copied';
+    setTimeout(()=>copyReportBtn.textContent=original,1200);
+  }catch(_){
+    hideProgress();
+    setStatus('Could not copy the report.','error');
+  }
+}
+
+async function savePdf(){
+  if(!lastReport?.text) return;
+  const original=savePdfBtn.textContent;
+  savePdfBtn.disabled=true;
+  savePdfBtn.textContent='Creating PDF…';
+
+  try{
+    if(!window.ToolsPDFExport) throw new Error('PDF export could not load.');
+    await window.ToolsPDFExport.saveTextPdf({
+      title:'Email Domain Analyzer Report',
+      subtitle:lastReport.domain,
+      text:lastReport.text,
+      filename:`${lastReport.domain}-email-domain-analysis.pdf`
+    });
+    savePdfBtn.textContent='Saved';
+    setTimeout(()=>savePdfBtn.textContent=original,1200);
+  }catch(error){
+    hideProgress();
+    setStatus(error.message||'Could not create the PDF report.','error');
+    savePdfBtn.textContent=original;
+  }finally{
+    savePdfBtn.disabled=false;
+  }
+}
+
+analyseBtn.addEventListener('click',analyse);
+clearBtn.addEventListener('click',clearAll);
+copyReportBtn.addEventListener('click',copyReport);
+savePdfBtn.addEventListener('click',savePdf);
+domainInput.addEventListener('keydown',event=>{if(event.key==='Enter') analyse()});
+
+const preset=new URLSearchParams(location.search).get('q');
+if(preset){
+  domainInput.value=preset;
+}
+})();
+</script>
+<script src="../../Assets/site-shell.js?v=mk126"></script>
+</body>
+</html>

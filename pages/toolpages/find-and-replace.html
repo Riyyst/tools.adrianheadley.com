@@ -25,7 +25,7 @@
 <meta name="twitter:title" content="Find &amp; Replace Text Online | Adrian Headley Tools"/>
 <meta name="twitter:description" content="Find, highlight and replace words or phrases in text, with case-sensitive and whole-word options plus copy and download tools."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html","name":"Find & Replace","description":"Find, highlight and replace words or phrases in text, with case-sensitive and whole-word options plus copy and download tools.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html#breadcrumb"},"dateModified":"2026-08-28","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html#app","name":"Find & Replace","url":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html","description":"Find, highlight and replace words or phrases in text, with case-sensitive and whole-word options plus copy and download tools.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Paste, type or import the text you want to edit.","Enter the text to find and the replacement, then choose any matching options.","Replace one or all matches, then copy or download the updated text."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Find & Replace","item":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html","name":"Find & Replace","description":"Find, highlight and replace words or phrases in text, with case-sensitive and whole-word options plus copy and download tools.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html#breadcrumb"},"dateModified":"2026-09-07","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html#app","name":"Find & Replace","url":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html","description":"Find, highlight and replace words or phrases in text, with case-sensitive and whole-word options plus copy and download tools.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Paste, type or import the text you want to edit.","Enter the text to find and the replacement, then choose any matching options.","Replace one or all matches, then copy or download the updated text.","Export the edited text as a professionally branded PDF using the site-wide Adrian Headley Tools PDF template."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Find & Replace","item":"https://tools.adrianheadley.com/pages/toolpages/find-and-replace.html"}]}]}</script>
 <style>
   :root{
     --bg:#f5f5f7;
@@ -399,7 +399,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk85">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk126">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -539,6 +539,8 @@
 </footer>
 
 <!-- RIYST_INLINE_SCRIPT_START -->
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="../../Assets/pdf-export.js?v=mk124"></script>
 <script>
 
 function encodeSharedState(value){
@@ -723,7 +725,7 @@ const $ = sel => document.querySelector(sel);
       btnDownload.style.display = dlType.value ? '' : 'none';
     }
 
-    function doDownload(){
+    async function doDownload(){
       const text = source.value ?? '';
       const type = dlType.value;
       if(!type) return;
@@ -733,8 +735,11 @@ const $ = sel => document.querySelector(sel);
         const html = `<!DOCTYPE html><html><body><pre style="font-family:Consolas,Monaco,monospace;white-space:pre-wrap">${escapeHtml(text)}</pre></body></html>`;
         downloadBlob(new Blob([html], {type:'application/msword'}), 'text.doc');
       } else if(type === 'pdf'){
-        const pdfBytes = generateSimplePDF(text);
-        downloadBlob(new Blob([pdfBytes], {type:'application/pdf'}), 'text.pdf');
+        await window.ToolsPDFExport.saveTextPdf({
+          title:'Find & Replace Export',
+          text,
+          filename:'find-and-replace-export.pdf'
+        });
       }
     }
 
@@ -882,78 +887,6 @@ const $ = sel => document.querySelector(sel);
       });
     }
 
-    // Simple PDF generator
-    function generateSimplePDF(text){
-      const encoder = new TextEncoder();
-      const pages = paginateText(text);
-      const objects = [];
-      let pdf = '%PDF-1.4\n';
-      const fontObjNum = 1;
-      const fontObj = fontObjNum + ' 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n';
-      objects.push(fontObj);
-      const pagesObjNum = 2;
-      const kids = [];
-      let objNum = 3;
-      for(const pageLines of pages){
-        const content = buildContentStream(pageLines);
-        const contentObjNum = objNum++;
-        const contentObj = contentObjNum + ' 0 obj\n<< /Length ' + content.length + ' >>\nstream\n' + content + 'endstream\nendobj\n';
-        objects.push(contentObj);
-        const pageObjNum = objNum++;
-        const pageObj = pageObjNum + ' 0 obj\n<< /Type /Page /Parent ' + pagesObjNum + ' 0 R /MediaBox [0 0 595 842] /Contents ' + contentObjNum + ' 0 R /Resources << /Font << /F1 ' + fontObjNum + ' 0 R >> >> >>\nendobj\n';
-        objects.push(pageObj);
-        kids.push(pageObjNum + ' 0 R');
-      }
-      const pagesObj = pagesObjNum + ' 0 obj\n<< /Type /Pages /Count ' + kids.length + ' /Kids [ ' + kids.join(' ') + ' ] >>\nendobj\n';
-      objects.splice(1, 0, pagesObj);
-      const catalogObjNum = objNum++;
-      const catalogObj = catalogObjNum + ' 0 obj\n<< /Type /Catalog /Pages ' + pagesObjNum + ' 0 R >>\nendobj\n';
-      objects.push(catalogObj);
-      const xref = [];
-      let offset = pdf.length;
-      for(const obj of objects){
-        xref.push(strPad(offset,10) + ' 00000 n ');
-        pdf += obj;
-        offset = pdf.length;
-      }
-      const xrefStart = pdf.length;
-      pdf += 'xref\n';
-      pdf += '0 ' + (objects.length+1) + '\n';
-      pdf += '0000000000 65535 f \n';
-      for(const line of xref) pdf += line + '\n';
-      pdf += 'trailer\n';
-      pdf += '<< /Size ' + (objects.length+1) + ' /Root ' + catalogObjNum + ' 0 R >>\n';
-      pdf += 'startxref\n' + xrefStart + '\n%%EOF';
-      return new TextEncoder().encode(pdf);
-    }
-    function strPad(num, size){ const s = String(num); return '0'.repeat(Math.max(0,size-s.length)) + s; }
-    function buildContentStream(lines){
-      let yStart = 812, lineH = 16;
-      let out = 'BT\n/F1 12 Tf\n1 0 0 1 30 ' + yStart + ' Tm\n14 TL\n';
-      for(const line of lines){ out += '(' + pdfEscape(line) + ') Tj\nT*\n'; }
-      out += 'ET\n'; return out;
-    }
-    function pdfEscape(s){ return s.replace(/([\\()])/g, '\\$1').replace(/\\r?\\n/g, '\\n'); }
-    function paginateText(text){
-      const maxWidthChars = 85;
-      const words = text.replace(/\\r\\n/g,'\\n').split(/(\\s+)/);
-      const lines = []; let line = '';
-      for(let token of words){
-        if(token === '\\n'){ lines.push(line); line=''; }
-        else if(/\\s+/.test(token)){
-          if(line.length + token.length <= maxWidthChars) line += token;
-          else { lines.push(line); line=''; }
-        } else {
-          if((line + token).length <= maxWidthChars) line += token;
-          else { if(line) lines.push(line); while(token.length > maxWidthChars){ lines.push(token.slice(0, maxWidthChars)); token = token.slice(maxWidthChars); } line = token; }
-        }
-      }
-      if(line) lines.push(line);
-      const linesPerPage = 46, pages = [];
-      for(let i=0;i<lines.length;i+=linesPerPage) pages.push(lines.slice(i,i+linesPerPage));
-      return pages.length ? pages : [[]];
-    }
-
 
     function findReplaceSetupState(){
       return {
@@ -998,6 +931,6 @@ const $ = sel => document.querySelector(sel);
   if(y) y.textContent=new Date().getFullYear();
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk85"></script>
+<script src="../../Assets/site-shell.js?v=mk126"></script>
 </body>
 </html>
