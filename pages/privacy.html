@@ -4,6 +4,8 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="theme-color" content="#f5f5f7"/>
+<meta name="referrer" content="strict-origin-when-cross-origin"/>
+<link rel="author" href="https://www.adrianheadley.com/"/>
 <title>Privacy Policy | Adrian Headley Tools</title>
 <meta name="description" content="Read the privacy information for Adrian Headley Tools, including browser-based processing, external services and how tool data is handled."/>
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
@@ -24,7 +26,7 @@
 <meta name="twitter:title" content="Privacy Policy | Adrian Headley Tools"/>
 <meta name="twitter:description" content="Read the privacy information for Adrian Headley Tools, including browser-based processing, external services and how tool data is handled."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/privacy.html#webpage","url":"https://tools.adrianheadley.com/pages/privacy.html","name":"Privacy Policy","description":"Read the privacy information for Adrian Headley Tools, including browser-based processing, external services and how tool data is handled.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"dateModified":"2026-09-07","breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/privacy.html#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/privacy.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Privacy Policy","item":"https://tools.adrianheadley.com/pages/privacy.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/privacy.html#webpage","url":"https://tools.adrianheadley.com/pages/privacy.html","name":"Privacy Policy","description":"Read the privacy information for Adrian Headley Tools, including browser-based processing, external services and how tool data is handled.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"dateModified":"2026-09-24","breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/privacy.html#breadcrumb"},"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/privacy.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Privacy Policy","item":"https://tools.adrianheadley.com/pages/privacy.html"}]}]}</script>
 <style>
 :root{
   --bg:#f5f5f7;
@@ -203,14 +205,14 @@ main{flex:1}
 </style>
 
 <link rel="icon" href="../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../Assets/site-shell.css?v=mk126">
+<link rel="stylesheet" href="../Assets/site-shell.css?v=mk144">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header class="tools-global-header" id="top">
   <div class="tools-global-header-inner">
-    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand" rel="noopener noreferrer external">
       <span class="tools-global-brand-mark"><img src="../Assets/ah-icon.png" alt="Tools logo"></span>
       <span class="tools-global-brand-name">Go to portfolio</span>
     </a>
@@ -272,7 +274,7 @@ main{flex:1}
       </div>
       <ul>
         <li><strong>No cookies</strong> — The website does not use cookies for analytics, advertising, personalisation or tracking.</li>
-        <li><strong>No analytics</strong> — No analytics service is used to monitor visitors or measure individual behaviour.</li>
+        <li><strong>No analytics</strong> — No first-party analytics or advertising tracker is intentionally loaded by Adrian Headley Tools, and no analytics service is used to monitor visitors or measure individual behaviour.</li>
         <li><strong>No tracking</strong> — No tracking pixels, fingerprinting scripts or cross-site identifiers are included.</li>
         <li><strong>No advertising profiles</strong> — User activity is not used to create profiles or target advertising.</li>
         <li><strong>No sale or sharing of data</strong> — Tool data is not collected, so it cannot be sold, rented or shared.</li>
@@ -310,6 +312,30 @@ main{flex:1}
       <p>Public Document Finder may send the generated public search query to DuckDuckGo or Bing result pages through browser/public-content fallbacks, and may query the Internet Archive CDX service when archive searching is selected. Search terms and any domain filter may therefore be sent to those independent services. The tool searches public/indexed material and does not brute-force hidden directories.</p>
 
       <div class="section-heading">
+        <h2>Tool-Specific Browser Processing</h2>
+      </div>
+      <p>
+        <strong>Browser Code Studio</strong> keeps project files, imported code,
+        project-wide search and replace data, local coaching analysis, queued console
+        input and saved sessions in the browser unless you explicitly export them.
+        The enhanced Monaco editor and Pyodide Python runtime are loaded from public
+        jsDelivr CDN resources when available, and Python may download compatible
+        packages needed by imports. If you choose Prepare offline mode, editor and
+        runtime assets are stored in browser Cache Storage for later offline use.
+        Those independent CDN requests are subject to the provider's own logging and
+        privacy practices. The tool does not upload project source to
+        tools.adrianheadley.com.
+      </p>
+      <p>
+        <strong>PDF Editor</strong> processes uploaded PDF files, annotations,
+        signatures and stamps locally in the browser. PDF.js, pdf-lib and
+        @pdf-lib/fontkit are loaded from public jsDelivr CDN resources when the editor
+        is opened, but the PDF contents are not uploaded to tools.adrianheadley.com or
+        to those libraries by the tool. Requests for the library files are subject to
+        jsDelivr's own logging and privacy practices.
+      </p>
+
+      <div class="section-heading">
         <h2>External Websites</h2>
       </div>
       <p>
@@ -336,10 +362,9 @@ main{flex:1}
         how information is handled will be explained clearly before it is introduced.
       </p>
 
-      <p class="last-updated"><em>Last updated: September 2026</em></p>
+      <p class="last-updated"><em>Last updated: 24 September 2026</em></p>
     </div>
   </section>
-      <p>Browser Code Studio keeps project files, imported code, project-wide search/replace data, local coaching analysis, queued console input and saved sessions in the browser unless you explicitly export them. The enhanced Monaco editor and Pyodide Python runtime are loaded from public jsDelivr CDN resources when available, and Python may download compatible packages needed by imports. If you choose Prepare offline mode, editor/runtime assets are stored in browser Cache Storage for later offline use. Those independent CDN requests are subject to the provider's own logging and privacy practices. The tool does not upload the project source to tools.adrianheadley.com.</p>
 </main>
 
 <footer class="tools-global-footer">
@@ -347,8 +372,9 @@ main{flex:1}
     <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
     <nav class="tools-global-footer-links" aria-label="Footer navigation">
       <a href="privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="security.html" class="tools-global-footer-link">Security</a>
       <a href="terms.html" class="tools-global-footer-link">Terms</a>
-      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link" rel="noopener noreferrer external">Support/Donate</a>
     </nav>
   </div>
 </footer>
@@ -356,6 +382,6 @@ main{flex:1}
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 </script>
-<script src="../Assets/site-shell.js?v=mk126"></script>
+<script src="../Assets/site-shell.js?v=mk144"></script>
 </body>
 </html>

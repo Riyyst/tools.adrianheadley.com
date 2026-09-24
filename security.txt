@@ -1,0 +1,6 @@
+# Security contact for tools.adrianheadley.com
+Contact: https://tools.adrianheadley.com/pages/security.html#reporting
+Expires: 2027-09-23T23:59:59Z
+Preferred-Languages: en
+Canonical: https://tools.adrianheadley.com/.well-known/security.txt
+Policy: https://tools.adrianheadley.com/pages/security.html

@@ -25,7 +25,7 @@
 <meta name="twitter:title" content="Image &amp; Screen Colour Picker | Adrian Headley Tools"/>
 <meta name="twitter:description" content="Pick colours from an uploaded image or directly from your screen where supported, then copy HEX or RGB values."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html","name":"Image Colour Picker","description":"Pick colours from an uploaded image or directly from your screen where supported, then copy HEX or RGB values.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#breadcrumb"},"dateModified":"2026-09-02","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#app","name":"Image Colour Picker","url":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html","description":"Pick colours from an uploaded image or directly from your screen where supported, then copy HEX or RGB values.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Choose image upload or screen colour picking.","Select the colour you want to inspect.","Copy the HEX or RGB value."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Image Colour Picker","item":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html","name":"Image Colour Picker","description":"Pick colours from an uploaded image or directly from your screen where supported, then copy HEX or RGB values.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#breadcrumb"},"dateModified":"2026-09-24","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#app"},"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#app","name":"Image Colour Picker","url":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html","description":"Pick colours from an uploaded image or directly from your screen where supported, then copy HEX or RGB values.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@id":"https://tools.adrianheadley.com/#publisher"},"featureList":["Choose image upload or screen colour picking.","Select the colour you want to inspect.","Copy the HEX or RGB value."],"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Image Colour Picker","item":"https://tools.adrianheadley.com/pages/toolpages/colour-picker.html"}]}]}</script>
 <style>
     :root{
       --bg:#f5f5f7;
@@ -414,14 +414,14 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk126">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk144">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header class="tools-global-header" id="top">
   <div class="tools-global-header-inner">
-    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand" rel="noopener noreferrer external">
       <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
       <span class="tools-global-brand-name">Go to portfolio</span>
     </a>
@@ -505,8 +505,9 @@
     <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
     <nav class="tools-global-footer-links" aria-label="Footer navigation">
       <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../security.html" class="tools-global-footer-link">Security</a>
       <a href="../terms.html" class="tools-global-footer-link">Terms</a>
-      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link" rel="noopener noreferrer external">Support/Donate</a>
     </nav>
   </div>
 </footer>
@@ -641,6 +642,6 @@ const canvas=document.getElementById("canvas"), ctx=canvas.getContext("2d",{will
     function hexToRgb(h){h=h.replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");return{r:parseInt(h.substr(0,2),16),g:parseInt(h.substr(2,2),16),b:parseInt(h.substr(4,2),16)};}
 </script>
 <!-- RIYST_INLINE_SCRIPT_END -->
-<script src="../../Assets/site-shell.js?v=mk126"></script>
+<script src="../../Assets/site-shell.js?v=mk144"></script>
 </body>
 </html>

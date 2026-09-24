@@ -185,6 +185,14 @@
       "Review or copy the extracted text, or download the searchable output if offered."
     ]
   },
+  "pdf-editor.html": {
+    "description": "A premium browser PDF editor with a large crisp centre document, direct and matched text, drawing, whiteout, signatures, imported stamps and page tools.",
+    "steps": [
+      "Click Draw and the editor now always opens directly on Pen, regardless of whether you previously used Whiteout, Highlight, Eraser or another tool. You can then choose Pencil, Marker or Eraser from the drawing toolbar if needed.",
+      "Text boxes start as a small typing area and automatically grow or shrink around the words you enter. The same auto-fit behaviour is applied when you change text, font or font size from Properties, while you can still manually resize the annotation afterward.",
+      "Created signatures are cropped tightly to the actual signature before placement, and imported transparent stamps have their empty transparent edges removed. Their default placement box preserves the real image proportions and starts compact rather than creating an oversized empty rectangle."
+    ]
+  },
   "pdf-separator.html": {
     "description": "Split a PDF into separate page files directly in your browser.",
     "steps": [

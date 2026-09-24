@@ -1,0 +1,62 @@
+name: Notify IndexNow
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.html'
+      - 'sitemap.xml'
+      - 'robots.txt'
+      - 'llms.txt'
+      - '.well-known/security.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out site
+        uses: actions/checkout@v4
+
+      - name: Submit sitemap URLs to IndexNow
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import urllib.request
+          import xml.etree.ElementTree as ET
+
+          host = "tools.adrianheadley.com"
+          key = "bb3706ef00d406caf6e11ea27bc515da"
+          key_location = f"https://{host}/{key}.txt"
+          endpoint = "https://api.indexnow.org/indexnow"
+
+          root = ET.parse("sitemap.xml").getroot()
+          ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          urls = [
+              node.text.strip()
+              for node in root.findall(".//sm:loc", ns)
+              if node.text and node.text.strip().startswith(f"https://{host}/")
+          ]
+
+          payload = {
+              "host": host,
+              "key": key,
+              "keyLocation": key_location,
+              "urlList": urls,
+          }
+
+          req = urllib.request.Request(
+              endpoint,
+              data=json.dumps(payload).encode("utf-8"),
+              headers={"Content-Type": "application/json; charset=utf-8"},
+              method="POST",
+          )
+
+          with urllib.request.urlopen(req, timeout=30) as response:
+              print("IndexNow status:", response.status)
+              print("Submitted URLs:", len(urls))
+          PY

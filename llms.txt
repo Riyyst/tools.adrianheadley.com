@@ -10,6 +10,7 @@ Language: English (UK)
 - [About](https://tools.adrianheadley.com/pages/about.html): How the site and browser tools work.
 - [Privacy](https://tools.adrianheadley.com/pages/privacy.html): Privacy and processing information.
 - [Terms](https://tools.adrianheadley.com/pages/terms.html): Terms of use.
+- [Security & Trust](https://tools.adrianheadley.com/pages/security.html): Operator, privacy, software supply-chain, download safety and vulnerability reporting information.
 
 ## Tools
 - [ASCII Art Generator](https://tools.adrianheadley.com/pages/toolpages/ascii-art.html): Turn text or an image into ASCII-style artwork directly in your browser, with controls for font, size and image detail.
@@ -57,3 +58,5 @@ This file is a supplementary machine-readable index. The canonical HTML pages an
 
 - [Income Tax Calculator](https://tools.adrianheadley.com/pages/toolpages/income-tax-calculator.html): Estimate annual UK Income Tax for one or more jobs, common PAYE tax codes and standard or Scottish tax bands.
 - [Investment Calculator](https://tools.adrianheadley.com/pages/toolpages/investment-calculator.html): Project investment growth, contributions, fees and selected UK tax outcomes across common account wrappers and investment types.
+
+- [PDF Editor](https://tools.adrianheadley.com/pages/toolpages/pdf-editor.html): Premium browser PDF editor with a large crisp Fit-width document, non-blocking PDF rendering, direct/matched text, exact embedded-font reuse where available, drawing, highlighting, whiteout, signatures, custom stamps and page management.

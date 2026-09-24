@@ -8,3 +8,5 @@ User-agent: ChatGPT-User
 Allow: /
 
 Sitemap: https://tools.adrianheadley.com/sitemap.xml
+
+# Security policy: https://tools.adrianheadley.com/pages/security.html

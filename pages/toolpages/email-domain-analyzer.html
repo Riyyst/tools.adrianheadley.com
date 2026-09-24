@@ -24,7 +24,7 @@
 <meta name="twitter:description" content="Analyse MX, SPF, DMARC, MTA-STS, TLS-RPT, BIMI, DNSSEC and mail-provider clues."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
 
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html","name":"Email Domain Analyzer","description":"Analyse the mail infrastructure and security posture of an email domain without probing a mailbox.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#breadcrumb"},"dateModified":"2026-09-08","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#app"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#app","name":"Email Domain Analyzer","url":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html","description":"Email-domain analysis focused on mail delivery and mail-security configuration.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern browser with JavaScript enabled and internet access.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Person","name":"Adrian Headley","url":"https://www.adrianheadley.com/"},"featureList":["Accept an email address or domain and analyse the domain side only.","Show whether the domain publishes MX records, a null MX, or appears to rely on address-record fallback.","Identify common hosted mail providers from MX infrastructure.","Parse SPF mechanisms and the final all-policy qualifier.","Parse DMARC policy, subdomain policy, percentage, alignment and reporting destinations.","Check MTA-STS TXT and retrieve the public MTA-STS policy when available.","Check TLS-RPT and BIMI records.","Check common DKIM selectors without trying to enumerate private mailboxes.","Show DNSSEC/DNSKEY clues from the public resolver.","Flag recognised temporary-email domains using local indicators and the current Mail.gw public domain list when available.","Produce a transparent mail-domain posture score.","Do not test whether a specific mailbox exists and do not perform SMTP recipient probing.","Copy or export the report using the site-wide PDF template."]},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Email Domain Analyzer","item":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html","name":"Email Domain Analyzer","description":"Analyse the mail infrastructure and security posture of an email domain without probing a mailbox.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#breadcrumb"},"dateModified":"2026-09-24","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#app"},"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#app","name":"Email Domain Analyzer","url":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html","description":"Email-domain analysis focused on mail delivery and mail-security configuration.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern browser with JavaScript enabled and internet access.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@id":"https://tools.adrianheadley.com/#publisher"},"featureList":["Accept an email address or domain and analyse the domain side only.","Show whether the domain publishes MX records, a null MX, or appears to rely on address-record fallback.","Identify common hosted mail providers from MX infrastructure.","Parse SPF mechanisms and the final all-policy qualifier.","Parse DMARC policy, subdomain policy, percentage, alignment and reporting destinations.","Check MTA-STS TXT and retrieve the public MTA-STS policy when available.","Check TLS-RPT and BIMI records.","Check common DKIM selectors without trying to enumerate private mailboxes.","Show DNSSEC/DNSKEY clues from the public resolver.","Flag recognised temporary-email domains using local indicators and the current Mail.gw public domain list when available.","Produce a transparent mail-domain posture score.","Do not test whether a specific mailbox exists and do not perform SMTP recipient probing.","Copy or export the report using the site-wide PDF template."],"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"Email Domain Analyzer","item":"https://tools.adrianheadley.com/pages/toolpages/email-domain-analyzer.html"}]}]}</script>
 
 <style>
 :root{
@@ -96,14 +96,14 @@ tr:last-child td{border-bottom:0}
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk126">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk144">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header class="tools-global-header" id="top">
   <div class="tools-global-header-inner">
-    <a href="https://www.adrianheadley.com/" class="tools-global-brand">
+    <a href="https://www.adrianheadley.com/" class="tools-global-brand" rel="noopener noreferrer external">
       <span class="tools-global-brand-mark"><img src="../../Assets/ah-icon.png" alt="Tools logo"></span>
       <span class="tools-global-brand-name">Go to portfolio</span>
     </a>
@@ -245,14 +245,15 @@ tr:last-child td{border-bottom:0}
     <p class="tools-global-footer-main">© 2026 tools.adrianheadley.com<span id="year" hidden>2026</span><span id="yearNow" hidden>2026</span><span id="footer-year" hidden>2026</span></p>
     <nav class="tools-global-footer-links" aria-label="Footer navigation">
       <a href="../privacy.html" class="tools-global-footer-link">Privacy</a>
+      <a href="../security.html" class="tools-global-footer-link">Security</a>
       <a href="../terms.html" class="tools-global-footer-link">Terms</a>
-      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link">Support/Donate</a>
+      <a href="https://buymeacoffee.com/adrianheadley" class="tools-global-footer-link" rel="noopener noreferrer external">Support/Donate</a>
     </nav>
   </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-<script src="../../Assets/pdf-export.js?v=mk124"></script>
+<script src="../../Assets/pdf-export.js?v=mk141"></script>
 <script>
 (function(){
 'use strict';
@@ -1034,6 +1035,6 @@ if(preset){
 }
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk126"></script>
+<script src="../../Assets/site-shell.js?v=mk144"></script>
 </body>
 </html>
