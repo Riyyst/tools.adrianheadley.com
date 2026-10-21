@@ -186,11 +186,11 @@
     ]
   },
   "pdf-editor.html": {
-    "description": "A premium browser PDF editor with a large crisp centre document, direct and matched text, drawing, whiteout, signatures, imported stamps and page tools.",
+    "description": "A premium browser PDF editor with dedicated contextual settings for Select, Text, Highlight, Whiteout, Draw and Stamp, plus scrolling pages, matched text, signatures and page tools.",
     "steps": [
-      "Click Draw and the editor now always opens directly on Pen, regardless of whether you previously used Whiteout, Highlight, Eraser or another tool. You can then choose Pencil, Marker or Eraser from the drawing toolbar if needed.",
-      "Text boxes start as a small typing area and automatically grow or shrink around the words you enter. The same auto-fit behaviour is applied when you change text, font or font size from Properties, while you can still manually resize the annotation afterward.",
-      "Created signatures are cropped tightly to the actual signature before placement, and imported transparent stamps have their empty transparent edges removed. Their default placement box preserves the real image proportions and starts compact rather than creating an oversized empty rectangle."
+      "The lower toolbar is now contextual. Selecting Highlight shows only Highlight settings; Whiteout shows only Whiteout settings; Draw shows only pen, pencil, marker and eraser settings; Text and Stamp each show their own controls. A previous tool's toolbar can no longer remain visible after switching tools.",
+      "Highlight has its own rectangle or ellipse shape, colour and opacity controls. Whiteout separately has rectangle or ellipse shape, cover colour and opacity, and those settings are preserved in the exported PDF.",
+      "Text provides quick Text box and Match text controls together with text colour and size. Select exposes Duplicate and Delete for the selected added item. Stamp exposes Create signature and Import stamp image. Draw retains its dedicated pen, pencil, marker, eraser, colour, width, opacity and eraser-size controls."
     ]
   },
   "pdf-separator.html": {

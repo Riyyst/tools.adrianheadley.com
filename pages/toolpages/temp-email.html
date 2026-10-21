@@ -252,6 +252,12 @@ main{flex:1}
   color:var(--muted);
   cursor:default;
 }
+.mailbox-note{
+  margin:.65rem .1rem 0;
+  color:var(--muted);
+  font-size:.73rem;
+  line-height:1.5;
+}
 .inbox-actions{
   display:flex;
   justify-content:center;
@@ -436,7 +442,7 @@ main{flex:1}
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk144">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk146">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -487,6 +493,8 @@ main{flex:1}
               <span id="address">—</span>
             </div>
 
+            <p class="mailbox-note">Public temporary inbox. Do not use for private or sensitive messages. <a href="https://maildrop.cc/privacy/" target="_blank" rel="noopener noreferrer">Maildrop privacy</a>.</p>
+
             <div class="inbox-actions">
               <button class="btn secondary" id="refreshBtn" type="button" disabled>Refresh Inbox</button>
             </div>
@@ -535,8 +543,11 @@ main{flex:1}
 (function(){
   'use strict';
 
-  const API='https://api.mail.gw';
-  const POLL_MS=3000;
+  // Maildrop publishes a browser-facing GraphQL API. No signup or secret key is required.
+  const API='https://api.maildrop.cc/graphql';
+  const MAIL_DOMAIN='maildrop.cc';
+  // Respect Maildrop's guidance to avoid checking an inbox more often than every 10 seconds.
+  const POLL_MS=15000;
   const REQUEST_TIMEOUT_MS=15000;
 
   const generateBtn=document.getElementById('generateBtn');
@@ -555,7 +566,7 @@ main{flex:1}
   const sunIcon=document.getElementById('sunIcon');
 
   const state={
-    token:null,
+    mailbox:null,
     address:null,
     messages:[],
     selectedId:null,
@@ -700,6 +711,8 @@ main{flex:1}
           <li><strong>Incoming messages:</strong> messages appear in the list automatically. You can also use <em>Refresh Inbox</em> for a manual check.</li>
           <li><strong>Reading messages:</strong> select a message to open it in the preview panel. Select the same message again to close it.</li>
           <li><strong>Safety:</strong> treat unfamiliar links and attachments with caution.</li>
+          <li><strong>Public inbox:</strong> Maildrop inboxes are not password-protected. Anyone who knows the address can read its mail. Never receive private details or sensitive verification codes here.</li>
+          <li><strong>Delivery:</strong> Maildrop filters spam and sometimes delays incoming messages while the sender retries delivery.</li>
           <li><strong>Temporary use:</strong> do not rely on this inbox for important accounts, recovery emails or permanent records.</li>
         </ol>
         <p>This service is receive-only. It cannot send or reply to email.</p>
@@ -768,187 +781,94 @@ main{flex:1}
       if(error && error.name==='AbortError'){
         throw new Error('The temporary email service took too long to respond. Please try again.');
       }
-      throw new Error('The temporary email service could not be reached. Please try again in a moment.');
+      console.error('Maildrop API connection failed:',error);
+      throw new Error('Could not contact the email provider. This may be a network, browser CORS, or temporary provider issue. Check the browser Console for details.');
     }finally{
       clearTimeout(timer);
     }
   }
 
-  async function apiErrorMessage(response, fallback){
-    try{
-      const data=await response.clone().json();
-      const detail=data?.detail || data?.message || data?.['hydra:description'];
-      if(detail) return String(detail);
-      const violations=Array.isArray(data?.violations) ? data.violations : [];
-      if(violations.length){
-        return violations.map(item=>item?.message).filter(Boolean).join(' ');
-      }
-    }catch(_){}
-    return fallback;
-  }
-
-  async function fetchDomains(){
-    const response=await apiFetch(`${API}/domains?page=1`,{
-      headers:{Accept:'application/ld+json'},
+  // Maildrop uses one GraphQL endpoint for checking a mailbox and reading mail.
+  // It does not create password-protected accounts; random @maildrop.cc addresses
+  // are ready to receive messages without registration.
+  async function maildropQuery(query, variables){
+    const response=await apiFetch(API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify({query,variables}),
       cache:'no-store'
     });
 
     if(!response.ok){
-      throw new Error(await apiErrorMessage(response,`Domain request failed (${response.status})`));
+      throw new Error(`The email provider returned HTTP ${response.status}. Please try again later.`);
     }
 
-    const data=await response.json();
-    const raw=Array.isArray(data)
-      ? data
-      : (data['hydra:member'] || data.member || data.domains || []);
-
-    const usable=raw.filter(item=>
-      item &&
-      item.domain &&
-      item.isActive !== false &&
-      item.isPrivate !== true
-    );
-
-    const fallback=raw.filter(item=>item && item.domain && item.isActive !== false);
-    const domains=(usable.length ? usable : fallback).map(item=>item.domain);
-
-    if(!domains.length){
-      throw new Error('No temporary email domains are currently available.');
+    let result;
+    try{
+      result=await response.json();
+    }catch(_){
+      throw new Error('The email provider returned an unreadable response.');
     }
 
-    return [...new Set(domains)];
+    if(result?.errors?.length){
+      throw new Error(result.errors.map(item=>item.message).filter(Boolean).join(' ')||'The email provider rejected the request.');
+    }
+    if(!result || !result.data){
+      throw new Error('The email provider returned an unexpected response.');
+    }
+    return result.data;
   }
 
+  const INBOX_QUERY=`query Inbox($mailbox:String!){inbox(mailbox:$mailbox){id subject headerfrom date}}`;
+  const MESSAGE_QUERY=`query Message($mailbox:String!,$id:String!){message(mailbox:$mailbox,id:$id){id subject headerfrom date data html}}`;
+
   async function createMailbox(){
-    const domains=await fetchDomains();
-    let lastError=null;
-
-    // A domain can become unavailable between the domain request and account
-    // creation, or a randomly generated address can occasionally collide.
-    // Retry a few fresh combinations before giving up.
-    for(let attempt=0;attempt<6;attempt++){
-      const domain=domains[attempt % domains.length];
-      const address=`u${randomString(12)}@${domain}`;
-      const password=`T${randomString(22)}!7`;
-
-      try{
-        const accountResponse=await apiFetch(`${API}/accounts`,{
-          method:'POST',
-          headers:{
-            'Content-Type':'application/json'
-          },
-          body:JSON.stringify({address,password})
-        });
-
-        if(!accountResponse.ok){
-          const message=await apiErrorMessage(
-            accountResponse,
-            `Account creation failed (${accountResponse.status})`
-          );
-
-          // 409/422 can be caused by an address collision or a domain that
-          // became unusable. Try a new address/domain automatically.
-          if(accountResponse.status===409 || accountResponse.status===422){
-            lastError=new Error(message);
-            continue;
-          }
-
-          throw new Error(message);
-        }
-
-        const tokenResponse=await apiFetch(`${API}/token`,{
-          method:'POST',
-          headers:{
-            'Content-Type':'application/json'
-          },
-          body:JSON.stringify({address,password})
-        });
-
-        let tokenData={};
-        try{
-          tokenData=await tokenResponse.json();
-        }catch(_){}
-
-        if(!tokenResponse.ok || !tokenData.token){
-          const message=await apiErrorMessage(
-            tokenResponse,
-            `Could not access the generated inbox (${tokenResponse.status})`
-          );
-          lastError=new Error(message);
-
-          if(tokenResponse.status===401 || tokenResponse.status===422){
-            continue;
-          }
-
-          throw lastError;
-        }
-
-        state.token=tokenData.token;
-        state.address=address;
-        return address;
-      }catch(error){
-        lastError=error;
-        if(/could not reach|took too long/i.test(error?.message||'')){
-          throw error;
-        }
-      }
+    // Use a long random name to make public mailbox addresses difficult to guess.
+    // Maildrop creates the inbox automatically when mail first arrives.
+    const mailbox=`ah${randomString(22)}`;
+    const data=await maildropQuery(INBOX_QUERY,{mailbox});
+    if(!Array.isArray(data.inbox)){
+      throw new Error('The email provider did not confirm the new inbox.');
     }
-
-    throw lastError || new Error('Could not generate a temporary inbox. Please try again.');
+    state.mailbox=mailbox;
+    state.address=`${mailbox}@${MAIL_DOMAIN}`;
+    return state.address;
   }
 
   async function fetchMessageList(){
-    if(!state.token) return [];
+    if(!state.mailbox) return [];
 
-    const response=await apiFetch(`${API}/messages`,{
-      headers:{
-        Authorization:`Bearer ${state.token}`,
-        Accept:'application/ld+json'
-      },
-      cache:'no-store'
-    });
-
-    if(!response.ok){
-      throw new Error(`Inbox refresh failed (${response.status})`);
+    const data=await maildropQuery(INBOX_QUERY,{mailbox:state.mailbox});
+    if(!Array.isArray(data.inbox)){
+      throw new Error('The email provider returned an unexpected inbox response.');
     }
-
-    const data=await response.json();
-
-    return (data['hydra:member']||[]).map(message=>({
+    return data.inbox.map(message=>({
       id:message.id,
       subject:message.subject,
-      from:message.from?.address||message.from?.name||'Unknown',
-      date:message.createdAt
+      from:message.headerfrom||'Unknown',
+      date:message.date
     }));
   }
 
   async function fetchFullMessage(id){
-    const response=await apiFetch(`${API}/messages/${id}`,{
-      headers:{
-        Authorization:`Bearer ${state.token}`,
-        Accept:'application/ld+json'
-      },
-      cache:'no-store'
-    });
-
-    if(!response.ok){
-      throw new Error(`Message request failed (${response.status})`);
+    if(!state.mailbox) throw new Error('Generate an address first.');
+    const data=await maildropQuery(MESSAGE_QUERY,{mailbox:state.mailbox,id});
+    const message=data.message;
+    if(!message){
+      throw new Error('That message is no longer available. Try refreshing the inbox.');
     }
-
-    const message=await response.json();
-
     return {
       id:message.id,
       subject:message.subject,
-      from:message.from?.address||message.from?.name||'Unknown',
-      date:message.createdAt,
-      html:Array.isArray(message.html)?message.html.join('\n'):(message.html||''),
-      text:message.text||''
+      from:message.headerfrom||'Unknown',
+      date:message.date,
+      html:message.html||'',
+      text:message.data||''
     };
   }
 
   async function refreshInbox(manual=false){
-    if(!state.token||state.refreshing) return;
+    if(!state.mailbox||state.refreshing) return;
 
     state.refreshing=true;
 
@@ -960,11 +880,7 @@ main{flex:1}
     try{
       const incoming=await fetchMessageList();
       const local=state.messages.filter(message=>message.local);
-      const existing=new Map(state.messages.filter(message=>!message.local).map(message=>[message.id,message]));
-
-      incoming.forEach(message=>existing.set(message.id,{...existing.get(message.id),...message}));
-
-      state.messages=[...local,...existing.values()];
+      state.messages=[...local,...incoming];
       ensureIntroMessage();
       renderList();
     }catch(error){
@@ -1022,7 +938,7 @@ main{flex:1}
 
   generateBtn.addEventListener('click',async()=>{
     clearPolling();
-    state.token=null;
+    state.mailbox=null;
     state.address=null;
     state.messages=[];
     state.selectedId=null;
@@ -1086,6 +1002,6 @@ main{flex:1}
   });
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk144"></script>
+<script src="../../Assets/site-shell.js?v=mk146"></script>
 </body>
 </html>
