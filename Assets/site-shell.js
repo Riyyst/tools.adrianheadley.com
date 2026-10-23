@@ -194,11 +194,11 @@
     ]
   },
   "pdf-separator.html": {
-    "description": "Separate a PDF into selected pages or repeating groups, then optionally build filenames from fields actually detected inside the grouped PDFs.",
+    "description": "Separate PDFs into selected pages or repeating groups, then use local semantic analysis to find useful filename fields in many kinds of documents.",
     "steps": [
-      "Choose Specific pages for individual extraction or Groups of pages to create repeating grouped PDFs. Pages per PDF starts blank and only shows 3 as a placeholder.",
-      "Intelligent naming becomes available only after the grouped PDFs have been created. Turn it on and choose Analyse grouped PDFs. The tool scans those grouped outputs locally and displays only labels and values it can actually identify in them.",
-      "Select the detected fields you want used in the filename. The tool combines the matching values for each grouped PDF, lets you review or correct every filename, then you can download individually, use Download All for a ZIP, or Save All to Folder in supported browsers."
+      "Create the grouped PDFs first. Intelligent naming then analyses those grouped outputs locally. The blue progress bar shows real progress through the grouped documents and their pages, using the same progress treatment as the other processing tools on the site.",
+      "The analyser no longer treats arbitrary PDF text fragments as labels. It looks for complete label/value structures, spatially separated fields and meaningful context. It can infer useful generic metadata such as Name, Organisation or Employer, Title / role, Reference, Location, and context-aware dates such as Commencement date, Event date, Due date or End date. This works across contracts, invitations, forms, letters, certificates, reports and other structured documents rather than being tied to one document type.",
+      "Only reliable fields found across enough of the grouped PDFs are offered. Select the useful fields you want, review the resulting filenames, then download individually, build a ZIP, or save all files directly to a selected folder where supported."
     ]
   },
   "powerful-sites.html": {

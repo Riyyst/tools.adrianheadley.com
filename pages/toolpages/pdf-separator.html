@@ -27,7 +27,7 @@
 <meta name="twitter:title" content="Split &amp; Separate PDF Pages | Adrian Headley Tools"/>
 <meta name="twitter:description" content="Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser, with ZIP download support."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","name":"PDF Separator","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb"},"dateModified":"2026-10-23","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app"},"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app","name":"PDF Separator","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@id":"https://tools.adrianheadley.com/#publisher"},"featureList":["Extract specific pages as individual PDFs.","Split a document repeatedly into groups of a custom number of pages.","Enable intelligent naming only after grouped PDFs have been created.","Analyse grouped PDF outputs locally and present only fields that are actually detected in the documents.","Select detected fields to build filenames and review or correct each filename before saving.","Download outputs individually, as one ZIP archive, or save all generated PDFs to a selected folder in supported browsers."],"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"PDF Separator","item":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","name":"PDF Separator","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb"},"dateModified":"2026-10-23","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app"},"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app","name":"PDF Separator","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@id":"https://tools.adrianheadley.com/#publisher"},"featureList":["Show the same blue real-time progress treatment used by other processing tools during splitting, intelligent naming analysis, ZIP creation and folder saving.","Analyse complete PDF text structures rather than treating arbitrary text fragments as field labels.","Infer generic semantic fields such as Name, Organisation, Employer, Title or role, Reference, Location and context-aware dates from many kinds of documents.","Recognise date meaning from surrounding wording, including commencement/effective dates, event dates, due dates, issue dates, signature dates and end dates.","Reject short fragments, sentence pieces and low-confidence fields before presenting filename options.","Let users select detected fields, review filenames, download a ZIP or save all outputs to a selected folder in supported browsers."],"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"PDF Separator","item":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"}]}]}</script>
 <style>
   :root{
     --bg:#f5f5f7;
@@ -415,6 +415,33 @@
     min-height:1.4rem;
   }
 
+  #status.progress-status{
+    --progress-fill:0%;
+    position:relative;
+    overflow:hidden;
+    min-height:3.25rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:.65rem .8rem;
+    border:1px solid #bfdbfe;
+    border-radius:12px;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(37,99,235,.20) 0 var(--progress-fill),
+        #f8fafc var(--progress-fill) 100%
+      ) !important;
+    color:#334155 !important;
+    transition:background .18s,border-color .18s;
+  }
+  #status.progress-status.is-complete{
+    background:#2563eb !important;
+    border-color:#2563eb !important;
+    color:#fff !important;
+  }
+  #status.progress-status:empty{display:none!important}
+
   .actions{
     display:flex;
     align-items:center;
@@ -549,7 +576,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk149">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk150">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -770,10 +797,59 @@
   let detectedFieldCatalog = [];
   let selectedFieldKeys = [];
   let detectedGroupValues = new Map();
+  let progressValue = 0;
+  let progressActive = false;
 
   function show(el){ if(el) el.classList.remove('hidden'); }
   function hide(el){ if(el) el.classList.add('hidden'); }
-  function setStatus(message){ statusEl.textContent = message || ''; }
+
+  function applyProgressAppearance(){
+    if(progressActive){
+      statusEl.classList.add('progress-status');
+      statusEl.classList.toggle('is-complete',progressValue>=100);
+      statusEl.style.setProperty('--progress-fill',progressValue+'%');
+      statusEl.setAttribute('role','progressbar');
+      statusEl.setAttribute('aria-valuemin','0');
+      statusEl.setAttribute('aria-valuemax','100');
+      statusEl.setAttribute('aria-valuenow',String(Math.round(progressValue)));
+    }else{
+      statusEl.classList.remove('progress-status','is-complete');
+      statusEl.style.removeProperty('--progress-fill');
+      ['role','aria-valuemin','aria-valuemax','aria-valuenow'].forEach(attr=>statusEl.removeAttribute(attr));
+    }
+  }
+
+  function setStatus(message){
+    statusEl.textContent = message || '';
+    statusEl.className = 'progress' + (progressActive ? ' progress-status' : '');
+    applyProgressAppearance();
+  }
+
+  function startProgress(message){
+    progressValue=0;
+    progressActive=true;
+    setStatus(message||'Working...');
+    setProgress(2);
+  }
+
+  function setProgress(percent,message=''){
+    progressValue=Math.max(progressValue,Math.max(0,Math.min(100,Number(percent)||0)));
+    progressActive=true;
+    if(message) statusEl.textContent=message;
+    applyProgressAppearance();
+  }
+
+  function completeProgress(message){
+    progressValue=100;
+    progressActive=true;
+    setStatus(message||'Complete.');
+  }
+
+  function hideProgress(){
+    progressValue=0;
+    progressActive=false;
+    applyProgressAppearance();
+  }
   function stem(name){
     const i = name.toLowerCase().lastIndexOf('.pdf');
     return i > -1 ? name.slice(0, i) : name;
@@ -806,20 +882,154 @@
     return normaliseLabel(label).toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
   }
 
-  function looksLikeLabel(text){
-    const clean=normaliseLabel(text);
-    if(clean.length<2||clean.length>42) return false;
-    if(/\d{3,}/.test(clean)) return false;
-    const words=clean.split(/\s+/);
-    if(words.length>5) return false;
-    return /^[A-Za-z][A-Za-z0-9 &/'().-]*$/.test(clean);
+  const STOP_LABELS=new Set([
+    'a','an','and','are','as','at','be','been','being','but','by','for','from','has','have','if','in','is',
+    'it','of','on','or','that','the','their','then','there','these','this','those','to','was','were','will',
+    'with','you','your','th'
+  ]);
+
+  const DOCUMENT_WORDS=/\b(contract|agreement|invitation|invite|report|certificate|letter|memorandum|policy|statement|notice|terms|conditions|form|application|schedule|summary|document|clause|section|appendix|page)\b/i;
+  const ORGANISATION_SUFFIX=/\b(ltd|limited|llp|plc|inc|incorporated|company|corp|corporation|university|college|school|trust|council|association|society|foundation|nhs)\b/i;
+
+  const DATE_PATTERN=/\b(?:\d{1,2}(?:st|nd|rd|th)?\s+(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{4}|(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2}(?:st|nd|rd|th)?(?:,\s*|\s+)\d{4}|\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}|\d{4}-\d{2}-\d{2})\b/i;
+  const TIME_PATTERN=/\b(?:[01]?\d|2[0-3])[:.]\d{2}(?:\s*(?:am|pm))?|\b\d{1,2}\s*(?:am|pm)\b/i;
+
+  function canonicalField(label){
+    const clean=normaliseLabel(label);
+    const lower=clean.toLowerCase().replace(/\s+/g,' ');
+
+    if(/^(?:employer(?: name)?|employing organisation|employing organization)$/.test(lower)){
+      return {key:'employer',label:'Employer',priority:118,type:'organisation'};
+    }
+    if(/^(?:company(?: name)?|organisation(?: name)?|organization(?: name)?|business(?: name)?|institution|host organisation|host organization|issuer)$/.test(lower)){
+      return {key:'organisation',label:'Organisation',priority:108,type:'organisation'};
+    }
+    if(/^(?:full name|name|person(?:'s)? name|name of (?:the )?(?:person|employee|contractor|client|guest|recipient|attendee|applicant|candidate|member|student|patient)|employee name|contractor name|client name|guest name|recipient name|attendee name|applicant name|candidate name)$/.test(lower)){
+      return {key:'name',label:'Name',priority:125,type:'person'};
+    }
+    if(/^(?:job title|role|position|occupation|designation|title \/ role)$/.test(lower)){
+      return {key:'title_role',label:'Title / role',priority:105,type:'short'};
+    }
+    if(/commencement|date of commencement|effective date|start date|starting date/.test(lower)){
+      return {key:'commencement_date',label:'Commencement date',priority:120,type:'date'};
+    }
+    if(/expiry|expiration|end date|ending date|termination date/.test(lower)){
+      return {key:'end_date',label:'End date',priority:112,type:'date'};
+    }
+    if(/date of birth|\bdob\b|birth date/.test(lower)){
+      return {key:'date_of_birth',label:'Date of birth',priority:108,type:'date'};
+    }
+    if(/event date|meeting date|appointment date|ceremony date|conference date/.test(lower)){
+      return {key:'event_date',label:'Event date',priority:112,type:'date'};
+    }
+    if(/due date|deadline|respond by|reply by|rsvp by/.test(lower)){
+      return {key:'due_date',label:'Due date',priority:108,type:'date'};
+    }
+    if(/issue date|date issued|issued date/.test(lower)){
+      return {key:'issue_date',label:'Issue date',priority:100,type:'date'};
+    }
+    if(/signature date|date signed|signed date/.test(lower)){
+      return {key:'signature_date',label:'Signature date',priority:96,type:'date'};
+    }
+    if(/^date$/.test(lower)){
+      return {key:'date',label:'Date',priority:82,type:'date'};
+    }
+    if(/^(?:venue|location|place|event venue|meeting location)$/.test(lower)){
+      return {key:'location',label:/venue/.test(lower)?'Venue':'Location',priority:88,type:'short'};
+    }
+    if(/address/.test(lower)){
+      return {key:'address',label:'Address',priority:72,type:'short'};
+    }
+    if(/^(?:reference|reference number|ref|ref no|booking reference|case number|application number|order number|invoice number|membership number|record number|document number|id)$/.test(lower)){
+      return {key:'reference',label:'Reference',priority:102,type:'reference'};
+    }
+    if(/^(?:subject|re|regarding)$/.test(lower)){
+      return {key:'subject',label:'Subject',priority:82,type:'short'};
+    }
+    if(/^(?:event title|event name)$/.test(lower)){
+      return {key:'event_title',label:'Event title',priority:90,type:'short'};
+    }
+    if(/^(?:document title|document name)$/.test(lower)){
+      return {key:'document_title',label:'Document title',priority:76,type:'short'};
+    }
+    if(/^(?:contract type|document type|type|category)$/.test(lower)){
+      return {key:'document_type',label:'Type',priority:78,type:'short'};
+    }
+    if(/email/.test(lower)){
+      return {key:'email',label:'Email',priority:76,type:'email'};
+    }
+    if(/phone|telephone|mobile/.test(lower)){
+      return {key:'phone',label:'Phone',priority:72,type:'phone'};
+    }
+    if(/department|team|division/.test(lower)){
+      return {key:'department',label:'Department',priority:78,type:'short'};
+    }
+
+    return {key:fieldKey(clean),label:clean,priority:48,type:'generic'};
   }
 
-  function looksLikeValue(text){
-    const clean=String(text||'').replace(/\s+/g,' ').trim();
+  function looksLikeLabel(text){
+    const clean=normaliseLabel(text);
+    if(clean.length<3||clean.length>56) return false;
+
+    const words=clean.split(/\s+/).filter(Boolean);
+    if(!words.length||words.length>7) return false;
+    if(STOP_LABELS.has(words[0].toLowerCase())||STOP_LABELS.has(clean.toLowerCase())) return false;
+    if(/[.!?]$/.test(clean)) return false;
+    if(/\b(?:shall|must|will|takes?|took|means|agrees?|hereby|contains?|includes?|provides?|applies?|requires?|becomes?)\b/i.test(clean)) return false;
+
+    const canonical=canonicalField(clean);
+    if(canonical.priority>=70) return true;
+
+    const alpha=(clean.match(/[A-Za-z]/g)||[]).length;
+    if(alpha/Math.max(1,clean.length)<.6) return false;
+
+    const titleLike=words.every(word=>/^[A-Z][A-Za-z'’()./-]*$/.test(word)||/^[A-Z]{2,}$/.test(word));
+    const fieldWord=/\b(name|date|title|role|position|reference|number|id|email|phone|telephone|mobile|address|location|venue|department|type|category|subject|organisation|organization|company|employer|client|guest|recipient|member|code)\b/i.test(clean);
+    return titleLike||fieldWord;
+  }
+
+  function isLikelyPersonName(value){
+    let clean=String(value||'').replace(/\s+/g,' ').trim();
+    clean=clean.replace(/^(?:Mr|Mrs|Ms|Miss|Dr|Prof|Professor)\.?\s+/i,'');
+    if(clean.length<5||clean.length>72||/\d|@/.test(clean)) return false;
+    if(DOCUMENT_WORDS.test(clean)||ORGANISATION_SUFFIX.test(clean)) return false;
+
+    const words=clean.split(/\s+/);
+    if(words.length<2||words.length>5) return false;
+    return words.every(word=>/^[A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ'’.-]+$/.test(word));
+  }
+
+  function isUsefulValue(value,field){
+    const clean=String(value||'').replace(/\s+/g,' ').trim().replace(/^[,:;\-–—\s]+|[\s]+$/g,'');
     if(!clean||clean.length>120) return false;
-    if(/^page\s+\d+/i.test(clean)) return false;
+    if(clean.toLowerCase()===normaliseLabel(field.label).toLowerCase()) return false;
+
+    if(field.type==='person') return isLikelyPersonName(clean);
+    if(field.type==='date') return DATE_PATTERN.test(clean);
+    if(field.type==='email') return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean);
+    if(field.type==='phone') return clean.replace(/\D/g,'').length>=7;
+    if(field.type==='reference') return clean.length<=50&&!/[.!?]\s/.test(clean);
+
+    const words=clean.split(/\s+/);
+    if(words.length>14) return false;
+    if(/[.!?]$/.test(clean)&&words.length>8) return false;
     return true;
+  }
+
+  function makePair(label,value,confidence,source='explicit'){
+    const field=canonicalField(label);
+    const cleanValue=String(value||'').replace(/\s+/g,' ').trim().replace(/^[,:;\-–—\s]+/,'');
+    if(!field.key||!looksLikeLabel(field.label)||!isUsefulValue(cleanValue,field)) return null;
+    return {
+      key:field.key,
+      label:field.label,
+      value:cleanValue,
+      confidence,
+      priority:field.priority,
+      type:field.type,
+      source
+    };
   }
 
   async function extractTextItems(pdf,pageNumber){
@@ -829,7 +1039,9 @@
       .map(item=>({
         text:String(item.str||'').replace(/\s+/g,' ').trim(),
         x:item.transform?.[4]||0,
-        y:item.transform?.[5]||0
+        y:item.transform?.[5]||0,
+        width:Number(item.width)||0,
+        height:Math.abs(item.transform?.[3]||item.height||10)
       }))
       .filter(item=>item.text);
   }
@@ -839,7 +1051,7 @@
     const sorted=[...items].sort((a,b)=>Math.abs(b.y-a.y)>3?b.y-a.y:a.x-b.x);
 
     for(const item of sorted){
-      let row=rows.find(r=>Math.abs(r.y-item.y)<=3);
+      let row=rows.find(r=>Math.abs(r.y-item.y)<=Math.max(3,Math.min(6,item.height*.35)));
       if(!row){
         row={y:item.y,items:[]};
         rows.push(row);
@@ -851,44 +1063,169 @@
       .sort((a,b)=>b.y-a.y)
       .map(row=>{
         const parts=row.items.sort((a,b)=>a.x-b.x);
-        return {y:row.y,items:parts,text:parts.map(item=>item.text).join(' ').replace(/\s+/g,' ').trim()};
+        return {
+          y:row.y,
+          items:parts,
+          text:parts.map(item=>item.text).join(' ').replace(/\s+/g,' ').trim()
+        };
       })
       .filter(row=>row.text);
+  }
+
+  function semanticPrefixPair(text){
+    const patterns=[
+      [/^(?:full name|name of (?:the )?(?:person|employee|contractor|client|guest|recipient|attendee|applicant|candidate|member|student|patient)|person(?:'s)? name|employee name|contractor name|client name|guest name|recipient name|attendee name|applicant name|candidate name|name)\b\s*[:\-–—]?\s+(.+)$/i,'Name'],
+      [/^(?:employer name|employer|employing organisation|employing organization)\b\s*[:\-–—]?\s+(.+)$/i,'Employer'],
+      [/^(?:company name|company|organisation name|organization name|organisation|organization|business name|institution|issuer)\b\s*[:\-–—]?\s+(.+)$/i,'Organisation'],
+      [/^(?:job title|role|position|occupation|designation)\b\s*[:\-–—]?\s+(.+)$/i,'Title / role'],
+      [/^(?:commencement date|date of commencement|effective date|start date|starting date)\b\s*[:\-–—]?\s+(.+)$/i,'Commencement date'],
+      [/^(?:expiry date|expiration date|end date|termination date)\b\s*[:\-–—]?\s+(.+)$/i,'End date'],
+      [/^(?:event date|meeting date|appointment date|ceremony date|conference date)\b\s*[:\-–—]?\s+(.+)$/i,'Event date'],
+      [/^(?:due date|deadline|rsvp by|respond by|reply by)\b\s*[:\-–—]?\s+(.+)$/i,'Due date'],
+      [/^(?:reference number|booking reference|case number|application number|order number|invoice number|membership number|reference|ref(?:erence)?|ref no)\b\s*[:#\-–—]?\s+(.+)$/i,'Reference'],
+      [/^(?:venue|location|event venue|meeting location)\b\s*[:\-–—]?\s+(.+)$/i,'Location'],
+      [/^(?:subject|regarding)\b\s*[:\-–—]?\s+(.+)$/i,'Subject']
+    ];
+
+    for(const [pattern,label] of patterns){
+      const match=String(text||'').match(pattern);
+      if(match){
+        const pair=makePair(label,match[1],13,'semantic-label');
+        if(pair) return pair;
+      }
+    }
+    return null;
+  }
+
+  function inferDatePair(text,lineIndex){
+    const line=String(text||'').replace(/\s+/g,' ').trim();
+    const match=line.match(DATE_PATTERN);
+    if(!match) return null;
+
+    const date=match[0];
+    let label='';
+    let priorityBoost=0;
+
+    if(/\b(?:commenc|takes? effect|effective|starts?|starting|begins?|beginning)\b/i.test(line)){
+      label='Commencement date'; priorityBoost=3;
+    }else if(/\b(?:expir|expiration|ends?|ending|termination|terminates?|valid until)\b/i.test(line)){
+      label='End date'; priorityBoost=3;
+    }else if(/\b(?:due|deadline|rsvp|respond by|reply by|submit by)\b/i.test(line)){
+      label='Due date'; priorityBoost=3;
+    }else if(/\b(?:event|invitation|invite|meeting|appointment|ceremony|conference|wedding|party|session)\b/i.test(line)){
+      label='Event date'; priorityBoost=2;
+    }else if(/\b(?:issued|issue date|date issued)\b/i.test(line)){
+      label='Issue date'; priorityBoost=2;
+    }else if(/\b(?:signed|signature)\b/i.test(line)){
+      label='Signature date'; priorityBoost=1;
+    }else if(/\b(?:birth|born|dob)\b/i.test(line)){
+      label='Date of birth'; priorityBoost=3;
+    }else if(line.replace(date,'').replace(/[\s,:;()\-–—]/g,'').length===0 || lineIndex<=3){
+      label='Date';
+    }
+
+    if(!label) return null;
+    const pair=makePair(label,date,10+priorityBoost,'inferred-date');
+    return pair;
+  }
+
+  function inferPersonPair(text,lineIndex){
+    const line=String(text||'').replace(/\s+/g,' ').trim();
+
+    const dear=line.match(/^(?:dear|to)\s+(.+)$/i);
+    if(dear&&isLikelyPersonName(dear[1])){
+      return makePair('Name',dear[1],10,'inferred-person');
+    }
+
+    const titled=line.match(/^(?:Mr|Mrs|Ms|Miss|Dr|Prof|Professor)\.?\s+(.+)$/);
+    if(titled&&isLikelyPersonName(line)){
+      return makePair('Name',line,8,'inferred-person');
+    }
+
+    if(lineIndex<=12&&isLikelyPersonName(line)){
+      return makePair('Name',line,6,'inferred-person');
+    }
+
+    return null;
+  }
+
+  function inferOrganisationPair(text,lineIndex){
+    const line=String(text||'').replace(/\s+/g,' ').trim();
+    if(lineIndex>15||line.length>90||!ORGANISATION_SUFFIX.test(line)||DOCUMENT_WORDS.test(line)) return null;
+    return makePair('Organisation',line,6,'inferred-organisation');
+  }
+
+  function inferReferencePair(text){
+    const line=String(text||'').replace(/\s+/g,' ').trim();
+    const match=line.match(/\b(?:reference|ref(?:erence)?|booking reference|case number|application number|order number|invoice number|membership number)\s*[:#\-–—]?\s*([A-Z0-9][A-Z0-9._\/-]{2,})\b/i);
+    if(!match) return null;
+    return makePair('Reference',match[1],10,'inferred-reference');
   }
 
   function extractDetectedPairs(lines){
     const pairs=[];
 
+    const add=pair=>{
+      if(!pair) return;
+      if(pair.label.length<3||STOP_LABELS.has(pair.label.toLowerCase())) return;
+      pairs.push(pair);
+    };
+
     for(let i=0;i<lines.length;i++){
       const line=lines[i];
+      const next=lines[i+1];
 
-      const colon=line.text.match(/^(.{2,42}?):\s*(.+)$/);
-      if(colon&&looksLikeLabel(colon[1])&&looksLikeValue(colon[2])){
-        pairs.push({label:normaliseLabel(colon[1]),value:colon[2].trim(),confidence:3});
+      const colon=line.text.match(/^(.{3,56}?):\s*(.+)$/);
+      if(colon&&looksLikeLabel(colon[1])){
+        add(makePair(colon[1],colon[2],12,'colon'));
       }
 
+      add(semanticPrefixPair(line.text));
+
       if(line.items.length>=2){
-        const left=line.items[0].text;
-        const rest=line.items.slice(1).map(item=>item.text).join(' ').trim();
-        if(looksLikeLabel(left)&&left.length<=32&&looksLikeValue(rest)){
-          pairs.push({label:normaliseLabel(left),value:rest,confidence:2});
+        let bestGap={gap:-Infinity,index:-1};
+        for(let j=0;j<line.items.length-1;j++){
+          const current=line.items[j];
+          const following=line.items[j+1];
+          const gap=following.x-(current.x+(current.width||0));
+          if(gap>bestGap.gap) bestGap={gap,index:j};
+        }
+
+        if(bestGap.index>=0&&bestGap.gap>=12){
+          const left=line.items.slice(0,bestGap.index+1).map(item=>item.text).join(' ').trim();
+          const right=line.items.slice(bestGap.index+1).map(item=>item.text).join(' ').trim();
+          if(looksLikeLabel(left)){
+            add(makePair(left,right,10,'spatial'));
+          }
         }
       }
 
-      if(looksLikeLabel(line.text)&&lines[i+1]&&looksLikeValue(lines[i+1].text)){
-        pairs.push({label:normaliseLabel(line.text),value:lines[i+1].text,confidence:1});
+      const canonical=canonicalField(line.text);
+      if(
+        next &&
+        canonical.priority>=70 &&
+        looksLikeLabel(line.text) &&
+        Math.abs(line.y-next.y)<=48
+      ){
+        add(makePair(line.text,next.text,8,'stacked'));
       }
+
+      add(inferDatePair(line.text,i));
+      add(inferReferencePair(line.text));
+      add(inferPersonPair(line.text,i));
+      add(inferOrganisationPair(line.text,i));
     }
 
     const best=new Map();
     for(const pair of pairs){
-      const key=fieldKey(pair.label);
-      if(!key) continue;
-      const existing=best.get(key);
-      if(!existing||pair.confidence>existing.confidence){
-        best.set(key,{...pair,key});
+      const existing=best.get(pair.key);
+      const pairRank=pair.confidence+(pair.priority/20);
+      const existingRank=existing?existing.confidence+(existing.priority/20):-Infinity;
+      if(!existing||pairRank>existingRank||(pairRank===existingRank&&pair.value.length<existing.value.length)){
+        best.set(pair.key,pair);
       }
     }
+
     return [...best.values()];
   }
 
@@ -898,10 +1235,12 @@
 
     const catalog=new Map();
     const groupValues=new Map();
+    const groupCount=groupedResults.length;
 
-    for(let i=0;i<groupedResults.length;i++){
+    for(let i=0;i<groupCount;i++){
       const result=groupedResults[i];
-      setStatus(`Analysing grouped PDF ${i+1}/${groupedResults.length}...`);
+      const baseProgress=5+(i/groupCount)*86;
+      setProgress(baseProgress,`Analysing grouped PDF ${i+1}/${groupCount}...`);
 
       const buffer=await result.blob.arrayBuffer();
       const loadingTask=pdfjsLib.getDocument({data:buffer});
@@ -909,21 +1248,41 @@
       const values=new Map();
 
       try{
-        const pagesToRead=Math.min(pdf.numPages,3);
+        const pagesToRead=Math.min(pdf.numPages,4);
         for(let pageNumber=1;pageNumber<=pagesToRead;pageNumber++){
+          const pageProgress=5+((i+(pageNumber/pagesToRead))/groupCount)*86;
+          setProgress(pageProgress,`Analysing grouped PDF ${i+1}/${groupCount}, page ${pageNumber}/${pagesToRead}...`);
+
           const lines=buildTextLines(await extractTextItems(pdf,pageNumber));
           for(const pair of extractDetectedPairs(lines)){
             const current=values.get(pair.key);
-            if(!current||pair.confidence>current.confidence){
+            const pairRank=pair.confidence+(pair.priority/20);
+            const currentRank=current?current.confidence+(current.priority/20):-Infinity;
+            if(!current||pairRank>currentRank){
               values.set(pair.key,pair);
             }
 
             let field=catalog.get(pair.key);
             if(!field){
-              field={key:pair.key,label:pair.label,groups:new Set(),examples:[]};
+              field={
+                key:pair.key,
+                label:pair.label,
+                groups:new Set(),
+                examples:[],
+                priority:pair.priority,
+                scoreTotal:0,
+                sources:new Set(),
+                uniqueValues:new Set()
+              };
               catalog.set(pair.key,field);
             }
+
             field.groups.add(i);
+            field.priority=Math.max(field.priority,pair.priority);
+            field.scoreTotal+=pair.confidence;
+            field.sources.add(pair.source);
+            field.uniqueValues.add(pair.value.toLowerCase());
+
             if(pair.value&&!field.examples.includes(pair.value)&&field.examples.length<3){
               field.examples.push(pair.value);
             }
@@ -937,16 +1296,34 @@
     }
 
     detectedGroupValues=groupValues;
+    const minimumCoverage=groupCount<=2?1:Math.max(2,Math.ceil(groupCount*.35));
+
     detectedFieldCatalog=[...catalog.values()]
       .map(field=>({
         key:field.key,
         label:field.label,
         foundIn:field.groups.size,
-        examples:field.examples
+        examples:field.examples,
+        priority:field.priority,
+        averageScore:field.scoreTotal/Math.max(1,field.groups.size),
+        sourceCount:field.sources.size,
+        uniqueCount:field.uniqueValues.size
       }))
-      .filter(field=>field.foundIn>=Math.max(1,Math.ceil(groupedResults.length*.25)))
-      .sort((a,b)=>b.foundIn-a.foundIn||a.label.localeCompare(b.label));
+      .filter(field=>{
+        if(field.label.length<3||STOP_LABELS.has(field.label.toLowerCase())) return false;
+        if(field.foundIn<minimumCoverage) return false;
 
+        const highValueSemantic=field.priority>=82;
+        const strongExplicit=field.averageScore>=9&&field.foundIn>=Math.max(2,Math.ceil(groupCount*.55));
+        return highValueSemantic||strongExplicit;
+      })
+      .sort((a,b)=>{
+        const aScore=(a.foundIn/groupCount)*120+a.priority+a.averageScore*4+Math.min(a.uniqueCount,5)*2;
+        const bScore=(b.foundIn/groupCount)*120+b.priority+b.averageScore*4+Math.min(b.uniqueCount,5)*2;
+        return bScore-aScore||a.label.localeCompare(b.label);
+      });
+
+    setProgress(96,'Finishing intelligent naming analysis...');
     return detectedFieldCatalog;
   }
 
@@ -984,7 +1361,7 @@
       strong.textContent=field.label;
 
       const example=document.createElement('span');
-      example.textContent=field.examples.length?'Examples: '+field.examples.join(' · '):'Detected field';
+      example.textContent=field.examples.length?'Found values: '+field.examples.join(' · '):'Detected field';
 
       copy.append(strong,example);
 
@@ -1063,6 +1440,7 @@
     });
 
     rebuildDownloadList();
+    hideProgress();
     setStatus('Intelligent filenames applied. The grouped PDFs are ready to save.');
   }
 
@@ -1144,6 +1522,7 @@
 
   function resetUI(full=true){
     errEl.textContent = '';
+    hideProgress();
     setStatus('');
     revokeOutputs();
     hide(dlList);
@@ -1273,12 +1652,13 @@
     hide(dlList);
     hide(zipBtn);
     zipBtn.setAttribute('disabled', '');
+    startProgress(`Preparing ${pages.length} page PDF${pages.length===1?'':'s'}...`);
 
     const src = await PDFDocument.load(sourceBytes);
 
     for(let i = 0; i < pages.length; i++){
       const pageNumber = pages[i];
-      setStatus(`Separating page ${i + 1}/${pages.length}...`);
+      setProgress(5+(i/pages.length)*90,`Separating page ${i + 1}/${pages.length}...`);
 
       const out = await PDFDocument.create();
       const [copied] = await out.copyPages(src, [pageNumber - 1]);
@@ -1291,6 +1671,7 @@
 
       outLinks.push({page:pageNumber, url, name, blob});
       addDownloadLink(pageNumber, url, name);
+      setProgress(5+((i+1)/pages.length)*90);
     }
 
     smartNamingToggle.checked = false;
@@ -1302,7 +1683,7 @@
     zipBtn.removeAttribute('disabled');
     show(folderBtn);
     folderBtn.removeAttribute('disabled');
-    setStatus('All done - pages ready below');
+    completeProgress('All done - pages ready below');
   }
 
   async function splitPageGroups(groups){
@@ -1312,12 +1693,16 @@
     hide(dlList);
     hide(zipBtn);
     zipBtn.setAttribute('disabled', '');
+    startProgress(`Preparing ${groups.length} grouped PDF${groups.length===1?'':'s'}...`);
 
     const src = await PDFDocument.load(sourceBytes);
 
     for(let i = 0; i < groups.length; i++){
       const group = groups[i];
-      setStatus(`Creating group ${i + 1}/${groups.length}: pages ${group.start}-${group.end}...`);
+      setProgress(
+        5+(i/groups.length)*90,
+        `Creating group ${i + 1}/${groups.length}: pages ${group.start}-${group.end}...`
+      );
 
       const out = await PDFDocument.create();
       const indices = group.pages.map(pageNumber => pageNumber - 1);
@@ -1339,6 +1724,7 @@
         kind:'group'
       });
       addGroupDownloadLink(group.start, group.end, url, name);
+      setProgress(5+((i+1)/groups.length)*90);
     }
 
     groupedResults = outLinks.filter(item=>item.kind==='group');
@@ -1360,7 +1746,7 @@
     zipBtn.removeAttribute('disabled');
     show(folderBtn);
     folderBtn.removeAttribute('disabled');
-    setStatus(`All done - ${groups.length} grouped PDF${groups.length === 1 ? '' : 's'} ready below. Intelligent naming is now available.`);
+    completeProgress(`All done - ${groups.length} grouped PDF${groups.length === 1 ? '' : 's'} ready below. Intelligent naming is now available.`);
   }
 
   function addDownloadLink(page, url, name){
@@ -1405,6 +1791,7 @@
     if(!outLinks.length) return;
 
     if(!('showDirectoryPicker' in window)){
+      hideProgress();
       setStatus('Direct folder saving is not supported by this browser. Building a ZIP instead...');
       await downloadAllAsZip();
       return;
@@ -1413,22 +1800,26 @@
     try{
       const directory=await window.showDirectoryPicker({mode:'readwrite'});
       folderBtn.setAttribute('disabled','');
+      startProgress(`Saving ${outLinks.length} PDF${outLinks.length===1?'':'s'}...`);
 
       for(let i=0;i<outLinks.length;i++){
         const item=outLinks[i];
-        setStatus(`Saving ${i+1}/${outLinks.length}: ${item.name}`);
+        setProgress((i/outLinks.length)*95,`Saving ${i+1}/${outLinks.length}: ${item.name}`);
         const fileHandle=await directory.getFileHandle(item.name,{create:true});
         const writable=await fileHandle.createWritable();
         await writable.write(item.blob);
         await writable.close();
+        setProgress(((i+1)/outLinks.length)*95);
       }
 
-      setStatus(`Saved ${outLinks.length} PDF${outLinks.length===1?'':'s'} to the selected folder.`);
+      completeProgress(`Saved ${outLinks.length} PDF${outLinks.length===1?'':'s'} to the selected folder.`);
     }catch(err){
       if(err?.name==='AbortError'){
+        hideProgress();
         setStatus('Folder selection cancelled.');
       }else{
         console.error(err);
+        hideProgress();
         errEl.textContent='Could not save directly to that folder. Use Download All instead.';
         setStatus('');
       }
@@ -1441,7 +1832,7 @@
     if(!outLinks.length) return;
 
     zipBtn.setAttribute('disabled', '');
-    setStatus('Building ZIP...');
+    startProgress('Building ZIP...');
 
     try{
       const zip = new JSZip();
@@ -1449,7 +1840,12 @@
         zip.file(item.name, item.blob);
       }
 
-      const content = await zip.generateAsync({type:'blob'});
+      const content = await zip.generateAsync(
+        {type:'blob'},
+        metadata=>{
+          setProgress(Math.max(2,metadata.percent||0),`Building ZIP... ${Math.round(metadata.percent||0)}%`);
+        }
+      );
       const url = URL.createObjectURL(content);
       const a = document.createElement('a');
       a.href = url;
@@ -1459,9 +1855,10 @@
       a.remove();
 
       setTimeout(() => URL.revokeObjectURL(url), 2000);
-      setStatus('ZIP download ready.');
+      completeProgress('ZIP download ready.');
     }catch(err){
       console.error(err);
+      hideProgress();
       errEl.textContent = 'Failed to build ZIP.';
       setStatus('');
     }finally{
@@ -1524,7 +1921,8 @@
     errEl.textContent='';
 
     if(smartNamingEnabled){
-      setStatus('Intelligent naming enabled. Analyse the grouped PDFs to find available naming fields.');
+      hideProgress();
+      setStatus('Intelligent naming enabled. Analyse the grouped PDFs to find useful naming fields.');
     }
   });
 
@@ -1532,16 +1930,19 @@
     errEl.textContent='';
     try{
       analyseGroupsBtn.setAttribute('disabled','');
+      startProgress(`Analysing ${groupedResults.length} grouped PDF${groupedResults.length===1?'':'s'}...`);
+
       await analyseGroupedDocuments();
       renderDetectedFields();
 
       if(detectedFieldCatalog.length){
-        setStatus(`Found ${detectedFieldCatalog.length} usable field${detectedFieldCatalog.length===1?'':'s'} across the grouped PDFs. Choose the fields you want in the filenames.`);
+        completeProgress(`Analysis complete - found ${detectedFieldCatalog.length} useful field${detectedFieldCatalog.length===1?'':'s'}. Choose what you want in the filenames.`);
       }else{
-        setStatus('No repeatable naming fields were found in the grouped PDFs.');
+        completeProgress('Analysis complete - no reliable filename fields were found.');
       }
     }catch(err){
       console.error(err);
+      hideProgress();
       errEl.textContent=err?.message||'Could not analyse the grouped PDFs.';
       setStatus('');
     }finally{
@@ -1564,6 +1965,6 @@
   resetUI(true);
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk149"></script>
+<script src="../../Assets/site-shell.js?v=mk150"></script>
 </body>
 </html>
