@@ -27,7 +27,7 @@
 <meta name="twitter:title" content="Split &amp; Separate PDF Pages | Adrian Headley Tools"/>
 <meta name="twitter:description" content="Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser, with ZIP download support."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","name":"PDF Separator","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb"},"dateModified":"2026-10-23","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app"},"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app","name":"PDF Separator","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@id":"https://tools.adrianheadley.com/#publisher"},"featureList":["Hide intelligent field choices until grouped-PDF analysis has completed.","Centre the grouped-PDF analysis action for a cleaner interface.","Reject weak person-name guesses and preserve double-barrelled, multiple-given-name and middle-name structures.","Preview every generated PDF in a new browser tab before downloading it.","Stop intelligent renaming when a selected token cannot be resolved rather than falling back to the original filename.","Guarantee unique filenames during bulk ZIP and folder export so duplicate names cannot overwrite PDFs."],"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"PDF Separator","item":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","name":"PDF Separator","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb"},"dateModified":"2026-10-23","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app"},"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app","name":"PDF Separator","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@id":"https://tools.adrianheadley.com/#publisher"},"featureList":["Keep intelligent filename controls hidden until grouped-PDF analysis has completed.","Show visible grouped-PDF and page-by-page analysis progress.","Reject weak person-name guesses while supporting hyphenated and multiple-name structures.","Require complete analysis before intelligent filenames can be applied.","Preview every generated PDF in a new browser tab.","Preserve all outputs in ZIP/folder export by uniquifying duplicate filenames."],"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"PDF Separator","item":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"}]}]}</script>
 <style>
   :root{
     --bg:#f5f5f7;
@@ -619,6 +619,8 @@
     .dl-list a{align-items:flex-start}
   }
 
+  [hidden]{display:none!important}
+
   .analysis-action-row{
     display:flex!important;
     justify-content:center!important;
@@ -626,12 +628,13 @@
     width:100%;
   }
   .analysis-action-row #analyseGroupsBtn{margin-inline:auto}
+
   .download-output-row{
     display:grid;
     grid-template-columns:minmax(0,1fr) auto;
     align-items:center;
-    gap:.7rem;
-    padding:.65rem .75rem;
+    gap:.65rem;
+    padding:.62rem .7rem;
     border-top:1px solid var(--border-subtle);
   }
   .download-output-row:first-child{border-top:0}
@@ -640,15 +643,29 @@
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
-    color:var(--text);
     font-weight:700;
+    color:var(--text);
   }
-  .download-output-actions{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;justify-content:flex-end}
+  .download-output-actions{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:.35rem;
+    flex-wrap:wrap;
+  }
   .download-output-action{
-    display:inline-flex;align-items:center;justify-content:center;
-    min-height:34px;padding:.35rem .55rem;
-    border:1px solid var(--border-subtle);border-radius:9px;
-    background:#fff;color:var(--accent);font-size:.72rem;font-weight:800;text-decoration:none
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:34px;
+    padding:.35rem .55rem;
+    border:1px solid var(--border-subtle);
+    border-radius:9px;
+    background:#fff;
+    color:var(--accent);
+    font-size:.72rem;
+    font-weight:800;
+    text-decoration:none;
   }
   .download-output-action:hover{background:#eff6ff;border-color:#bfdbfe}
   @media(max-width:620px){
@@ -658,7 +675,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk154">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk155">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -816,7 +833,7 @@
                         <div class="input">
                           <input id="filenameTemplate" type="text" autocomplete="off" placeholder="[NAME] - Contract"/>
                         </div>
-                        <p class="mode-note">Type normal text anywhere. For example <strong>[NAME] - Contract</strong>, <strong>[LASTNAME], [GIVENNAMES] - Contract</strong>, or <strong>[EMPLOYER] - [DOCUMENT_TYPE]</strong>.</p>
+                        <p class="mode-note">Type normal text anywhere. For example <strong>[NAME] - Contract</strong>, <strong>[LASTNAME], [FIRSTNAME] - Contract</strong>, or <strong>[EMPLOYER] - [DOCUMENT_TYPE]</strong>.</p>
 
                         <div class="template-preview" id="templatePreview" hidden>
                           <strong>Format preview</strong>
@@ -944,6 +961,7 @@
   let detectedFieldCatalog = [];
   let detectedGroupValues = new Map();
   let availableTokens = new Map();
+  let analysisComplete = false;
   let progressValue = 0;
   let progressActive = false;
 
@@ -1143,8 +1161,9 @@
     if(clean.length<3||clean.length>90||/\d|@/.test(clean)) return false;
     if(DOCUMENT_WORDS.test(clean)||ORGANISATION_SUFFIX.test(clean)) return false;
 
-    const nonNamePhrases=/\b(?:grievance|procedure|policy|guidance|contract|agreement|schedule|appendix|section|terms|conditions|job description|person specification|information|statement|report|form|application|declaration|notice|summary|contents|signature|witness|department|directorate|service|services|work|post|duties|responsibilities)\b/i;
-    if(nonNamePhrases.test(clean)) return false;
+    if(/\b(?:grievance|procedure|policy|guidance|contract|agreement|schedule|appendix|section|terms|conditions|job description|person specification|information|statement|report|form|application|declaration|notice|summary|contents|signature|witness|department|directorate|service|services|work|post|duties|responsibilities)\b/i.test(clean)){
+      return false;
+    }
 
     const words=clean.split(/\s+/).filter(Boolean);
     if(words.length<2||words.length>7) return false;
@@ -1240,7 +1259,7 @@
       return makePair('Name',dear[1],12,'inferred-person');
     }
 
-    if(/^\s*(?:\(\d+\)|\d+[.)])\s*/.test(original) && isLikelyPersonName(line)){
+    if(/^\s*(?:\(\d+\)|\d+[.)])\s*/.test(original)&&isLikelyPersonName(line)){
       return makePair('Name',line,14,'numbered-party-person');
     }
 
@@ -1248,8 +1267,6 @@
       return makePair('Name',line,14,'honorific-person');
     }
 
-    // Do not treat arbitrary two-word headings as names. Unlabelled names
-    // need strong structural evidence (numbered party, salutation or honorific).
     return null;
   }
 
@@ -1371,6 +1388,7 @@
     if(!groupedResults.length) throw new Error('Create the grouped PDFs first.');
     if(!window.pdfjsLib) throw new Error('The PDF text reader could not be loaded.');
 
+    analysisComplete=false;
     const catalog=new Map();
     const groupValues=new Map();
     const groupCount=groupedResults.length;
@@ -1386,37 +1404,34 @@
         const pagesToRead=pdf.numPages;
 
         for(let pageNumber=1;pageNumber<=pagesToRead;pageNumber++){
-          const globalStep=(i+(pageNumber/pagesToRead))/groupCount;
+          const percent=4+((i+(pageNumber/pagesToRead))/groupCount)*90;
+
           setProgress(
-            5+globalStep*86,
-            `Analysing grouped PDF ${i+1}/${groupCount}, page ${pageNumber}/${pagesToRead}...`
+            percent,
+            `Analysing grouped PDF ${i+1}/${groupCount} — page ${pageNumber}/${pagesToRead}`
           );
+
+          await new Promise(resolve=>requestAnimationFrame(()=>resolve()));
 
           const lines=buildTextLines(await extractTextItems(pdf,pageNumber));
           let pairs=extractDetectedPairs(lines);
 
-          // Reclassify organisations by document semantics without making
-          // the whole analyser contract-specific.
           const pageText=lines.map(line=>line.text).join(' ');
           const contractual=/\b(contract|employment agreement|honorary contract|terms of engagement)\b/i.test(pageText);
           const invitation=/\b(invitation|invite|rsvp|venue|ceremony|reception)\b/i.test(pageText);
 
           if(contractual){
-            pairs=pairs.map(pair=>{
-              if(pair.key==='organisation'){
-                return {...pair,key:'employer',label:'Employer',priority:118,type:'organisation'};
-              }
-              return pair;
-            });
+            pairs=pairs.map(pair=>pair.key==='organisation'
+              ? {...pair,key:'employer',label:'Employer',priority:118,type:'organisation'}
+              : pair
+            );
           }
 
           if(invitation){
-            pairs=pairs.map(pair=>{
-              if(pair.key==='date' && pair.source==='inferred-date'){
-                return {...pair,key:'event_date',label:'Event date',priority:112,type:'date'};
-              }
-              return pair;
-            });
+            pairs=pairs.map(pair=>(pair.key==='date'&&pair.source==='inferred-date')
+              ? {...pair,key:'event_date',label:'Event date',priority:112,type:'date'}
+              : pair
+            );
           }
 
           for(const pair of pairs){
@@ -1434,8 +1449,6 @@
 
       groupValues.set(i,values);
 
-      // Add one catalog hit per field per group only after the entire grouped PDF
-      // has been analysed so later pages can improve the chosen value.
       for(const pair of values.values()){
         let field=catalog.get(pair.key);
         if(!field){
@@ -1480,10 +1493,7 @@
       .filter(field=>{
         if(field.label.length<3||STOP_LABELS.has(field.label.toLowerCase())) return false;
         if(field.foundIn!==groupCount) return false;
-
-        const semantic=field.priority>=78;
-        const strongExplicit=field.averageScore>=9;
-        return semantic||strongExplicit;
+        return field.priority>=78||field.averageScore>=9;
       })
       .sort((a,b)=>{
         const aScore=a.priority+a.averageScore*4+Math.min(a.uniqueCount,5)*2;
@@ -1491,7 +1501,8 @@
         return bScore-aScore||a.label.localeCompare(b.label);
       });
 
-    setProgress(96,'Finishing intelligent naming analysis...');
+    analysisComplete=true;
+    setProgress(96,'Finishing intelligent naming analysis…');
     return detectedFieldCatalog;
   }
 
@@ -1511,30 +1522,23 @@
       : original;
 
     const parts=withoutTitle.split(/\s+/).filter(Boolean);
-
-    // Keep hyphenated names intact because they remain one token naturally.
-    // Common surname particles are attached to the surname rather than lost.
     let surnameStart=Math.max(0,parts.length-1);
     const particles=new Set(['de','da','del','della','di','du','la','le','van','von','der','den','bin','al']);
-    while(surnameStart>0 && particles.has(parts[surnameStart-1].toLowerCase())){
+
+    while(surnameStart>0&&particles.has(parts[surnameStart-1].toLowerCase())){
       surnameStart--;
     }
 
     const givenParts=parts.slice(0,surnameStart);
     const surnameParts=parts.slice(surnameStart);
 
-    const firstname=givenParts[0] || parts[0] || '';
-    const middleParts=givenParts.slice(1);
-    const givennames=givenParts.length ? givenParts.join(' ') : firstname;
-    const lastname=surnameParts.join(' ') || (parts[parts.length-1]||'');
-
     return {
       name:original,
       title,
-      firstname,
-      middlenames:middleParts.join(' '),
-      givennames,
-      lastname
+      firstname:givenParts[0]||parts[0]||'',
+      middlenames:givenParts.slice(1).join(' '),
+      givennames:givenParts.length?givenParts.join(' '):(parts[0]||''),
+      lastname:surnameParts.join(' ')||(parts[parts.length-1]||'')
     };
   }
 
@@ -1662,6 +1666,13 @@
   }
 
   function renderDetectedFields(){
+    if(!analysisComplete){
+      detectedFields.hidden=true;
+      nameFormatPanel.hidden=true;
+      templateBuilder.hidden=true;
+      return;
+    }
+
     detectedFieldSelect.innerHTML='<option value="">Choose a field…</option>';
     detectedFieldSummary.innerHTML='';
     refreshAvailableTokens();
@@ -1717,7 +1728,7 @@
   function updateTemplatePreview(){
     const template=filenameTemplate.value;
     const hasTemplate=!!template.trim();
-    applyTemplateBtn.disabled=!hasTemplate;
+    applyTemplateBtn.disabled=!hasTemplate||!analysisComplete;
     templatePreview.hidden=!hasTemplate;
     templatePreviewList.innerHTML='';
 
@@ -1751,40 +1762,49 @@
 
   async function applyNamingTemplate(){
     const template=filenameTemplate.value.trim();
+
+    if(!analysisComplete){
+      errEl.textContent='Analyse the grouped PDFs before applying intelligent filenames.';
+      return;
+    }
     if(!template||!groupedResults.length) return;
+    if(detectedGroupValues.size!==groupedResults.length){
+      errEl.textContent='The analysis results are incomplete. Analyse the grouped PDFs again.';
+      return;
+    }
 
     const tokens=[...template.matchAll(/\[[A-Za-z0-9_ ]+\]/g)].map(match=>match[0].toUpperCase());
-    const unknownTokens=tokens.filter(token=>!availableTokens.has(token));
-
-    if(unknownTokens.length){
-      errEl.textContent=`Unknown filename field: ${unknownTokens[0]}. Choose fields from the detected-field list.`;
+    const unknown=tokens.find(token=>!availableTokens.has(token));
+    if(unknown){
+      errEl.textContent=`Unknown filename field: ${unknown}. Insert fields from the detected-field list.`;
       return;
     }
 
     applyTemplateBtn.setAttribute('disabled','');
+    errEl.textContent='';
     startProgress(`Applying filename format to ${groupedResults.length} grouped PDF${groupedResults.length===1?'':'s'}...`);
 
     try{
       const proposed=[];
 
       for(let index=0;index<groupedResults.length;index++){
-        const resolvedTokens=tokens.map(token=>({token,value:tokenValueForGroup(token,index)}));
-        const missingRequired=resolvedTokens.find(item=>!item.value);
-
-        if(missingRequired){
-          throw new Error(`Could not resolve ${missingRequired.token} for pages ${groupedResults[index].start}-${groupedResults[index].end}. The existing filenames were left unchanged.`);
+        for(const token of tokens){
+          const value=tokenValueForGroup(token,index);
+          if(!value){
+            throw new Error(`Could not resolve ${token} for pages ${groupedResults[index].start}-${groupedResults[index].end}. No filenames were changed.`);
+          }
         }
 
         const rendered=renderTemplateForGroup(template,index);
         if(!rendered){
-          throw new Error(`The filename format produced an empty name for pages ${groupedResults[index].start}-${groupedResults[index].end}.`);
+          throw new Error(`The format produced an empty filename for pages ${groupedResults[index].start}-${groupedResults[index].end}.`);
         }
 
         proposed.push(rendered+'.pdf');
 
         setProgress(
-          5+((index+1)/groupedResults.length)*78,
-          `Applying filename ${index+1}/${groupedResults.length}...`
+          5+((index+1)/groupedResults.length)*80,
+          `Applying filename ${index+1}/${groupedResults.length}…`
         );
 
         if(index%5===0){
@@ -1792,11 +1812,9 @@
         }
       }
 
-      // Guarantee every output has a unique filename. Duplicate names in JSZip
-      // overwrite earlier entries, which can otherwise make 89 outputs become 86.
       const uniqueNames=makeUniqueFilenames(proposed);
 
-      setProgress(86,'Writing unique filenames to grouped outputs...');
+      setProgress(88,'Writing filenames to all grouped PDFs…');
 
       groupedResults.forEach((result,index)=>{
         result.name=uniqueNames[index];
@@ -1812,7 +1830,7 @@
         }
       });
 
-      setProgress(94,'Refreshing filenames and downloads...');
+      setProgress(96,'Refreshing download names…');
       rebuildDownloadList();
 
       await new Promise(resolve=>requestAnimationFrame(()=>resolve()));
@@ -1937,6 +1955,7 @@
       detectedFieldCatalog = [];
       detectedGroupValues = new Map();
       availableTokens = new Map();
+      analysisComplete = false;
       detectedFields.hidden = true;
       detectedFieldSummary.innerHTML = '';
       detectedFieldSelect.innerHTML = '<option value="">Choose a field…</option>';
@@ -2129,6 +2148,7 @@
     detectedFieldCatalog = [];
     detectedGroupValues = new Map();
     availableTokens = new Map();
+    analysisComplete = false;
     detectedFields.hidden = true;
     detectedFieldSelect.innerHTML = '<option value="">Choose a field…</option>';
     detectedFieldSummary.innerHTML = '';
@@ -2209,62 +2229,48 @@
   }
 
   function makeUniqueFilenames(names){
-    const used=new Map();
+    const counters=new Map();
+    const used=new Set();
 
-    return names.map((name,index)=>{
-      const safe=String(name||`File ${index+1}.pdf`);
-      const match=safe.match(/^(.*?)(\.pdf)?$/i);
-      const stem=(match?.[1]||`File ${index+1}`).trim()||`File ${index+1}`;
-      const ext='.pdf';
+    return names.map((raw,index)=>{
+      const safe=String(raw||`File ${index+1}.pdf`).trim();
+      const stem=safe.replace(/\.pdf$/i,'').trim()||`File ${index+1}`;
       const key=stem.toLowerCase();
 
-      const seen=(used.get(key)||0)+1;
-      used.set(key,seen);
+      let count=(counters.get(key)||0)+1;
+      counters.set(key,count);
 
-      if(seen===1) return stem+ext;
-
-      let candidate=`${stem} (${seen})${ext}`;
-      let candidateKey=candidate.toLowerCase();
-
-      while(used.has(candidateKey)){
-        const next=(used.get(key)||seen)+1;
-        used.set(key,next);
-        candidate=`${stem} (${next})${ext}`;
-        candidateKey=candidate.toLowerCase();
+      let candidate=count===1?`${stem}.pdf`:`${stem} (${count}).pdf`;
+      while(used.has(candidate.toLowerCase())){
+        count++;
+        counters.set(key,count);
+        candidate=`${stem} (${count}).pdf`;
       }
 
-      used.set(candidateKey,1);
+      used.add(candidate.toLowerCase());
       return candidate;
     });
   }
 
-  function ensureUniqueBulkOutputNames(){
+  function synchroniseUniqueOutputNames(){
     const unique=makeUniqueFilenames(outLinks.map(item=>item.name));
-    let changed=false;
+    outLinks.forEach((item,index)=>{ item.name=unique[index]; });
 
-    outLinks.forEach((item,index)=>{
-      if(item.name!==unique[index]) changed=true;
-      item.name=unique[index];
+    let groupIndex=0;
+    outLinks.forEach(item=>{
+      if(item.kind==='group'&&groupedResults[groupIndex]){
+        groupedResults[groupIndex].name=item.name;
+        groupedResults[groupIndex].pendingName=item.name.replace(/\.pdf$/i,'');
+        groupIndex++;
+      }
     });
 
-    if(groupedResults.length){
-      let groupIndex=0;
-      outLinks.forEach(item=>{
-        if(item.kind==='group' && groupedResults[groupIndex]){
-          groupedResults[groupIndex].name=item.name;
-          groupedResults[groupIndex].pendingName=item.name.replace(/\.pdf$/i,'');
-          groupIndex++;
-        }
-      });
-    }
-
-    if(changed) rebuildDownloadList();
-    return changed;
+    rebuildDownloadList();
   }
 
   async function saveAllToFolder(){
     if(!outLinks.length) return;
-    ensureUniqueBulkOutputNames();
+    synchroniseUniqueOutputNames();
 
     if(!('showDirectoryPicker' in window)){
       hideProgress();
@@ -2306,7 +2312,7 @@
 
   async function downloadAllAsZip(){
     if(!outLinks.length) return;
-    ensureUniqueBulkOutputNames();
+    synchroniseUniqueOutputNames();
 
     zipBtn.setAttribute('disabled', '');
     startProgress('Building ZIP...');
@@ -2332,7 +2338,7 @@
       a.remove();
 
       setTimeout(() => URL.revokeObjectURL(url), 2000);
-      completeProgress(`ZIP download ready - ${outLinks.length} PDF${outLinks.length===1?'':'s'} included.`);
+      completeProgress(`ZIP download ready — ${outLinks.length} PDF${outLinks.length===1?'':'s'} included.`);
     }catch(err){
       console.error(err);
       hideProgress();
@@ -2385,6 +2391,7 @@
     detectedFieldCatalog=[];
     detectedGroupValues=new Map();
     availableTokens=new Map();
+    analysisComplete=false;
     detectedFields.hidden=true;
     detectedFieldSelect.innerHTML='<option value="">Choose a field…</option>';
     detectedFieldSummary.innerHTML='';
@@ -2401,6 +2408,7 @@
     namingModeGrid.hidden=true;
     manualNamingPanel.hidden=true;
     smartNamingPanel.hidden=false;
+    analysisComplete=false;
     detectedFields.hidden=true;
     nameFormatPanel.hidden=true;
     templateBuilder.hidden=true;
@@ -2446,6 +2454,7 @@
 
   analyseGroupsBtn.addEventListener('click',async()=>{
     errEl.textContent='';
+    analysisComplete=false;
     detectedFields.hidden=true;
     nameFormatPanel.hidden=true;
     templateBuilder.hidden=true;
@@ -2510,6 +2519,6 @@
   resetUI(true);
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk154"></script>
+<script src="../../Assets/site-shell.js?v=mk155"></script>
 </body>
 </html>

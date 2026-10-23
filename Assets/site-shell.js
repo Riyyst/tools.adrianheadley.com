@@ -194,11 +194,11 @@
     ]
   },
   "pdf-separator.html": {
-    "description": "Separate PDFs into page groups, choose Intelligent or Manual naming, preview every generated PDF, and export the full set without losing duplicate filenames.",
+    "description": "Separate PDFs into page groups, choose Intelligent or Manual naming, preview outputs, and build reliable filenames only after real analysis.",
     "steps": [
-      "After grouping, choose Intelligent naming or Manual naming. Manual filename fields remain hidden unless Manual naming is selected. In Intelligent naming, no field choices are shown before Analyse grouped PDFs has actually completed, and the Analyse button is centred for a cleaner layout.",
-      "Intelligent analysis only offers reliable fields found in every grouped PDF. Person detection requires strong evidence such as an explicit Name label, numbered party, salutation or honorific, which prevents headings such as Grievance Procedure being treated as a person. Name parsing preserves hyphenated first or last names, surname particles and multiple given/middle names, with tokens for Firstname, Middle name(s), Given name(s), Lastname and Title.",
-      "A Preview button sits beside every Download button and opens that generated PDF in a new browser tab for checking. Apply to all filenames now stops if a selected field cannot be resolved instead of silently reverting to the original filename. Bulk ZIP/folder export also guarantees unique filenames by appending (2), (3), etc. where needed, preventing duplicate names from overwriting files and reducing the final file count."
+      "After grouping, choose Intelligent naming or Manual naming. In Intelligent naming, only the centred Analyse grouped PDFs button and its explanation are visible initially. The field selector, Name format and filename builder stay hidden until every grouped PDF has actually been scanned.",
+      "Analysis visibly progresses through each grouped PDF and each page. Person detection requires strong evidence such as a Name label, numbered party, salutation or honorific, so headings such as Grievance Procedure are rejected. Hyphenated names, surname particles and multiple given or middle names are preserved with Firstname, Middle name(s), Given name(s), Lastname and Title tokens.",
+      "Apply to all filenames is allowed only after complete analysis. Missing tokens stop the operation instead of silently reverting to the original filename. Preview opens each generated PDF in a new tab. ZIP and folder export make duplicate filenames unique with (2), (3), etc., so the exported file count cannot shrink because of duplicate names."
     ]
   },
   "powerful-sites.html": {
