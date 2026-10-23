@@ -194,11 +194,11 @@
     ]
   },
   "pdf-separator.html": {
-    "description": "Split a PDF into separate page files directly in your browser.",
+    "description": "Separate a PDF into individual selected pages or automatically create repeating groups of pages.",
     "steps": [
-      "Upload the PDF you want to separate.",
-      "Choose the pages or splitting option you need.",
-      "Run the split and download the resulting PDF files."
+      "Choose a PDF, then select Specific pages if you want individual page PDFs. Enter page numbers or ranges such as 1,3,5-7, or leave the field blank to separate every page individually.",
+      "Choose Groups of pages when the document needs to be divided repeatedly into equal-size PDFs. Enter the number of pages per PDF. For example, 7 creates pages 1-7, 8-14, 15-21 and so on.",
+      "If the document does not divide evenly, the remaining pages are automatically placed in the final PDF. Download each result individually or use Download All for a ZIP containing every generated PDF."
     ]
   },
   "powerful-sites.html": {

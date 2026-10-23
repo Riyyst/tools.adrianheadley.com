@@ -8,7 +8,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin"/>
 <link rel="author" href="https://www.adrianheadley.com/"/>
 <title>Split &amp; Separate PDF Pages | Adrian Headley Tools</title>
-<meta name="description" content="Split a PDF into individual pages or selected page ranges directly in your browser, with ZIP download support."/>
+<meta name="description" content="Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser, with ZIP download support."/>
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"/>
 <meta name="author" content="Adrian Headley"/>
 <meta name="application-name" content="Adrian Headley Tools"/>
@@ -17,7 +17,7 @@
 <meta property="og:site_name" content="Adrian Headley Tools"/>
 <meta property="og:locale" content="en_GB"/>
 <meta property="og:title" content="Split &amp; Separate PDF Pages | Adrian Headley Tools"/>
-<meta property="og:description" content="Split a PDF into individual pages or selected page ranges directly in your browser, with ZIP download support."/>
+<meta property="og:description" content="Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser, with ZIP download support."/>
 <meta property="og:url" content="https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"/>
 <meta property="og:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
 <meta property="og:image:width" content="2048"/>
@@ -25,9 +25,9 @@
 <meta property="og:image:alt" content="Adrian Headley Tools"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="Split &amp; Separate PDF Pages | Adrian Headley Tools"/>
-<meta name="twitter:description" content="Split a PDF into individual pages or selected page ranges directly in your browser, with ZIP download support."/>
+<meta name="twitter:description" content="Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser, with ZIP download support."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","name":"PDF Separator","description":"Split a PDF into individual pages or selected page ranges directly in your browser, with ZIP download support.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb"},"dateModified":"2026-09-24","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app"},"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app","name":"PDF Separator","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","description":"Split a PDF into individual pages or selected page ranges directly in your browser, with ZIP download support.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@id":"https://tools.adrianheadley.com/#publisher"},"featureList":["Choose the PDF you want to split.","Select all pages or enter the page numbers and ranges you need.","Split the PDF and download individual files or the combined ZIP where available."],"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"PDF Separator","item":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","name":"PDF Separator","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb"},"dateModified":"2026-10-23","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app"},"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app","name":"PDF Separator","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@id":"https://tools.adrianheadley.com/#publisher"},"featureList":["Choose a PDF to separate locally in the browser.","Extract specific pages using individual page numbers and ranges.","Split the whole document into repeating groups of X pages, such as pages 1-7, 8-14 and 15-21.","Automatically place any remaining pages into the final grouped PDF.","Download each generated PDF separately or download all generated PDFs in one ZIP archive."],"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"PDF Separator","item":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"}]}]}</script>
 <style>
   :root{
     --bg:#f5f5f7;
@@ -246,6 +246,72 @@
   #pagesBlock{
     width:min(100%,720px);
   }
+  .extract-mode{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:.55rem;
+    margin-bottom:1rem;
+  }
+  .extract-mode button{
+    min-height:48px;
+    border:1px solid var(--border-strong);
+    border-radius:14px;
+    background:#fff;
+    color:var(--text-soft);
+    padding:.65rem .8rem;
+    font:inherit;
+    font-size:.84rem;
+    font-weight:750;
+    cursor:pointer;
+    transition:background .16s,border-color .16s,color .16s,box-shadow .16s;
+  }
+  .extract-mode button:hover{
+    background:#f8fafc;
+    border-color:#94a3b8;
+    color:var(--text);
+  }
+  .extract-mode button.active{
+    background:var(--accent-soft);
+    border-color:rgba(37,99,235,.28);
+    color:var(--accent);
+    box-shadow:0 0 0 2px rgba(37,99,235,.05);
+  }
+  .mode-panel{
+    border:1px solid var(--border-subtle);
+    border-radius:18px;
+    background:#f8fafc;
+    padding:1rem;
+  }
+  .mode-panel[hidden]{display:none!important}
+  .mode-panel label{
+    display:block;
+    margin-bottom:.45rem;
+    text-align:center;
+  }
+  .group-preview{
+    margin:.75rem 0 0;
+    padding:.72rem .8rem;
+    border:1px solid #bfdbfe;
+    border-radius:13px;
+    background:#eff6ff;
+    color:#1e3a8a;
+    text-align:center;
+    font-size:.8rem;
+    font-weight:650;
+    line-height:1.45;
+  }
+  .group-preview strong{font-weight:800}
+  .mode-note{
+    margin:.55rem 0 0;
+    text-align:center;
+    color:var(--text-soft);
+    font-size:.78rem;
+    line-height:1.45;
+  }
+  @media(max-width:620px){
+    .extract-mode{grid-template-columns:1fr}
+  }
+
   .input input{
     width:100%;
     border-radius:14px;
@@ -418,7 +484,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk146">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk147">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -450,7 +516,7 @@
   <section class="intro">
     <div class="container">
       <h1 class="intro__title">PDF Separator</h1>
-      <p class="intro__subtitle">Split one PDF into separate page PDFs directly in your browser.</p>
+      <p class="intro__subtitle">Split one PDF into individual pages, selected pages or repeating groups of pages directly in your browser.</p>
     </div>
   </section>
 
@@ -469,11 +535,28 @@
 
             <div class="controls hidden" id="pagesBlock">
               <div>
-                <label for="pages">Pages to extract</label>
-                <div class="input">
-                  <input id="pages" inputmode="numeric" placeholder="e.g. 1,3,5-7 or leave blank for all" type="text"/>
+                <label>How would you like to separate the PDF?</label>
+                <div class="extract-mode" id="extractMode" role="group" aria-label="PDF extraction mode">
+                  <button class="active" data-extract-mode="specific" type="button">Specific pages</button>
+                  <button data-extract-mode="groups" type="button">Groups of pages</button>
                 </div>
-                <p class="hint">Use commas and ranges, such as <strong>2-5</strong>, <strong>1,4,9</strong>, or leave blank for all pages.</p>
+
+                <div class="mode-panel" id="specificPagesPanel">
+                  <label for="pages">Pages to extract</label>
+                  <div class="input">
+                    <input id="pages" inputmode="numeric" placeholder="e.g. 1,3,5-7 or leave blank for all" type="text"/>
+                  </div>
+                  <p class="hint">Each selected page is saved as its own PDF. Use commas and ranges, such as <strong>2-5</strong>, <strong>1,4,9</strong>, or leave blank for all pages.</p>
+                </div>
+
+                <div class="mode-panel" id="groupPagesPanel" hidden>
+                  <label for="groupSize">Pages per PDF</label>
+                  <div class="input">
+                    <input id="groupSize" inputmode="numeric" min="1" step="1" type="number" value="7"/>
+                  </div>
+                  <p class="mode-note">The document will be separated repeatedly in groups of this many pages. Any pages left at the end are placed into the final PDF.</p>
+                  <div class="group-preview" id="groupPreview" aria-live="polite">Choose a PDF to preview the groups.</div>
+                </div>
               </div>
             </div>
 
@@ -535,6 +618,11 @@
   const pdfInfoEl = $('#pdfInfo');
   const pagesBlock = $('#pagesBlock');
   const pagesInput = $('#pages');
+  const groupSizeInput = $('#groupSize');
+  const groupPreview = $('#groupPreview');
+  const specificPagesPanel = $('#specificPagesPanel');
+  const groupPagesPanel = $('#groupPagesPanel');
+  const extractModeButtons = [...document.querySelectorAll('[data-extract-mode]')];
   const namingInput = $('#naming');
   const statusEl = $('#status');
   const runBtn = $('#runUnified');
@@ -548,6 +636,7 @@
   let totalPages = 0;
   let sourceBytes = null;
   let outLinks = [];
+  let extractMode = 'specific';
 
   function show(el){ if(el) el.classList.remove('hidden'); }
   function hide(el){ if(el) el.classList.add('hidden'); }
@@ -559,6 +648,68 @@
   function fmtName(stemName, page){
     const tpl = namingInput.value || '{name} — Page {page}';
     return tpl.replaceAll('{name}', stemName).replaceAll('{page}', String(page)) + '.pdf';
+  }
+
+  function fmtGroupName(stemName, start, end){
+    return `${stemName || 'PDF'} — Pages ${start}-${end}.pdf`;
+  }
+
+  function buildPageGroups(max, size){
+    const groupSize = Number.parseInt(size, 10);
+    if(!Number.isInteger(groupSize) || groupSize < 1){
+      throw new Error('Enter a valid number of pages per PDF.');
+    }
+    if(max < 1) return [];
+
+    const groups = [];
+    for(let start = 1; start <= max; start += groupSize){
+      const end = Math.min(start + groupSize - 1, max);
+      groups.push({
+        start,
+        end,
+        pages: Array.from({length:end - start + 1}, (_, i) => start + i)
+      });
+    }
+    return groups;
+  }
+
+  function updateGroupPreview(){
+    if(!groupPreview) return;
+    if(!totalPages){
+      groupPreview.textContent = 'Choose a PDF to preview the groups.';
+      return;
+    }
+
+    const raw = Number.parseInt(groupSizeInput.value, 10);
+    if(!Number.isInteger(raw) || raw < 1){
+      groupPreview.textContent = 'Enter at least 1 page per PDF.';
+      return;
+    }
+
+    const groups = buildPageGroups(totalPages, raw);
+    const first = groups[0];
+    const second = groups[1];
+    const last = groups[groups.length - 1];
+    const examples = [];
+
+    if(first) examples.push(`${first.start}–${first.end}`);
+    if(second) examples.push(`${second.start}–${second.end}`);
+    if(groups.length > 3) examples.push('…');
+    if(last && (!second || last.start !== second.start)) examples.push(`${last.start}–${last.end}`);
+
+    groupPreview.innerHTML =
+      `<strong>${totalPages} pages → ${groups.length} PDF${groups.length === 1 ? '' : 's'}</strong>` +
+      (examples.length ? `<br>${examples.join(', ')}` : '');
+  }
+
+  function setExtractMode(mode){
+    extractMode = mode === 'groups' ? 'groups' : 'specific';
+    extractModeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.extractMode === extractMode));
+    specificPagesPanel.hidden = extractMode !== 'specific';
+    groupPagesPanel.hidden = extractMode !== 'groups';
+    runBtn.textContent = extractMode === 'groups' ? 'Split into Groups' : 'Split';
+    errEl.textContent = '';
+    if(extractMode === 'groups') updateGroupPreview();
   }
 
   function revokeOutputs(){
@@ -586,6 +737,9 @@
       pdfInfoEl.innerHTML = '';
       hide(pdfInfoEl);
       pagesInput.value = '';
+      groupSizeInput.value = '7';
+      setExtractMode('specific');
+      updateGroupPreview();
       hide(pagesBlock);
       hide(runBtn);
       runBtn.setAttribute('disabled', '');
@@ -635,6 +789,7 @@
       pdfInfoEl.innerHTML = '<strong>Pages:</strong> ' + totalPages + (totalPages === 1 ? ' page' : ' pages');
       show(pdfInfoEl);
       show(pagesBlock);
+      updateGroupPreview();
       show(runBtn);
       runBtn.removeAttribute('disabled');
       show(clearBtn);
@@ -705,6 +860,47 @@
     setStatus('All done - pages ready below');
   }
 
+  async function splitPageGroups(groups){
+    const { PDFDocument } = PDFLib;
+    revokeOutputs();
+    dlList.innerHTML = '';
+    hide(dlList);
+    hide(zipBtn);
+    zipBtn.setAttribute('disabled', '');
+
+    const src = await PDFDocument.load(sourceBytes);
+
+    for(let i = 0; i < groups.length; i++){
+      const group = groups[i];
+      setStatus(`Creating group ${i + 1}/${groups.length}: pages ${group.start}-${group.end}...`);
+
+      const out = await PDFDocument.create();
+      const indices = group.pages.map(pageNumber => pageNumber - 1);
+      const copiedPages = await out.copyPages(src, indices);
+      copiedPages.forEach(page => out.addPage(page));
+
+      const bytes = await out.save({ useObjectStreams:false });
+      const blob = new Blob([bytes], {type:'application/pdf'});
+      const url = URL.createObjectURL(blob);
+      const name = fmtGroupName(fileStem, group.start, group.end);
+
+      outLinks.push({
+        start:group.start,
+        end:group.end,
+        pages:group.pages,
+        url,
+        name,
+        blob,
+        kind:'group'
+      });
+      addGroupDownloadLink(group.start, group.end, url, name);
+    }
+
+    show(zipBtn);
+    zipBtn.removeAttribute('disabled');
+    setStatus(`All done - ${groups.length} grouped PDF${groups.length === 1 ? '' : 's'} ready below`);
+  }
+
   function addDownloadLink(page, url, name){
     const a = document.createElement('a');
     a.href = url;
@@ -713,6 +909,25 @@
     const left = document.createElement('span');
     left.className = 'name';
     left.textContent = (fileStem || 'PDF') + ' — Page ' + page;
+
+    const right = document.createElement('span');
+    right.className = 'right';
+    right.textContent = 'Download';
+
+    a.appendChild(left);
+    a.appendChild(right);
+    dlList.appendChild(a);
+    show(dlList);
+  }
+
+  function addGroupDownloadLink(start, end, url, name){
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+
+    const left = document.createElement('span');
+    left.className = 'name';
+    left.textContent = (fileStem || 'PDF') + ' — Pages ' + start + '–' + end;
 
     const right = document.createElement('span');
     right.className = 'right';
@@ -740,7 +955,7 @@
       const url = URL.createObjectURL(content);
       const a = document.createElement('a');
       a.href = url;
-      a.download = (fileStem || 'PDF') + ' — All Pages.zip';
+      a.download = (fileStem || 'PDF') + (extractMode === 'groups' ? ' — Page Groups.zip' : ' — All Pages.zip');
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -765,10 +980,16 @@
     }
 
     try{
-      const pages = parsePagesSpec(pagesInput.value, totalPages);
       runBtn.setAttribute('disabled', '');
       hide(clearBtn);
-      await splitPages(pages);
+
+      if(extractMode === 'groups'){
+        const groups = buildPageGroups(totalPages, groupSizeInput.value);
+        await splitPageGroups(groups);
+      }else{
+        const pages = parsePagesSpec(pagesInput.value, totalPages);
+        await splitPages(pages);
+      }
     }catch(err){
       console.error(err);
       errEl.textContent = err && err.message ? err.message : 'Could not split that PDF. Try another PDF file.';
@@ -779,6 +1000,10 @@
     }
   });
 
+  extractModeButtons.forEach(btn => btn.addEventListener('click', () => setExtractMode(btn.dataset.extractMode)));
+  groupSizeInput.addEventListener('input', updateGroupPreview);
+  groupSizeInput.addEventListener('change', updateGroupPreview);
+
   clearBtn.addEventListener('click', () => resetUI(true));
   zipBtn.addEventListener('click', downloadAllAsZip);
 
@@ -788,6 +1013,6 @@
   resetUI(true);
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk146"></script>
+<script src="../../Assets/site-shell.js?v=mk147"></script>
 </body>
 </html>
