@@ -27,7 +27,7 @@
 <meta name="twitter:title" content="Split &amp; Separate PDF Pages | Adrian Headley Tools"/>
 <meta name="twitter:description" content="Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser, with ZIP download support."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","name":"PDF Separator","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb"},"dateModified":"2026-10-23","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app"},"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app","name":"PDF Separator","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@id":"https://tools.adrianheadley.com/#publisher"},"featureList":["Choose any reliable intelligent field found in every grouped PDF rather than forcing Name.","Use generic name-layout examples such as Firstname Lastname and Lastname, Firstname, Title.","Build filename templates from intelligent field tokens plus arbitrary user-written text.","Show a generic format preview without exposing real names in the example.","Resolve real values independently for each grouped PDF only when applying the template.","Apply filenames to every grouped output with visible blue batch progress and refresh all manual filename fields and download links."],"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"PDF Separator","item":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","name":"PDF Separator","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb"},"dateModified":"2026-10-23","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app"},"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app","name":"PDF Separator","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@id":"https://tools.adrianheadley.com/#publisher"},"featureList":["Show Intelligent naming and Manual naming as separate post-grouping modes.","Keep manual filename fields hidden until Manual naming is explicitly chosen.","Analyse every page of every grouped PDF for reliable semantic fields.","Offer any field found reliably in every grouped PDF rather than forcing Name.","Build mail-merge-style filename templates from detected fields and normal text.","Apply resolved real values to every grouped output and explicitly synchronise Download All and Save All filenames."],"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"PDF Separator","item":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"}]}]}</script>
 <style>
   :root{
     --bg:#f5f5f7;
@@ -349,6 +349,23 @@
   .post-group-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
   .post-group-head strong{display:block;font-size:.92rem;color:var(--text)}
   .post-group-head span{display:block;margin-top:.14rem;color:var(--text-soft);font-size:.76rem;line-height:1.4}
+  .naming-mode-grid{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin-top:.9rem
+  }
+  .naming-mode-card{
+    min-height:92px;text-align:left;padding:.9rem;border:1px solid var(--border-subtle);border-radius:14px;
+    background:#f8fafc;color:var(--text);font:inherit;cursor:pointer
+  }
+  .naming-mode-card:hover{background:#eff6ff;border-color:#bfdbfe}
+  .naming-mode-card strong{display:block;font-size:.84rem}
+  .naming-mode-card span{display:block;margin-top:.2rem;font-size:.72rem;color:var(--text-soft);line-height:1.4}
+  .manual-naming-panel,.smart-naming-block{
+    margin-top:1rem;padding:1rem;border:1px solid var(--border-subtle);border-radius:16px;background:#f8fafc
+  }
+  .panel-head-row{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}
+  .panel-head-row strong{display:block;font-size:.88rem}
+  .panel-head-row span{display:block;margin-top:.12rem;font-size:.72rem;color:var(--text-soft);line-height:1.4}
+  .subtle-btn{background:#fff!important;color:#475569!important;border:1px solid var(--border-strong)!important}
   .manual-rename-list{display:grid;gap:.48rem;margin-top:.9rem}
   .manual-rename-row{
     display:grid;grid-template-columns:82px minmax(0,1fr) auto;align-items:center;gap:.55rem;
@@ -360,9 +377,6 @@
     padding:.45rem .55rem;background:#fff;color:var(--text);font:inherit;font-size:.76rem
   }
   .manual-rename-ext{font-size:.72rem;font-weight:800;color:#64748b}
-  .smart-naming-block{
-    margin-top:1rem;padding:1rem;border:1px solid var(--border-subtle);border-radius:16px;background:#f8fafc
-  }
   .smart-detected-note{margin-top:.85rem}
   .detected-fields{margin-top:1rem;border-top:1px solid var(--border-subtle);padding-top:1rem}
   .field-picker-panel{
@@ -402,6 +416,7 @@
   .template-preview strong{display:block;font-size:.76rem;margin-bottom:.28rem}
   #templatePreviewList{display:grid;gap:.15rem;font-size:.72rem;overflow-wrap:anywhere}
   @media(max-width:720px){
+    .naming-mode-grid{grid-template-columns:1fr}
     .manual-rename-row{grid-template-columns:68px minmax(0,1fr)}
     .manual-rename-ext{grid-column:2}
     .field-picker-panel,.name-format-panel{grid-template-columns:1fr}
@@ -606,7 +621,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk152">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk153">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -683,79 +698,94 @@
                     <div class="post-group-head">
                       <div>
                         <strong>Rename grouped PDFs</strong>
-                        <span>Rename any file manually, or use Intelligent naming to fill the filenames for you.</span>
+                        <span>Choose how you want to name the grouped files.</span>
                       </div>
                     </div>
 
-                    <div class="manual-rename-list" id="manualRenameList"></div>
+                    <div class="naming-mode-grid" id="namingModeGrid">
+                      <button class="naming-mode-card" id="intelligentModeBtn" type="button">
+                        <strong>Intelligent naming</strong>
+                        <span>Analyse all grouped PDFs and build filenames from reliable detected fields.</span>
+                      </button>
+                      <button class="naming-mode-card" id="manualModeBtn" type="button">
+                        <strong>Manual naming</strong>
+                        <span>Rename each grouped PDF yourself.</span>
+                      </button>
+                    </div>
 
-                    <div class="smart-naming-block">
-                      <div class="smart-naming-head">
+                    <div class="manual-naming-panel" id="manualNamingPanel" hidden>
+                      <div class="panel-head-row">
+                        <div>
+                          <strong>Manual naming</strong>
+                          <span>Edit each filename directly.</span>
+                        </div>
+                        <button class="btn subtle-btn" id="closeManualNamingBtn" type="button">Close</button>
+                      </div>
+                      <div class="manual-rename-list" id="manualRenameList"></div>
+                    </div>
+
+                    <div class="smart-naming-block" id="smartNamingPanel" hidden>
+                      <div class="panel-head-row">
                         <div>
                           <strong>Intelligent naming</strong>
-                          <span>Analyse every grouped PDF, then build a filename like a mail merge using only fields found reliably in all groups.</span>
+                          <span>Analyse every grouped PDF, then build a filename like a mail merge using reliable fields found in all groups.</span>
                         </div>
-                        <label class="toggle-switch" title="Enable intelligent naming">
-                          <input id="smartNamingToggle" type="checkbox"/>
-                          <span class="toggle-track" aria-hidden="true"></span>
-                        </label>
+                        <button class="btn subtle-btn" id="closeIntelligentNamingBtn" type="button">Close</button>
                       </div>
 
-                      <div id="smartNamingOptions" hidden>
-                        <p class="mode-note smart-detected-note">
-                          Analyse the grouped PDFs first. Only reliable fields found in every grouped PDF will be available.
-                        </p>
+                      <p class="mode-note smart-detected-note">
+                        Analyse the grouped PDFs first. Only reliable fields found in every grouped PDF will be available.
+                      </p>
+
+                      <div class="smart-actions">
+                        <button class="btn" id="analyseGroupsBtn" type="button">Analyse grouped PDFs</button>
+                      </div>
+
+                      <div class="detected-fields" id="detectedFields" hidden>
+                        <div class="smart-review-head">
+                          <strong>Available intelligent fields</strong>
+                          <span>Choose any reliable field found in every grouped PDF.</span>
+                        </div>
+
+                        <div class="field-picker-panel">
+                          <div>
+                            <label for="detectedFieldSelect">Add intelligent field</label>
+                            <select id="detectedFieldSelect">
+                              <option value="">Choose a field…</option>
+                            </select>
+                          </div>
+                          <button class="btn field-insert-btn" id="insertDetectedFieldBtn" type="button" disabled>Insert field</button>
+                        </div>
+
+                        <div class="detected-field-summary" id="detectedFieldSummary"></div>
+                      </div>
+
+                      <div class="name-format-panel" id="nameFormatPanel" hidden>
+                        <label for="nameFormat">Name format</label>
+                        <select id="nameFormat">
+                          <option value="[NAME]">Full name as detected</option>
+                          <option value="[FIRSTNAME] [LASTNAME]">Firstname Lastname</option>
+                          <option value="[LASTNAME], [FIRSTNAME]">Lastname, Firstname</option>
+                          <option value="[LASTNAME], [FIRSTNAME], [TITLE]">Lastname, Firstname, Title</option>
+                          <option value="[TITLE] [FIRSTNAME] [LASTNAME]">Title Firstname Lastname</option>
+                        </select>
+                        <button class="btn field-insert-btn" id="insertNameFormatBtn" type="button">Insert name format</button>
+                      </div>
+
+                      <div class="template-builder" id="templateBuilder" hidden>
+                        <label for="filenameTemplate">Filename format</label>
+                        <div class="input">
+                          <input id="filenameTemplate" type="text" autocomplete="off" placeholder="[NAME] - Contract"/>
+                        </div>
+                        <p class="mode-note">Type normal text anywhere. For example <strong>[NAME] - Contract</strong>, <strong>[LASTNAME], [FIRSTNAME] - Contract</strong>, or <strong>[EMPLOYER] - [DOCUMENT_TYPE]</strong>.</p>
+
+                        <div class="template-preview" id="templatePreview" hidden>
+                          <strong>Format preview</strong>
+                          <div id="templatePreviewList"></div>
+                        </div>
 
                         <div class="smart-actions">
-                          <button class="btn" id="analyseGroupsBtn" type="button">Analyse grouped PDFs</button>
-                        </div>
-
-                        <div class="detected-fields" id="detectedFields" hidden>
-                          <div class="smart-review-head">
-                            <strong>Available intelligent fields</strong>
-                            <span>Choose any reliable field found in every grouped PDF.</span>
-                          </div>
-
-                          <div class="field-picker-panel">
-                            <div>
-                              <label for="detectedFieldSelect">Add intelligent field</label>
-                              <select id="detectedFieldSelect">
-                                <option value="">Choose a field…</option>
-                              </select>
-                            </div>
-                            <button class="btn field-insert-btn" id="insertDetectedFieldBtn" type="button" disabled>Insert field</button>
-                          </div>
-
-                          <div class="detected-field-summary" id="detectedFieldSummary"></div>
-                        </div>
-
-                        <div class="name-format-panel" id="nameFormatPanel" hidden>
-                          <label for="nameFormat">Name format</label>
-                          <select id="nameFormat">
-                            <option value="[NAME]">Full name as detected</option>
-                            <option value="[FIRSTNAME] [LASTNAME]">Firstname Lastname</option>
-                            <option value="[LASTNAME], [FIRSTNAME]">Lastname, Firstname</option>
-                            <option value="[LASTNAME], [FIRSTNAME], [TITLE]">Lastname, Firstname, Title</option>
-                            <option value="[TITLE] [FIRSTNAME] [LASTNAME]">Title Firstname Lastname</option>
-                          </select>
-                          <button class="btn field-insert-btn" id="insertNameFormatBtn" type="button">Insert name format</button>
-                        </div>
-
-                        <div class="template-builder" id="templateBuilder" hidden>
-                          <label for="filenameTemplate">Filename format</label>
-                          <div class="input">
-                            <input id="filenameTemplate" type="text" autocomplete="off" placeholder="[NAME] - Contract"/>
-                          </div>
-                          <p class="mode-note">Type normal text anywhere. Intelligent fields use square brackets, for example <strong>[NAME] - Contract</strong> or <strong>[LASTNAME], [FIRSTNAME] - [DOCUMENT_TYPE]</strong>.</p>
-
-                          <div class="template-preview" id="templatePreview" hidden>
-                            <strong>Format preview</strong>
-                            <div id="templatePreviewList"></div>
-                          </div>
-
-                          <div class="smart-actions">
-                            <button class="btn" id="applyTemplateBtn" type="button" disabled>Apply to all filenames</button>
-                          </div>
+                          <button class="btn" id="applyTemplateBtn" type="button" disabled>Apply to all filenames</button>
                         </div>
                       </div>
                     </div>
@@ -835,9 +865,14 @@
   const groupPagesPanel = $('#groupPagesPanel');
   const extractModeButtons = [...document.querySelectorAll('[data-extract-mode]')];
   const postGroupNaming = $('#postGroupNaming');
+  const namingModeGrid = $('#namingModeGrid');
+  const intelligentModeBtn = $('#intelligentModeBtn');
+  const manualModeBtn = $('#manualModeBtn');
+  const manualNamingPanel = $('#manualNamingPanel');
+  const closeManualNamingBtn = $('#closeManualNamingBtn');
   const manualRenameList = $('#manualRenameList');
-  const smartNamingToggle = $('#smartNamingToggle');
-  const smartNamingOptions = $('#smartNamingOptions');
+  const smartNamingPanel = $('#smartNamingPanel');
+  const closeIntelligentNamingBtn = $('#closeIntelligentNamingBtn');
   const detectedFields = $('#detectedFields');
   const detectedFieldSelect = $('#detectedFieldSelect');
   const detectedFieldSummary = $('#detectedFieldSummary');
@@ -866,7 +901,6 @@
   let sourceBytes = null;
   let outLinks = [];
   let extractMode = 'specific';
-  let smartNamingEnabled = false;
   let groupedResults = [];
   let detectedFieldCatalog = [];
   let detectedGroupValues = new Map();
@@ -1181,26 +1215,27 @@
     let priorityBoost=0;
 
     if(/\b(?:commenc|takes? effect|effective|starts?|starting|begins?|beginning)\b/i.test(line)){
-      label='Commencement date'; priorityBoost=3;
+      label='Commencement date'; priorityBoost=4;
     }else if(/\b(?:expir|expiration|ends?|ending|termination|terminates?|valid until)\b/i.test(line)){
-      label='End date'; priorityBoost=3;
+      label='End date'; priorityBoost=4;
     }else if(/\b(?:due|deadline|rsvp|respond by|reply by|submit by)\b/i.test(line)){
-      label='Due date'; priorityBoost=3;
+      label='Due date'; priorityBoost=4;
     }else if(/\b(?:event|invitation|invite|meeting|appointment|ceremony|conference|wedding|party|session)\b/i.test(line)){
-      label='Event date'; priorityBoost=2;
+      label='Event date'; priorityBoost=3;
     }else if(/\b(?:issued|issue date|date issued)\b/i.test(line)){
-      label='Issue date'; priorityBoost=2;
+      label='Issue date'; priorityBoost=3;
     }else if(/\b(?:signed|signature)\b/i.test(line)){
-      label='Signature date'; priorityBoost=1;
+      label='Signature date'; priorityBoost=2;
     }else if(/\b(?:birth|born|dob)\b/i.test(line)){
-      label='Date of birth'; priorityBoost=3;
+      label='Date of birth'; priorityBoost=4;
+    }else if(/^\s*(?:dated|date)\s*[:\-–—]/i.test(line)){
+      label='Date'; priorityBoost=5;
     }else if(line.replace(date,'').replace(/[\s,:;()\-–—]/g,'').length===0 || lineIndex<=3){
       label='Date';
     }
 
     if(!label) return null;
-    const pair=makePair(label,date,10+priorityBoost,'inferred-date');
-    return pair;
+    return makePair(label,date,10+priorityBoost,'inferred-date');
   }
 
   function stripPartyMarker(value){
@@ -1213,28 +1248,54 @@
   function joinWrappedProperName(lines,index){
     const current=stripPartyMarker(lines[index]?.text||'');
     const next=stripPartyMarker(lines[index+1]?.text||'');
-    if(!current||!next) return current;
+    const after=stripPartyMarker(lines[index+2]?.text||'');
 
-    const close=Math.abs((lines[index]?.y||0)-(lines[index+1]?.y||0))<=32;
-    const nextShort=next.split(/\s+/).length<=4;
-    const continuation=/^(?:Trust|Foundation|Limited|Ltd|LLP|PLC|University|College|Hospital|Hospitals|Council|Association|Society|Group|Services|Service|Authority|Board)$/i.test(next);
+    if(!current) return '';
 
-    if(close&&nextShort&&continuation){
-      return `${current} ${next}`.replace(/\s+/g,' ').trim();
+    const currentWords=current.split(/\s+/).filter(Boolean);
+    const currentProper=currentWords.length>=2 && currentWords.length<=14 &&
+      currentWords.filter(word=>/^[A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ'’&.-]*$/.test(word)||/^[A-Z]{2,}$/.test(word)).length>=Math.max(2,Math.ceil(currentWords.length*.6));
+
+    if(!currentProper) return current;
+
+    let result=current;
+    const currentY=lines[index]?.y||0;
+
+    const canJoin=(candidate,candidateY)=>{
+      if(!candidate||Math.abs(currentY-candidateY)>38) return false;
+      const words=candidate.split(/\s+/).filter(Boolean);
+      if(words.length>6) return false;
+      return words.every(word=>/^[A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ'’&.-]*$/.test(word)||/^[A-Z]{2,}$/.test(word));
+    };
+
+    if(next&&canJoin(next,lines[index+1]?.y||0)){
+      const combined=`${result} ${next}`.replace(/\s+/g,' ').trim();
+      if(ORGANISATION_SUFFIX.test(combined)) result=combined;
     }
-    return current;
+
+    if(after&&result!==current&&canJoin(after,lines[index+2]?.y||0)){
+      const combined=`${result} ${after}`.replace(/\s+/g,' ').trim();
+      if(ORGANISATION_SUFFIX.test(combined)) result=combined;
+    }
+
+    return result;
   }
 
   function inferPersonPair(text,lineIndex){
-    let line=stripPartyMarker(String(text||'').replace(/\s+/g,' ').trim());
+    const original=String(text||'').replace(/\s+/g,' ').trim();
+    const line=stripPartyMarker(original);
 
     const dear=line.match(/^(?:dear|to)\s+(.+)$/i);
     if(dear&&isLikelyPersonName(dear[1])){
       return makePair('Name',dear[1],12,'inferred-person');
     }
 
+    if(/^\s*(?:\(\d+\)|\d+[.)])\s*/.test(original) && isLikelyPersonName(line)){
+      return makePair('Name',line,14,'numbered-party-person');
+    }
+
     if(/^(?:Mr|Mrs|Ms|Miss|Dr|Prof|Professor)\.?\s+/i.test(line)&&isLikelyPersonName(line)){
-      return makePair('Name',line,13,'inferred-person');
+      return makePair('Name',line,13,'honorific-person');
     }
 
     if(lineIndex<=14&&isLikelyPersonName(line)){
@@ -1247,8 +1308,8 @@
   function inferOrganisationPair(text,lineIndex){
     const line=stripPartyMarker(String(text||'').replace(/\s+/g,' ').trim());
     const words=line.split(/\s+/).filter(Boolean);
-    if(lineIndex>16||line.length>110||words.length<2||!ORGANISATION_SUFFIX.test(line)||DOCUMENT_WORDS.test(line)) return null;
-    return makePair('Organisation',line,8,'inferred-organisation');
+    if(lineIndex>18||line.length>150||words.length<2||!ORGANISATION_SUFFIX.test(line)||DOCUMENT_WORDS.test(line)) return null;
+    return makePair('Organisation',line,10,'inferred-organisation');
   }
 
   function inferReferencePair(text){
@@ -1294,12 +1355,13 @@
 
       const colon=line.text.match(/^(.{3,56}?):\s*(.+)$/);
       if(colon&&looksLikeLabel(colon[1])){
-        add(makePair(colon[1],colon[2],12,'colon'));
+        add(makePair(colon[1],colon[2],13,'colon'));
       }
 
       add(semanticPrefixPair(stripPartyMarker(line.text)));
 
       if(line.items.length>=2){
+        // Detect label/value columns from actual x-position gaps.
         let bestGap={gap:-Infinity,index:-1};
         for(let j=0;j<line.items.length-1;j++){
           const current=line.items[j];
@@ -1308,23 +1370,31 @@
           if(gap>bestGap.gap) bestGap={gap,index:j};
         }
 
-        if(bestGap.index>=0&&bestGap.gap>=12){
+        if(bestGap.index>=0&&bestGap.gap>=10){
           const left=line.items.slice(0,bestGap.index+1).map(item=>item.text).join(' ').trim();
           const right=line.items.slice(bestGap.index+1).map(item=>item.text).join(' ').trim();
+
           if(looksLikeLabel(left)){
-            add(makePair(left,right,10,'spatial'));
+            add(makePair(left,right,11,'spatial'));
+          }
+
+          // A numbered left column often indicates a party/person/organisation entry.
+          if(/^\s*(?:\(\d+\)|\d+[.)])\s*$/.test(left)){
+            const person=inferPersonPair(`${left} ${right}`,i);
+            if(person) add(person);
+
+            const orgJoined=joinWrappedProperName([
+              {text:`${left} ${right}`,y:line.y,items:line.items},
+              ...(next?[next]:[])
+            ],0);
+            add(inferOrganisationPair(orgJoined,i));
           }
         }
       }
 
       const canonical=canonicalField(stripPartyMarker(line.text));
-      if(
-        next &&
-        canonical.priority>=70 &&
-        looksLikeLabel(stripPartyMarker(line.text)) &&
-        Math.abs(line.y-next.y)<=48
-      ){
-        add(makePair(stripPartyMarker(line.text),stripPartyMarker(next.text),8,'stacked'));
+      if(next && canonical.priority>=70 && looksLikeLabel(stripPartyMarker(line.text)) && Math.abs(line.y-next.y)<=48){
+        add(makePair(stripPartyMarker(line.text),stripPartyMarker(next.text),9,'stacked'));
       }
 
       add(inferDatePair(line.text,i));
@@ -1341,7 +1411,7 @@
       const existing=best.get(pair.key);
       const pairRank=pair.confidence+(pair.priority/20);
       const existingRank=existing?existing.confidence+(existing.priority/20):-Infinity;
-      if(!existing||pairRank>existingRank||(pairRank===existingRank&&pair.value.length<existing.value.length)){
+      if(!existing||pairRank>existingRank||(pairRank===existingRank&&pair.value.length>existing.value.length)){
         best.set(pair.key,pair);
       }
     }
@@ -1359,34 +1429,46 @@
 
     for(let i=0;i<groupCount;i++){
       const result=groupedResults[i];
-      const baseProgress=5+(i/groupCount)*86;
-      setProgress(baseProgress,`Analysing grouped PDF ${i+1}/${groupCount}...`);
-
       const buffer=await result.blob.arrayBuffer();
       const loadingTask=pdfjsLib.getDocument({data:buffer});
       const pdf=await loadingTask.promise;
       const values=new Map();
 
       try{
-        const pagesToRead=Math.min(pdf.numPages,4);
+        const pagesToRead=pdf.numPages;
+
         for(let pageNumber=1;pageNumber<=pagesToRead;pageNumber++){
-          const pageProgress=5+((i+(pageNumber/pagesToRead))/groupCount)*86;
-          setProgress(pageProgress,`Analysing grouped PDF ${i+1}/${groupCount}, page ${pageNumber}/${pagesToRead}...`);
+          const globalStep=(i+(pageNumber/pagesToRead))/groupCount;
+          setProgress(
+            5+globalStep*86,
+            `Analysing grouped PDF ${i+1}/${groupCount}, page ${pageNumber}/${pagesToRead}...`
+          );
 
           const lines=buildTextLines(await extractTextItems(pdf,pageNumber));
-          const pairs=extractDetectedPairs(lines);
+          let pairs=extractDetectedPairs(lines);
 
-          // Numbered party blocks are common in agreements, letters and formal forms.
-          // Preserve the generic concepts (Name / Organisation), then allow context
-          // to relabel the organisation as Employer when the document itself is a contract.
+          // Reclassify organisations by document semantics without making
+          // the whole analyser contract-specific.
           const pageText=lines.map(line=>line.text).join(' ');
-          const documentLooksContractual=/\b(contract|employment agreement|honorary contract|terms of engagement)\b/i.test(pageText);
+          const contractual=/\b(contract|employment agreement|honorary contract|terms of engagement)\b/i.test(pageText);
+          const invitation=/\b(invitation|invite|rsvp|venue|ceremony|reception)\b/i.test(pageText);
 
-          if(documentLooksContractual){
-            const orgIndex=pairs.findIndex(pair=>pair.key==='organisation');
-            if(orgIndex>=0){
-              pairs[orgIndex]={...pairs[orgIndex],key:'employer',label:'Employer',priority:118,type:'organisation'};
-            }
+          if(contractual){
+            pairs=pairs.map(pair=>{
+              if(pair.key==='organisation'){
+                return {...pair,key:'employer',label:'Employer',priority:118,type:'organisation'};
+              }
+              return pair;
+            });
+          }
+
+          if(invitation){
+            pairs=pairs.map(pair=>{
+              if(pair.key==='date' && pair.source==='inferred-date'){
+                return {...pair,key:'event_date',label:'Event date',priority:112,type:'date'};
+              }
+              return pair;
+            });
           }
 
           for(const pair of pairs){
@@ -1396,31 +1478,6 @@
             if(!current||pairRank>currentRank){
               values.set(pair.key,pair);
             }
-
-            let field=catalog.get(pair.key);
-            if(!field){
-              field={
-                key:pair.key,
-                label:pair.label,
-                groups:new Set(),
-                examples:[],
-                priority:pair.priority,
-                scoreTotal:0,
-                sources:new Set(),
-                uniqueValues:new Set()
-              };
-              catalog.set(pair.key,field);
-            }
-
-            field.groups.add(i);
-            field.priority=Math.max(field.priority,pair.priority);
-            field.scoreTotal+=pair.confidence;
-            field.sources.add(pair.source);
-            field.uniqueValues.add(pair.value.toLowerCase());
-
-            if(pair.value&&!field.examples.includes(pair.value)&&field.examples.length<3){
-              field.examples.push(pair.value);
-            }
           }
         }
       }finally{
@@ -1428,6 +1485,35 @@
       }
 
       groupValues.set(i,values);
+
+      // Add one catalog hit per field per group only after the entire grouped PDF
+      // has been analysed so later pages can improve the chosen value.
+      for(const pair of values.values()){
+        let field=catalog.get(pair.key);
+        if(!field){
+          field={
+            key:pair.key,
+            label:pair.label,
+            groups:new Set(),
+            examples:[],
+            priority:pair.priority,
+            scoreTotal:0,
+            sources:new Set(),
+            uniqueValues:new Set()
+          };
+          catalog.set(pair.key,field);
+        }
+
+        field.groups.add(i);
+        field.priority=Math.max(field.priority,pair.priority);
+        field.scoreTotal+=pair.confidence;
+        field.sources.add(pair.source);
+        field.uniqueValues.add(pair.value.toLowerCase());
+
+        if(pair.value&&!field.examples.includes(pair.value)&&field.examples.length<3){
+          field.examples.push(pair.value);
+        }
+      }
     }
 
     detectedGroupValues=groupValues;
@@ -1447,13 +1533,13 @@
         if(field.label.length<3||STOP_LABELS.has(field.label.toLowerCase())) return false;
         if(field.foundIn!==groupCount) return false;
 
-        const highValueSemantic=field.priority>=82;
+        const semantic=field.priority>=78;
         const strongExplicit=field.averageScore>=9;
-        return highValueSemantic||strongExplicit;
+        return semantic||strongExplicit;
       })
       .sort((a,b)=>{
-        const aScore=(a.foundIn/groupCount)*120+a.priority+a.averageScore*4+Math.min(a.uniqueCount,5)*2;
-        const bScore=(b.foundIn/groupCount)*120+b.priority+b.averageScore*4+Math.min(b.uniqueCount,5)*2;
+        const aScore=a.priority+a.averageScore*4+Math.min(a.uniqueCount,5)*2;
+        const bScore=b.priority+b.averageScore*4+Math.min(b.uniqueCount,5)*2;
         return bScore-aScore||a.label.localeCompare(b.label);
       });
 
@@ -1550,9 +1636,24 @@
   function setGroupFilename(index,value){
     const item=groupedResults[index];
     if(!item) return;
+
     const clean=sanitiseFilenamePart(String(value||'').replace(/\.pdf$/i,'')).trim();
-    item.name=(clean||fmtGroupName(fileStem,item.start,item.end).replace(/\.pdf$/i,''))+'.pdf';
+    const finalName=(clean||fmtGroupName(fileStem,item.start,item.end).replace(/\.pdf$/i,''))+'.pdf';
+
+    item.name=finalName;
     item.pendingName=clean;
+
+    let groupIndex=0;
+    for(const output of outLinks){
+      if(output.kind!=='group') continue;
+      if(groupIndex===index){
+        output.name=finalName;
+        output.pendingName=clean;
+        break;
+      }
+      groupIndex++;
+    }
+
     updateGroupDownloadLink(index);
   }
 
@@ -1686,27 +1787,39 @@
       for(let index=0;index<groupedResults.length;index++){
         const result=groupedResults[index];
         const rendered=renderTemplateForGroup(template,index);
-        const fallback=result.name.replace(/\.pdf$/i,'');
+        const fallback=fmtGroupName(fileStem,result.start,result.end).replace(/\.pdf$/i,'');
         const clean=sanitiseFilenamePart(rendered||fallback).trim();
         newNames.push((clean||fallback)+'.pdf');
 
         setProgress(
-          5+((index+1)/groupedResults.length)*86,
+          5+((index+1)/groupedResults.length)*84,
           `Applying filename ${index+1}/${groupedResults.length}...`
         );
 
-        if(index%6===0){
+        if(index%5===0){
           await new Promise(resolve=>requestAnimationFrame(()=>resolve()));
         }
       }
+
+      setProgress(92,'Writing filenames to grouped outputs...');
 
       groupedResults.forEach((result,index)=>{
         result.name=newNames[index];
         result.pendingName=newNames[index].replace(/\.pdf$/i,'');
       });
 
-      setProgress(94,'Updating all filename fields and downloads...');
-      renderManualRenameList();
+      // outLinks is the source used by Download All / Save All.
+      // Update it explicitly instead of relying on shared object identity.
+      let groupIndex=0;
+      outLinks.forEach(item=>{
+        if(item.kind==='group'){
+          item.name=newNames[groupIndex]||item.name;
+          item.pendingName=(newNames[groupIndex]||item.name).replace(/\.pdf$/i,'');
+          groupIndex++;
+        }
+      });
+
+      setProgress(96,'Refreshing filenames and downloads...');
       rebuildDownloadList();
 
       await new Promise(resolve=>requestAnimationFrame(()=>resolve()));
@@ -1823,10 +1936,10 @@
       pagesInput.value = '';
       groupSizeInput.value = '';
       postGroupNaming.hidden = true;
+      namingModeGrid.hidden = false;
+      manualNamingPanel.hidden = true;
+      smartNamingPanel.hidden = true;
       manualRenameList.innerHTML = '';
-      smartNamingToggle.checked = false;
-      smartNamingEnabled = false;
-      smartNamingOptions.hidden = true;
       groupedResults = [];
       detectedFieldCatalog = [];
       detectedGroupValues = new Map();
@@ -1961,9 +2074,9 @@
     }
 
     postGroupNaming.hidden = true;
-    smartNamingToggle.checked = false;
-    smartNamingEnabled = false;
-    smartNamingOptions.hidden = true;
+    namingModeGrid.hidden = false;
+    manualNamingPanel.hidden = true;
+    smartNamingPanel.hidden = true;
 
     show(zipBtn);
     zipBtn.removeAttribute('disabled');
@@ -2015,17 +2128,17 @@
 
     groupedResults = outLinks.filter(item=>item.kind==='group');
     postGroupNaming.hidden = groupedResults.length===0;
-    renderManualRenameList();
+    namingModeGrid.hidden = false;
+    manualNamingPanel.hidden = true;
+    smartNamingPanel.hidden = true;
+    manualRenameList.innerHTML = '';
 
-    smartNamingToggle.checked = false;
-    smartNamingEnabled = false;
-    smartNamingOptions.hidden = true;
     detectedFieldCatalog = [];
     detectedGroupValues = new Map();
     availableTokens = new Map();
     detectedFields.hidden = true;
-    detectedFieldSummary.innerHTML = '';
     detectedFieldSelect.innerHTML = '<option value="">Choose a field…</option>';
+    detectedFieldSummary.innerHTML = '';
     insertDetectedFieldBtn.disabled = true;
     nameFormatPanel.hidden = true;
     templateBuilder.hidden = true;
@@ -2193,16 +2306,18 @@
 
   groupSizeInput.addEventListener('input', ()=>{
     postGroupNaming.hidden=true;
+    namingModeGrid.hidden=false;
+    manualNamingPanel.hidden=true;
+    smartNamingPanel.hidden=true;
     manualRenameList.innerHTML='';
     groupedResults=[];
     detectedFieldCatalog=[];
     detectedGroupValues=new Map();
     availableTokens=new Map();
-    smartNamingToggle.checked=false;
-    smartNamingEnabled=false;
-    smartNamingOptions.hidden=true;
     detectedFields.hidden=true;
+    detectedFieldSelect.innerHTML='<option value="">Choose a field…</option>';
     detectedFieldSummary.innerHTML='';
+    insertDetectedFieldBtn.disabled=true;
     nameFormatPanel.hidden=true;
     templateBuilder.hidden=true;
     filenameTemplate.value='';
@@ -2210,26 +2325,49 @@
   });
   groupSizeInput.addEventListener('change', updateGroupPreview);
 
-  smartNamingToggle.addEventListener('change',()=>{
-    smartNamingEnabled=smartNamingToggle.checked;
-    smartNamingOptions.hidden=!smartNamingEnabled;
+
+  intelligentModeBtn.addEventListener('click',()=>{
+    namingModeGrid.hidden=true;
+    manualNamingPanel.hidden=true;
+    smartNamingPanel.hidden=false;
     detectedFieldCatalog=[];
     detectedGroupValues=new Map();
     availableTokens=new Map();
     detectedFields.hidden=true;
+    detectedFieldSelect.innerHTML='<option value="">Choose a field…</option>';
     detectedFieldSummary.innerHTML='';
+    insertDetectedFieldBtn.disabled=true;
     nameFormatPanel.hidden=true;
     templateBuilder.hidden=true;
     filenameTemplate.value='';
     templatePreview.hidden=true;
     templatePreviewList.innerHTML='';
     applyTemplateBtn.disabled=true;
-    errEl.textContent='';
+    hideProgress();
+    setStatus('Intelligent naming ready. Analyse the grouped PDFs to find reliable fields.');
+  });
 
-    if(smartNamingEnabled){
-      hideProgress();
-      setStatus('Intelligent naming enabled. Analyse the grouped PDFs to find reliable fields available in every file.');
-    }
+  manualModeBtn.addEventListener('click',()=>{
+    namingModeGrid.hidden=true;
+    smartNamingPanel.hidden=true;
+    manualNamingPanel.hidden=false;
+    renderManualRenameList();
+    hideProgress();
+    setStatus('Manual naming ready. Edit any grouped filename below.');
+  });
+
+  closeManualNamingBtn.addEventListener('click',()=>{
+    manualNamingPanel.hidden=true;
+    namingModeGrid.hidden=false;
+    hideProgress();
+    setStatus('');
+  });
+
+  closeIntelligentNamingBtn.addEventListener('click',()=>{
+    smartNamingPanel.hidden=true;
+    namingModeGrid.hidden=false;
+    hideProgress();
+    setStatus('');
   });
 
   analyseGroupsBtn.addEventListener('click',async()=>{
@@ -2292,6 +2430,6 @@
   resetUI(true);
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk152"></script>
+<script src="../../Assets/site-shell.js?v=mk153"></script>
 </body>
 </html>
