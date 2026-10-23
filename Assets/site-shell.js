@@ -194,11 +194,11 @@
     ]
   },
   "pdf-separator.html": {
-    "description": "Separate PDFs into selected pages or repeating groups, then use local semantic analysis to find useful filename fields in many kinds of documents.",
+    "description": "Separate PDFs into page groups, rename every grouped file manually, or build accurate mail-merge-style filenames from reliable fields detected in every grouped PDF.",
     "steps": [
-      "Create the grouped PDFs first. Intelligent naming then analyses those grouped outputs locally. The blue progress bar shows real progress through the grouped documents and their pages, using the same progress treatment as the other processing tools on the site.",
-      "The analyser no longer treats arbitrary PDF text fragments as labels. It looks for complete label/value structures, spatially separated fields and meaningful context. It can infer useful generic metadata such as Name, Organisation or Employer, Title / role, Reference, Location, and context-aware dates such as Commencement date, Event date, Due date or End date. This works across contracts, invitations, forms, letters, certificates, reports and other structured documents rather than being tied to one document type.",
-      "Only reliable fields found across enough of the grouped PDFs are offered. Select the useful fields you want, review the resulting filenames, then download individually, build a ZIP, or save all files directly to a selected folder where supported."
+      "Create the grouped PDFs first. A Rename grouped PDFs section then appears automatically with an editable filename for every group. Intelligent naming is not shown at all before grouping is complete.",
+      "Turn on Intelligent naming and analyse the grouped PDFs. Only reliable fields found in every single grouped PDF are offered. The analyser reconstructs useful document structure, joins wrapped organisation names, recognises numbered person/organisation party entries, merges labels such as DATED into Date, and filters headings or sentence fragments that are poor filename data.",
+      "Build the filename like a mail merge. Click detected fields to insert tokens such as [EMPLOYER], [DATE] or [COMMENCEMENT_DATE]. If Name is available, choose formats such as [NAME], [LASTNAME], [FIRSTNAME], or [LASTNAME], [FIRSTNAME], [TITLE]. Type normal text anywhere, for example [NAME] - Contract. A live preview shows real filenames before Apply to all filenames, after which every filename can still be edited individually."
     ]
   },
   "powerful-sites.html": {
