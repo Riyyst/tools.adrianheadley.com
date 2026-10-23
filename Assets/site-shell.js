@@ -194,11 +194,11 @@
     ]
   },
   "pdf-separator.html": {
-    "description": "Separate PDFs into page groups, then choose either Intelligent naming or Manual naming without cluttering the page with both workflows at once.",
+    "description": "Separate PDFs into page groups, choose Intelligent or Manual naming, preview every generated PDF, and export the full set without losing duplicate filenames.",
     "steps": [
-      "After grouping, the tool shows two tidy choices: Intelligent naming or Manual naming. Manual filename boxes are not shown automatically. Choose Manual naming only when you want to edit the grouped filenames one by one.",
-      "Choose Intelligent naming to analyse every page of every grouped PDF. The analyser reconstructs labelled values, numbered party entries, person names, wrapped organisation names, dates, document titles/types, references and other structured metadata. A field is only offered if it is reliably found in every grouped PDF. Name is not privileged or forced; Employer, Organisation, Date, Commencement date, Document type and other reliable fields can all be chosen when detected.",
-      "Build a mail-merge-style filename from any available fields plus normal text. Apply to all filenames resolves real values separately for every grouped PDF, explicitly updates the underlying output objects used by Download All and Save All to Folder, and displays the blue batch progress bar until every filename and download link has been refreshed."
+      "After grouping, choose Intelligent naming or Manual naming. Manual filename fields remain hidden unless Manual naming is selected. In Intelligent naming, no field choices are shown before Analyse grouped PDFs has actually completed, and the Analyse button is centred for a cleaner layout.",
+      "Intelligent analysis only offers reliable fields found in every grouped PDF. Person detection requires strong evidence such as an explicit Name label, numbered party, salutation or honorific, which prevents headings such as Grievance Procedure being treated as a person. Name parsing preserves hyphenated first or last names, surname particles and multiple given/middle names, with tokens for Firstname, Middle name(s), Given name(s), Lastname and Title.",
+      "A Preview button sits beside every Download button and opens that generated PDF in a new browser tab for checking. Apply to all filenames now stops if a selected field cannot be resolved instead of silently reverting to the original filename. Bulk ZIP/folder export also guarantees unique filenames by appending (2), (3), etc. where needed, preventing duplicate names from overwriting files and reducing the final file count."
     ]
   },
   "powerful-sites.html": {
