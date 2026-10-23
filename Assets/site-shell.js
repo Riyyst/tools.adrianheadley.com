@@ -194,11 +194,11 @@
     ]
   },
   "pdf-separator.html": {
-    "description": "Separate a PDF into individual selected pages or automatically create repeating groups of pages.",
+    "description": "Separate a PDF into selected pages or repeating groups, then optionally build filenames from fields actually detected inside the grouped PDFs.",
     "steps": [
-      "Choose a PDF, then select Specific pages if you want individual page PDFs. Enter page numbers or ranges such as 1,3,5-7, or leave the field blank to separate every page individually.",
-      "Choose Groups of pages when the document needs to be divided repeatedly into equal-size PDFs. Enter the number of pages per PDF. For example, 7 creates pages 1-7, 8-14, 15-21 and so on.",
-      "If the document does not divide evenly, the remaining pages are automatically placed in the final PDF. Download each result individually or use Download All for a ZIP containing every generated PDF."
+      "Choose Specific pages for individual extraction or Groups of pages to create repeating grouped PDFs. Pages per PDF starts blank and only shows 3 as a placeholder.",
+      "Intelligent naming becomes available only after the grouped PDFs have been created. Turn it on and choose Analyse grouped PDFs. The tool scans those grouped outputs locally and displays only labels and values it can actually identify in them.",
+      "Select the detected fields you want used in the filename. The tool combines the matching values for each grouped PDF, lets you review or correct every filename, then you can download individually, use Download All for a ZIP, or Save All to Folder in supported browsers."
     ]
   },
   "powerful-sites.html": {
