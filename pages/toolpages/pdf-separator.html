@@ -27,7 +27,7 @@
 <meta name="twitter:title" content="Split &amp; Separate PDF Pages | Adrian Headley Tools"/>
 <meta name="twitter:description" content="Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser, with ZIP download support."/>
 <meta name="twitter:image" content="https://tools.adrianheadley.com/Assets/Media/Images/tools-logo.png"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","name":"PDF Separator","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb"},"dateModified":"2026-10-23","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app"},"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app","name":"PDF Separator","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@id":"https://tools.adrianheadley.com/#publisher"},"featureList":["Reveal manual grouped-PDF filename editing only after grouping is complete.","Hide Intelligent naming entirely until grouped PDFs are available.","Offer only reliable intelligent fields detected in every grouped PDF.","Build filenames using mail-merge-style tokens mixed freely with user-written text.","Parse detected names into title, first name and surname tokens with selectable name formats.","Preview intelligent filenames before applying them to all grouped PDFs, with per-file manual editing retained afterward.","Join wrapped organisation names, recognise numbered party entries and merge equivalent labels such as DATED into Date."],"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"PDF Separator","item":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#webpage","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","name":"PDF Separator","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","inLanguage":"en-GB","isPartOf":{"@id":"https://tools.adrianheadley.com/#website"},"breadcrumb":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb"},"dateModified":"2026-10-23","mainEntity":{"@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app"},"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"WebApplication","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#app","name":"PDF Separator","url":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html","description":"Split a PDF into individual pages, selected pages or repeating groups of pages directly in your browser.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires a modern web browser with JavaScript enabled.","inLanguage":"en-GB","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@id":"https://tools.adrianheadley.com/#publisher"},"featureList":["Choose any reliable intelligent field found in every grouped PDF rather than forcing Name.","Use generic name-layout examples such as Firstname Lastname and Lastname, Firstname, Title.","Build filename templates from intelligent field tokens plus arbitrary user-written text.","Show a generic format preview without exposing real names in the example.","Resolve real values independently for each grouped PDF only when applying the template.","Apply filenames to every grouped output with visible blue batch progress and refresh all manual filename fields and download links."],"publisher":{"@id":"https://tools.adrianheadley.com/#publisher"}},{"@type":"BreadcrumbList","@id":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Tools","item":"https://tools.adrianheadley.com/"},{"@type":"ListItem","position":2,"name":"PDF Separator","item":"https://tools.adrianheadley.com/pages/toolpages/pdf-separator.html"}]}]}</script>
 <style>
   :root{
     --bg:#f5f5f7;
@@ -365,14 +365,23 @@
   }
   .smart-detected-note{margin-top:.85rem}
   .detected-fields{margin-top:1rem;border-top:1px solid var(--border-subtle);padding-top:1rem}
-  .detected-field-list{display:flex;flex-wrap:wrap;gap:.45rem}
-  .detected-field-btn{
-    display:inline-flex;align-items:center;gap:.38rem;min-height:36px;padding:.42rem .62rem;
-    border:1px solid #bfdbfe;border-radius:999px;background:#eff6ff;color:#1d4ed8;
-    font:inherit;font-size:.72rem;font-weight:800;cursor:pointer
+  .field-picker-panel{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.55rem;align-items:end;
+    padding:.8rem;border:1px solid var(--border-subtle);border-radius:12px;background:#fff
   }
-  .detected-field-btn:hover{background:#dbeafe;border-color:#93c5fd}
-  .detected-field-btn .token{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.66rem}
+  .field-picker-panel label{display:block;text-align:left;margin:0 0 .4rem}
+  .field-picker-panel select{
+    width:100%;min-height:40px;border:1px solid var(--border-strong);border-radius:9px;background:#fff;
+    padding:.45rem .55rem;color:var(--text);font:inherit;font-size:.78rem
+  }
+  .detected-field-summary{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.55rem}
+  .detected-field-pill{
+    display:inline-flex;align-items:center;gap:.28rem;padding:.3rem .48rem;border-radius:999px;
+    background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;font-size:.68rem;font-weight:800
+  }
+  .detected-field-pill code{
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.62rem;color:inherit
+  }
   .name-format-panel{
     display:grid;grid-template-columns:minmax(180px,1fr) auto;gap:.55rem;align-items:end;
     margin-top:.9rem;padding:.8rem;border:1px solid var(--border-subtle);border-radius:12px;background:#fff
@@ -395,7 +404,7 @@
   @media(max-width:720px){
     .manual-rename-row{grid-template-columns:68px minmax(0,1fr)}
     .manual-rename-ext{grid-column:2}
-    .name-format-panel{grid-template-columns:1fr}
+    .field-picker-panel,.name-format-panel{grid-template-columns:1fr}
   }
 
   .input input{
@@ -597,7 +606,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk151">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk152">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -704,19 +713,30 @@
                         <div class="detected-fields" id="detectedFields" hidden>
                           <div class="smart-review-head">
                             <strong>Available intelligent fields</strong>
-                            <span>Click a field to insert it into the filename format.</span>
+                            <span>Choose any reliable field found in every grouped PDF.</span>
                           </div>
-                          <div class="detected-field-list" id="detectedFieldList"></div>
+
+                          <div class="field-picker-panel">
+                            <div>
+                              <label for="detectedFieldSelect">Add intelligent field</label>
+                              <select id="detectedFieldSelect">
+                                <option value="">Choose a field…</option>
+                              </select>
+                            </div>
+                            <button class="btn field-insert-btn" id="insertDetectedFieldBtn" type="button" disabled>Insert field</button>
+                          </div>
+
+                          <div class="detected-field-summary" id="detectedFieldSummary"></div>
                         </div>
 
                         <div class="name-format-panel" id="nameFormatPanel" hidden>
                           <label for="nameFormat">Name format</label>
                           <select id="nameFormat">
-                            <option value="[NAME]">Mr Paul Smith</option>
-                            <option value="[FIRSTNAME] [LASTNAME]">Paul Smith</option>
-                            <option value="[LASTNAME], [FIRSTNAME]">Smith, Paul</option>
-                            <option value="[LASTNAME], [FIRSTNAME], [TITLE]">Smith, Paul, Mr</option>
-                            <option value="[TITLE] [FIRSTNAME] [LASTNAME]">Mr Paul Smith</option>
+                            <option value="[NAME]">Full name as detected</option>
+                            <option value="[FIRSTNAME] [LASTNAME]">Firstname Lastname</option>
+                            <option value="[LASTNAME], [FIRSTNAME]">Lastname, Firstname</option>
+                            <option value="[LASTNAME], [FIRSTNAME], [TITLE]">Lastname, Firstname, Title</option>
+                            <option value="[TITLE] [FIRSTNAME] [LASTNAME]">Title Firstname Lastname</option>
                           </select>
                           <button class="btn field-insert-btn" id="insertNameFormatBtn" type="button">Insert name format</button>
                         </div>
@@ -729,7 +749,7 @@
                           <p class="mode-note">Type normal text anywhere. Intelligent fields use square brackets, for example <strong>[NAME] - Contract</strong> or <strong>[LASTNAME], [FIRSTNAME] - [DOCUMENT_TYPE]</strong>.</p>
 
                           <div class="template-preview" id="templatePreview" hidden>
-                            <strong>Live preview</strong>
+                            <strong>Format preview</strong>
                             <div id="templatePreviewList"></div>
                           </div>
 
@@ -819,7 +839,9 @@
   const smartNamingToggle = $('#smartNamingToggle');
   const smartNamingOptions = $('#smartNamingOptions');
   const detectedFields = $('#detectedFields');
-  const detectedFieldList = $('#detectedFieldList');
+  const detectedFieldSelect = $('#detectedFieldSelect');
+  const detectedFieldSummary = $('#detectedFieldSummary');
+  const insertDetectedFieldBtn = $('#insertDetectedFieldBtn');
   const analyseGroupsBtn = $('#analyseGroupsBtn');
   const nameFormatPanel = $('#nameFormatPanel');
   const nameFormat = $('#nameFormat');
@@ -1468,7 +1490,7 @@
     availableTokens=new Map();
 
     for(const field of detectedFieldCatalog){
-      const token=tokenForField(field);
+      const token=tokenForField(field).toUpperCase();
       availableTokens.set(token,{type:'field',key:field.key,label:field.label});
 
       if(field.key==='name'){
@@ -1481,7 +1503,7 @@
   }
 
   function tokenValueForGroup(token,index){
-    const spec=availableTokens.get(token);
+    const spec=availableTokens.get(String(token||'').toUpperCase());
     if(!spec) return '';
 
     const values=detectedGroupValues.get(index)||new Map();
@@ -1497,13 +1519,17 @@
   function renderTemplateForGroup(template,index){
     let result=String(template||'');
 
-    for(const [token] of availableTokens){
-      result=result.split(token).join(tokenValueForGroup(token,index));
-    }
+    result=result.replace(/\[[A-Za-z0-9_ ]+\]/g,token=>{
+      const upper=token.toUpperCase();
+      return availableTokens.has(upper) ? tokenValueForGroup(upper,index) : token;
+    });
 
     result=result
-      .replace(/\[[A-Z0-9_ ]+\]/g,'')
+      .replace(/\[[A-Za-z0-9_ ]+\]/g,'')
       .replace(/\s+([,.;])/g,'$1')
+      .replace(/,\s*,+/g,',')
+      .replace(/\s*-\s*(?=$)/g,'')
+      .replace(/(^|[\s_-])[,;]+/g,'$1')
       .replace(/([_-])\s*\1+/g,'$1')
       .replace(/\s{2,}/g,' ')
       .replace(/^[\s,_-]+|[\s,_-]+$/g,'')
@@ -1560,50 +1586,44 @@
   }
 
   function renderDetectedFields(){
-    detectedFieldList.innerHTML='';
+    detectedFieldSelect.innerHTML='<option value="">Choose a field…</option>';
+    detectedFieldSummary.innerHTML='';
     refreshAvailableTokens();
+    insertDetectedFieldBtn.disabled=true;
+    nameFormatPanel.hidden=true;
+    templateBuilder.hidden=true;
+    filenameTemplate.value='';
+    templatePreview.hidden=true;
+    templatePreviewList.innerHTML='';
+    applyTemplateBtn.disabled=true;
 
     if(!detectedFieldCatalog.length){
       detectedFields.hidden=false;
-      detectedFieldList.innerHTML='<div class="mode-note">No reliable filename fields were found in every grouped PDF.</div>';
-      nameFormatPanel.hidden=true;
-      templateBuilder.hidden=true;
+      detectedFieldSummary.innerHTML='<span class="mode-note">No reliable filename fields were found in every grouped PDF.</span>';
       return;
     }
 
     for(const field of detectedFieldCatalog){
-      const button=document.createElement('button');
-      button.type='button';
-      button.className='detected-field-btn';
+      const option=document.createElement('option');
+      option.value=field.key;
+      option.textContent=field.label;
+      detectedFieldSelect.appendChild(option);
+
+      const pill=document.createElement('span');
+      pill.className='detected-field-pill';
 
       const label=document.createElement('span');
       label.textContent=field.label;
 
-      const token=document.createElement('span');
-      token.className='token';
+      const token=document.createElement('code');
       token.textContent=tokenForField(field);
 
-      button.append(label,token);
-      button.addEventListener('click',()=>{
-        if(field.key==='name'){
-          nameFormatPanel.hidden=false;
-        }else{
-          insertTemplateText(tokenForField(field));
-        }
-      });
-
-      detectedFieldList.appendChild(button);
+      pill.append(label,token);
+      detectedFieldSummary.appendChild(pill);
     }
 
-    nameFormatPanel.hidden=!detectedFieldCatalog.some(field=>field.key==='name');
-    templateBuilder.hidden=false;
     detectedFields.hidden=false;
-
-    if(!filenameTemplate.value.trim()){
-      const first=detectedFieldCatalog[0];
-      filenameTemplate.value=first.key==='name'?'[NAME]':tokenForField(first);
-    }
-    updateTemplatePreview();
+    templateBuilder.hidden=false;
   }
 
   function insertTemplateText(text){
@@ -1627,34 +1647,79 @@
 
     if(!hasTemplate) return;
 
-    const previewCount=Math.min(4,groupedResults.length);
-    for(let i=0;i<previewCount;i++){
-      const div=document.createElement('div');
-      const rendered=renderTemplateForGroup(template,i);
-      div.textContent=(rendered||groupedResults[i].name.replace(/\.pdf$/i,''))+'.pdf';
-      templatePreviewList.appendChild(div);
+    const genericValues={
+      '[NAME]':'Title Firstname Lastname',
+      '[TITLE]':'Title',
+      '[FIRSTNAME]':'Firstname',
+      '[LASTNAME]':'Lastname'
+    };
+
+    for(const field of detectedFieldCatalog){
+      const token=tokenForField(field).toUpperCase();
+      if(!genericValues[token]){
+        genericValues[token]=field.label.replace(/\s+/g,' ');
+      }
     }
 
-    if(groupedResults.length>previewCount){
-      const more=document.createElement('div');
-      more.textContent=`…and ${groupedResults.length-previewCount} more`;
-      templatePreviewList.appendChild(more);
-    }
+    let example=template.replace(/\[[A-Za-z0-9_ ]+\]/g,token=>genericValues[token.toUpperCase()]||token);
+    example=example.replace(/\s{2,}/g,' ').trim();
+
+    const div=document.createElement('div');
+    div.textContent=example+'.pdf';
+    templatePreviewList.appendChild(div);
+
+    const note=document.createElement('div');
+    note.textContent='Real detected values are applied separately to each grouped PDF.';
+    templatePreviewList.appendChild(note);
   }
 
-  function applyNamingTemplate(){
+  async function applyNamingTemplate(){
     const template=filenameTemplate.value.trim();
-    if(!template) return;
+    if(!template||!groupedResults.length) return;
 
-    groupedResults.forEach((result,index)=>{
-      const rendered=renderTemplateForGroup(template,index);
-      setGroupFilename(index,rendered||result.name);
-    });
+    applyTemplateBtn.setAttribute('disabled','');
+    startProgress(`Applying filename format to ${groupedResults.length} grouped PDF${groupedResults.length===1?'':'s'}...`);
 
-    renderManualRenameList();
-    rebuildDownloadList();
-    hideProgress();
-    setStatus('Filename format applied to every grouped PDF. You can still edit any filename individually.');
+    try{
+      const newNames=[];
+
+      for(let index=0;index<groupedResults.length;index++){
+        const result=groupedResults[index];
+        const rendered=renderTemplateForGroup(template,index);
+        const fallback=result.name.replace(/\.pdf$/i,'');
+        const clean=sanitiseFilenamePart(rendered||fallback).trim();
+        newNames.push((clean||fallback)+'.pdf');
+
+        setProgress(
+          5+((index+1)/groupedResults.length)*86,
+          `Applying filename ${index+1}/${groupedResults.length}...`
+        );
+
+        if(index%6===0){
+          await new Promise(resolve=>requestAnimationFrame(()=>resolve()));
+        }
+      }
+
+      groupedResults.forEach((result,index)=>{
+        result.name=newNames[index];
+        result.pendingName=newNames[index].replace(/\.pdf$/i,'');
+      });
+
+      setProgress(94,'Updating all filename fields and downloads...');
+      renderManualRenameList();
+      rebuildDownloadList();
+
+      await new Promise(resolve=>requestAnimationFrame(()=>resolve()));
+      completeProgress(`Applied the filename format to all ${groupedResults.length} grouped PDFs.`);
+
+    }catch(err){
+      console.error(err);
+      hideProgress();
+      errEl.textContent=err?.message||'Could not apply the filename format.';
+      setStatus('');
+    }finally{
+      applyTemplateBtn.removeAttribute('disabled');
+    }
   }
 
   function rebuildDownloadList(){
@@ -1767,7 +1832,9 @@
       detectedGroupValues = new Map();
       availableTokens = new Map();
       detectedFields.hidden = true;
-      detectedFieldList.innerHTML = '';
+      detectedFieldSummary.innerHTML = '';
+      detectedFieldSelect.innerHTML = '<option value="">Choose a field…</option>';
+      insertDetectedFieldBtn.disabled = true;
       nameFormatPanel.hidden = true;
       templateBuilder.hidden = true;
       filenameTemplate.value = '';
@@ -1957,7 +2024,9 @@
     detectedGroupValues = new Map();
     availableTokens = new Map();
     detectedFields.hidden = true;
-    detectedFieldList.innerHTML = '';
+    detectedFieldSummary.innerHTML = '';
+    detectedFieldSelect.innerHTML = '<option value="">Choose a field…</option>';
+    insertDetectedFieldBtn.disabled = true;
     nameFormatPanel.hidden = true;
     templateBuilder.hidden = true;
     filenameTemplate.value = '';
@@ -2133,7 +2202,7 @@
     smartNamingEnabled=false;
     smartNamingOptions.hidden=true;
     detectedFields.hidden=true;
-    detectedFieldList.innerHTML='';
+    detectedFieldSummary.innerHTML='';
     nameFormatPanel.hidden=true;
     templateBuilder.hidden=true;
     filenameTemplate.value='';
@@ -2148,7 +2217,7 @@
     detectedGroupValues=new Map();
     availableTokens=new Map();
     detectedFields.hidden=true;
-    detectedFieldList.innerHTML='';
+    detectedFieldSummary.innerHTML='';
     nameFormatPanel.hidden=true;
     templateBuilder.hidden=true;
     filenameTemplate.value='';
@@ -2187,6 +2256,25 @@
     }
   });
 
+  detectedFieldSelect.addEventListener('change',()=>{
+    const key=detectedFieldSelect.value;
+    insertDetectedFieldBtn.disabled=!key;
+    nameFormatPanel.hidden=key!=='name';
+  });
+
+  insertDetectedFieldBtn.addEventListener('click',()=>{
+    const key=detectedFieldSelect.value;
+    if(!key) return;
+
+    if(key==='name'){
+      nameFormatPanel.hidden=false;
+      return;
+    }
+
+    const field=detectedFieldCatalog.find(item=>item.key===key);
+    if(field) insertTemplateText(tokenForField(field));
+  });
+
   insertNameFormatBtn.addEventListener('click',()=>{
     insertTemplateText(nameFormat.value);
   });
@@ -2204,6 +2292,6 @@
   resetUI(true);
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk151"></script>
+<script src="../../Assets/site-shell.js?v=mk152"></script>
 </body>
 </html>

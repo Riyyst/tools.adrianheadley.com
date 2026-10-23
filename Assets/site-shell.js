@@ -194,11 +194,11 @@
     ]
   },
   "pdf-separator.html": {
-    "description": "Separate PDFs into page groups, rename every grouped file manually, or build accurate mail-merge-style filenames from reliable fields detected in every grouped PDF.",
+    "description": "Separate PDFs into page groups, rename every file manually, or build flexible mail-merge-style filenames from any reliable field found in every grouped PDF.",
     "steps": [
-      "Create the grouped PDFs first. A Rename grouped PDFs section then appears automatically with an editable filename for every group. Intelligent naming is not shown at all before grouping is complete.",
-      "Turn on Intelligent naming and analyse the grouped PDFs. Only reliable fields found in every single grouped PDF are offered. The analyser reconstructs useful document structure, joins wrapped organisation names, recognises numbered person/organisation party entries, merges labels such as DATED into Date, and filters headings or sentence fragments that are poor filename data.",
-      "Build the filename like a mail merge. Click detected fields to insert tokens such as [EMPLOYER], [DATE] or [COMMENCEMENT_DATE]. If Name is available, choose formats such as [NAME], [LASTNAME], [FIRSTNAME], or [LASTNAME], [FIRSTNAME], [TITLE]. Type normal text anywhere, for example [NAME] - Contract. A live preview shows real filenames before Apply to all filenames, after which every filename can still be edited individually."
+      "After grouping, each PDF has an editable filename. Intelligent naming is optional and remains hidden until grouping has completed.",
+      "Analyse the grouped PDFs, then use Add intelligent field to choose any reliable field found in every group. Name is not forced: it is simply one available field alongside items such as Employer, Date, Commencement date or Document type when those are detected. Selecting Name reveals generic format choices such as Firstname Lastname, Lastname, Firstname, and Lastname, Firstname, Title; real names are not used in those layout examples.",
+      "Build the filename like a mail merge by mixing tokens and normal text. The Format preview uses generic labels, while Apply to all filenames resolves the real detected values separately for every grouped PDF. Applying is now a real batch operation with the blue progress bar and updates all generated filename fields and download links before completion."
     ]
   },
   "powerful-sites.html": {
