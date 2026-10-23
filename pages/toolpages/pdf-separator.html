@@ -632,7 +632,7 @@
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk69">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk70">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -776,11 +776,9 @@
                         <select id="nameFormat">
                           <option value="[NAME]">Full name as detected</option>
                           <option value="[FIRSTNAME] [LASTNAME]">Firstname Lastname</option>
-                          <option value="[GIVENNAMES] [LASTNAME]">Given name(s) Lastname</option>
                           <option value="[LASTNAME], [FIRSTNAME]">Lastname, Firstname</option>
-                          <option value="[LASTNAME], [GIVENNAMES]">Lastname, Given name(s)</option>
-                          <option value="[LASTNAME], [GIVENNAMES], [TITLE]">Lastname, Given name(s), Title</option>
-                          <option value="[TITLE] [GIVENNAMES] [LASTNAME]">Title Given name(s) Lastname</option>
+                          <option value="[LASTNAME], [FIRSTNAME], [TITLE]">Lastname, Firstname, Title</option>
+                          <option value="[TITLE] [FIRSTNAME] [LASTNAME]">Title Firstname Lastname</option>
                         </select>
                         <button class="btn field-insert-btn" id="insertNameFormatBtn" type="button">Insert name format</button>
                       </div>
@@ -1571,30 +1569,84 @@
   function parsePersonName(value){
     const original=String(value||'').replace(/\s+/g,' ').trim();
     const title=normaliseHonorific(original);
-
     const withoutTitle=title
       ? original.replace(/^(Mr|Mrs|Ms|Miss|Dr|Prof|Professor|Sir|Dame|Mx)\.?\s+/i,'').trim()
       : original;
 
+    const cleanPart=value=>String(value||'').replace(/\s+/g,' ').trim();
+
+    // Explicit "Lastname, Firstname" style is unambiguous.
+    if(withoutTitle.includes(',')){
+      const [lastRaw,...firstRest]=withoutTitle.split(',');
+      const lastname=cleanPart(lastRaw);
+      const firstname=cleanPart(firstRest.join(','));
+      const firstWords=firstname.split(/\s+/).filter(Boolean);
+      const lastWords=lastname.split(/\s+/).filter(Boolean);
+
+      return {
+        name:original,
+        title,
+        firstname,
+        lastname,
+        confident:!!firstname&&!!lastname&&firstWords.length<=2&&lastWords.length<=2
+      };
+    }
+
     const parts=withoutTitle.split(/\s+/).filter(Boolean);
     const particles=new Set(['de','da','del','della','di','du','la','le','van','von','der','den','bin','al']);
 
-    let surnameStart=Math.max(0,parts.length-1);
-
-    while(surnameStart>0 && particles.has(parts[surnameStart-1].toLowerCase())){
-      surnameStart--;
+    if(parts.length===2){
+      return {
+        name:original,
+        title,
+        firstname:parts[0],
+        lastname:parts[1],
+        confident:true
+      };
     }
 
-    const givenParts=parts.slice(0,surnameStart);
-    const surnameParts=parts.slice(surnameStart);
+    if(parts.length===4){
+      return {
+        name:original,
+        title,
+        firstname:parts.slice(0,2).join(' '),
+        lastname:parts.slice(2).join(' '),
+        confident:true
+      };
+    }
+
+    if(parts.length===3){
+      // A surname particle gives us a reliable 1 + 2 split:
+      // e.g. "Sarah van Berg" -> Sarah / van Berg.
+      if(particles.has(parts[1].toLowerCase())){
+        return {
+          name:original,
+          title,
+          firstname:parts[0],
+          lastname:parts.slice(1).join(' '),
+          confident:true
+        };
+      }
+
+      // Hyphenated first/last components are already preserved as one token.
+      // A plain three-word name could legitimately be:
+      // "Mary Jane Smith" OR "Mary Smith Jones".
+      // Do not guess which side owns the middle word.
+      return {
+        name:original,
+        title,
+        firstname:'',
+        lastname:'',
+        confident:false
+      };
+    }
 
     return {
       name:original,
       title,
-      firstname:givenParts[0]||parts[0]||'',
-      middlenames:givenParts.slice(1).join(' '),
-      givennames:givenParts.length?givenParts.join(' '):(parts[0]||''),
-      lastname:surnameParts.join(' ')||(parts[parts.length-1]||'')
+      firstname:'',
+      lastname:'',
+      confident:false
     };
   }
 
@@ -1612,8 +1664,6 @@
         availableTokens.set('[NAME]',{type:'name',part:'name',label:'Name'});
         availableTokens.set('[TITLE]',{type:'name',part:'title',label:'Title'});
         availableTokens.set('[FIRSTNAME]',{type:'name',part:'firstname',label:'First name'});
-        availableTokens.set('[MIDDLENAMES]',{type:'name',part:'middlenames',label:'Middle name(s)'});
-        availableTokens.set('[GIVENNAMES]',{type:'name',part:'givennames',label:'Given name(s)'});
         availableTokens.set('[LASTNAME]',{type:'name',part:'lastname',label:'Last name'});
       }
     }
@@ -1655,6 +1705,19 @@
       }
 
       const person=parsePersonName(rawName);
+
+      if(spec.part==='name'){
+        return person.name||upperToken;
+      }
+
+      if(spec.part==='title'){
+        return person.title||upperToken;
+      }
+
+      if(!person.confident){
+        return upperToken;
+      }
+
       return person[spec.part]||upperToken;
     }
 
@@ -1822,8 +1885,6 @@
       '[NAME]':'Title Firstname Lastname',
       '[TITLE]':'Title',
       '[FIRSTNAME]':'Firstname',
-      '[MIDDLENAMES]':'Middlename(s)',
-      '[GIVENNAMES]':'Firstname Middlename(s)',
       '[LASTNAME]':'Lastname'
     };
 
@@ -2566,6 +2627,6 @@
   resetUI(true);
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk69"></script>
+<script src="../../Assets/site-shell.js?v=mk70"></script>
 </body>
 </html>
