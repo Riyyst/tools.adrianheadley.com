@@ -620,10 +620,19 @@
   }
 
   [hidden]{display:none!important}
+
+  #analyseGroupsBtn,
+  #applyTemplateBtn{
+    display:block;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+  #analyseGroupsBtn{margin-top:.9rem!important}
+  #applyTemplateBtn{margin-top:.85rem!important}
 </style>
 
 <link rel="icon" href="../../Assets/ah-icon.png" type="image/png">
-<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk68">
+<link rel="stylesheet" href="../../Assets/site-shell.css?v=mk69">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -767,9 +776,11 @@
                         <select id="nameFormat">
                           <option value="[NAME]">Full name as detected</option>
                           <option value="[FIRSTNAME] [LASTNAME]">Firstname Lastname</option>
+                          <option value="[GIVENNAMES] [LASTNAME]">Given name(s) Lastname</option>
                           <option value="[LASTNAME], [FIRSTNAME]">Lastname, Firstname</option>
-                          <option value="[LASTNAME], [FIRSTNAME], [TITLE]">Lastname, Firstname, Title</option>
-                          <option value="[TITLE] [FIRSTNAME] [LASTNAME]">Title Firstname Lastname</option>
+                          <option value="[LASTNAME], [GIVENNAMES]">Lastname, Given name(s)</option>
+                          <option value="[LASTNAME], [GIVENNAMES], [TITLE]">Lastname, Given name(s), Title</option>
+                          <option value="[TITLE] [GIVENNAMES] [LASTNAME]">Title Given name(s) Lastname</option>
                         </select>
                         <button class="btn field-insert-btn" id="insertNameFormatBtn" type="button">Insert name format</button>
                       </div>
@@ -1557,24 +1568,39 @@
     const map={mr:'Mr',mrs:'Mrs',ms:'Ms',miss:'Miss',dr:'Dr',prof:'Prof',professor:'Professor'};
     return map[raw]||match[1];
   }
-
   function parsePersonName(value){
     const original=String(value||'').replace(/\s+/g,' ').trim();
     const title=normaliseHonorific(original);
-    const withoutTitle=title?original.replace(/^(Mr|Mrs|Ms|Miss|Dr|Prof|Professor)\.?\s+/i,'').trim():original;
+
+    const withoutTitle=title
+      ? original.replace(/^(Mr|Mrs|Ms|Miss|Dr|Prof|Professor|Sir|Dame|Mx)\.?\s+/i,'').trim()
+      : original;
+
     const parts=withoutTitle.split(/\s+/).filter(Boolean);
+    const particles=new Set(['de','da','del','della','di','du','la','le','van','von','der','den','bin','al']);
+
+    let surnameStart=Math.max(0,parts.length-1);
+
+    while(surnameStart>0 && particles.has(parts[surnameStart-1].toLowerCase())){
+      surnameStart--;
+    }
+
+    const givenParts=parts.slice(0,surnameStart);
+    const surnameParts=parts.slice(surnameStart);
+
     return {
       name:original,
       title,
-      firstname:parts[0]||'',
-      lastname:parts.length>1?parts[parts.length-1]:(parts[0]||'')
+      firstname:givenParts[0]||parts[0]||'',
+      middlenames:givenParts.slice(1).join(' '),
+      givennames:givenParts.length?givenParts.join(' '):(parts[0]||''),
+      lastname:surnameParts.join(' ')||(parts[parts.length-1]||'')
     };
   }
 
   function tokenForField(field){
     return `[${field.key.toUpperCase()}]`;
   }
-
   function refreshAvailableTokens(){
     availableTokens=new Map();
 
@@ -1586,35 +1612,69 @@
         availableTokens.set('[NAME]',{type:'name',part:'name',label:'Name'});
         availableTokens.set('[TITLE]',{type:'name',part:'title',label:'Title'});
         availableTokens.set('[FIRSTNAME]',{type:'name',part:'firstname',label:'First name'});
+        availableTokens.set('[MIDDLENAMES]',{type:'name',part:'middlenames',label:'Middle name(s)'});
+        availableTokens.set('[GIVENNAMES]',{type:'name',part:'givennames',label:'Given name(s)'});
         availableTokens.set('[LASTNAME]',{type:'name',part:'lastname',label:'Last name'});
       }
     }
   }
 
+
+  function isReliableDetectedPersonName(value){
+    let clean=String(value||'').replace(/\s+/g,' ').trim();
+    if(!clean) return false;
+
+    clean=clean.replace(/^(?:Mr|Mrs|Ms|Miss|Dr|Prof|Professor|Sir|Dame|Mx)\.?\s+/i,'');
+
+    if(clean.length<3||clean.length>90||/\d|@/.test(clean)) return false;
+
+    if(/\b(?:grievance|procedure|policy|guidance|contract|agreement|schedule|appendix|section|terms|conditions|job description|person specification|information|statement|report|form|application|declaration|notice|summary|contents|signature|witness|department|directorate|service|services|work|post|duties|responsibilities|honorary|employment|organisation|organization|employer)\b/i.test(clean)){
+      return false;
+    }
+
+    const words=clean.split(/\s+/).filter(Boolean);
+    if(words.length<2||words.length>7) return false;
+
+    return words.every(word=>
+      /^[A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ'’.-]*$/.test(word) ||
+      /^(?:de|da|del|della|di|du|la|le|van|von|der|den|bin|al)$/i.test(word)
+    );
+  }
   function tokenValueForGroup(token,index){
-    const spec=availableTokens.get(String(token||'').toUpperCase());
+    const upperToken=String(token||'').toUpperCase();
+    const spec=availableTokens.get(upperToken);
     if(!spec) return '';
 
     const values=detectedGroupValues.get(index)||new Map();
 
     if(spec.type==='name'){
-      const person=parsePersonName(values.get('name')?.value||'');
-      return person[spec.part]||'';
+      const rawName=values.get('name')?.value||'';
+
+      if(!isReliableDetectedPersonName(rawName)){
+        return upperToken;
+      }
+
+      const person=parsePersonName(rawName);
+      return person[spec.part]||upperToken;
     }
 
     return values.get(spec.key)?.value||'';
   }
-
   function renderTemplateForGroup(template,index){
     let result=String(template||'');
 
     result=result.replace(/\[[A-Za-z0-9_ ]+\]/g,token=>{
       const upper=token.toUpperCase();
-      return availableTokens.has(upper) ? tokenValueForGroup(upper,index) : token;
+
+      if(availableTokens.has(upper)){
+        const value=tokenValueForGroup(upper,index);
+        return value||upper;
+      }
+
+      return token;
     });
 
     result=result
-      .replace(/\[[A-Za-z0-9_ ]+\]/g,'')
       .replace(/\s+([,.;])/g,'$1')
       .replace(/,\s*,+/g,',')
       .replace(/\s*-\s*(?=$)/g,'')
@@ -1762,6 +1822,8 @@
       '[NAME]':'Title Firstname Lastname',
       '[TITLE]':'Title',
       '[FIRSTNAME]':'Firstname',
+      '[MIDDLENAMES]':'Middlename(s)',
+      '[GIVENNAMES]':'Firstname Middlename(s)',
       '[LASTNAME]':'Lastname'
     };
 
@@ -2504,6 +2566,6 @@
   resetUI(true);
 })();
 </script>
-<script src="../../Assets/site-shell.js?v=mk68"></script>
+<script src="../../Assets/site-shell.js?v=mk69"></script>
 </body>
 </html>
