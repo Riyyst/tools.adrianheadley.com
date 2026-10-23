@@ -194,11 +194,11 @@
     ]
   },
   "pdf-separator.html": {
-    "description": "Separate PDFs into page groups, choose Intelligent or Manual naming, preview outputs, and build reliable filenames only after real analysis.",
+    "description": "Separate PDFs into page groups, then choose either Intelligent naming or Manual naming without cluttering the page with both workflows at once.",
     "steps": [
-      "After grouping, choose Intelligent naming or Manual naming. In Intelligent naming, only the centred Analyse grouped PDFs button and its explanation are visible initially. The field selector, Name format and filename builder stay hidden until every grouped PDF has actually been scanned.",
-      "Analysis visibly progresses through each grouped PDF and each page. Person detection requires strong evidence such as a Name label, numbered party, salutation or honorific, so headings such as Grievance Procedure are rejected. Hyphenated names, surname particles and multiple given or middle names are preserved with Firstname, Middle name(s), Given name(s), Lastname and Title tokens.",
-      "Apply to all filenames is allowed only after complete analysis. Missing tokens stop the operation instead of silently reverting to the original filename. Preview opens each generated PDF in a new tab. ZIP and folder export make duplicate filenames unique with (2), (3), etc., so the exported file count cannot shrink because of duplicate names."
+      "After grouping, the tool shows two tidy choices: Intelligent naming or Manual naming. Manual filename boxes are not shown automatically. Choose Manual naming only when you want to edit the grouped filenames one by one.",
+      "Choose Intelligent naming to analyse every page of every grouped PDF. The analyser reconstructs labelled values, numbered party entries, person names, wrapped organisation names, dates, document titles/types, references and other structured metadata. A field is only offered if it is reliably found in every grouped PDF. Name is not privileged or forced; Employer, Organisation, Date, Commencement date, Document type and other reliable fields can all be chosen when detected.",
+      "Build a mail-merge-style filename from any available fields plus normal text. Apply to all filenames resolves real values separately for every grouped PDF, explicitly updates the underlying output objects used by Download All and Save All to Folder, and displays the blue batch progress bar until every filename and download link has been refreshed."
     ]
   },
   "powerful-sites.html": {
